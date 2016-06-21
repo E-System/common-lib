@@ -1,0 +1,113 @@
+/*
+ * Copyright 2016 E-System LLC
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.es.lib.common.reflection;
+
+import com.es.lib.common.exception.ESRuntimeException;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
+/**
+ * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @since 10.04.15
+ */
+public final class ReflectionUtil {
+
+    private ReflectionUtil() {
+    }
+
+    /**
+     * Проверить является ли объект указанного типа
+     *
+     * @param value объект
+     * @param type  тип для проверки
+     * @return true - объект указанного типа
+     */
+    public static boolean isInstance(Object value, Class<?> type) {
+        return type.isInstance(value);
+    }
+
+    public static Type[] extractTypes(Type type) {
+        Type[] result = null;
+        if (type instanceof ParameterizedType) {
+            result = ((ParameterizedType) type).getActualTypeArguments();
+        } else if (type instanceof Class) {
+            Class<?> injectionPointClass = (Class<?>) type;
+            result = ((ParameterizedType) injectionPointClass.getGenericSuperclass()).getActualTypeArguments();
+        }
+        if (result == null) {
+            throw new ESRuntimeException("Entity type not found with " + type);
+        }
+        return result;
+    }
+
+    public static Class<?> extractClass(Type type) {
+        if (type instanceof Class) {
+            return (Class<?>) type;
+        } else if (type instanceof ParameterizedType) {
+            return (Class<?>) ((ParameterizedType) type).getOwnerType();
+        }
+        throw new ESRuntimeException("Unknown type: " + type);
+    }
+
+    public static <T extends Annotation> T getAnnotation(Class<?> cls, Class<T> annotationClass) {
+        return cls.getAnnotation(annotationClass);
+    }
+
+    public static <T> Collection<T> getStaticObjects(Class<?> holder) throws IllegalAccessException {
+        Collection<T> result = new LinkedList<>();
+        for (Field field : holder.getFields()) {
+            int mod = field.getModifiers();
+            if (Modifier.isStatic(mod) && Modifier.isFinal(mod)) {
+                result.add((T) field.get(holder));
+            }
+        }
+        return result;
+    }
+
+    public static Class<?> getInnerClassByName(Class<?> holder, String name) {
+        for (Class<?> aClass : holder.getClasses()) {
+            if (aClass.getSimpleName().equals(name)) {
+                return aClass;
+            }
+        }
+        return null;
+    }
+
+    public static Map<String, Class<?>> getInnerClassesGroupedByName(Class<?> holder) {
+        Map<String, Class<?>> result = new HashMap<>();
+        for (Class<?> aClass : holder.getClasses()) {
+            result.put(aClass.getSimpleName(), aClass);
+        }
+        return result;
+    }
+
+    public static <T> Collection<T> getInnerClassStaticObjectByName(Class<?> holder, String name) throws IllegalAccessException {
+        return getStaticObjects(
+                getInnerClassByName(
+                        holder, name
+                )
+        );
+    }
+}

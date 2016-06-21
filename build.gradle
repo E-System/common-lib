@@ -1,0 +1,84 @@
+/*
+ * Copyright 2016 E-System LLC
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+buildscript {
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+    repositories {
+        jcenter()
+        maven {
+            url "${artifactory_contextUrl}/plugins-snapshot"
+            credentials {
+                username "${artifactory_user}"
+                password "${artifactory_password}"
+            }
+        }
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'com.es.gradle:esgc:1.1.0-SNAPSHOT'
+    }
+}
+
+plugins {
+    id "org.sonarqube" version "2.0.1"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14'
+}
+
+apply from: "build-${profile}.gradle"
+apply plugin: 'org.sonarqube'
+apply plugin: 'com.es.gradle.esgc'
+apply plugin: 'com.es.gradle.esgcGlobal'
+
+esgcGlobal{
+    idea()
+}
+esgc {
+    manifestVersion()
+    propertyVersion("/com/es/lib/common")
+
+    publish()
+
+    dependencies{
+        compile{
+            commonsLang()
+            slf4j()
+            gson()
+            mail()
+            jbcrypt()
+        }
+        testCompile{
+            spock()
+        }
+    }
+}
+
+test{
+    systemProperty 'test_email_server', test_email_server
+    systemProperty 'test_email_login', test_email_login
+    systemProperty 'test_email_password', test_email_password
+}
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "${sonar_url}"
+        property "sonar.login", "${sonar_user}"
+        property "sonar.password", "${sonar_password}"
+    }
+}
