@@ -103,4 +103,17 @@ class CollectionUtilSpec extends Specification {
         new AbstractMap.SimpleEntry("", "abc")    || true
         new AbstractMap.SimpleEntry("abc", "asd") || true
     }
+
+    def "Fill not available keys with string '1'"() {
+        expect:
+        CollectionUtil.fillNotAvailableKeys(map, keys, value) == result
+        where:
+        map        | keys       | value || result
+        null       | null       | null  || null
+        null       | []         | '1'   || null
+        ['A': '1'] | null       | '1'   || ['A': '1']
+        ['A': '1'] | ['A']      | '2'   || ['A': '1']
+        ['A': '1'] | ['B']      | '2'   || ['A': '1', 'B': '2']
+        [:]        | ['A', 'B'] | '1'   || ['A': '1', 'B': '1']
+    }
 }

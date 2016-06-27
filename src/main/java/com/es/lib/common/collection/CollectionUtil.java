@@ -159,4 +159,25 @@ public final class CollectionUtil {
         }
         return values.stream().filter(StringUtils::isNotBlank).collect(Collectors.joining(delimiter));
     }
+
+    /**
+     * Fill not exist map values by keys
+     *
+     * @param map   map
+     * @param keys  keys array
+     * @param value value for added keys
+     * @param <K>   key type
+     * @param <V>   value type
+     * @return input map
+     */
+    public static <K, V> Map<K, V> fillNotAvailableKeys(Map<K, V> map, Collection<K> keys, V value) {
+        if (map == null) {
+            return null;
+        }
+        if (keys == null) {
+            return map;
+        }
+        keys.stream().filter(key -> !map.containsKey(key)).forEach(key -> map.put(key, value));
+        return map;
+    }
 }
