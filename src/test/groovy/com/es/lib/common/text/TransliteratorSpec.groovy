@@ -40,4 +40,21 @@ class TransliteratorSpec extends Specification {
         Transliterator.RUSSIAN | false            || Transliterator.ENGLISH
         Transliterator.ENGLISH | false            || Transliterator.ENGLISH
     }
+
+    def "Проверка верхнего регистра(зажатый шифт)"() {
+        expect:
+        Transliterator.get(value, englishToRussian) == result
+        where:
+        value                  | englishToRussian || result
+        ""                     | true             || ""
+        "ASDF"                 | true             || "ФЫВА"
+        "ФЫВА"                 | true             || "ФЫВА"
+        "ФывА"                 | true             || "ФывА"
+        "~:\"<>"               | true             || "ЁЖЭБЮ"
+        ""                     | false            || ""
+        "ASDF"                 | false            || "ASDF"
+        "ФывА"                 | false            || "AsdF"
+        "ЁЖЭБЮ"                | false            || "~:\"<>"
+
+    }
 }

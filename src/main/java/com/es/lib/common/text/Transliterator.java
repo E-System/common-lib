@@ -25,8 +25,8 @@ import java.util.Collection;
  */
 public final class Transliterator {
 
-    public static final String ENGLISH = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
-    public static final String RUSSIAN = "ё1234567890-=йцукенгшщзхъ\\фывапролджэячсмитьбю/";
+    public static final String ENGLISH = "`qwertyuiop[]asdfghjkl;'zxcvbnm,.~QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>";
+    public static final String RUSSIAN = "ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ";
 
     private Transliterator() {
     }
