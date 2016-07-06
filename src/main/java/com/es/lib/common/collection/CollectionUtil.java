@@ -18,10 +18,7 @@ package com.es.lib.common.collection;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -136,14 +133,61 @@ public final class CollectionUtil {
         return !isEmpty(array);
     }
 
+    /**
+     * Split array on N array with max {count} size
+     *
+     * @param list  input array
+     * @param count max any output array size
+     * @param <T>   type of array
+     * @return
+     */
     public static <T> List<List<T>> partition(List<T> list, int count) {
         List<List<T>> parts = new ArrayList<>();
-        if (isNotEmpty(list)) {
+        if (isNotEmpty(list) && count > 0) {
             final int size = list.size();
             for (int i = 0; i < size; i += count) {
                 parts.add(new ArrayList<>(
                         list.subList(i, Math.min(size, i + count)))
                 );
+            }
+        }
+        return parts;
+    }
+
+    /**
+     * Split array in {count} array
+     *
+     * @param list    input array
+     * @param count   size splitted array
+     * @param shuffle shuffle element into arrays
+     * @param <T>     type of array
+     * @return {count} size array
+     */
+    public static <T> List<List<T>> partitionOn(List<T> list, int count, boolean shuffle) {
+        List<List<T>> parts = new ArrayList<>();
+        if (isNotEmpty(list) && count > 0) {
+            for (int i = 0; i < count; ++i) {
+                parts.add(new LinkedList<>());
+            }
+            if (!shuffle) {
+                int size = list.size();
+                int partSize = (int) Math.round(Math.ceil(1.0d * size / count));
+                for (int i = 0; i < count && size > 0; ++i) {
+                    parts.get(i).addAll(
+                            list.subList(partSize * i, partSize * i + Math.min(partSize, size))
+                    );
+                    size -= partSize;
+                }
+            } else {
+                int index = 0;
+                for (T item : list) {
+                    if (index >= count) {
+                        index = 0;
+                    }
+                    List<T> ts = parts.get(index);
+                    ts.add(item);
+                    ++index;
+                }
             }
         }
         return parts;
