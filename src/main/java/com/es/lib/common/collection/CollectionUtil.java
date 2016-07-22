@@ -32,6 +32,27 @@ public final class CollectionUtil {
     }
 
     /**
+     * Создать новый ассоциативный массив без пустых значений
+     *
+     * @param map исходный ассоциативный массив
+     * @param <K> тип ключа
+     * @return новый ассоциативный массив без пустых значений
+     */
+    public static <K> Map<K, String> removeEmptyValues(Map<K, String> map) {
+        if (CollectionUtil.isEmpty(map)) {
+            return map;
+        }
+        return map.entrySet().stream().filter(
+                v -> StringUtils.isNotEmpty(v.getValue())
+        ).collect(
+                Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                )
+        );
+    }
+
+    /**
      * Создать новый ассоциативный массив без null значений
      *
      * @param map исходный ассоциативный массив

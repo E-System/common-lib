@@ -24,6 +24,21 @@ import spock.lang.Specification
  */
 class CollectionUtilSpec extends Specification {
 
+    def "Удалить пустые значения"() {
+        expect:
+        CollectionUtil.removeEmptyValues(map as Map) == result
+        where:
+        map                      | result
+        null                     | null
+        [:]                      | [:]
+        ["k1": null, "k2": "v2"] | ["k2": "v2"]
+        ["k1": "v1", "k2": "v2"] | ["k1": "v1", "k2": "v2"]
+        ["k1": null, "k2": null] | [:]
+        ["k1": "", "k2": "v2"]   | ["k2": "v2"]
+        ["k1": "v1", "k2": "v2"] | ["k1": "v1", "k2": "v2"]
+        ["k1": "", "k2": ""]     | [:]
+    }
+
     def "Удалить null значения"() {
         expect:
         CollectionUtil.removeNullValues(map as Map) == result
