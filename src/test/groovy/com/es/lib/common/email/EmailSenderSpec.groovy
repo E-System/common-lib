@@ -18,6 +18,7 @@ package com.es.lib.common.email
 
 import com.es.lib.common.email.config.EmailAuth
 import com.es.lib.common.email.config.SMTPServerConfiguration
+import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Timeout
 
@@ -41,6 +42,9 @@ class EmailSenderSpec extends Specification {
         )
     }
 
+    @IgnoreIf({
+        System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
+    })
     @Timeout(20)
     def "Email должен быть отправлен"() {
         when:
@@ -49,6 +53,9 @@ class EmailSenderSpec extends Specification {
         sender.send(EmailMessage.create("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body " + new Date()).build())
     }
 
+    @IgnoreIf({
+        System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
+    })
     @Timeout(20)
     def "Email должен быть отправлен с русским названием вложения"() {
         when:

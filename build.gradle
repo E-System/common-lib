@@ -20,6 +20,9 @@ buildscript {
     repositories {
         jcenter()
         maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
             url "${artifactory_contextUrl}/plugins-snapshot"
             credentials {
                 username "${artifactory_user}"
@@ -30,23 +33,25 @@ buildscript {
     }
     dependencies {
         classpath 'com.es.gradle:esgc:1.1.0-SNAPSHOT'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.0.1"
     }
 }
 
-plugins {
-    id "org.sonarqube" version "2.0.1"
-}
+def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null
+def sonarAvailable = properties['sonar_url'] != null && properties['sonar_user'] != null && properties['sonar_password'] != null
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
 }
 
 apply from: "build-${profile}.gradle"
-apply plugin: 'org.sonarqube'
+if (sonarAvailable) {
+    apply plugin: 'org.sonarqube'
+}
 apply plugin: 'com.es.gradle.esgc'
 apply plugin: 'com.es.gradle.esgcGlobal'
 
-esgcGlobal{
+esgcGlobal {
     idea()
 }
 esgc {
@@ -55,30 +60,34 @@ esgc {
 
     publish()
 
-    dependencies{
-        compile{
+    dependencies {
+        compile {
             commonsLang()
             slf4j()
             gson()
             mail()
             jbcrypt()
         }
-        testCompile{
+        testCompile {
             spock()
         }
     }
 }
 
-test{
-    systemProperty 'test_email_server', test_email_server
-    systemProperty 'test_email_login', test_email_login
-    systemProperty 'test_email_password', test_email_password
+if (emailTestEnabled) {
+    test {
+        systemProperty 'test_email_server', test_email_server
+        systemProperty 'test_email_login', test_email_login
+        systemProperty 'test_email_password', test_email_password
+    }
 }
 
-sonarqube {
-    properties {
-        property "sonar.host.url", "${sonar_url}"
-        property "sonar.login", "${sonar_user}"
-        property "sonar.password", "${sonar_password}"
+if (sonarAvailable) {
+    sonarqube {
+        properties {
+            property "sonar.host.url", "${sonar_url}"
+            property "sonar.login", "${sonar_user}"
+            property "sonar.password", "${sonar_password}"
+        }
     }
 }

@@ -11,9 +11,12 @@ artifactory_user=lib-user
 
 artifactory_password=***  
 
+Если указаны параметры
 
 test_email_server=yandex  
 
 test_email_login=develop@ext-system.com  
 
-test_email_password=***  
+test_email_password=***
+
+то будут выполнены тесты с отправкой и получением почты

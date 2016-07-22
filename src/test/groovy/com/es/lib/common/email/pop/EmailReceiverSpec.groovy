@@ -18,7 +18,9 @@ package com.es.lib.common.email.pop
 
 import com.es.lib.common.email.config.EmailAuth
 import com.es.lib.common.email.config.POP3ServerConfiguration
+import spock.lang.IgnoreIf
 import spock.lang.Specification
+import spock.lang.Timeout
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -26,6 +28,10 @@ import spock.lang.Specification
  */
 class EmailReceiverSpec extends Specification {
 
+    @IgnoreIf({
+        System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
+    })
+    @Timeout(20)
     def "GetAll"() {
         when:
         def receiver = new EmailReceiver(
