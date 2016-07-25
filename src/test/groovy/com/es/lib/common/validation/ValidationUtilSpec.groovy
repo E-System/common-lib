@@ -128,4 +128,30 @@ class ValidationUtilSpec extends Specification {
         "0"   | 0
     }
 
+    def "Get int representation throw NPE with null value"() {
+        when:
+        ValidationUtil.getInt(null, 1) == 1
+        then:
+        thrown(NullPointerException)
+    }
+
+    def "Get int representation throw IAE with incorrect index value"() {
+        when:
+        ValidationUtil.getInt("", 1) == 1
+        ValidationUtil.getInt("", -1) == 1
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def "Get int representation of character in string"() {
+        expect:
+        ValidationUtil.getInt(value, index) == result
+        where:
+        value | index || result
+        "1"   | 0     || 1
+        "12"  | 0     || 1
+        "12"  | 1     || 2
+        "99"  | 1     || 9
+    }
+
 }

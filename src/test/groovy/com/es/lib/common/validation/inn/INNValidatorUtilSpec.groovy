@@ -26,34 +26,32 @@ import spock.lang.Specification
  */
 class INNValidatorUtilSpec extends Specification {
 
-    def "Исключение для значений длина которых не 10 и не 12"() {
+    def "BadLengthException for value with length != 10 and length != 12"() {
         when:
         INNValidatorUtil.validate(value)
         then:
         thrown(BadLengthException)
         where:
-        value << ["123"]
+        value << ["", "1", "12", "123456789", "12345678901", "1234567890123"]
     }
 
-    def "При передаче null не должна возникать проверка"() {
+    def "BadLengthException when null value"() {
+        when:
+        INNValidatorUtil.validate(null as String)
+        then:
+        thrown(BadLengthException)
+    }
+
+    def "BadValueException for invalid value"() {
         when:
         INNValidatorUtil.validate(value)
         then:
-        true
-        where:
-        value << [null as String]
-    }
-
-    def "Для некорректных ИНН должны выкидывать исключения"() {
-        when: "Происходит валидация"
-        INNValidatorUtil.validate(value)
-        then: "Кидаем исключение"
         thrown(BadValueException)
         where:
         value << ["1234567890", "1111111111", "123456789012", "111111111111"]
     }
 
-    def "Корректные ИНН: 12 символов: 500100732259, 10 символов: 7830002293"() {
+    def "Success for: 12 symbols: 500100732259, 10 symbols: 7830002293"() {
         when:
         INNValidatorUtil.validate(value)
         then:

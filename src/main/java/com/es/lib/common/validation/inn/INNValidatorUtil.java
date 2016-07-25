@@ -18,6 +18,7 @@ package com.es.lib.common.validation.inn;
 
 import com.es.lib.common.validation.BadLengthException;
 import com.es.lib.common.validation.BadValueException;
+import com.es.lib.common.validation.ValidationUtil;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -25,49 +26,52 @@ import com.es.lib.common.validation.BadValueException;
  */
 public class INNValidatorUtil {
 
-	private static int[] N10_WEIGHTS = {2, 4, 10, 3, 5, 9, 4, 6, 8};
-	private static int[] N11_WEIGHTS = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
-	private static int[] N12_WEIGHTS = {3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
+    private static int[] N10_WEIGHTS = {2, 4, 10, 3, 5, 9, 4, 6, 8};
+    private static int[] N11_WEIGHTS = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
+    private static int[] N12_WEIGHTS = {3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
 
-	private INNValidatorUtil() {
-	}
+    private INNValidatorUtil() {
+    }
 
-	public static void validate(String value) throws BadValueException, BadLengthException {
-		if (value == null) {
-			return;
-		}
-		if (value.length() != 10 && value.length() != 12) {
-			throw new BadLengthException();
-		}
-		if (value.length() == 10) {
-			validate10(value);
-		} else {
-			validate12(value);
-		}
-	}
+    /**
+     * Validate INN
+     *
+     * @param value string with INN
+     * @throws BadValueException  when invalid length
+     * @throws BadLengthException when invalid value
+     */
+    public static void validate(String value) throws BadValueException, BadLengthException {
+        if (value == null) {
+            return;
+        }
+        if (value.length() != 10 && value.length() != 12) {
+            throw new BadLengthException();
+        }
+        if (value.length() == 10) {
+            validate10(value);
+        } else {
+            validate12(value);
+        }
+    }
 
-	private static void validate12(String value) throws BadValueException {
-		if ((getInt(value, 10) != getControlNumber(value, N11_WEIGHTS))
-		    || (getInt(value, 11) != getControlNumber(value, N12_WEIGHTS))) {
-			throw new BadValueException();
-		}
-	}
+    private static void validate12(String value) throws BadValueException {
+        if ((ValidationUtil.getInt(value, 10) != getControlNumber(value, N11_WEIGHTS))
+            || (ValidationUtil.getInt(value, 11) != getControlNumber(value, N12_WEIGHTS))) {
+            throw new BadValueException();
+        }
+    }
 
-	private static void validate10(String value) throws BadValueException {
-		if (getInt(value, 9) != getControlNumber(value, N10_WEIGHTS)) {
-			throw new BadValueException();
-		}
-	}
+    private static void validate10(String value) throws BadValueException {
+        if (ValidationUtil.getInt(value, 9) != getControlNumber(value, N10_WEIGHTS)) {
+            throw new BadValueException();
+        }
+    }
 
-	private static int getControlNumber(String value, int[] weights) {
-		int res = 0;
-		for (int i = 0; i < weights.length; ++i) {
-			res += getInt(value, i) * weights[i];
-		}
-		return (res % 11) % 10;
-	}
-
-	private static int getInt(String value, int index) {
-		return Character.getNumericValue(value.charAt(index));
-	}
+    private static int getControlNumber(String value, int[] weights) {
+        int res = 0;
+        for (int i = 0; i < weights.length; ++i) {
+            res += ValidationUtil.getInt(value, i) * weights[i];
+        }
+        return (res % 11) % 10;
+    }
 }
