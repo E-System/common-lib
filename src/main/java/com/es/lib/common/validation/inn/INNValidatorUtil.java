@@ -42,7 +42,7 @@ public class INNValidatorUtil {
      */
     public static void validate(String value) throws BadValueException, BadLengthException {
         if (value == null) {
-            return;
+            throw new BadLengthException();
         }
         if (value.length() != 10 && value.length() != 12) {
             throw new BadLengthException();
