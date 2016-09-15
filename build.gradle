@@ -32,22 +32,16 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.es.gradle:esgc:1.1.0-SNAPSHOT'
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.0.1"
+        classpath 'com.es.gradle:esgc:1.2.0-SNAPSHOT'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1-rc3"
     }
 }
 
-def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null
-def sonarAvailable = properties['sonar_url'] != null && properties['sonar_user'] != null && properties['sonar_password'] != null
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
+    gradleVersion = '3.0'
 }
 
 apply from: "build-${profile}.gradle"
-if (sonarAvailable) {
-    apply plugin: 'org.sonarqube'
-}
 apply plugin: 'com.es.gradle.esgc'
 apply plugin: 'com.es.gradle.esgcGlobal'
 
@@ -74,15 +68,18 @@ esgc {
     }
 }
 
+def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null
 if (emailTestEnabled) {
     test {
-        systemProperty 'test_email_server', test_email_server
-        systemProperty 'test_email_login', test_email_login
-        systemProperty 'test_email_password', test_email_password
+        systemProperty 'test_email_server', "${test_email_server}"
+        systemProperty 'test_email_login', "${test_email_login}"
+        systemProperty 'test_email_password', "${test_email_password}"
     }
 }
 
+def sonarAvailable = properties['sonar_url'] != null && properties['sonar_user'] != null && properties['sonar_password'] != null
 if (sonarAvailable) {
+    apply plugin: 'org.sonarqube'
     sonarqube {
         properties {
             property "sonar.host.url", "${sonar_url}"

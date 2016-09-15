@@ -16,6 +16,7 @@
 
 package com.es.lib.common.email.pop;
 
+import com.es.lib.common.HashUtil;
 import com.es.lib.common.email.common.BaseEmailProcessor;
 import com.es.lib.common.email.config.POP3ServerConfiguration;
 import org.apache.commons.lang3.StringUtils;
@@ -24,9 +25,11 @@ import org.slf4j.LoggerFactory;
 
 import javax.mail.*;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 /**
@@ -62,22 +65,23 @@ public class EmailReceiver extends BaseEmailProcessor {
                 Map<String, String> headers = getAllHeaders(message);
 
                 Map<String, File> attachments = new HashMap<>();
+                String realPathPrefix = pathPrefix;
                 String messageId = headers.get("Message-ID");
                 if (StringUtils.isNotEmpty(messageId)) {
-                    pathPrefix += "/" + messageId;
+                    realPathPrefix += "/" + HashUtil.md5(messageId);
                 }
-                attachments.putAll(processAttachments(pathPrefix, message));
+                attachments.putAll(processAttachments(realPathPrefix, message));
                 LOG.trace("Attachments: {}", attachments);
 
                 result.add(
-                        new ReceivedMessage(
-                                Arrays.asList(message.getFrom()),
-                                message.getSubject(),
-                                fetchText(message),
-                                message.getSentDate(),
-                                headers,
-                                attachments
-                        )
+                    new ReceivedMessage(
+                        Arrays.asList(message.getFrom()),
+                        message.getSubject(),
+                        fetchText(message),
+                        message.getSentDate(),
+                        headers,
+                        attachments
+                    )
                 );
                 if (deleteCollected) {
                     message.setFlag(Flags.Flag.DELETED, true);
@@ -109,8 +113,8 @@ public class EmailReceiver extends BaseEmailProcessor {
         while (allHeaders.hasMoreElements()) {
             Header header = (Header) allHeaders.nextElement();
             result.put(
-                    header.getName(),
-                    header.getValue()
+                header.getName(),
+                header.getValue()
             );
         }
         return result;
@@ -120,17 +124,17 @@ public class EmailReceiver extends BaseEmailProcessor {
         if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
             Map<String, File> result = new HashMap<>(1);
             result.put(
-                    part.getFileName(),
-                    saveFile(pathPrefix, part)
+                part.getFileName(),
+                saveFile(pathPrefix, part)
             );
             return result;
         }
-        if (part.isMimeType("text/*")) {
+        if (part.isMimeType("text/*") || !(part.getContent() instanceof Multipart)) {
             return Collections.emptyMap();
         }
         Multipart multiPart = (Multipart) part.getContent();
         Map<String, File> result = new HashMap<>(multiPart.getCount());
-        for (int i = 0; i < multiPart.getCount(); i++) {
+        for (int i = 0; i < multiPart.getCount(); ++i) {
             result.putAll(processAttachments(pathPrefix, multiPart.getBodyPart(i)));
         }
         return result;
@@ -147,13 +151,15 @@ public class EmailReceiver extends BaseEmailProcessor {
             for (int i = 0; i < mp.getCount(); i++) {
                 Part bp = mp.getBodyPart(i);
                 if (bp.isMimeType("text/plain")) {
-                    if (text == null)
+                    if (text == null) {
                         text = fetchText(bp);
+                    }
                     continue;
                 } else if (bp.isMimeType("text/html")) {
                     String s = fetchText(bp);
-                    if (s != null)
+                    if (s != null) {
                         return s;
+                    }
                 } else {
                     return fetchText(bp);
                 }
@@ -163,8 +169,9 @@ public class EmailReceiver extends BaseEmailProcessor {
             Multipart mp = (Multipart) p.getContent();
             for (int i = 0; i < mp.getCount(); i++) {
                 String s = fetchText(mp.getBodyPart(i));
-                if (s != null)
+                if (s != null) {
                     return s;
+                }
             }
         }
 
@@ -172,19 +179,8 @@ public class EmailReceiver extends BaseEmailProcessor {
     }
 
     private File saveFile(String pathPrefix, Part part) throws IOException, MessagingException {
-        File destFilePath = new File("/tmp/" + part.getFileName());
-        FileOutputStream output = new FileOutputStream(destFilePath);
-
-        InputStream input = part.getInputStream();
-
-        byte[] buffer = new byte[4096];
-
-        int byteRead;
-
-        while ((byteRead = input.read(buffer)) != -1) {
-            output.write(buffer, 0, byteRead);
-        }
-        output.close();
-        return destFilePath;
+        Path destinationFile = Files.createDirectories(Paths.get(pathPrefix)).resolve(part.getFileName());
+        Files.copy(part.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
+        return destinationFile.toFile();
     }
 }

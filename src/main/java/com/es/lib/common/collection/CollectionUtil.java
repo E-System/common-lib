@@ -160,7 +160,7 @@ public final class CollectionUtil {
      * @param list  input array
      * @param count max any output array size
      * @param <T>   type of array
-     * @return
+     * @return Array of N array
      */
     public static <T> List<List<T>> partition(List<T> list, int count) {
         List<List<T>> parts = new ArrayList<>();
