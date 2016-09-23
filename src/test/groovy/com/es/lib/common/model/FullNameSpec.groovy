@@ -90,15 +90,15 @@ class FullNameSpec extends Specification {
         where:
         value                          | result
         null                           | null
-        ""                             | ""
+        ""                             | null
         "aaa"                          | "aaa"
         "aaa bbb"                      | "aaa b."
         "aaa \t bbb"                   | "aaa b."
         "aaa bbb ccc"                  | "aaa b. c."
         "aaa   bbb   ccc"              | "aaa b. c."
         "aaa  \n bbb   ccc"            | "aaa b. c."
-        "aaa   bbb   ccc d."           | "aaa b. c. d."
-        "aaa   bbb   ccc d.          " | "aaa b. c. d."
+        "aaa   bbb   ccc "           | "aaa b. c."
+        "aaa   bbb   ccc           " | "aaa b. c."
     }
 
     def "Сокращения с левой стороны"() {
@@ -107,14 +107,14 @@ class FullNameSpec extends Specification {
         where:
         value                          | result
         null                           | null
-        ""                             | ""
+        ""                             | null
         "aaa"                          | "aaa"
         "aaa bbb"                      | "b. aaa"
         "aaa \t bbb"                   | "b. aaa"
         "aaa bbb ccc"                  | "b. c. aaa"
         "aaa   bbb   ccc"              | "b. c. aaa"
         "aaa  \n bbb   ccc"            | "b. c. aaa"
-        "aaa   bbb   ccc d."           | "b. c. d. aaa"
-        "aaa   bbb   ccc d.          " | "b. c. d. aaa"
+        "aaa   bbb   ccc "           | "b. c. aaa"
+        "aaa   bbb   ccc           " | "b. c. aaa"
     }
 }

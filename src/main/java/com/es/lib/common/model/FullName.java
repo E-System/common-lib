@@ -52,11 +52,20 @@ public class FullName {
     }
 
     public List<String> toList() {
-        return Arrays.asList(surname, name, patronymic);
+        return Arrays.asList(toArray());
     }
 
     public String[] toArray() {
-        return new String[]{surname, name, patronymic};
+        if (surname != null) {
+            if (name != null) {
+                if (patronymic != null) {
+                    return new String[]{surname, name, patronymic};
+                }
+                return new String[]{surname, name};
+            }
+            return new String[]{surname};
+        }
+        return new String[0];
     }
 
     public String getFull() {
