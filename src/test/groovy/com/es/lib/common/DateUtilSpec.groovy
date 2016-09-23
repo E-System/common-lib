@@ -41,7 +41,7 @@ class DateUtilSpec extends Specification {
 
     def "NextDay"() {
         expect:
-        DateUtil.nextDay(date, zone).equals(result)
+        DateUtil.nextDay(date, zone) == result
         where:
         date                             | zone                                  | result
         sdf.parse("06.02.2015 23:30:00") | TimeZone.getTimeZone("Europe/Moscow") | sdf.parse("07.02.2015 23:30:00")

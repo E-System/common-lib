@@ -26,7 +26,7 @@ class NumberUtilSpec extends Specification {
 
     def "Format"() {
         expect:
-        NumberFormatUtil.f22(a).equals(b)
+        NumberFormatUtil.f22(a) == b
         where:
         a              | b
         0.001d         | "0,00"

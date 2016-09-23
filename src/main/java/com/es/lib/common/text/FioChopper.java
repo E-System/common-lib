@@ -16,9 +16,9 @@
 
 package com.es.lib.common.text;
 
+import com.es.lib.common.model.FullName;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -28,34 +28,68 @@ import java.util.StringJoiner;
  */
 public class FioChopper {
 
+    private FioChopper() {
+    }
+
     /**
      * Сокращение Ф.И.О в формат Фамилия И. О.
      *
-     * @param fio входная строка с Ф.И.О.
+     * @param fullName входная строка с Ф.И.О.
      * @return сокращенная форма
      */
-    public static String right(String fio) {
-        return process(fio, false);
+    public static String rightFullName(FullName fullName) {
+        return process(fullName, false);
     }
 
     /**
      * Сокращение Ф.И.О в формат И. О. Фамилия
      *
-     * @param fio входная строка с Ф.И.О.
+     * @param fullName входная строка с Ф.И.О.
      * @return сокращенная форма
      */
-    public static String left(String fio) {
-        return process(fio, true);
+    public static String leftFullName(FullName fullName) {
+        return process(fullName, true);
     }
 
-    private static String process(String fio, boolean left) {
-        if (StringUtils.isBlank(fio)) {
-            return fio;
+    /**
+     * Сокращение Ф.И.О в формат Фамилия И. О.
+     *
+     * @param fullName входная строка с Ф.И.О.
+     * @return сокращенная форма
+     */
+    public static String right(String fullName) {
+        return process(fullName, false);
+    }
+
+    /**
+     * Сокращение Ф.И.О в формат И. О. Фамилия
+     *
+     * @param fullName входная строка с Ф.И.О.
+     * @return сокращенная форма
+     */
+    public static String left(String fullName) {
+        return process(fullName, true);
+    }
+
+    private static String process(FullName fullName, boolean left) {
+        if (fullName == null) {
+            return null;
         }
-        List<String> parts = Arrays.asList(fio.trim().split("\\s+"));
+        return processList(fullName.toList(), left);
+    }
+
+    private static String process(String fullName, boolean left) {
+        if (StringUtils.isBlank(fullName)) {
+            return fullName;
+        }
+        List<String> parts = TextUtil.splitAsList(fullName);
         if (parts.isEmpty()) {
-            return fio;
+            return fullName;
         }
+        return processList(parts, left);
+    }
+
+    private static String processList(List<String> parts, boolean left) {
         if (parts.size() == 1) {
             return parts.get(0);
         }
@@ -69,8 +103,5 @@ public class FioChopper {
             result += (" " + parts.get(0));
         }
         return result;
-    }
-
-    private FioChopper() {
     }
 }
