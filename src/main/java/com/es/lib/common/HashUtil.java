@@ -65,4 +65,24 @@ public final class HashUtil {
         }
         return hex.toString();
     }
+
+    public static int CRC16CCITT(byte[] bytes) {  return CRC16CCITT(bytes, 0, 0); }
+
+    public static int CRC16CCITT(byte[] bytes, int skipIndex, int skipLen) {
+        int crc = 0xFFFF;          // init
+        int polynom = 0x1021;   // 0001 0000 0010 0001
+        for (int i = 0; i < bytes.length; i++) {
+            if(i>=skipIndex && i<skipIndex+skipLen) {
+                continue;
+            }
+            for (int j = 0; j < 8; j++) {
+                boolean bit = ((bytes[i] >> (7 - j) & 1) == 1);
+                boolean c15 = ((crc >> 15 & 1) == 1);
+                crc <<= 1;
+                if (c15 ^ bit) crc ^= polynom;
+            }
+        }
+        crc &= 0xffff;
+        return crc;
+    }
 }
