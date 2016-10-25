@@ -45,8 +45,8 @@ public class ByteUtil {
     public static String toHex(byte[] b) {
         Objects.requireNonNull(b);
         return IntStream.range(0, b.length)
-                .mapToObj(i -> String.format("%02X", b[i] & 0xff))
-                .collect(Collectors.joining(" "));
+            .mapToObj(i -> String.format("%02X", b[i] & 0xff))
+            .collect(Collectors.joining(" "));
     }
 
     /**
@@ -54,8 +54,8 @@ public class ByteUtil {
      *
      * @param value - значение
      * @param width - кол-во байтов результата
-     * @throws IllegalArgumentException если width меньше 1 или value меньше 0 или если значение не может уместиться в width байт
      * @return массив байтов BCD вида
+     * @throws IllegalArgumentException если width меньше 1 или value меньше 0 или если значение не может уместиться в width байт
      */
     public static byte[] doubleToBCD(double value, int width) {
         return doubleToBCD(value, 2, width);
@@ -67,8 +67,8 @@ public class ByteUtil {
      * @param value        - значение
      * @param decimalCount - кол-во знаком после запятой
      * @param width        - кол-во байтов результата
-     * @throws IllegalArgumentException если width&lt;=0 или value&lt;0 или если значение не может уместиться в width байт
      * @return массив байтов BCD вида
+     * @throws IllegalArgumentException если width&lt;=0 или value&lt;0 или если значение не может уместиться в width байт
      */
     public static byte[] doubleToBCD(double value, int decimalCount, int width) {
         return longToBCD((long) (value * Math.pow(10, decimalCount)), width);
@@ -79,8 +79,8 @@ public class ByteUtil {
      *
      * @param value - значение
      * @param width - кол-во байтов результата
-     * @throws IllegalArgumentException если width&lt;=0 или value&lt;0 или если значение не может уместиться в width байт
      * @return массив байтов BCD вида
+     * @throws IllegalArgumentException если width&lt;=0 или value&lt;0 или если значение не может уместиться в width байт
      */
     public static byte[] intToBCD(int value, int width) {
         return longToBCD(value, width);
@@ -90,11 +90,11 @@ public class ByteUtil {
      * Преобразует int значение в байт BCD вида
      *
      * @param value - значение
-     * @throws IllegalArgumentException если value&lt;0 или value&gt;55
      * @return байт BCD вида
+     * @throws IllegalArgumentException если value&lt;0 или value&gt;55
      */
     public static byte intToBCDByte(int value) {
-        if(value>255) {
+        if (value > 255) {
             throw new IllegalArgumentException("Value must be <= 255");
         }
         return longToBCD(value, 1)[0];
@@ -105,14 +105,14 @@ public class ByteUtil {
      *
      * @param value - значение
      * @param width - кол-во байтов результата
-     * @throws IllegalArgumentException если width&lt;=0 или value&lt;0 или если значение не может уместиться в width байт
      * @return массив байтов BCD вида
+     * @throws IllegalArgumentException если width&lt;=0 или value&lt;0 или если значение не может уместиться в width байт
      */
     public static byte[] longToBCD(long value, int width) {
-        if(value<0) {
+        if (value < 0) {
             throw new IllegalArgumentException("Value must be >= 0");
         }
-        if(width<=0) {
+        if (width <= 0) {
             throw new IllegalArgumentException("Width must be > 0");
         }
         String s = String.format("%0" + width * 2 + "d", value);
@@ -121,7 +121,7 @@ public class ByteUtil {
         }
         byte[] r = new byte[width];
         for (int i = 0; i < width; i++) {
-            r[i] = (byte) (Integer.parseInt(s.substring(i*2, i*2 + 2), 16) & 0xff);
+            r[i] = (byte) (Integer.parseInt(s.substring(i * 2, i * 2 + 2), 16) & 0xff);
         }
         return r;
     }
@@ -129,7 +129,7 @@ public class ByteUtil {
     /**
      * Read short value from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return short
      */
@@ -140,7 +140,7 @@ public class ByteUtil {
     /**
      * Read short value in LE format from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return short
      */
@@ -152,7 +152,7 @@ public class ByteUtil {
     /**
      * Read unsigned short (int) value from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return unsigned short (int) value
      */
@@ -165,7 +165,7 @@ public class ByteUtil {
     /**
      * Read short value in LE format from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return unsigned short (int) value
      */
@@ -177,7 +177,7 @@ public class ByteUtil {
     /**
      * Read 3byte int value from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return 3byte int value
      */
@@ -188,7 +188,7 @@ public class ByteUtil {
     /**
      * Read 3byte int value in LE format from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return 3byte int value
      */
@@ -199,7 +199,7 @@ public class ByteUtil {
     /**
      * Read int value from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return int value
      */
@@ -210,7 +210,7 @@ public class ByteUtil {
     /**
      * Read int value in LE format from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return int value
      */
@@ -221,23 +221,111 @@ public class ByteUtil {
     /**
      * Read long value from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return long value
      */
     public static long getLong(byte[] b, int index) {
-        return ((long)getInt(b, index) & 4294967295L) << 32 | (long)getInt(b, index + 4) & 4294967295L;
+        return ((long) getInt(b, index) & 4294967295L) << 32 | (long) getInt(b, index + 4) & 4294967295L;
     }
 
     /**
      * Read long value in LE format from array
      *
-     * @param b - source byte array
+     * @param b     - source byte array
      * @param index - start position index
      * @return long value
      */
     public static long getLongLE(byte[] b, int index) {
-        return (long)getIntLE(b, index) & 4294967295L | ((long)getIntLE(b, index + 4) & 4294967295L) << 32;
+        return (long) getIntLE(b, index) & 4294967295L | ((long) getIntLE(b, index + 4) & 4294967295L) << 32;
+    }
+
+    /**
+     * Get int16 bytes
+     *
+     * @param value - value to bytes
+     * @return byte[]
+     */
+    public static byte[] getInt16Bytes(int value) {
+        return new byte[]{(byte) ((value >>> 8) & 0xFF), (byte) (value & 0xFF)};
+    }
+
+    /**
+     * Get int16 bytes LE
+     *
+     * @param value - value to bytes
+     * @return byte[] LE
+     */
+    public static byte[] getInt16BytesLE(int value) {
+        return new byte[]{(byte) (value & 0xFF), (byte) ((value >>> 8) & 0xFF)};
+    }
+
+    /**
+     * Get int32 bytes
+     *
+     * @param value - value to bytes
+     * @return byte[]
+     */
+    public static byte[] getInt32Bytes(int value) {
+        return new byte[]{
+            (byte) ((value >>> 24) & 0xFF),
+            (byte) ((value >>> 16) & 0xFF),
+            (byte) ((value >>> 8) & 0xFF),
+            (byte) (value & 0xFF)
+        };
+    }
+
+    /**
+     * Get int32 bytes LE
+     *
+     * @param value - value
+     * @return byte[] LE
+     */
+    public static byte[] getInt32BytesLE(int value) {
+        return new byte[]{
+            (byte) (value & 0xFF),
+            (byte) ((value >>> 8) & 0xFF),
+            (byte) ((value >>> 16) & 0xFF),
+            (byte) ((value >>> 24) & 0xFF),
+        };
+    }
+
+    /**
+     * Get long bytes
+     *
+     * @param value - value to bytes
+     * @return byte[]
+     */
+    public static byte[] getLongBytes(long value) {
+        return new byte[]{
+            (byte) ((value >>> 56) & 0xFF),
+            (byte) ((value >>> 48) & 0xFF),
+            (byte) ((value >>> 40) & 0xFF),
+            (byte) ((value >>> 32) & 0xFF),
+            (byte) ((value >>> 24) & 0xFF),
+            (byte) ((value >>> 16) & 0xFF),
+            (byte) ((value >>> 8) & 0xFF),
+            (byte) (value & 0xFF)
+        };
+    }
+
+    /**
+     * Get long bytes LE
+     *
+     * @param value - value to bytes
+     * @return byte[] LE
+     */
+    public static byte[] getLongBytesLE(long value) {
+        return new byte[]{
+            (byte) (value & 0xFF),
+            (byte) ((value >>> 8) & 0xFF),
+            (byte) ((value >>> 16) & 0xFF),
+            (byte) ((value >>> 24) & 0xFF),
+            (byte) ((value >>> 32) & 0xFF),
+            (byte) ((value >>> 40) & 0xFF),
+            (byte) ((value >>> 48) & 0xFF),
+            (byte) ((value >>> 56) & 0xFF),
+        };
     }
 
 }

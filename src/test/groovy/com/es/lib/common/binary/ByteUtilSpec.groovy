@@ -143,4 +143,29 @@ class ByteUtilSpec extends Specification {
         then:
         thrown(IllegalArgumentException)
     }
+
+    def "int16 to byte[] must be correct"() {
+        expect:
+        ByteUtil.getUnsignedShort(ByteUtil.getInt16Bytes(value), 0) == value
+        ByteUtil.getUnsignedShortLE(ByteUtil.getInt16BytesLE(value), 0) == value
+        where:
+        value << [0x0000, 0x0001, 0x00FF, 0xFF00, 0xFFFF]
+    }
+
+    def "int32 to byte[] must be correct"() {
+        expect:
+        ByteUtil.getInt(ByteUtil.getInt32Bytes(value), 0) == value
+        ByteUtil.getIntLE(ByteUtil.getInt32BytesLE(value), 0) == value
+        where:
+        value << [0x00000000, 0x00000001, 0x000000FF, 0x0000FF00, 0x0000FFFF, 0x00FFFFFF, -0x1]
+    }
+
+    def "long to byte[] must be correct"() {
+        expect:
+        ByteUtil.getLong(ByteUtil.getLongBytes(value), 0) == value
+        ByteUtil.getLongLE(ByteUtil.getLongBytesLE(value), 0) == value
+        where:
+        value << [0x00000000L, 0x00000001L, 0x000000FFL, 0x0000FF00L, 0x0000FFFFL, 0x00FFFFFFL, -0x1L]
+    }
+
 }
