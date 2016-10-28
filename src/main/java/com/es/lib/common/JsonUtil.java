@@ -19,6 +19,8 @@ package com.es.lib.common;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Reader;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
@@ -31,6 +33,8 @@ public final class JsonUtil {
 	public static <T> T fromJson(String json, Class<T> classOfT) {
 		return getProcessor().fromJson(json, classOfT);
 	}
+
+    public static <T> T fromJson(Reader reader, Class<T> classOfT) { return getProcessor().fromJson(reader, classOfT); }
 
 	public static <T> T fromJson(String json, TypeToken<T> token) {
 		return getProcessor().fromJson(json, token.getType());
