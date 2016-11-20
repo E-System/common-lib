@@ -1,3 +1,8 @@
+import java.nio.file.Files
+import java.nio.file.NoSuchFileException
+import java.nio.file.Paths
+import java.time.LocalDateTime
+
 /*
  * Copyright 2016 E-System LLC
  *
@@ -14,58 +19,122 @@
  *    limitations under the License.
  */
 buildscript {
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    }
     repositories {
-        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-        maven {
-            url "${artifactory_contextUrl}/plugins-snapshot"
-            credentials {
-                username "${artifactory_user}"
-                password "${artifactory_password}"
-            }
-        }
-        mavenLocal()
     }
     dependencies {
-        classpath 'com.es.gradle:esgc:1.2.0-SNAPSHOT'
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1-rc3"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.2.1"
     }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '3.2'
 }
 
 apply from: "build-${profile}.gradle"
-apply plugin: 'com.es.gradle.esgc'
-apply plugin: 'com.es.gradle.esgcGlobal'
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
-esgcGlobal {
-    idea()
+sourceCompatibility = JavaVersion.VERSION_1_8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+group = ext.mainGroup
+version = ext.mainVersion + (ext.snapshot ? '-SNAPSHOT' : '')
+
+repositories {
+    jcenter()
+    mavenLocal()
 }
-esgc {
-    manifestVersion()
-    propertyVersion("/com/es/lib/common")
 
-    publish()
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = JavaVersion.VERSION_1_8
+    }
+    module {
+        downloadJavadoc = false
+        downloadSources = false
+        inheritOutputDirs = true
+        excludeDirs += file('gradle')
+        excludeDirs += file('out')
+    }
+}
 
-    dependencies {
-        compile {
-            commonsLang()
-            slf4j()
-            gson()
-            mail()
-            jbcrypt()
-        }
-        testCompile {
-            spock()
+def propName = rootProject.name
+def fullPath = '/com/es/lib/common'
+if (!fullPath.startsWith('/src/main/resources')) {
+    fullPath = '/src/main/resources' + fullPath
+}
+def versionString = "${project.version}"
+def filePath = "${project.projectDir}${fullPath}/"
+new File(filePath).mkdirs()
+try {
+    Files.delete(Paths.get(filePath, 'build.properties'))
+} catch (NoSuchFileException ignore) {
+}
+println("Create file for property: ${filePath}")
+project.ant.propertyfile(file: "${filePath}build.properties") {
+    ant.entry(key: 'name', value: propName)
+    ant.entry(key: 'version', value: versionString)
+    ant.entry(key: 'date', value: "${LocalDateTime.now().toString()}")
+}
+
+jar {
+    manifest {
+        attributes(
+                'Implementation-Version': project.version,
+                'Implementation-Vendor': 'E-SYSTEM'
+        )
+    }
+}
+javadoc {
+    failOnError = false
+    options.encoding = 'utf-8'
+}
+tasks.create(name: 'javadocJar', type: Jar, dependsOn: 'javadoc') {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+tasks.create(name: 'sourceJar', type: Jar) {
+    from sourceSets.main.allJava
+}
+
+artifacts {
+    archives javadocJar
+    archives sourceJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact javadocJar {
+                classifier 'javadoc'
+            }
+            artifact sourceJar {
+                classifier 'sources'
+            }
         }
     }
+}
+dependencies {
+    compile "org.apache.commons:commons-lang3:3.4"
+    compile "org.slf4j:slf4j-api:1.7.21"
+    compile "com.google.code.gson:gson:2.7"
+    compile "com.sun.mail:javax.mail:1.5.6"
+    compile "de.svenkubiak:jBCrypt:0.4.1"
+
+
+
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    testCompile "cglib:cglib:3.2.0"
+    testCompile "org.objenesis:objenesis:2.2"
 }
 
 def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null
