@@ -1,22 +1,23 @@
-# common-lib
+[![LOGO](https://ext-system.com/pictures/logo.png)](https://ext-system.com)
 
-For build need define property in ${HOME}/.gradle/gradle.properties
+## common-lib
 
-profile=develop  
+Homepage: https://ext-system.com
 
-
-artifactory_contextUrl=http://ext-system.com/artifactory  
-
-artifactory_user=lib-user  
-
-artifactory_password=***  
-
-Если указаны параметры
-
-test_email_server=yandex  
-
-test_email_login=develop@ext-system.com  
-
+For build need define some global Gradle property in ${HOME}/.gradle/gradle.properties  
+* Build profile
+```
+profile=develop
+```     
+* Email send test account (Test not run if property not defined)
+```
+test_email_server=yandex|gmail|mailru
+test_email_login=abc@ext-system.com  
 test_email_password=***
-
-то будут выполнены тесты с отправкой и получением почты
+```
+* SonarQube account (Analyzing not run if property not defined)
+```
+sonar_url=
+sonar_user=
+sonar_password=
+```
