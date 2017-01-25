@@ -53,7 +53,7 @@ class OGRNValidatorUtilSpeck extends Specification {
         then:
         thrown(BadValueException)
         where:
-        value << ["5077746887311", "1077746887312"]
+        value << ["5077746887311", "1077746887312", "3й4500116000221"]
     }
 
     def "Success for: 13 symbols: 5077746887312"() {

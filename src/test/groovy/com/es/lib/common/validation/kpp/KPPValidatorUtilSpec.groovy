@@ -32,7 +32,7 @@ class KPPValidatorUtilSpec extends Specification {
         then:
         thrown(BadValueException)
         where:
-        value << ["AAAA12123", "AAAA12BBB", "AAAAAAAAA", "фывапролд", "1111az122"]
+        value << ["AAAA12123", "AAAA12BBB", "AAAAAAAAA", "фывапролд", "1111az122", "1й1111122"]
     }
 
     def "Success for: 9 symbols: 1111AZ122"() {

@@ -48,7 +48,7 @@ class INNValidatorUtilSpec extends Specification {
         then:
         thrown(BadValueException)
         where:
-        value << ["1234567890", "1111111111", "123456789012", "111111111111"]
+        value << ["1234567890", "1111111111", "123456789012", "111111111111", "7й30002293"]
     }
 
     def "Success for: 12 symbols: 500100732259, 10 symbols: 7830002293"() {

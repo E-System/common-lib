@@ -28,7 +28,9 @@ public class OGRNValidatorUtil {
         if (length != 13 && length != 15) {
             throw new BadLengthException();
         }
-        if (value.matches("\\D")) {
+        try{
+            Long.parseLong(value);
+        }catch (NumberFormatException e){
             throw new BadValueException();
         }
         if (length == 13) {
@@ -77,7 +79,9 @@ public class OGRNValidatorUtil {
             if (length != 13) {
                 throw new BadLengthException();
             }
-            if (value.matches("\\D")) {
+            try{
+                Long.parseLong(value);
+            }catch (NumberFormatException e){
                 throw new BadValueException();
             }
         }

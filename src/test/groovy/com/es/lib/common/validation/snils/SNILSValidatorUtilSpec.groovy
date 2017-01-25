@@ -49,7 +49,7 @@ class SNILSValidatorUtilSpec extends Specification {
         then:
         thrown(BadValueException)
         where:
-        value << ["11223344596", "08765430301", "08265430200", "08765430311"]
+        value << ["11223344596", "08765430301", "08265430200", "08765430311", "1й223344595"]
     }
 
     def "Success for: 11 symbols: 08765430300, 08765430200, 08765430300, 08675430300, 11223344595"() {
