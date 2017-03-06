@@ -135,11 +135,11 @@ public class EmailSender extends BaseEmailProcessor {
                 EmailByteArrayContent content = (EmailByteArrayContent) attachment.getContent();
                 dataSource = new ByteArrayDataSource(content.getBytes(), content.getType());
                 mimeBodyPart.setDataHandler(new DataHandler(dataSource));
+                mimeBodyPart.addHeader("Content-Transfer-Encoding", "base64");
+                mimeBodyPart.addHeader("Content-Type", content.getType() + "; charset=utf-8");
                 if (StringUtils.isNotBlank(content.getName())) {
                     mimeBodyPart.setFileName(content.getName());
                 }
-                mimeBodyPart.setHeader("Content-Transfer-Encoding", "base64");
-                mimeBodyPart.setHeader("Content-type", content.getType() + "; charset=utf-8");
             } else {
                 EmailFileContent content = (EmailFileContent) attachment.getContent();
                 dataSource = new FileDataSource(content.getTarget());
