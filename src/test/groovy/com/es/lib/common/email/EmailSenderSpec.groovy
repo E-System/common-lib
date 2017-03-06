@@ -87,6 +87,7 @@ class EmailSenderSpec extends Specification {
         def attachment = new EmailAttachment(
                 new EmailByteArrayContent(
                         fileContent.getBytes(),
+                        'text/plain',
                         "Тестовое имя файла (из байт).txt"
                 )
         )
