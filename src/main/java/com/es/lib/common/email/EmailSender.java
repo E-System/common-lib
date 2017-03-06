@@ -59,9 +59,9 @@ public class EmailSender extends BaseEmailProcessor {
         smtpMessage.setFrom(new InternetAddress(backAddress, from));
         if (StringUtils.isNotEmpty(emailMessage.getBackAddress())) {
             smtpMessage.setReplyTo(
-                    InternetAddress.parse(
-                            emailMessage.getBackAddress()
-                    )
+                InternetAddress.parse(
+                    emailMessage.getBackAddress()
+                )
             );
         }
 
@@ -102,8 +102,8 @@ public class EmailSender extends BaseEmailProcessor {
             if (attachment.getContent().isByteArray()) {
                 EmailByteArrayContent content = (EmailByteArrayContent) attachment.getContent();
                 message.setContent(
-                        new ByteArrayDataSource(content.getBytes(), content.getType()),
-                        content.getType()
+                    new ByteArrayDataSource(content.getBytes(), content.getType()),
+                    content.getType()
                 );
             } else {
                 EmailFileContent content = (EmailFileContent) attachment.getContent();
@@ -136,8 +136,10 @@ public class EmailSender extends BaseEmailProcessor {
                 dataSource = new ByteArrayDataSource(content.getBytes(), content.getType());
                 mimeBodyPart.setDataHandler(new DataHandler(dataSource));
                 if (StringUtils.isNotBlank(content.getName())) {
-                    mimeBodyPart.setFileName(MimeUtility.encodeText(content.getName()));
+                    mimeBodyPart.setFileName(content.getName());
                 }
+                mimeBodyPart.setHeader("Content-Transfer-Encoding", "base64");
+                mimeBodyPart.setHeader("Content-type", content.getType() + "; charset=utf-8");
             } else {
                 EmailFileContent content = (EmailFileContent) attachment.getContent();
                 dataSource = new FileDataSource(content.getTarget());
