@@ -28,14 +28,12 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.*;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import static javax.mail.Part.ATTACHMENT;
@@ -128,7 +126,7 @@ public class EmailSender extends BaseEmailProcessor {
         }
     }
 
-    private void processAttachments(EmailMessage emailMessage, Multipart multipart) throws MessagingException {
+    private void processAttachments(EmailMessage emailMessage, Multipart multipart) throws MessagingException, UnsupportedEncodingException {
         for (EmailAttachment attachment : emailMessage.getAttachments()) {
             BodyPart mimeBodyPart = new MimeBodyPart();
 
@@ -138,7 +136,7 @@ public class EmailSender extends BaseEmailProcessor {
                 dataSource = new ByteArrayDataSource(content.getBytes(), content.getType());
                 mimeBodyPart.setDataHandler(new DataHandler(dataSource));
                 if (StringUtils.isNotBlank(content.getName())) {
-                    mimeBodyPart.setFileName(content.getName());
+                    mimeBodyPart.setFileName(MimeUtility.encodeText(content.getName()));
                 }
             } else {
                 EmailFileContent content = (EmailFileContent) attachment.getContent();

@@ -75,4 +75,26 @@ class EmailSenderSpec extends Specification {
         then:
         sender.send(message)
     }
+
+    @IgnoreIf({
+        System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
+    })
+    @Timeout(20)
+    def "Email должен быть отправлен с русским названием вложения (из байт)"() {
+        when:
+        def sender = createSender()
+        def fileContent = 'Пробное содержимое'
+        def attachment = new EmailAttachment(
+                new EmailByteArrayContent(
+                        fileContent.getBytes(),
+                        "Тестовое имя файла (из байт).txt"
+                )
+        )
+        def message = EmailMessage
+                .create("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
+                .attachment(attachment)
+                .build()
+        then:
+        sender.send(message)
+    }
 }
