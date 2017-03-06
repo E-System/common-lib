@@ -137,6 +137,9 @@ public class EmailSender extends BaseEmailProcessor {
                 EmailByteArrayContent content = (EmailByteArrayContent) attachment.getContent();
                 dataSource = new ByteArrayDataSource(content.getBytes(), content.getType());
                 mimeBodyPart.setDataHandler(new DataHandler(dataSource));
+                if (StringUtils.isNotBlank(content.getName())) {
+                    mimeBodyPart.setFileName(content.getName());
+                }
             } else {
                 EmailFileContent content = (EmailFileContent) attachment.getContent();
                 dataSource = new FileDataSource(content.getTarget());

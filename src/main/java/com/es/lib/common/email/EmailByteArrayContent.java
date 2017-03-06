@@ -16,8 +16,6 @@
 
 package com.es.lib.common.email;
 
-import java.util.Arrays;
-
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
@@ -26,10 +24,16 @@ public class EmailByteArrayContent extends EmailAttachmentContent {
 
     private byte[] bytes;
     private String type;
+    private String name;
 
     public EmailByteArrayContent(byte[] bytes, String type) {
+        this(bytes, type, null);
+    }
+
+    public EmailByteArrayContent(byte[] bytes, String type, String name) {
         this.bytes = bytes;
         this.type = type;
+        this.name = name;
     }
 
     public byte[] getBytes() {
@@ -40,11 +44,16 @@ public class EmailByteArrayContent extends EmailAttachmentContent {
         return type;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
-        return "EmailByteArrayContent [" +
-               "type='" + type + "'" +
-               ", bytes=" + Arrays.toString(bytes) +
-               "] " + super.toString();
+        return "EmailByteArrayContent{" +
+               "bytes=" + bytes +
+               ", type='" + type + '\'' +
+               ", name='" + name + '\'' +
+               "} " + super.toString();
     }
 }
