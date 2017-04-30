@@ -56,6 +56,15 @@ public class FullName {
         return patronymic;
     }
 
+    public String getNotSurname() {
+        String result = (StringUtils.isNotBlank(name) ? name : "")
+                        + (StringUtils.isNotBlank(patronymic) ? " " + patronymic : "");
+        if (CollectionUtil.isNotEmpty(others)) {
+            result += (" " + String.join(" ", others));
+        }
+        return result.trim();
+    }
+
     public List<String> getOthers() {
         return others;
     }

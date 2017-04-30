@@ -127,4 +127,13 @@ class FullNameSpec extends Specification {
         null                       | ""
         "Рахметов Иприс Алюб Углы" | "Рахметов Иприс Алюб Углы"
     }
+
+    def "Рахметов Иприс Алюб Углы getNotSurname"() {
+        expect:
+        new FullName(value).notSurname == result
+        where:
+        value                      | result
+        null                       | ""
+        "Рахметов Иприс Алюб Углы" | "Иприс Алюб Углы"
+    }
 }
