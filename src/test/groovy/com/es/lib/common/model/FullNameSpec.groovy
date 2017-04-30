@@ -88,33 +88,43 @@ class FullNameSpec extends Specification {
         expect:
         new FullName(value).choppedRight == result
         where:
-        value                          | result
-        null                           | null
-        ""                             | null
-        "aaa"                          | "aaa"
-        "aaa bbb"                      | "aaa b."
-        "aaa \t bbb"                   | "aaa b."
-        "aaa bbb ccc"                  | "aaa b. c."
-        "aaa   bbb   ccc"              | "aaa b. c."
-        "aaa  \n bbb   ccc"            | "aaa b. c."
+        value                        | result
+        null                         | null
+        ""                           | null
+        "aaa"                        | "aaa"
+        "aaa bbb"                    | "aaa b."
+        "aaa \t bbb"                 | "aaa b."
+        "aaa bbb ccc"                | "aaa b. c."
+        "aaa   bbb   ccc"            | "aaa b. c."
+        "aaa  \n bbb   ccc"          | "aaa b. c."
         "aaa   bbb   ccc "           | "aaa b. c."
         "aaa   bbb   ccc           " | "aaa b. c."
+        "Рахметов Иприс Алюб Углы"   | "Рахметов И. А."
     }
 
     def "Сокращения с левой стороны"() {
         expect:
         new FullName(value).choppedLeft == result
         where:
-        value                          | result
-        null                           | null
-        ""                             | null
-        "aaa"                          | "aaa"
-        "aaa bbb"                      | "b. aaa"
-        "aaa \t bbb"                   | "b. aaa"
-        "aaa bbb ccc"                  | "b. c. aaa"
-        "aaa   bbb   ccc"              | "b. c. aaa"
-        "aaa  \n bbb   ccc"            | "b. c. aaa"
+        value                        | result
+        null                         | null
+        ""                           | null
+        "aaa"                        | "aaa"
+        "aaa bbb"                    | "b. aaa"
+        "aaa \t bbb"                 | "b. aaa"
+        "aaa bbb ccc"                | "b. c. aaa"
+        "aaa   bbb   ccc"            | "b. c. aaa"
+        "aaa  \n bbb   ccc"          | "b. c. aaa"
         "aaa   bbb   ccc "           | "b. c. aaa"
         "aaa   bbb   ccc           " | "b. c. aaa"
+    }
+
+    def "Рахметов Иприс Алюб Углы"() {
+        expect:
+        new FullName(value).full == result
+        where:
+        value                      | result
+        null                       | ""
+        "Рахметов Иприс Алюб Углы" | "Рахметов Иприс Алюб Углы"
     }
 }

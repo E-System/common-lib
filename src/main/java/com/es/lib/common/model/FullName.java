@@ -1,5 +1,6 @@
 package com.es.lib.common.model;
 
+import com.es.lib.common.collection.CollectionUtil;
 import com.es.lib.common.text.FioChopper;
 import com.es.lib.common.text.TextUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ public class FullName {
     private String surname;
     private String name;
     private String patronymic;
+    private List<String> others;
 
     public FullName(String fullName) {
         if (StringUtils.isBlank(fullName)) {
@@ -30,6 +32,9 @@ public class FullName {
         }
         if (parts.length >= 3) {
             patronymic = parts[2];
+        }
+        if (parts.length >= 4) {
+            others = Arrays.asList(Arrays.copyOfRange(parts, 3, parts.length));
         }
     }
 
@@ -51,6 +56,10 @@ public class FullName {
         return patronymic;
     }
 
+    public List<String> getOthers() {
+        return others;
+    }
+
     public List<String> toList() {
         return Arrays.asList(toArray());
     }
@@ -69,9 +78,13 @@ public class FullName {
     }
 
     public String getFull() {
-        return (StringUtils.isNotBlank(surname) ? surname + " " : "")
-               + (StringUtils.isNotBlank(name) ? name : "")
-               + (StringUtils.isNotBlank(patronymic) ? " " + patronymic : "");
+        String result = (StringUtils.isNotBlank(surname) ? surname + " " : "")
+                        + (StringUtils.isNotBlank(name) ? name : "")
+                        + (StringUtils.isNotBlank(patronymic) ? " " + patronymic : "");
+        if (CollectionUtil.isNotEmpty(others)) {
+            result += (" " + String.join(" ", others));
+        }
+        return result.trim();
     }
 
     public String getChoppedLeft() {
@@ -100,6 +113,7 @@ public class FullName {
                "surname='" + surname + '\'' +
                ", name='" + name + '\'' +
                ", patronymic='" + patronymic + '\'' +
+               ", others=" + others +
                '}';
     }
 }
