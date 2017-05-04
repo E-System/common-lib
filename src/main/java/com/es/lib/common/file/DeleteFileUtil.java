@@ -22,7 +22,9 @@ import java.io.File;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 11.03.16
  */
-public class DeleteFileUtil {
+public final class DeleteFileUtil {
+
+    private DeleteFileUtil() { }
 
     public static boolean silent(File file) {
         try {
@@ -37,9 +39,5 @@ public class DeleteFileUtil {
             throw new NullPointerException("file argument is null");
         }
         return file.delete();
-    }
-
-    private DeleteFileUtil() {
-
     }
 }
