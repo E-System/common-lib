@@ -33,8 +33,8 @@ public final class OSUtil {
      *
      * @return путь до конфигурационного файла
      */
-    public static String getConfigFilePath(String appName, String configFileName) {
-        return Paths.get(getAppConfigPath(appName), configFileName).toString();
+    public static String getConfigFilePath(String companyName, String appName, String configFileName) {
+        return Paths.get(getAppConfigPath(companyName, appName), configFileName).toString();
     }
 
     /**
@@ -42,12 +42,12 @@ public final class OSUtil {
      *
      * @return путь до папки конфигурации
      */
-    public static String getAppConfigPath(String appName) {
+    public static String getAppConfigPath(String companyName, String appName) {
         switch (OSUtil.getOS()) {
             case WINDOWS:
-                return Paths.get(System.getenv("LOCALAPPDATA"), appName).toString();
+                return Paths.get(System.getenv("LOCALAPPDATA"), companyName, appName).toString();
             default:
-                return Paths.get(System.getenv("HOME"), ".config", appName).toString();
+                return Paths.get(System.getenv("HOME"), ".config", companyName, appName).toString();
         }
     }
 

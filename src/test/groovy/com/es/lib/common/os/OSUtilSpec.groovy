@@ -25,21 +25,21 @@ class OSUtilSpec extends Specification {
         OSUtil.getOS('sunos') == OSUtil.OS.SOLARIS
     }
 
-    def "Get os"(){
+    def "Get os"() {
         expect:
         OSUtil.getOS() == OSUtil.getOS(System.getProperty("os.name").toLowerCase())
     }
 
     def "getAppConfigPath"() {
         expect:
-        def path = OSUtil.getAppConfigPath("test")
+        def path = OSUtil.getAppConfigPath("es", "test")
         println(path)
         path != null
     }
 
     def "getConfigFilePath"() {
         expect:
-        def path = OSUtil.getConfigFilePath("test", "config.dat")
+        def path = OSUtil.getConfigFilePath("es", "test", "config.dat")
         println(path)
         path != null
     }
