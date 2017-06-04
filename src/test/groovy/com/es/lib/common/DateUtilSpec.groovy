@@ -34,10 +34,13 @@ import java.time.temporal.ChronoUnit
 class DateUtilSpec extends Specification {
 
     @Shared
-    int currentYear = LocalDateTime.now().year;
+    int currentYear = LocalDateTime.now().year
 
     static sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
     static dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
+    static {
+        sdf.setTimeZone(TimeZone.getTimeZone('Asia/Krasnoyarsk'))
+    }
 
     def "NextDay"() {
         expect:
