@@ -35,11 +35,15 @@ class DateUtilSpec extends Specification {
 
     @Shared
     int currentYear = LocalDateTime.now().year
+    @Shared
+    SimpleDateFormat sdf
+    @Shared
+    DateTimeFormatter dtf
 
-    static sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
-    static dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
-    static {
-        sdf.setTimeZone(TimeZone.getTimeZone('Asia/Krasnoyarsk'))
+    def setupSpec() {
+        TimeZone.setDefault(TimeZone.getTimeZone('Asia/Krasnoyarsk'))
+        sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+        dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
     }
 
     def "NextDay"() {
@@ -136,9 +140,9 @@ class DateUtilSpec extends Specification {
         expect:
         DateUtil.format(timeZone, date, format) == result
         where:
-        timeZone                              | date                             | format                || result
-        TimeZone.default                      | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
-        TimeZone.getTimeZone('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
+        timeZone                                 | date                             | format                || result
+        TimeZone.default | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
+        TimeZone.getTimeZone('Europe/Moscow')    | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
     }
 
     def "Получение дня недели"() {
