@@ -40,10 +40,10 @@ public final class DateUtil {
 
     public static Date nextDay(Date date, TimeZone timeZone) {
         return Date.from(
-                ZonedDateTime.ofInstant(
-                        date.toInstant(),
-                        timeZone.toZoneId()
-                ).plusDays(1).toInstant()
+            ZonedDateTime.ofInstant(
+                date.toInstant(),
+                timeZone.toZoneId()
+            ).plusDays(1).toInstant()
         );
     }
 
@@ -63,8 +63,8 @@ public final class DateUtil {
      */
     public static long between(ChronoUnit chronoUnit, Date start) {
         return chronoUnit.between(
-                start.toInstant(),
-                ZonedDateTime.now()
+            start.toInstant(),
+            ZonedDateTime.now()
         );
     }
 
@@ -78,8 +78,8 @@ public final class DateUtil {
      */
     public static long between(ChronoUnit chronoUnit, Date start, Date end) {
         return chronoUnit.between(
-                start.toInstant(),
-                end.toInstant()
+            start.toInstant(),
+            end.toInstant()
         );
     }
 
@@ -123,7 +123,7 @@ public final class DateUtil {
      */
     public static Date monthStart(ZoneId zoneId) {
         return Date.from(
-                LocalDate.now().withDayOfMonth(1).atStartOfDay(zoneId).toInstant()
+            LocalDate.now().withDayOfMonth(1).atStartOfDay(zoneId).toInstant()
         );
     }
 
@@ -183,19 +183,37 @@ public final class DateUtil {
     }
 
     public static String getYearIndex(Date date) {
-        return new SimpleDateFormat("yy").format(date);
+        return format(date, "yy");
     }
 
     public static String format(Date date, String format) {
-        return new SimpleDateFormat(format).format(date);
+        return createDateFormat(format).format(date);
+    }
+
+    public static String format(TimeZone timeZone, Date date, String format) {
+        return createDateFormat(format, timeZone).format(date);
     }
 
     public static String format(Locale locale, Date date, String format) {
-        return new SimpleDateFormat(format, locale).format(date);
+        return createDateFormat(format, locale).format(date);
     }
 
     public static Date parse(String date, String format) throws ParseException {
-        return new SimpleDateFormat(format).parse(date);
+        return createDateFormat(format).parse(date);
+    }
+
+    private static SimpleDateFormat createDateFormat(String format) {
+        return new SimpleDateFormat(format);
+    }
+
+    private static SimpleDateFormat createDateFormat(String format, TimeZone timeZone) {
+        SimpleDateFormat result = createDateFormat(format);
+        result.setTimeZone(timeZone);
+        return result;
+    }
+
+    private static SimpleDateFormat createDateFormat(String format, Locale locale) {
+        return new SimpleDateFormat(format, locale);
     }
 
     public static Calendar getCalendar(Date date, TimeZone timeZone) {
