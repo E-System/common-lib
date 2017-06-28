@@ -43,12 +43,12 @@ public final class CollectionUtil {
             return map;
         }
         return map.entrySet().stream().filter(
-                v -> StringUtils.isNotEmpty(v.getValue())
+            v -> v.getValue() != null && (!(v.getValue() instanceof CharSequence) || StringUtils.isNotEmpty(v.getValue()))
         ).collect(
-                Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue
-                )
+            Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue
+            )
         );
     }
 
@@ -65,12 +65,12 @@ public final class CollectionUtil {
             return map;
         }
         return map.entrySet().stream().filter(
-                CollectionUtil::isValueNonNull
+            CollectionUtil::isValueNonNull
         ).collect(
-                Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue
-                )
+            Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue
+            )
         );
     }
 
@@ -168,7 +168,7 @@ public final class CollectionUtil {
             final int size = list.size();
             for (int i = 0; i < size; i += count) {
                 parts.add(new ArrayList<>(
-                        list.subList(i, Math.min(size, i + count)))
+                    list.subList(i, Math.min(size, i + count)))
                 );
             }
         }
@@ -195,7 +195,7 @@ public final class CollectionUtil {
                 int partSize = (int) Math.round(Math.ceil(1.0d * size / count));
                 for (int i = 0; i < count && size > 0; ++i) {
                     parts.get(i).addAll(
-                            list.subList(partSize * i, partSize * i + Math.min(partSize, size))
+                        list.subList(partSize * i, partSize * i + Math.min(partSize, size))
                     );
                     size -= partSize;
                 }

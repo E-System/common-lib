@@ -28,27 +28,29 @@ class CollectionUtilSpec extends Specification {
         expect:
         CollectionUtil.removeEmptyValues(map as Map) == result
         where:
-        map                      | result
-        null                     | null
-        [:]                      | [:]
-        ["k1": null, "k2": "v2"] | ["k2": "v2"]
-        ["k1": "v1", "k2": "v2"] | ["k1": "v1", "k2": "v2"]
-        ["k1": null, "k2": null] | [:]
-        ["k1": "", "k2": "v2"]   | ["k2": "v2"]
-        ["k1": "v1", "k2": "v2"] | ["k1": "v1", "k2": "v2"]
-        ["k1": "", "k2": ""]     | [:]
+        map                                 | result
+        null                                | null
+        [:]                                 | [:]
+        ["k1": null, "k2": "v2"]            | ["k2": "v2"]
+        ["k1": "v1", "k2": "v2"]            | ["k1": "v1", "k2": "v2"]
+        ["k1": null, "k2": null]            | [:]
+        ["k1": "", "k2": "v2"]              | ["k2": "v2"]
+        ["k1": "v1", "k2": "v2"]            | ["k1": "v1", "k2": "v2"]
+        ["k1": "", "k2": ""]                | [:]
+        ["k1": false, "k2": true, "k3": ""] | ["k1": false, "k2": true]
     }
 
     def "Удалить null значения"() {
         expect:
         CollectionUtil.removeNullValues(map as Map) == result
         where:
-        map                      | result
-        null                     | null
-        [:]                      | [:]
-        ["k1": null, "k2": "v2"] | ["k2": "v2"]
-        ["k1": "v1", "k2": "v2"] | ["k1": "v1", "k2": "v2"]
-        ["k1": null, "k2": null] | [:]
+        map                                   | result
+        null                                  | null
+        [:]                                   | [:]
+        ["k1": null, "k2": "v2"]              | ["k2": "v2"]
+        ["k1": "v1", "k2": "v2"]              | ["k1": "v1", "k2": "v2"]
+        ["k1": null, "k2": null]              | [:]
+        ["k1": false, "k2": true, "k3": null] | ["k1": false, "k2": true]
     }
 
     def "Получение первого элемента или null"() {
