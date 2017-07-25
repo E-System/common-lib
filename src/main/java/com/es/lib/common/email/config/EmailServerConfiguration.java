@@ -70,15 +70,15 @@ public class EmailServerConfiguration implements Serializable {
     public Properties getProperty() throws IOException {
         String type = getTypeAsString();
         return load(
-                formatRow("mail.transport.protocol", type) +
-                formatRow("mail.host", server.getHost()) +
-                formatRow("mail." + type + ".auth", true) +
-                formatRow("mail." + type + ".timeout", server.getTimeout()) +
-                formatRow("mail." + type + ".port", server.getPort()) +
-                formatSsl() +
-                formatDebug() +
-                formatRow("mail." + type + ".quitwait", false) +
-                formatParameters()
+            formatRow("mail.transport.protocol", type) +
+            formatRow("mail.host", server.getHost()) +
+            formatRow("mail." + type + ".auth", true) +
+            formatRow("mail." + type + ".timeout", server.getTimeout()) +
+            formatRow("mail." + type + ".port", server.getPort()) +
+            formatSsl() +
+            formatDebug() +
+            formatRow("mail." + type + ".quitwait", false) +
+            formatParameters()
         );
     }
 
@@ -87,8 +87,8 @@ public class EmailServerConfiguration implements Serializable {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(
-                        getAuth().getLogin(),
-                        getAuth().getPassword()
+                    getAuth().getLogin(),
+                    getAuth().getPassword()
                 );
             }
         };
@@ -134,9 +134,9 @@ public class EmailServerConfiguration implements Serializable {
     private Properties load(String content) throws IOException {
         Properties result = new Properties();
         result.load(
-                new StringReader(
-                        content
-                )
+            new StringReader(
+                content
+            )
         );
         return result;
     }

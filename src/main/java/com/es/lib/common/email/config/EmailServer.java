@@ -33,11 +33,16 @@ public class EmailServer implements Cloneable, Serializable {
         timeout = 2000;
     }
 
-    public EmailServer(final String host, final int port, final boolean ssl) {
+    public EmailServer(String host, int port, boolean ssl) {
         this();
         this.host = host;
         this.port = port;
         this.ssl = ssl;
+    }
+
+    public EmailServer(String host, int port, boolean ssl, int timeout) {
+        this(host, port, ssl);
+        this.timeout = timeout;
     }
 
     public String getHost() {
