@@ -29,32 +29,37 @@ public final class OSUtil {
     private OSUtil() { }
 
     /**
-     * Получить путь до конфигурационного файла
+     * Get path to configuration file
      *
-     * @return путь до конфигурационного файла
+     * @param vendorName     Vendor name
+     * @param appName        Application name
+     * @param configFileName Configuration file name
+     * @return path to configuration file
      */
-    public static String getConfigFilePath(String companyName, String appName, String configFileName) {
-        return Paths.get(getAppConfigPath(companyName, appName), configFileName).toString();
+    public static String getConfigFilePath(String vendorName, String appName, String configFileName) {
+        return Paths.get(getAppConfigPath(vendorName, appName), configFileName).toString();
     }
 
     /**
-     * Получить путь до папки конфигурации
+     * Get path to configuration folder
      *
-     * @return путь до папки конфигурации
+     * @param vendorName Vendor name
+     * @param appName    Application name
+     * @return path to configuration folder
      */
-    public static String getAppConfigPath(String companyName, String appName) {
+    public static String getAppConfigPath(String vendorName, String appName) {
         switch (OSUtil.getOS()) {
             case WINDOWS:
-                return Paths.get(System.getenv("LOCALAPPDATA"), companyName, appName).toString();
+                return Paths.get(System.getenv("LOCALAPPDATA"), vendorName, appName).toString();
             default:
-                return Paths.get(System.getenv("HOME"), ".config", companyName, appName).toString();
+                return Paths.get(System.getenv("HOME"), ".config", vendorName, appName).toString();
         }
     }
 
     /**
-     * Получить путь до папки приложения
+     * Get path to application folder
      *
-     * @return путь до папки приложения
+     * @return path to application folder
      */
     public static String getAppPath() {
         return Paths.get(".").toAbsolutePath().normalize().toString();
