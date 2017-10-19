@@ -245,4 +245,28 @@ public final class CollectionUtil {
         keys.stream().filter(key -> !map.containsKey(key)).forEach(key -> map.put(key, value));
         return map;
     }
+
+    public static <V> Map<String, V> extractByPrefix(Map<String, V> map, String prefix, boolean removePrefix, int capacity) {
+        if (map == null) {
+            return null;
+        }
+        if (StringUtils.isBlank(prefix)) {
+            return new HashMap<>();
+        }
+        Map<String, V> result = new HashMap<>(capacity);
+        for (Map.Entry<String, V> entry : map.entrySet()) {
+            if (entry.getKey().startsWith(prefix)) {
+                String key = entry.getKey();
+                if (removePrefix) {
+                    key = key.replace(prefix + "_", "");
+                }
+                result.put(key, entry.getValue());
+            }
+        }
+        return result;
+    }
+
+    public static <V> Map<String, V> extractByPrefix(Map<String, V> map, String prefix, boolean removePrefix) {
+        return extractByPrefix(map, prefix, removePrefix, 3);
+    }
 }

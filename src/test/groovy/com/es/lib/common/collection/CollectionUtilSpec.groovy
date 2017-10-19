@@ -28,29 +28,29 @@ class CollectionUtilSpec extends Specification {
         expect:
         CollectionUtil.removeEmptyValues(map as Map) == result
         where:
-        map                                 | result
-        null                                | null
-        [:]                                 | [:]
-        ["k1": null, "k2": "v2"]            | ["k2": "v2"]
-        ["k1": "v1", "k2": "v2"]            | ["k1": "v1", "k2": "v2"]
-        ["k1": null, "k2": null]            | [:]
-        ["k1": "", "k2": "v2"]              | ["k2": "v2"]
-        ["k1": "v1", "k2": "v2"]            | ["k1": "v1", "k2": "v2"]
-        ["k1": "", "k2": ""]                | [:]
-        ["k1": false, "k2": true, "k3": ""] | ["k1": false, "k2": true]
+        map                                 || result
+        null                                || null
+        [:]                                 || [:]
+        ["k1": null, "k2": "v2"]            || ["k2": "v2"]
+        ["k1": "v1", "k2": "v2"]            || ["k1": "v1", "k2": "v2"]
+        ["k1": null, "k2": null]            || [:]
+        ["k1": "", "k2": "v2"]              || ["k2": "v2"]
+        ["k1": "v1", "k2": "v2"]            || ["k1": "v1", "k2": "v2"]
+        ["k1": "", "k2": ""]                || [:]
+        ["k1": false, "k2": true, "k3": ""] || ["k1": false, "k2": true]
     }
 
     def "Удалить null значения"() {
         expect:
         CollectionUtil.removeNullValues(map as Map) == result
         where:
-        map                                   | result
-        null                                  | null
-        [:]                                   | [:]
-        ["k1": null, "k2": "v2"]              | ["k2": "v2"]
-        ["k1": "v1", "k2": "v2"]              | ["k1": "v1", "k2": "v2"]
-        ["k1": null, "k2": null]              | [:]
-        ["k1": false, "k2": true, "k3": null] | ["k1": false, "k2": true]
+        map                                   || result
+        null                                  || null
+        [:]                                   || [:]
+        ["k1": null, "k2": "v2"]              || ["k2": "v2"]
+        ["k1": "v1", "k2": "v2"]              || ["k1": "v1", "k2": "v2"]
+        ["k1": null, "k2": null]              || [:]
+        ["k1": false, "k2": true, "k3": null] || ["k1": false, "k2": true]
     }
 
     def "Получение первого элемента или null"() {
@@ -139,18 +139,18 @@ class CollectionUtilSpec extends Specification {
         CollectionUtil.partition(list, count) == result
         where:
         list      | count || result
-        []        | 0      | []
-        [1]       | 0      | []
-        [1]       | 1      | [[1]]
-        [1, 2]    | 1      | [[1], [2]]
-        [1, 2, 3] | 1      | [[1], [2], [3]]
-        [1]       | 2      | [[1]]
-        [1, 2]    | 2      | [[1, 2]]
-        [1, 2, 3] | 2      | [[1, 2], [3]]
-        [1]       | 3      | [[1]]
-        [1, 2]    | 3      | [[1, 2]]
-        [1, 2, 3] | 3      | [[1, 2, 3]]
-        [1, 2, 3] | 4      | [[1, 2, 3]]
+        []        | 0     || []
+        [1]       | 0     || []
+        [1]       | 1     || [[1]]
+        [1, 2]    | 1     || [[1], [2]]
+        [1, 2, 3] | 1     || [[1], [2], [3]]
+        [1]       | 2     || [[1]]
+        [1, 2]    | 2     || [[1, 2]]
+        [1, 2, 3] | 2     || [[1, 2], [3]]
+        [1]       | 3     || [[1]]
+        [1, 2]    | 3     || [[1, 2]]
+        [1, 2, 3] | 3     || [[1, 2, 3]]
+        [1, 2, 3] | 4     || [[1, 2, 3]]
     }
 
     def "PartitionOn shuffle"() {
@@ -158,20 +158,20 @@ class CollectionUtilSpec extends Specification {
         CollectionUtil.partitionOn(list, count, true) == result
         where:
         list               | count || result
-        []                 | 0      | []
-        [1]                | 0      | []
-        [1]                | 1      | [[1]]
-        [1, 2]             | 1      | [[1, 2]]
-        [1, 2, 3]          | 1      | [[1, 2, 3]]
-        [1]                | 2      | [[1], []]
-        [1, 2]             | 2      | [[1], [2]]
-        [1, 2, 3]          | 2      | [[1, 3], [2]]
-        [1]                | 3      | [[1], [], []]
-        [1, 2]             | 3      | [[1], [2], []]
-        [1, 2, 3]          | 3      | [[1], [2], [3]]
-        [1, 2, 3]          | 4      | [[1], [2], [3], []]
-        [1, 2, 3, 4, 5, 6] | 2      | [[1, 3, 5], [2, 4, 6]]
-        [1, 2, 3, 4, 5, 6] | 3      | [[1, 4], [2, 5], [3, 6]]
+        []                 | 0     || []
+        [1]                | 0     || []
+        [1]                | 1     || [[1]]
+        [1, 2]             | 1     || [[1, 2]]
+        [1, 2, 3]          | 1     || [[1, 2, 3]]
+        [1]                | 2     || [[1], []]
+        [1, 2]             | 2     || [[1], [2]]
+        [1, 2, 3]          | 2     || [[1, 3], [2]]
+        [1]                | 3     || [[1], [], []]
+        [1, 2]             | 3     || [[1], [2], []]
+        [1, 2, 3]          | 3     || [[1], [2], [3]]
+        [1, 2, 3]          | 4     || [[1], [2], [3], []]
+        [1, 2, 3, 4, 5, 6] | 2     || [[1, 3, 5], [2, 4, 6]]
+        [1, 2, 3, 4, 5, 6] | 3     || [[1, 4], [2, 5], [3, 6]]
     }
 
     def "PartitionOn not shuffle"() {
@@ -179,20 +179,39 @@ class CollectionUtilSpec extends Specification {
         CollectionUtil.partitionOn(list, count, false) == result
         where:
         list               | count || result
-        []                 | 0      | []
-        [1]                | 0      | []
-        [1]                | 1      | [[1]]
-        [1, 2]             | 1      | [[1, 2]]
-        [1, 2, 3]          | 1      | [[1, 2, 3]]
-        [1]                | 2      | [[1], []]
-        [1, 2]             | 2      | [[1], [2]]
-        [1, 2, 3]          | 2      | [[1, 2], [3]]
-        [1]                | 3      | [[1], [], []]
-        [1, 2]             | 3      | [[1], [2], []]
-        [1, 2, 3]          | 3      | [[1], [2], [3]]
-        [1, 2, 3]          | 4      | [[1], [2], [3], []]
-        [1, 2, 3, 4, 5, 6] | 2      | [[1, 2, 3], [4, 5, 6]]
-        [1, 2, 3, 4, 5, 6] | 3      | [[1, 2], [3, 4], [5, 6]]
-        [1, 2, 3, 4, 5]    | 3      | [[1, 2], [3, 4], [5]]
+        []                 | 0     || []
+        [1]                | 0     || []
+        [1]                | 1     || [[1]]
+        [1, 2]             | 1     || [[1, 2]]
+        [1, 2, 3]          | 1     || [[1, 2, 3]]
+        [1]                | 2     || [[1], []]
+        [1, 2]             | 2     || [[1], [2]]
+        [1, 2, 3]          | 2     || [[1, 2], [3]]
+        [1]                | 3     || [[1], [], []]
+        [1, 2]             | 3     || [[1], [2], []]
+        [1, 2, 3]          | 3     || [[1], [2], [3]]
+        [1, 2, 3]          | 4     || [[1], [2], [3], []]
+        [1, 2, 3, 4, 5, 6] | 2     || [[1, 2, 3], [4, 5, 6]]
+        [1, 2, 3, 4, 5, 6] | 3     || [[1, 2], [3, 4], [5, 6]]
+        [1, 2, 3, 4, 5]    | 3     || [[1, 2], [3, 4], [5]]
+    }
+
+    def "extractByPrefix"() {
+        expect:
+        CollectionUtil.extractByPrefix(map, prefix, removePrefix) == result
+        where:
+        map                                                                | prefix     | removePrefix || result
+        null                                                               | '123'      | true         || null
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | ''         | true         || [:]
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'KEYWORDS' | true         || ['RU_RU': '1', 'EN_US': '2']
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'OTHER'    | true         || [:]
+        ['KEYWORDS_RU_RU': "1", 'KEYWORDS_EN_US': '2', 'OTHER_RU_RU': '3'] | 'KEYWORDS' | true         || ['RU_RU': '1', 'EN_US': '2']
+        ['OTHER_RU_RU': '1', 'OTHER_EN_US': '2']                           | 'KEYWORDS' | true         || [:]
+        null                                                               | '123'      | false        || null
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | ''         | false        || [:]
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'KEYWORDS' | false        || ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'OTHER'    | false        || [:]
+        ['KEYWORDS_RU_RU': "1", 'KEYWORDS_EN_US': '2', 'OTHER_RU_RU': '3'] | 'KEYWORDS' | false        || ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']
+        ['OTHER_RU_RU': '1', 'OTHER_EN_US': '2']                           | 'KEYWORDS' | false        || [:]
     }
 }
