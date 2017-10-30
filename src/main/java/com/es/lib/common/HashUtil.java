@@ -89,8 +89,12 @@ public final class HashUtil {
     public static int XOR(byte[] data) { return XOR(data, 0, 0); }
 
     public static int XOR(byte[] data, int skipIndex, int skipLen) {
+        return XOR(data, skipIndex, skipLen, data.length);
+    }
+
+    public static int XOR(byte[] data, int skipIndex, int skipLen, int lastIdx) {
         byte res = 0x00;
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < lastIdx; i++) {
             if (i >= skipIndex && i < skipIndex + skipLen) {
                 continue;
             }
