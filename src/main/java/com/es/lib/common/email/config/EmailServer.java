@@ -30,7 +30,7 @@ public class EmailServer implements Cloneable, Serializable {
     private int timeout;
 
     public EmailServer() {
-        timeout = 2000;
+        timeout = 20000;
     }
 
     public EmailServer(String host, int port, boolean ssl) {
