@@ -41,8 +41,8 @@ public class DateRange {
 
     public static Collection<SItem> getAll(TimeZone timeZone) {
         return Stream.of(DateRange.Interval.values())
-                .map(v -> v.getItem(timeZone))
-                .collect(Collectors.toList());
+            .map(v -> v.getItem(timeZone))
+            .collect(Collectors.toList());
     }
 
     public static DateRange getDefaultRange(TimeZone timeZone) {
@@ -79,8 +79,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().build(),
-                        new DateBuilder(timeZone).clearTime().addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().build(),
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(1).build()
                 );
             }
         },
@@ -88,8 +88,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().addDayOfMonth(-1).build(),
-                        new DateBuilder(timeZone).clearTime().build()
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(-1).build(),
+                    DateBuilder.create(timeZone).clearTime().build()
                 );
             }
         },
@@ -97,8 +97,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().addDayOfMonth(-7).build(),
-                        new DateBuilder(timeZone).clearTime().addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(-7).build(),
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(1).build()
                 );
             }
         },
@@ -106,8 +106,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().setDayOfWeek(Calendar.MONDAY).build(),
-                        new DateBuilder(timeZone).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfWeek(Calendar.MONDAY).build(),
+                    DateBuilder.create(timeZone).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
                 );
             }
         },
@@ -115,8 +115,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build(),
-                        new DateBuilder(timeZone).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build(),
+                    DateBuilder.create(timeZone).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
                 );
             }
         },
@@ -124,8 +124,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).build(),
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).addMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).build(),
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addMonth(1).build()
                 );
             }
         },
@@ -133,8 +133,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().addMonth(-1).setDayOfMonth(1).build(),
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().addMonth(-1).setDayOfMonth(1).build(),
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).build()
                 );
             }
         },
@@ -142,8 +142,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).build(),
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).addMonth(3).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).build(),
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addMonth(3).build()
                 );
             }
         },
@@ -151,8 +151,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).addMonth(-3).build(),
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addMonth(-3).build(),
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).build()
                 );
             }
         },
@@ -160,8 +160,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).setMonth(0).build(),
-                        new DateBuilder(timeZone).clearTime().addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).setMonth(0).build(),
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(1).build()
                 );
             }
         },
@@ -169,8 +169,8 @@ public class DateRange {
             @Override
             public DateRange getRange(TimeZone timeZone) {
                 return new DateRange(
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build(),
-                        new DateBuilder(timeZone).clearTime().setDayOfMonth(1).setMonth(0).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build(),
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).setMonth(0).build()
                 );
             }
         };

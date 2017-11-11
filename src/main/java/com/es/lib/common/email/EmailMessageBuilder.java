@@ -44,6 +44,10 @@ public class EmailMessageBuilder {
         this.extensions = new HashMap<>();
     }
 
+    public static EmailMessageBuilder create() {
+        return new EmailMessageBuilder();
+    }
+
     public EmailMessageBuilder backAddress(String backAddress) {
         this.backAddress = backAddress;
         return this;
@@ -114,16 +118,16 @@ public class EmailMessageBuilder {
 
     public EmailMessage build() {
         return new EmailMessage(
-                backAddress,
-                from,
-                destinations,
-                subject,
-                message,
-                headers,
-                attachments,
-                extensions,
-                id,
-                rootAttachment
+            backAddress,
+            from,
+            destinations,
+            subject,
+            message,
+            headers,
+            attachments,
+            extensions,
+            id,
+            rootAttachment
         );
     }
 }

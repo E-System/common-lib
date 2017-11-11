@@ -37,7 +37,7 @@ public class EmailMessage {
     private final EmailRootAttachment rootAttachment;
 
     public static EmailMessageBuilder create() {
-        return new EmailMessageBuilder();
+        return EmailMessageBuilder.create();
     }
 
     public static EmailMessageBuilder create(String destinations) {
@@ -46,9 +46,9 @@ public class EmailMessage {
 
     public static EmailMessageBuilder create(String destinations, String subject, String message) {
         return create()
-                .destinations(destinations)
-                .subject(subject)
-                .message(message);
+            .destinations(destinations)
+            .subject(subject)
+            .message(message);
     }
 
     EmailMessage(String backAddress, String from, String destinations, String subject, String message, Map<String, String> headers, Collection<EmailAttachment> attachments, Map<String, String> extensions, String id, EmailRootAttachment rootAttachment) {
