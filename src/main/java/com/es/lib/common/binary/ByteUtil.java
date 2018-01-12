@@ -42,7 +42,7 @@ public class ByteUtil {
      * @param b - мастив байтов
      * @return строку hex значений байтов объединенных пробелом
      */
-    public static String toHex(byte[] b) {
+    public static String toHex(byte... b) {
         Objects.requireNonNull(b);
         return IntStream.range(0, b.length)
             .mapToObj(i -> String.format("%02X", b[i] & 0xff))
@@ -238,6 +238,34 @@ public class ByteUtil {
      */
     public static long getLongLE(byte[] b, int index) {
         return (long) getIntLE(b, index) & 4294967295L | ((long) getIntLE(b, index + 4) & 4294967295L) << 32;
+    }
+
+    /**
+     * Read custom len long value from array
+     *
+     * @param b     - source byte array
+     * @param index - start position index
+     * @param count - bytes count of value
+     * @return long value
+     */
+    public static long getLong(byte[] b, int index, int count) {
+        byte[] data = new byte[8];
+        System.arraycopy(b, index, data, 8 - count, count);
+        return getLong(data, 0);
+    }
+
+    /**
+     * Read custom len long value in LE format from array
+     *
+     * @param b     - source byte array
+     * @param index - start position index
+     * @param count - bytes count of value
+     * @return long value
+     */
+    public static long getLongLE(byte[] b, int index, int count) {
+        byte[] data = new byte[8];
+        System.arraycopy(b, index, data, 0, count);
+        return getLongLE(data, 0);
     }
 
     /**
