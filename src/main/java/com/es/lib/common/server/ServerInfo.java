@@ -16,6 +16,7 @@
 
 package com.es.lib.common.server;
 
+import com.es.lib.common.os.OSUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,46 +26,53 @@ import org.slf4j.LoggerFactory;
  */
 public final class ServerInfo {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ServerInfo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServerInfo.class);
 
-	private String name;
-	private String version;
-	private boolean tomcat;
+    private String name;
+    private String version;
+    private boolean tomcat;
+    private OSUtil.OS os;
 
-	public ServerInfo() {
-	}
+    public ServerInfo() {
+    }
 
-	public static ServerInfo getInstance() {
-		return InstanceWrapper.INSTANCE;
-	}
+    public static ServerInfo getInstance() {
+        return InstanceWrapper.INSTANCE;
+    }
 
-	public void init(String serverInfo) {
-		int slashPos = serverInfo.indexOf("/");
-		name = (slashPos == -1 ? serverInfo : serverInfo.substring(0, slashPos));
-		version = (slashPos == -1 ? null : serverInfo.substring(slashPos + 1));
-		tomcat = name.toLowerCase().contains("tomcat");
-	}
+    public void init(String serverInfo) {
+        int slashPos = serverInfo.indexOf("/");
+        name = (slashPos == -1 ? serverInfo : serverInfo.substring(0, slashPos));
+        version = (slashPos == -1 ? null : serverInfo.substring(slashPos + 1));
+        tomcat = name.toLowerCase().contains("tomcat");
+        os = OSUtil.getOS();
+    }
 
-	public void log() {
-		LOG.info("Container: {}", name);
-		LOG.info("Container version: {}", version);
-		LOG.info("Is Tomcat: {}", tomcat);
-	}
+    public void log() {
+        LOG.info("OS: {}", os);
+        LOG.info("Container: {}", name);
+        LOG.info("Container version: {}", version);
+        LOG.info("Is Tomcat: {}", tomcat);
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getVersion() {
-		return version;
-	}
+    public String getVersion() {
+        return version;
+    }
 
-	public boolean isTomcat() {
-		return tomcat;
-	}
+    public boolean isTomcat() {
+        return tomcat;
+    }
 
-	private static class InstanceWrapper {
+    public OSUtil.OS getOs() {
+        return os;
+    }
 
-		final static ServerInfo INSTANCE = new ServerInfo();
-	}
+    private static class InstanceWrapper {
+
+        final static ServerInfo INSTANCE = new ServerInfo();
+    }
 }
