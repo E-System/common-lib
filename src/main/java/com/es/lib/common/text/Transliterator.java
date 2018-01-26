@@ -28,8 +28,7 @@ public final class Transliterator {
     public static final String ENGLISH = "`qwertyuiop[]asdfghjkl;'zxcvbnm,.~QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>";
     public static final String RUSSIAN = "ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ";
 
-    private Transliterator() {
-    }
+    private Transliterator() { }
 
     /**
      * Транслитерация по символам на клавиатуре(переводит и символа в ENGLISH в символ RUSSIAN в той же позиции)
@@ -59,9 +58,9 @@ public final class Transliterator {
 
     public static Collection<? extends CharSequence> get(String term) {
         return Arrays.asList(
-                term,
-                get(term, true),
-                get(term, false)
+            term,
+            get(term, true),
+            get(term, false)
         );
     }
 }

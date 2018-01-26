@@ -16,10 +16,10 @@
 
 package com.es.lib.common.config;
 
+import com.es.lib.common.os.OSUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.TimeZone;
@@ -35,15 +35,16 @@ public class GlobalConfig {
 
     private String name;
     private String version;
+    private OSUtil.OS os;
 
-    public GlobalConfig() {
-    }
+    private GlobalConfig() { }
 
     public static GlobalConfig getInstance() {
         return InstanceWrapper.INSTANCE;
     }
 
-    public void init(Supplier<InputStream> resourceSupplier) throws IOException {
+    public void init(Supplier<InputStream> resourceSupplier) {
+        os = OSUtil.getOS();
         Properties props = new Properties();
         try (InputStream is = resourceSupplier.get()) {
             props.load(is);
@@ -55,6 +56,7 @@ public class GlobalConfig {
     }
 
     public void log() {
+        LOG.info("OS: {}", os);
         LOG.info("Application: {}-{}", name, version);
         LOG.info("Server time zone: {}", TimeZone.getDefault());
     }
@@ -65,6 +67,10 @@ public class GlobalConfig {
 
     public String getVersion() {
         return version;
+    }
+
+    public OSUtil.OS getOs() {
+        return os;
     }
 
     private static class InstanceWrapper {

@@ -27,24 +27,23 @@ import java.io.Reader;
  */
 public final class JsonUtil {
 
-	private JsonUtil() {
-	}
+    private JsonUtil() { }
 
-	public static <T> T fromJson(String json, Class<T> classOfT) {
-		return getProcessor().fromJson(json, classOfT);
-	}
+    public static <T> T fromJson(String json, Class<T> classOfT) {
+        return getProcessor().fromJson(json, classOfT);
+    }
 
     public static <T> T fromJson(Reader reader, Class<T> classOfT) { return getProcessor().fromJson(reader, classOfT); }
 
-	public static <T> T fromJson(String json, TypeToken<T> token) {
-		return getProcessor().fromJson(json, token.getType());
-	}
+    public static <T> T fromJson(String json, TypeToken<T> token) {
+        return getProcessor().fromJson(json, token.getType());
+    }
 
-	public static String toJson(Object object) {
-		return getProcessor().toJson(object);
-	}
+    public static String toJson(Object object) {
+        return getProcessor().toJson(object);
+    }
 
-	private static Gson getProcessor() {
-		return new Gson();
-	}
+    private static Gson getProcessor() {
+        return new Gson();
+    }
 }

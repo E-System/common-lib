@@ -16,7 +16,11 @@
 
 package com.es.lib.common;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.TimeZone;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -24,24 +28,20 @@ import java.util.*;
  */
 public final class TZUtil {
 
-	private static final String TIMEZONE_ID_PREFIXES = "^(Africa|America|Asia|Atlantic|Australia|Europe|Indian|Pacific)/.*";
+    private static final String TIMEZONE_ID_PREFIXES = "^(Africa|America|Asia|Atlantic|Australia|Europe|Indian|Pacific)/.*";
 
-	private TZUtil() {
-	}
+    private TZUtil() { }
 
-	public static boolean isCorrect(String timeZoneID) {
-		TimeZone timeZone = TimeZone.getTimeZone(timeZoneID);
-		return timeZone != null && timeZone.getID().equals(timeZoneID);
-	}
+    public static boolean isCorrect(String timeZoneID) {
+        TimeZone timeZone = TimeZone.getTimeZone(timeZoneID);
+        return timeZone != null && timeZone.getID().equals(timeZoneID);
+    }
 
-	public static Collection<TimeZone> getAvailable() {
-		List<TimeZone> timeZones = new ArrayList<>();
-		for (final String id : TimeZone.getAvailableIDs()) {
-			if (id.matches(TIMEZONE_ID_PREFIXES)) {
-				timeZones.add(TimeZone.getTimeZone(id));
-			}
-		}
-		Collections.sort(timeZones, (a, b) -> a.getID().compareTo(b.getID()));
-		return timeZones;
-	}
+    public static Collection<TimeZone> getAvailable() {
+        return Stream.of(TimeZone.getAvailableIDs())
+            .filter(v -> v.matches(TIMEZONE_ID_PREFIXES))
+            .map(TimeZone::getTimeZone)
+            .sorted(Comparator.comparing(TimeZone::getID))
+            .collect(Collectors.toList());
+    }
 }

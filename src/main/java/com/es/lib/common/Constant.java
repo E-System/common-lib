@@ -44,9 +44,4 @@ public interface Constant {
      * Максимальное количество дней в месяце
      */
     int MAX_MONTH_DAYS = 31;
-
-
-    long MULTIPLIER_MILLISECOND = 1000;
-    long MULTIPLIER_MINUTE = 60 * MULTIPLIER_MILLISECOND;
-    long MULTIPLIER_HOUR = 60 * MULTIPLIER_MINUTE;
 }

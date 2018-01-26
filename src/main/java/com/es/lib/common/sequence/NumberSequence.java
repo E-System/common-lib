@@ -43,7 +43,7 @@ public abstract class NumberSequence<T extends Number> implements Serializable {
         } else if (entityClass.isAssignableFrom(Long.class)) {
             return new LongSequence();
         }
-        throw new ESRuntimeException("Параметризация неизвестным типом: " + entityClass);
+        throw new ESRuntimeException("Parametrize with invalid types. Available Short, Integer, Long but used: " + entityClass);
     }
 
     public abstract T next();

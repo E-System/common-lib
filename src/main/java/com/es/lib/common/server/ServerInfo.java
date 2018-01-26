@@ -16,7 +16,6 @@
 
 package com.es.lib.common.server;
 
-import com.es.lib.common.os.OSUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,10 +30,8 @@ public final class ServerInfo {
     private String name;
     private String version;
     private boolean tomcat;
-    private OSUtil.OS os;
 
-    public ServerInfo() {
-    }
+    private ServerInfo() { }
 
     public static ServerInfo getInstance() {
         return InstanceWrapper.INSTANCE;
@@ -45,14 +42,10 @@ public final class ServerInfo {
         name = (slashPos == -1 ? serverInfo : serverInfo.substring(0, slashPos));
         version = (slashPos == -1 ? null : serverInfo.substring(slashPos + 1));
         tomcat = name.toLowerCase().contains("tomcat");
-        os = OSUtil.getOS();
     }
 
     public void log() {
-        LOG.info("OS: {}", os);
-        LOG.info("Container: {}", name);
-        LOG.info("Container version: {}", version);
-        LOG.info("Is Tomcat: {}", tomcat);
+        LOG.info("Container: {} {} (Tomcat: {})", name, version, tomcat);
     }
 
     public String getName() {
@@ -65,10 +58,6 @@ public final class ServerInfo {
 
     public boolean isTomcat() {
         return tomcat;
-    }
-
-    public OSUtil.OS getOs() {
-        return os;
     }
 
     private static class InstanceWrapper {
