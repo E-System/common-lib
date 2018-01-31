@@ -24,15 +24,4 @@ class VersionLoaderSpec extends Specification {
         info.version == "1.3.0-SNAPSHOT"
         info.date == "2018-01-31T16:00:45.167"
     }
-
-    def "ReadBuildInfo"() {
-        when:
-        def info = VersionLoader.readBuildInfo()
-        then:
-        info != null
-        info.name == "common-lib-native"
-        info.version == "1.3.0-SNAPSHOT"
-        info.date == "2018-01-31T16:00:45.167"
-    }
-
 }
