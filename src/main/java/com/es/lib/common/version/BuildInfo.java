@@ -55,9 +55,9 @@ public class BuildInfo implements Serializable {
     public Map<String, String> asMap() {
         Map<String, String> result = new LinkedHashMap<>();
         result.put("name", getName());
+        result.put("version", getVersion());
         result.put("date", getDate());
         result.put("hash", getHash());
-        result.put("version", getVersion());
         return result;
     }
 
