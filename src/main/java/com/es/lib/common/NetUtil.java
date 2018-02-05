@@ -78,9 +78,9 @@ public class NetUtil {
 	 * @return числовое представление адреса подсети
 	 */
 	public static long getNetwork(String subnet) {
-		Objects.requireNonNull(subnet, "Параметр не должен быть null");
+		Objects.requireNonNull(subnet, "Parameter is null");
 		if (!subnet.contains("/")) {
-			throw new IllegalArgumentException("Параметр должен содержать символ '/'");
+			throw new IllegalArgumentException("Parameter not contains '/'");
 		}
 		return ip4ToLong(subnet.substring(0, subnet.indexOf("/")));
 	}
@@ -92,9 +92,9 @@ public class NetUtil {
 	 * @return числовое представление широковещательного адреса для подсети
 	 */
 	public static long getBroadcast(String subnet) {
-		Objects.requireNonNull(subnet, "Параметр не должен быть null");
+		Objects.requireNonNull(subnet, "Parameter is null");
 		if (!subnet.contains("/")) {
-			throw new IllegalArgumentException("Параметр должен содержать символ '/'");
+			throw new IllegalArgumentException("Parameter not contains '/'");
 		}
 		long ip = getNetwork(subnet);
 		int mask = Integer.parseInt(subnet.substring(subnet.indexOf("/") + 1));

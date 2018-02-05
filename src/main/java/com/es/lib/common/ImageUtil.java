@@ -62,7 +62,7 @@ public final class ImageUtil {
         } else if (type.contains("gif")) {
             return "gif";
         }
-        throw new IOException("Форматы файла должны быть gif,png,jpg");
+        throw new IOException("Accepted file format is gif, png, jpg");
     }
 
     public static void resizeToStream(InputStream inputStream, final String contentType, OutputStream outputStream, final int maxWidth) throws IOException {
@@ -76,19 +76,19 @@ public final class ImageUtil {
             int saveHeight = maxWidth * Math.max(width, height) / Math.min(width, height);
             LOG.info("Output image size: {} - {}", maxWidth, saveHeight);
             success = ImageIO.write(
-                    resize(bufferedImage, maxWidth, saveHeight),
-                    getImageType(contentType),
-                    outputStream
+                resize(bufferedImage, maxWidth, saveHeight),
+                getImageType(contentType),
+                outputStream
             );
         } else {
             success = ImageIO.write(
-                    bufferedImage,
-                    getImageType(contentType),
-                    outputStream
+                bufferedImage,
+                getImageType(contentType),
+                outputStream
             );
         }
         if (!success) {
-            throw new IOException("Файл некорректно загружен");
+            throw new IOException("File loading error");
         }
         outputStream.flush();
     }

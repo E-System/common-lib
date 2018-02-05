@@ -66,7 +66,7 @@ public class EntityClassExtractor<T> implements Serializable {
         ParameterizedType paramType = (ParameterizedType) type;
         if (paramType.getActualTypeArguments().length == 2) {
             if (paramType.getActualTypeArguments()[index] instanceof TypeVariable) {
-                throw new IllegalArgumentException("Невозможно определить класс сущности");
+                throw new IllegalArgumentException("ENTITY CLASS NOT DETERMINED");
             } else {
                 return (Class<K>) paramType.getActualTypeArguments()[index];
             }

@@ -39,7 +39,7 @@ public final class NumberUtil {
 
 	public static BigDecimal percent(BigDecimal val1, BigDecimal val2) {
 		if (val1 == null || val2 == null) {
-			throw new ESRuntimeException("ОШИБКА ВЫЧИСЛЕНИЯ ПРОЦЕНТА: [val1: " + val1 + ", val2: " + val2 + "]");
+			throw new ESRuntimeException("ERROR CALCULATE PERCENT: [val1: " + val1 + ", val2: " + val2 + "]");
 		}
 		return percent(val1.doubleValue(), val2.doubleValue());
 	}
