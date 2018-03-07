@@ -140,9 +140,9 @@ class DateUtilSpec extends Specification {
         expect:
         DateUtil.format(timeZone, date, format) == result
         where:
-        timeZone                                 | date                             | format                || result
-        TimeZone.default | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
-        TimeZone.getTimeZone('Europe/Moscow')    | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
+        timeZone                              | date                             | format                || result
+        TimeZone.default                      | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
+        TimeZone.getTimeZone('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
     }
 
     def "Получение дня недели"() {
@@ -166,5 +166,29 @@ class DateUtilSpec extends Specification {
         year | month | day || result
         2015 | 1     | 1   || 1
         2015 | 2     | 1   || 5
+    }
+
+    def "Convert Date to LocalDateTime"() {
+        given:
+        def date = new Date()
+        when:
+        def result = DateUtil.convert(date)
+        println(date)
+        println(result)
+        then:
+        result != null
+        date.getTime() == result.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    }
+
+    def "Convert LocalDateTime to Date"() {
+        given:
+        def date = LocalDateTime.now()
+        when:
+        def result = DateUtil.convert(date)
+        println(date)
+        println(result)
+        then:
+        result != null
+        result.getTime() == date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 }

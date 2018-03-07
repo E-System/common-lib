@@ -107,19 +107,19 @@ public final class DateUtil {
     }
 
     /**
-     * Получить дату в начале месяца
+     * Get start of month
      *
-     * @return дата в начале текущего месяца
+     * @return Start of month
      */
     public static Date monthStart() {
         return monthStart(ZoneId.systemDefault());
     }
 
     /**
-     * Получить дату в начале месяца
+     * Get start of month
      *
-     * @param zoneId таймзона
-     * @return дата в начале текущего месяца
+     * @param zoneId Timezone
+     * @return Start of month
      */
     public static Date monthStart(ZoneId zoneId) {
         return Date.from(
@@ -128,9 +128,9 @@ public final class DateUtil {
     }
 
     /**
-     * Получить начало сегодняшнего дня
+     * Get today begin
      *
-     * @return начало сегодняшнего дня
+     * @return Today begin
      */
     public static Date todayBegin() {
         return Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant());
@@ -227,24 +227,24 @@ public final class DateUtil {
     }
 
     /**
-     * Получить день недели
+     * Get week day
      *
-     * @param year       год
-     * @param month      месяц
-     * @param dayOfMonth день месяца
-     * @return день недели
+     * @param year       Year
+     * @param month      Month
+     * @param dayOfMonth Day of month
+     * @return Week day
      */
     public static DayOfWeek getWeekDay(int year, int month, int dayOfMonth) {
         return LocalDate.of(year, month, dayOfMonth).getDayOfWeek();
     }
 
     /**
-     * Получить номер недели
+     * Get week number in year
      *
-     * @param year       год
-     * @param month      месяц
-     * @param dayOfMonth день месяца
-     * @return номер недели
+     * @param year       Year
+     * @param month      Month
+     * @param dayOfMonth Day of month
+     * @return Week number in year
      */
     public static int getWeekNumber(int year, int month, int dayOfMonth) {
         LocalDate date = LocalDate.of(year, month, dayOfMonth);
@@ -253,11 +253,11 @@ public final class DateUtil {
     }
 
     /**
-     * Преобразовать Date в LocalDateTime
+     * Convert Date to LocalDateTime
      *
-     * @param date   дата
-     * @param zoneId таймзона
-     * @return дата
+     * @param date   Date
+     * @param zoneId Timezone
+     * @return Local date
      */
     public static LocalDateTime convert(Date date, ZoneId zoneId) {
         if (date == null) {
@@ -268,11 +268,21 @@ public final class DateUtil {
     }
 
     /**
-     * Преобразовать LocalDateTime в Date
+     * Convert Date to LocalDateTime
      *
-     * @param date   дата
-     * @param zoneId таймзона
-     * @return дата
+     * @param date Date
+     * @return Local Date
+     */
+    public static LocalDateTime convert(Date date) {
+        return convert(date, ZoneId.systemDefault());
+    }
+
+    /**
+     * Convert LocalDateTime to Date
+     *
+     * @param date   Local date
+     * @param zoneId Timezone
+     * @return Date
      */
     public static Date convert(LocalDateTime date, ZoneId zoneId) {
         if (date == null) {
@@ -280,5 +290,15 @@ public final class DateUtil {
         }
         Instant instant = date.atZone(zoneId).toInstant();
         return Date.from(instant);
+    }
+
+    /**
+     * Convert LocalDateTime to Date
+     *
+     * @param date Local date
+     * @return Date
+     */
+    public static Date convert(LocalDateTime date) {
+        return convert(date, ZoneId.systemDefault());
     }
 }
