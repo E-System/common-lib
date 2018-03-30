@@ -26,7 +26,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Утилиты для работы с номерами телефонов
+ * Utils for phone numbers
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 11.08.15
@@ -40,10 +40,10 @@ public final class PhoneUtil {
     }
 
     /**
-     * Очистить номер телефона от дополнительных символов (пробельные символы, скобки, дефисы....)
+     * Clean phone number (remove spaces, braces, dashes...)
      *
-     * @param value номер телефона
-     * @return очищенный номер телефона
+     * @param value Phone number
+     * @return Cleaned phone number
      */
     public static String clean(String value) {
         if (value == null) {
@@ -56,10 +56,10 @@ public final class PhoneUtil {
     }
 
     /**
-     * Проверить является ли номер мобильным (в начале 7, 8 или пусто, потом 9 и 7 произвольных цифр)
+     * Check phone number for mobile(7, 8 or blank in begin, next 9 and 7 digits)
      *
-     * @param value номер телефона
-     * @return true - номер мобильный
+     * @param value Phone number
+     * @return true - is mobile number
      */
     public static boolean isMobile(String value) {
         value = clean(value);
@@ -67,11 +67,11 @@ public final class PhoneUtil {
     }
 
     /**
-     * Разделить входную строку на массив пар (номер, признак мобильного телефона)
+     * Split input on phone pairs(number and mobile phone flag)
      *
-     * @param value входная строка
-     * @param clean очищать номера в результате
-     * @return массив пар (номер, признак мобильного телефона)
+     * @param value Input string
+     * @param clean Clean numbers
+     * @return Phone pairs
      */
     public static Collection<Map.Entry<String, Boolean>> split(String value, boolean clean) {
         final Collection<String> phones = StringSplitter.process(value, new StringSplitter.Splitter("(,|;)"));
@@ -79,34 +79,64 @@ public final class PhoneUtil {
     }
 
     /**
-     * Склеить однотипные номера в 2 строки
+     * Join phone numbers by types
      *
-     * @param values    массив номеров
-     * @param delimiter разделитель для номеров в финальных строках
-     * @return 1 элемент - обычные номера, 2 элемент - мобильные номера
+     * @param values    Numbers array
+     * @param delimiter Delimiter for phones
+     * @return 1 element - simple numbers, 2 element - mobile numbers
      */
     public static Map.Entry<String, String> joinByType(Collection<Map.Entry<String, Boolean>> values, String delimiter) {
         if (CollectionUtil.isEmpty(values)) {
             return null;
         }
         return Pair.of(
-                values.stream().filter(v -> !v.getValue()).map(Map.Entry::getKey).collect(Collectors.joining(delimiter)),
-                values.stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.joining(delimiter))
+            values.stream().filter(v -> !v.getValue()).map(Map.Entry::getKey).collect(Collectors.joining(delimiter)),
+            values.stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.joining(delimiter))
         );
     }
 
     /**
-     * Преобразовать входную строку номеров телефона в 2 по типам номеров
+     * Convert input string to 2 string with typed numbers
      *
-     * @param value     входная строка
-     * @param clean     очищать номера в результате
-     * @param delimiter разделитель для номеров в финальных строках
-     * @return 1 элемент - обычные номера, 2 элемент - мобильные номера
+     * @param value     Input string
+     * @param clean     Clean numbers in output string
+     * @param delimiter Delimiter for numbers in output string
+     * @return 1 element - simple numbers, 2 element - mobile numbers
      */
     public static Map.Entry<String, String> groupByType(String value, boolean clean, String delimiter) {
         return joinByType(
-                split(value, clean),
-                delimiter
+            split(value, clean),
+            delimiter
         );
+    }
+
+    /**
+     * Format phone number by mask
+     *
+     * @param value Input number
+     * @param mask  Mask (for example +7 (***) ***-****)
+     * @param full  Fill not available symbols in phone from mask
+     * @return Formatted phone
+     */
+    public static String format(String value, String mask, boolean full) {
+        if (value == null) {
+            value = "";
+        }
+        if (StringUtils.isEmpty(mask)) {
+            return value;
+        }
+        StringBuilder sb = new StringBuilder();
+        int i = 0, j = 0;
+        for (; i < mask.length() && j < value.length(); ++i) {
+            char maskChar = mask.charAt(i);
+            sb.append(maskChar == '*' ? value.charAt(j++) : maskChar);
+        }
+        if (full) {
+            for (; i < mask.length(); ++i) {
+                char maskChar = mask.charAt(i);
+                sb.append(maskChar == '*' ? ' ' : maskChar);
+            }
+        }
+        return sb.toString();
     }
 }

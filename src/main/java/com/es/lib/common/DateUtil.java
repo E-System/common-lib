@@ -35,8 +35,7 @@ public final class DateUtil {
 
     public static final String CALENDAR_DATE_PATTERN = "dd.MM.yyyy";
 
-    private DateUtil() {
-    }
+    private DateUtil() {}
 
     public static Date nextDay(Date date, TimeZone timeZone) {
         return Date.from(
@@ -190,12 +189,24 @@ public final class DateUtil {
         return createDateFormat(format).format(date);
     }
 
+    public static String format(Date date) {
+        return format(date, CALENDAR_DATE_PATTERN);
+    }
+
     public static String format(TimeZone timeZone, Date date, String format) {
         return createDateFormat(format, timeZone).format(date);
     }
 
+    public static String format(TimeZone timeZone, Date date) {
+        return format(timeZone, date, CALENDAR_DATE_PATTERN);
+    }
+
     public static String format(Locale locale, Date date, String format) {
         return createDateFormat(format, locale).format(date);
+    }
+
+    public static String format(Locale locale, Date date) {
+        return format(locale, date, CALENDAR_DATE_PATTERN);
     }
 
     public static Date parse(String date, String format) throws ParseException {

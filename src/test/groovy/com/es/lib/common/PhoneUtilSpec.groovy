@@ -25,7 +25,7 @@ import spock.lang.Specification
  */
 class PhoneUtilSpec extends Specification {
 
-    def "Очистка номеров"() {
+    def "Clean number"() {
         expect:
         PhoneUtil.clean(value) == result
         where:
@@ -37,7 +37,7 @@ class PhoneUtilSpec extends Specification {
         "+7 905 981 79 16" || "79059817916"
     }
 
-    def "Проверка на мобильный номер"() {
+    def "Checnk on mobile phone"() {
         expect:
         PhoneUtil.isMobile(value) == result
         where:
@@ -53,7 +53,7 @@ class PhoneUtilSpec extends Specification {
         "111223"           || false
     }
 
-    def "Разделение строки на массив номеров"() {
+    def "Split input to array of numbers"() {
         expect:
         PhoneUtil.split(value, clean) == result
         where:
@@ -64,7 +64,7 @@ class PhoneUtilSpec extends Specification {
 
     }
 
-    def "Соединить номера по типам"() {
+    def "Join numbers by types"() {
         expect:
         PhoneUtil.joinByType(values, ", ") == result
         where:
@@ -74,7 +74,7 @@ class PhoneUtilSpec extends Specification {
         [Pair.of("11-12-13", false), Pair.of("9059817916", true), Pair.of("79131111234", true)] || Pair.of("11-12-13", "9059817916, 79131111234")
     }
 
-    def "Разделить номера по типам"() {
+    def "Split numbers by types"() {
         expect:
         PhoneUtil.groupByType(values, false, ", ") == result
         where:
@@ -83,5 +83,23 @@ class PhoneUtilSpec extends Specification {
         "+7(3852)11-12-12, +7 905 981 79 16"              || Pair.of("+7(3852)11-12-12", "+7 905 981 79 16")
         "+7(3852)11-12-12"                                || Pair.of("+7(3852)11-12-12", "")
         "+7(3852)11-12-12, +7 905 981 79 16; 79131111234" || Pair.of("+7(3852)11-12-12", "+7 905 981 79 16, 79131111234")
+    }
+
+    def "Format number"() {
+        expect:
+        PhoneUtil.format(value, mask, full) == result
+        where:
+        value        | mask               | full  || result
+        null         | null               | true  || ''
+        null         | null               | false || ''
+        null         | ""                 | true  || ''
+        null         | ""                 | false || ''
+        '7913333333' | null               | true  || '7913333333'
+        '7913333333' | null               | false || '7913333333'
+        '7913333333' | ''                 | true  || '7913333333'
+        '7913333333' | ''                 | false || '7913333333'
+        '7913333333' | '+7(***) ***-****' | false || '+7(791) 333-3333'
+        '79133'      | '+7(***) ***-****' | false || '+7(791) 33'
+        '79133'      | '+7(***) ***-****' | true  || '+7(791) 33 -    '
     }
 }
