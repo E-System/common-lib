@@ -17,7 +17,7 @@
 package com.es.lib.common;
 
 /**
- * Рассчет суммы процента
+ * Calculate percent
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 07.11.15
@@ -28,55 +28,55 @@ public class PercentUtil {
     }
 
     /**
-     * Получить целочисленный процент от числа
+     * Calculate int percent form value
      *
-     * @param value   число
-     * @param percent процент
-     * @return процент от числа
+     * @param value   Value
+     * @param percent Percent
+     * @return Value percent
      */
     public static int get(int value, double percent) {
-        return (int) Math.round(getDecimal(value, percent));
+        return (int) get((long) value, percent);
     }
 
     /**
-     * Получить целочисленный процент от числа
+     * Calculate long percent form value
      *
-     * @param value   число
-     * @param percent процент
-     * @return процент от числа
+     * @param value   Value
+     * @param percent Percent
+     * @return Value percent
      */
     public static long get(long value, double percent) {
-        return Math.round(value * percent / 100.0d);
+        return Math.round(getDecimal(value, percent));
     }
 
     /**
-     * Получить дробный процент от числа
+     * Calculate double percent form value
      *
-     * @param value   число
-     * @param percent процент
-     * @return процент от числа
+     * @param value   Value
+     * @param percent Percent
+     * @return Value percent
      */
     public static double getDecimal(double value, double percent) {
         return value * percent / 100.0d;
     }
 
     /**
-     * Получить значение + процент от значения
+     * Calculate int value with percent
      *
-     * @param value   значение
-     * @param percent процент
-     * @return значение + процент от значения
+     * @param value   Value
+     * @param percent Percent
+     * @return Value + value percent
      */
     public static int getTotal(int value, double percent) {
         return value + get(value, percent);
     }
 
     /**
-     * Получить значение + процент от значения
+     * Calculate long value with percent
      *
-     * @param value   значение
-     * @param percent процент
-     * @return значение + процент от значения
+     * @param value   Value
+     * @param percent Percent
+     * @return Value + value percent
      */
     public static long getTotal(long value, double percent) {
         return value + get(value, percent);
