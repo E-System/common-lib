@@ -17,9 +17,11 @@
 package com.es.lib.common.collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -28,8 +30,7 @@ import java.util.stream.Collectors;
  */
 public final class CollectionUtil {
 
-    private CollectionUtil() {
-    }
+    private CollectionUtil() {}
 
     /**
      * Создать новый ассоциативный массив без пустых значений
@@ -268,5 +269,15 @@ public final class CollectionUtil {
 
     public static <V> Map<String, V> extractByPrefix(Map<String, V> map, String prefix, boolean removePrefix) {
         return extractByPrefix(map, prefix, removePrefix, 3);
+    }
+
+    public static <U> Map.Entry<U, Integer> findWithIndex(final List<U> input, final Predicate<U> predicate) {
+        for (int i = 0; i < input.size(); ++i) {
+            U elem = input.get(i);
+            if (predicate.test(elem)) {
+                return Pair.of(elem, i);
+            }
+        }
+        return null;
     }
 }
