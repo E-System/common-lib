@@ -33,13 +33,13 @@ public final class HashUtil {
     private HashUtil() {
     }
 
-    public static String hash(String text, String algorithm) {
-        if (text == null) {
+    public static String hash(byte[] value, String algorithm) {
+        if (value == null) {
             return null;
         }
         try {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
-            digest.update(text.getBytes(Constant.DEFAULT_ENCODING));
+            digest.update(value);
             return getHex(digest.digest());
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
@@ -47,8 +47,24 @@ public final class HashUtil {
         }
     }
 
-    public static String md5(String text) {
-        return hash(text, "MD5");
+    public static String hash(String value, String algorithm) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return hash(value.getBytes(Constant.DEFAULT_ENCODING), algorithm);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public static String md5(String value) {
+        return hash(value, "MD5");
+    }
+
+    public static String md5(byte[] value) {
+        return hash(value, "MD5");
     }
 
     public static boolean isCorrect(final String text, final String hash) {
