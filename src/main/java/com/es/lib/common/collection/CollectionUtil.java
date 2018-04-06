@@ -272,6 +272,9 @@ public final class CollectionUtil {
     }
 
     public static <U> Map.Entry<U, Integer> findWithIndex(final List<U> input, final Predicate<U> predicate) {
+        if (isEmpty(input)) {
+            return null;
+        }
         for (int i = 0; i < input.size(); ++i) {
             U elem = input.get(i);
             if (predicate.test(elem)) {

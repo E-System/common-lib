@@ -16,7 +16,10 @@
 
 package com.es.lib.common.collection
 
+import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
+
+import java.util.function.Predicate
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -213,5 +216,23 @@ class CollectionUtilSpec extends Specification {
         ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'OTHER'    | false        || [:]
         ['KEYWORDS_RU_RU': "1", 'KEYWORDS_EN_US': '2', 'OTHER_RU_RU': '3'] | 'KEYWORDS' | false        || ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']
         ['OTHER_RU_RU': '1', 'OTHER_EN_US': '2']                           | 'KEYWORDS' | false        || [:]
+    }
+
+    def "FindWithIndex"() {
+        expect:
+        CollectionUtil.findWithIndex(input, new Predicate<Object>() {
+            @Override
+            boolean test(Object o) {
+                return o == 1
+            }
+        }) == result
+        where:
+        input     || result
+        null      || null
+        []        || null
+        [1, 2, 3] || Pair.of(1, 0)
+        [2, 1, 3] || Pair.of(1, 1)
+        [3, 2, 1] || Pair.of(1, 2)
+        [3, 2, 4] || null
     }
 }
