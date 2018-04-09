@@ -34,6 +34,7 @@ import java.util.TimeZone;
 public final class DateUtil {
 
     public static final String CALENDAR_DATE_PATTERN = "dd.MM.yyyy";
+    public static final String CALENDAR_DATE_PATTERN_WITH_TIME = "dd.MM.yyyy HH:mm:ss";
 
     private DateUtil() {}
 
@@ -193,6 +194,10 @@ public final class DateUtil {
         return format(date, CALENDAR_DATE_PATTERN);
     }
 
+    public static String formatWithTime(Date date) {
+        return format(date, CALENDAR_DATE_PATTERN_WITH_TIME);
+    }
+
     public static String format(TimeZone timeZone, Date date, String format) {
         return createDateFormat(format, timeZone).format(date);
     }
@@ -201,12 +206,20 @@ public final class DateUtil {
         return format(timeZone, date, CALENDAR_DATE_PATTERN);
     }
 
+    public static String formatWithTime(TimeZone timeZone, Date date) {
+        return format(timeZone, date, CALENDAR_DATE_PATTERN_WITH_TIME);
+    }
+
     public static String format(Locale locale, Date date, String format) {
         return createDateFormat(format, locale).format(date);
     }
 
     public static String format(Locale locale, Date date) {
         return format(locale, date, CALENDAR_DATE_PATTERN);
+    }
+
+    public static String formatWithTime(Locale locale, Date date) {
+        return format(locale, date, CALENDAR_DATE_PATTERN_WITH_TIME);
     }
 
     public static Date parse(String date, String format) throws ParseException {
