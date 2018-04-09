@@ -187,6 +187,9 @@ public final class DateUtil {
     }
 
     public static String format(Date date, String format) {
+        if (date == null){
+            return null;
+        }
         return createDateFormat(format).format(date);
     }
 
@@ -199,6 +202,9 @@ public final class DateUtil {
     }
 
     public static String format(TimeZone timeZone, Date date, String format) {
+        if (date == null){
+            return null;
+        }
         return createDateFormat(format, timeZone).format(date);
     }
 
@@ -211,6 +217,9 @@ public final class DateUtil {
     }
 
     public static String format(Locale locale, Date date, String format) {
+        if (date == null){
+            return null;
+        }
         return createDateFormat(format, locale).format(date);
     }
 
@@ -223,6 +232,9 @@ public final class DateUtil {
     }
 
     public static Date parse(String date, String format) throws ParseException {
+        if (date == null){
+            return null;
+        }
         return createDateFormat(format).parse(date);
     }
 
