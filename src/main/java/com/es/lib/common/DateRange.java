@@ -39,14 +39,22 @@ public class DateRange {
         this.dend = dend;
     }
 
-    public static Collection<SItem> getAll(TimeZone timeZone) {
+    public static Collection<SItem> getAll(TimeZone timeZone, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
-            .map(v -> v.getItem(timeZone))
+            .map(v -> v.getItem(timeZone, lastNextDay))
             .collect(Collectors.toList());
     }
 
+    public static Collection<SItem> getAll(TimeZone timeZone) {
+        return getAll(timeZone, true);
+    }
+
     public static DateRange getDefaultRange(TimeZone timeZone) {
-        return Interval.TODAY.getRange(timeZone);
+        return getDefaultRange(timeZone, true);
+    }
+
+    public static DateRange getDefaultRange(TimeZone timeZone, boolean lastNextDay) {
+        return Interval.TODAY.getRange(timeZone, lastNextDay);
     }
 
     public Date getDbegin() {
