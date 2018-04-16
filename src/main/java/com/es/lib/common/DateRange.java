@@ -77,108 +77,117 @@ public class DateRange {
     public enum Interval {
         TODAY {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().build(),
-                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
         YESTERDAY {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().addDayOfMonth(-1).build(),
-                    DateBuilder.create(timeZone).clearTime().build()
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
         LAST_7_DAYS {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().addDayOfMonth(-7).build(),
-                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
         CURRENT_WEEK {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().setDayOfWeek(Calendar.MONDAY).build(),
-                    DateBuilder.create(timeZone).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
         LAST_WEEK {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build(),
-                    DateBuilder.create(timeZone).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
         CURRENT_MONTH {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).build(),
-                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
         LAST_MONTH {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().addMonth(-1).setDayOfMonth(1).build(),
-                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
         CURRENT_TRIAD {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).build(),
-                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addMonth(3).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addMonth(3).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
         LAST_TRIAD {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addMonth(-3).build(),
-                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
         CURRENT_YEAR {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).setMonth(0).build(),
-                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(1).build()
+                    DateBuilder.create(timeZone).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
         LAST_YEAR {
             @Override
-            public DateRange getRange(TimeZone timeZone) {
+            public DateRange getRange(TimeZone timeZone, boolean lastNextDay) {
                 return new DateRange(
                     DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build(),
-                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).setMonth(0).build()
+                    DateBuilder.create(timeZone).clearTime().setDayOfMonth(1).setMonth(0).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         };
 
-        public abstract DateRange getRange(TimeZone timeZone);
+        public DateRange getRange(TimeZone timeZone) {
+            return getRange(timeZone, true);
+        }
+
+        public abstract DateRange getRange(TimeZone timeZone, boolean lastNextDay);
 
         public SItem getItem(TimeZone timeZone) {
-            return new SItem(this.getRange(timeZone).getIntervalString(), this.toString());
+            return getItem(timeZone, true);
         }
+
+        public SItem getItem(TimeZone timeZone, boolean lastNextDay) {
+            return new SItem(this.getRange(timeZone, lastNextDay).getIntervalString(), this.toString());
+        }
+
     }
 }

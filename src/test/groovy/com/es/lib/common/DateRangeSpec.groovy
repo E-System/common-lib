@@ -25,13 +25,13 @@ import spock.lang.Specification
  */
 class DateRangeSpec extends Specification {
 
-    def "Генерация интервалов"() {
+    def "Interval generate with next day"() {
         expect:
-        def range = interval.getRange(timeZone);
+        def range = interval.getRange(timeZone)
         range.dbegin == dbegin
         range.dend == dend
         where:
-        interval                         | timeZone         | dbegin                                                                                                 | dend
+        interval                         | timeZone         | dbegin                                                                                                    | dend
         DateRange.Interval.TODAY         | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().build()                                                  | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(1).build()
         DateRange.Interval.YESTERDAY     | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(-1).build()                                | DateBuilder.create(TimeZone.default).clearTime().build()
         DateRange.Interval.LAST_7_DAYS   | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(-7).build()                                | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(1).build()
@@ -45,9 +45,29 @@ class DateRangeSpec extends Specification {
         DateRange.Interval.LAST_YEAR     | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).build()
     }
 
-    def "Генерация списка всех интервалов"() {
+    def "Interval generate with current day"() {
+        expect:
+        def range = interval.getRange(timeZone, false)
+        range.dbegin == dbegin
+        range.dend == dend
+        where:
+        interval                         | timeZone         | dbegin                                                                                                    | dend
+        DateRange.Interval.TODAY         | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().build()                                                  | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.YESTERDAY     | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(-1).build()                                | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_7_DAYS   | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(-7).build()                                | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.CURRENT_WEEK  | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().setDayOfWeek(Calendar.MONDAY).build()                    | DateBuilder.create(TimeZone.default).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_WEEK     | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build() | DateBuilder.create(TimeZone.default).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.CURRENT_MONTH | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).build()                                 | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_MONTH    | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().addMonth(-1).setDayOfMonth(1).build()                    | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.CURRENT_TRIAD | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).build()                                 | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(3).addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_TRIAD    | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(-3).build()                    | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.CURRENT_YEAR  | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).build()                     | DateBuilder.create(TimeZone.default).clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_YEAR     | TimeZone.default | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | DateBuilder.create(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).addDayOfMonth(-1).build()
+    }
+
+    def "Generate list of all intervals"() {
         when:
-        def ranges = DateRange.getAll(TimeZone.default);
+        def ranges = DateRange.getAll(TimeZone.default)
         then:
         ranges.size() == DateRange.Interval.values().length
         ranges[0].title == DateRange.Interval.TODAY.toString()
