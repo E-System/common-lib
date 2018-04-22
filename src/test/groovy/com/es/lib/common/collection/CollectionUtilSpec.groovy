@@ -260,5 +260,7 @@ class CollectionUtilSpec extends Specification {
         newAttributes.containsKey('K2')
         !newAttributes.containsKey('K3')
         !newAttributes.containsKey('K4')
+        newAttributes['K1'] == 'V1'
+        newAttributes['K2'] == 'V2'
     }
 }
