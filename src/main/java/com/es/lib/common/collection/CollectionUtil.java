@@ -21,7 +21,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -265,6 +267,22 @@ public final class CollectionUtil {
             }
         }
         return result;
+    }
+
+    public static Map<String, String> updateValues(Supplier<Map<String, String>> supplier, Consumer<Map<String, String>> consumer, Collection<? extends Map.Entry<String, String>> items) {
+        Map<String, String> attributes = supplier.get();
+        if (attributes == null) {
+            attributes = new HashMap<>();
+            consumer.accept(attributes);
+        }
+        for (Map.Entry<String, String> item : items) {
+            if (StringUtils.isBlank(item.getValue())) {
+                attributes.remove(item.getKey());
+            } else {
+                attributes.put(item.getKey(), item.getValue());
+            }
+        }
+        return attributes;
     }
 
     public static <V> Map<String, V> extractByPrefix(Map<String, V> map, String prefix, boolean removePrefix) {

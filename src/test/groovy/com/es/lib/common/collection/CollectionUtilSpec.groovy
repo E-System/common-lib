@@ -19,7 +19,9 @@ package com.es.lib.common.collection
 import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
 
+import java.util.function.Consumer
 import java.util.function.Predicate
+import java.util.function.Supplier
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -234,5 +236,29 @@ class CollectionUtilSpec extends Specification {
         [2, 1, 3] || Pair.of(1, 1)
         [3, 2, 1] || Pair.of(1, 2)
         [3, 2, 4] || null
+    }
+
+    def "Update values with null"() {
+        when:
+        def attributes = null
+        def supplier = new Supplier<Map<String, String>>() {
+            @Override
+            Map<String, String> get() {
+                return attributes
+            }
+        }
+        def consumer = new Consumer<Map<String, String>>() {
+            @Override
+            void accept(Map<String, String> o) {
+                attributes = o
+            }
+        }
+        def newAttributes = CollectionUtil.updateValues(supplier, consumer, [Pair.of('K1', 'V1'), Pair.of('K2', 'V2'), Pair.of('K3', null), Pair.of('K4', '')])
+        then:
+        attributes == newAttributes
+        newAttributes.containsKey('K1')
+        newAttributes.containsKey('K2')
+        !newAttributes.containsKey('K3')
+        !newAttributes.containsKey('K4')
     }
 }
