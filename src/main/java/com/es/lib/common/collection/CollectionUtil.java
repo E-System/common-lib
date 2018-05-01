@@ -285,6 +285,23 @@ public final class CollectionUtil {
         return attributes;
     }
 
+    public static Map<String, String> updateValues(Supplier<Map<String, String>> supplier, Consumer<Map<String, String>> consumer, Map<String, String> source, Collection<String> keys) {
+        Map<String, String> attributes = supplier.get();
+        if (attributes == null) {
+            attributes = new HashMap<>();
+            consumer.accept(attributes);
+        }
+        for (String key : keys) {
+            String value = source.get(key);
+            if (StringUtils.isBlank(value)) {
+                attributes.remove(key);
+            } else {
+                attributes.put(key, value);
+            }
+        }
+        return attributes;
+    }
+
     public static <V> Map<String, V> extractByPrefix(Map<String, V> map, String prefix, boolean removePrefix) {
         return extractByPrefix(map, prefix, removePrefix, 3);
     }

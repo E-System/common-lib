@@ -263,4 +263,55 @@ class CollectionUtilSpec extends Specification {
         newAttributes['K1'] == 'V1'
         newAttributes['K2'] == 'V2'
     }
+
+    def "Update values from sources with null"() {
+        when:
+        def attributes = null
+        def supplier = new Supplier<Map<String, String>>() {
+            @Override
+            Map<String, String> get() {
+                return attributes
+            }
+        }
+        def consumer = new Consumer<Map<String, String>>() {
+            @Override
+            void accept(Map<String, String> o) {
+                attributes = o
+            }
+        }
+        def newAttributes = CollectionUtil.updateValues(supplier, consumer, ['K1': 'V1', 'K2': 'V2', 'K3': null, 'K4': ''], ['K1', 'K2', 'K3', 'K4'])
+        then:
+        attributes == newAttributes
+        newAttributes.containsKey('K1')
+        newAttributes.containsKey('K2')
+        !newAttributes.containsKey('K3')
+        !newAttributes.containsKey('K4')
+        newAttributes['K1'] == 'V1'
+        newAttributes['K2'] == 'V2'
+    }
+
+    def "Update values from sources with null with not all keys"() {
+        when:
+        def attributes = null
+        def supplier = new Supplier<Map<String, String>>() {
+            @Override
+            Map<String, String> get() {
+                return attributes
+            }
+        }
+        def consumer = new Consumer<Map<String, String>>() {
+            @Override
+            void accept(Map<String, String> o) {
+                attributes = o
+            }
+        }
+        def newAttributes = CollectionUtil.updateValues(supplier, consumer, ['K1': 'V1', 'K2': 'V2', 'K3': null, 'K4': ''], ['K1', 'K3', 'K4'])
+        then:
+        attributes == newAttributes
+        newAttributes.containsKey('K1')
+        !newAttributes.containsKey('K2')
+        !newAttributes.containsKey('K3')
+        !newAttributes.containsKey('K4')
+        newAttributes['K1'] == 'V1'
+    }
 }
