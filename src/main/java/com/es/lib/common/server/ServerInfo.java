@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Deprecated
 public final class ServerInfo {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServerInfo.class);

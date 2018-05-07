@@ -29,6 +29,7 @@ import java.util.function.Supplier;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 16.07.15
  */
+@Deprecated
 public class GlobalConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(GlobalConfig.class);
