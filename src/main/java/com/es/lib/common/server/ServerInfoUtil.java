@@ -13,7 +13,7 @@ public final class ServerInfoUtil {
 
     private ServerInfoUtil() {}
 
-    public void log(String serverInfo) {
+    public static void log(String serverInfo) {
         int slashPos = serverInfo.indexOf("/");
         String name = (slashPos == -1 ? serverInfo : serverInfo.substring(0, slashPos));
         String version = (slashPos == -1 ? null : serverInfo.substring(slashPos + 1));
