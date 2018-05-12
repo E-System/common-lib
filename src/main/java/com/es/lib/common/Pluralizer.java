@@ -25,15 +25,19 @@ public final class Pluralizer {
     private Pluralizer() { }
 
     /**
-     * Выбор текста во множественном числе
+     * Select numeral text
      *
      * @param value число
-     * @param str1  1-я форма множественного числа
-     * @param str2  2-я форма множественного числа
-     * @param str3  3-я форма множественного числа
-     * @return одна из форм выбранная на основе числа
+     * @param str1  First form
+     * @param str2  Second form
+     * @param str3  Third form
+     * @return One from selected form
      */
     public static String evaluate(int value, String str1, String str2, String str3) {
+        return evaluate((long) value, str1, str2, str3);
+    }
+
+    public static String evaluate(long value, String str1, String str2, String str3) {
         if ((value % 10 == 1) && (value % 100 != 11)) {
             return str1;
         } else if ((value % 10 >= 2) && (value % 10 <= 4) && (value % 100 < 10 || value % 100 >= 20)) {

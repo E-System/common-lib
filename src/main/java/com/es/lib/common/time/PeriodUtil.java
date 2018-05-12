@@ -6,6 +6,8 @@ import com.es.lib.common.Pluralizer;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -34,32 +36,44 @@ public final class PeriodUtil {
         if (date == null || dateNext == null) {
             return null;
         }
-        Period period = Period.between(date.toLocalDate(), dateNext.toLocalDate());
-        long[] time = getTime(date, dateNext);
-        StringBuilder sb = new StringBuilder();
-        if (period.getYears() > 0) {
-            sb.append(period.getYears()).append(" ").append(Pluralizer.evaluate(period.getYears(), "год", "года", "лет"));
+        long[] diff = getDiff(date, dateNext);
+        Collection<String> parts = new ArrayList<>(6);
+        if (diff[0] > 0) {
+            parts.add(String.valueOf(diff[0]) + " " + Pluralizer.evaluate(diff[0], "год", "года", "лет"));
         }
-        if (period.getMonths() > 0) {
-            sb.append(period.getMonths()).append(" мес.");
+        if (diff[1] > 0) {
+            parts.add(String.valueOf(diff[1]) + " мес.");
         }
-        if (period.getDays() > 0) {
-            sb.append(period.getDays()).append(" дн.");
+        if (diff[2] > 0) {
+            parts.add(String.valueOf(diff[2]) + " дн.");
         }
-        if (time[0] > 0) {
-            sb.append(time[0]).append(" ч.");
+        if (diff[3] > 0) {
+            parts.add(String.valueOf(diff[3]) + " ч.");
         }
-        if (time[1] > 0) {
-            sb.append(time[1]).append(" м.");
+        if (diff[4] > 0) {
+            parts.add(String.valueOf(diff[4]) + " м.");
         }
-        if (time[2] > 0) {
-            sb.append(time[2]).append(" c.");
+        if (diff[5] > 0) {
+            parts.add(String.valueOf(diff[5]) + " c.");
         }
-        String result = sb.toString();
+        String result = String.join(" ", parts);
         if (useBraces) {
             result = "(" + result + ")";
         }
         return result;
+    }
+
+    private static long[] getDiff(LocalDateTime date, LocalDateTime dateNext) {
+        Period period = Period.between(date.toLocalDate(), dateNext.toLocalDate());
+        long[] time = getTime(date, dateNext);
+        return new long[]{
+            period.getYears(),
+            period.getMonths(),
+            period.getDays(),
+            time[0],
+            time[1],
+            time[2]
+        };
     }
 
     private static long[] getTime(LocalDateTime date, LocalDateTime dateNext) {

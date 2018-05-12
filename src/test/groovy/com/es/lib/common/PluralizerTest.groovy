@@ -24,11 +24,12 @@ import spock.lang.Specification
  */
 class PluralizerTest extends Specification {
 
-    def "Evaluate"() {
+    def "Evaluate int"() {
         expect:
         Pluralizer.evaluate(value, str1, str2, str3) == result
         where:
         value | str1   | str2  | str3   | result
+        0     | 'день' | 'дня' | 'дней' | 'дней'
         1     | 'день' | 'дня' | 'дней' | 'день'
         2     | 'день' | 'дня' | 'дней' | 'дня'
         3     | 'день' | 'дня' | 'дней' | 'дня'
@@ -41,5 +42,25 @@ class PluralizerTest extends Specification {
         10    | 'день' | 'дня' | 'дней' | 'дней'
         101   | 'день' | 'дня' | 'дней' | 'день'
         102   | 'день' | 'дня' | 'дней' | 'дня'
+    }
+
+    def "Evaluate long"() {
+        expect:
+        Pluralizer.evaluate(value, str1, str2, str3) == result
+        where:
+        value | str1   | str2  | str3   | result
+        0L    | 'день' | 'дня' | 'дней' | 'дней'
+        1L    | 'день' | 'дня' | 'дней' | 'день'
+        2L    | 'день' | 'дня' | 'дней' | 'дня'
+        3L    | 'день' | 'дня' | 'дней' | 'дня'
+        4L    | 'день' | 'дня' | 'дней' | 'дня'
+        5L    | 'день' | 'дня' | 'дней' | 'дней'
+        6L    | 'день' | 'дня' | 'дней' | 'дней'
+        7L    | 'день' | 'дня' | 'дней' | 'дней'
+        8L    | 'день' | 'дня' | 'дней' | 'дней'
+        9L    | 'день' | 'дня' | 'дней' | 'дней'
+        10L   | 'день' | 'дня' | 'дней' | 'дней'
+        101L  | 'день' | 'дня' | 'дней' | 'день'
+        102L  | 'день' | 'дня' | 'дней' | 'дня'
     }
 }
