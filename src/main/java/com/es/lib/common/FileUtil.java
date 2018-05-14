@@ -30,83 +30,82 @@ import java.util.zip.CheckedInputStream;
  */
 public final class FileUtil {
 
-	/**
-	 * Размер буфера для операций чтения
-	 */
-	public static final int BUFFER_SIZE = 1024;
+    /**
+     * Размер буфера для операций чтения
+     */
+    public static final int BUFFER_SIZE = 1024;
 
-	private FileUtil() {
-	}
+    private FileUtil() { }
 
-	public static long crc32(String string) throws UnsupportedEncodingException {
-		return crc32(string.getBytes(Constant.DEFAULT_ENCODING));
-	}
+    public static long crc32(String string) throws UnsupportedEncodingException {
+        return crc32(string.getBytes(Constant.DEFAULT_ENCODING));
+    }
 
-	public static long crc32(byte[] bytes) {
-		CRC32 crc = new CRC32();
-		crc.update(bytes);
-		return crc.getValue();
-	}
-
-
-	public static Map.Entry<String, Long> readCrc32(String fileName) throws IOException {
-		return readCrc32(new FileInputStream(new File(fileName)));
-	}
-
-	public static Map.Entry<String, Long> readCrc32(File file) throws IOException {
-		return readCrc32(new FileInputStream(file));
-	}
-
-	public static Map.Entry<String, Long> readCrc32(InputStream inputStream) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		try (CheckedInputStream cis = new CheckedInputStream(inputStream, new CRC32())) {
-			byte[] buf = new byte[BUFFER_SIZE];
-			while (cis.read(buf) >= 0) {
-				sb.append(Arrays.toString(buf));
-			}
-			return Pair.of(sb.toString(), cis.getChecksum().getValue());
-		}
-	}
+    public static long crc32(byte[] bytes) {
+        CRC32 crc = new CRC32();
+        crc.update(bytes);
+        return crc.getValue();
+    }
 
 
-	/**
-	 * Прочитать поток в строку
-	 *
-	 * @param is       поток для чтения
-	 * @param encoding кодировка
-	 * @return строка с данными из потока
-	 * @throws IOException исключение чтения из потока
-	 */
-	public static String read(InputStream is, String encoding) throws IOException {
-		byte[] data = new byte[is.available()];
-		is.read(data);
-		is.close();
-		return new String(data, encoding);
-	}
+    public static Map.Entry<String, Long> readCrc32(String fileName) throws IOException {
+        return readCrc32(new FileInputStream(new File(fileName)));
+    }
 
-	public static String readBuffered(InputStream inputStream) throws IOException {
-		return readBuffered(inputStream, Constant.DEFAULT_ENCODING);
-	}
+    public static Map.Entry<String, Long> readCrc32(File file) throws IOException {
+        return readCrc32(new FileInputStream(file));
+    }
 
-	public static String readBuffered(InputStream inputStream, String encoding) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream, encoding));
-		String line;
-		while ((line = rd.readLine()) != null) {
-			sb.append(line);
-		}
-		return sb.toString();
-	}
+    public static Map.Entry<String, Long> readCrc32(InputStream inputStream) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (CheckedInputStream cis = new CheckedInputStream(inputStream, new CRC32())) {
+            byte[] buf = new byte[BUFFER_SIZE];
+            while (cis.read(buf) >= 0) {
+                sb.append(Arrays.toString(buf));
+            }
+            return Pair.of(sb.toString(), cis.getChecksum().getValue());
+        }
+    }
 
-	public static byte[] readBufferedByte(InputStream inputStream) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-		final byte[] bytes = new byte[BUFFER_SIZE];
-		int read;
-		while ((read = inputStream.read(bytes)) != -1) {
-			baos.write(bytes, 0, read);
-		}
-		baos.close();
-		return baos.toByteArray();
-	}
+    /**
+     * Прочитать поток в строку
+     *
+     * @param is       поток для чтения
+     * @param encoding кодировка
+     * @return строка с данными из потока
+     * @throws IOException исключение чтения из потока
+     */
+    public static String read(InputStream is, String encoding) throws IOException {
+        byte[] data = new byte[is.available()];
+        is.read(data);
+        is.close();
+        return new String(data, encoding);
+    }
+
+    public static String readBuffered(InputStream inputStream) throws IOException {
+        return readBuffered(inputStream, Constant.DEFAULT_ENCODING);
+    }
+
+    public static String readBuffered(InputStream inputStream, String encoding) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream, encoding));
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        return sb.toString();
+    }
+
+    public static byte[] readBufferedByte(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        final byte[] bytes = new byte[BUFFER_SIZE];
+        int read;
+        while ((read = inputStream.read(bytes)) != -1) {
+            baos.write(bytes, 0, read);
+        }
+        baos.close();
+        return baos.toByteArray();
+    }
 }

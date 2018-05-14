@@ -17,6 +17,11 @@
 package com.es.lib.common.file;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -39,5 +44,13 @@ public final class DeleteFileUtil {
             throw new NullPointerException("file argument is null");
         }
         return file.delete();
+    }
+
+    public static void recursively(Path path) throws IOException {
+        try (Stream<Path> paths = Files.walk(path)) {
+            paths.map(Path::toFile)
+                .sorted(Comparator.reverseOrder())
+                .forEach(File::delete);
+        }
     }
 }
