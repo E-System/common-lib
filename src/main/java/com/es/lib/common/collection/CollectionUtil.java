@@ -318,4 +318,20 @@ public final class CollectionUtil {
         }
         return null;
     }
+
+    public static <T> T coalesce(T... items) {
+        return firstBySelector(Objects::nonNull, items);
+    }
+
+    public static <T> T firstBySelector(Predicate<T> selector, T... items) {
+        if (items == null) {
+            return null;
+        }
+        for (T item : items) {
+            if (selector.test(item)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }

@@ -16,6 +16,7 @@
 
 package com.es.lib.common.collection
 
+import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
 
@@ -313,5 +314,29 @@ class CollectionUtilSpec extends Specification {
         !newAttributes.containsKey('K3')
         !newAttributes.containsKey('K4')
         newAttributes['K1'] == 'V1'
+    }
+
+    def "coalesce not null"() {
+        expect:
+        CollectionUtil.coalesce(null, null, 'Hello') == 'Hello'
+        CollectionUtil.coalesce(null, null, 'Hello', null, null) == 'Hello'
+        CollectionUtil.coalesce('Hello', null, null) == 'Hello'
+        CollectionUtil.coalesce('', null, null) == ''
+    }
+
+    def "first not empty"() {
+        setup:
+        def predicate = new Predicate<String>() {
+            @Override
+            boolean test(String t) {
+                return StringUtils.isNotBlank(t)
+            }
+        }
+        expect:
+        CollectionUtil.firstBySelector(predicate, null, null, 'Hello') == 'Hello'
+        CollectionUtil.firstBySelector(predicate, null, null, 'Hello', null, null) == 'Hello'
+        CollectionUtil.firstBySelector(predicate, 'Hello', null, null) == 'Hello'
+        CollectionUtil.firstBySelector(predicate, '', 'Hello', null) == 'Hello'
+        CollectionUtil.firstBySelector(predicate, '', null, 'Hello', null) == 'Hello'
     }
 }
