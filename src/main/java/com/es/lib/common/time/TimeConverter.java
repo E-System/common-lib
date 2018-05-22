@@ -12,6 +12,8 @@ public final class TimeConverter {
     public static final long MULTIPLIER_MINUTE = 60 * MULTIPLIER_MILLISECOND;
     public static final long MULTIPLIER_HOUR = 60 * MULTIPLIER_MINUTE;
 
+    private static String NON_NUMBER_PATTERN = "[^0-9]";
+
     private TimeConverter() { }
 
     public static String asString(long value) {
@@ -31,14 +33,14 @@ public final class TimeConverter {
         }
         long result = 0;
         String[] values = value.split(":");
-        long hours = Long.parseLong(values[0]);
+        long hours = Long.parseLong(values[0].replaceAll(NON_NUMBER_PATTERN, ""));
         result += hours * MULTIPLIER_HOUR;
         if (values.length > 1) {
-            long min = Long.parseLong(values[1]);
+            long min = Long.parseLong(values[1].replaceAll(NON_NUMBER_PATTERN, ""));
             result += min * MULTIPLIER_MINUTE;
         }
         if (values.length > 2) {
-            long sec = Long.parseLong(values[2]);
+            long sec = Long.parseLong(values[2].replaceAll(NON_NUMBER_PATTERN, ""));
             result += sec * MULTIPLIER_MILLISECOND;
         }
         return result;

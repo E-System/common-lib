@@ -35,4 +35,18 @@ class TimeConverterSpec extends Specification {
         "1:1:2"    || 3662000
         "01:01:02" || 3662000
     }
+
+    def "AsLong with masks"() {
+        expect:
+        TimeConverter.asLong(value) == result
+        where:
+        value        || result
+        null         || null
+        ""           || null
+        "0_"         || 0
+        "1 "         || 3600000
+        "1_:_1"      || 3660000
+        "1 :1_:_2"   || 3662000
+        "01:01:__02" || 3662000
+    }
 }
