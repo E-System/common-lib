@@ -33,16 +33,30 @@ public final class TimeConverter {
         }
         long result = 0;
         String[] values = value.split(":");
-        long hours = Long.parseLong(values[0].replaceAll(NON_NUMBER_PATTERN, ""));
+        if (values.length == 0) {
+            return null;
+        }
+        long hours = parse(values[0]);
         result += hours * MULTIPLIER_HOUR;
         if (values.length > 1) {
-            long min = Long.parseLong(values[1].replaceAll(NON_NUMBER_PATTERN, ""));
+            long min = parse(values[1]);
             result += min * MULTIPLIER_MINUTE;
         }
         if (values.length > 2) {
-            long sec = Long.parseLong(values[2].replaceAll(NON_NUMBER_PATTERN, ""));
+            long sec = parse(values[2]);
             result += sec * MULTIPLIER_MILLISECOND;
         }
         return result;
+    }
+
+    private static long parse(String value) {
+        if (value == null) {
+            return 0;
+        }
+        value = value.replaceAll(NON_NUMBER_PATTERN, "");
+        if (StringUtils.isBlank(value)) {
+            return 0;
+        }
+        return Long.parseLong(value);
     }
 }

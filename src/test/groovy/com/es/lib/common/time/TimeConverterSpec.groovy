@@ -29,6 +29,9 @@ class TimeConverterSpec extends Specification {
         value      || result
         null       || null
         ""         || null
+        " "        || null
+        ":"        || null
+        " : "      || 0
         "0"        || 0
         "1"        || 3600000
         "1:1"      || 3660000
@@ -43,6 +46,7 @@ class TimeConverterSpec extends Specification {
         value        || result
         null         || null
         ""           || null
+        " "          || null
         "0_"         || 0
         "1 "         || 3600000
         "1_:_1"      || 3660000
