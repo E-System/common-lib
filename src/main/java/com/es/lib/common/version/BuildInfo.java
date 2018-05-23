@@ -15,6 +15,7 @@ public class BuildInfo implements Serializable {
     private String name;
     private String version;
     private String date;
+    private String hash;
 
     public BuildInfo() { }
 
@@ -30,6 +31,7 @@ public class BuildInfo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+        this.hash = null;
     }
 
     public String getVersion() {
@@ -38,6 +40,7 @@ public class BuildInfo implements Serializable {
 
     public void setVersion(String version) {
         this.version = version;
+        this.hash = null;
     }
 
     public String getDate() {
@@ -46,10 +49,14 @@ public class BuildInfo implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+        this.hash = null;
     }
 
     public String getHash() {
-        return HashUtil.md5(name + version + date);
+        if (hash == null) {
+            hash = HashUtil.md5(name + version + date);
+        }
+        return hash;
     }
 
     public Map<String, String> asMap() {
