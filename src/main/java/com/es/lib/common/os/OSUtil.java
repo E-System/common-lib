@@ -17,6 +17,8 @@
 package com.es.lib.common.os;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.nio.file.Paths;
 
 /**
@@ -58,6 +60,9 @@ public final class OSUtil {
     public static String getAppConfigPath(String vendorName, String appName) {
         switch (OSUtil.getOS()) {
             case WINDOWS:
+                if(StringUtils.isBlank(System.getenv("LOCALAPPDATA"))) {
+                    return Paths.get(System.getenv("APPDATA"), vendorName, appName).toString();
+                }
                 return Paths.get(System.getenv("LOCALAPPDATA"), vendorName, appName).toString();
             default:
                 return Paths.get(System.getenv("HOME"), ".config", vendorName, appName).toString();
