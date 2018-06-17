@@ -16,6 +16,7 @@
 
 package com.es.lib.common.text
 
+import com.es.lib.common.model.FullName
 import spock.lang.Specification
 
 /**
@@ -39,6 +40,18 @@ class FioChopperSpec extends Specification {
         "aaa  \n bbb   ccc"            | "aaa b. c."
         "aaa   bbb   ccc d."           | "aaa b. c. d."
         "aaa   bbb   ccc d.          " | "aaa b. c. d."
+    }
+
+    def "Сокращения с правой стороны2"() {
+        expect:
+        FioChopper.process(new FullName(s, n, p), false) == result
+        where:
+        s      | n      | p      | result
+        null   | null   | null   | null
+        ""     | ""     | ""     | null
+        " "    | " "    | " "    | null
+        "aaa"  | "aaa"  | "aaa"  | "aaa a. a."
+        "aaa " | "aaa " | "aaa " | "aaa a. a."
     }
 
     def "Сокращения с левой стороны"() {

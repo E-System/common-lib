@@ -75,7 +75,7 @@ public class FioChopper {
         if (fullName == null) {
             return null;
         }
-        if (fullName.isAllEmpty()) {
+        if (fullName.isAllBlank()) {
             return null;
         }
         final List<String> parts = fullName.toList();
@@ -98,12 +98,12 @@ public class FioChopper {
 
     private static String processList(List<String> parts, boolean left) {
         if (parts.size() == 1) {
-            return parts.get(0);
+            return parts.get(0).trim();
         }
-        String result = left ? "" : parts.get(0) + " ";
+        String result = left ? "" : parts.get(0).trim() + " ";
         StringJoiner joiner = new StringJoiner(" ");
         for (String p : parts.subList(1, parts.size())) {
-            if (p != null) {
+            if (StringUtils.isNotBlank(p)) {
                 joiner.add(p.trim().substring(0, 1) + ".");
             }
         }
