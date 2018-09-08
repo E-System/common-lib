@@ -6,13 +6,16 @@ public class PageRequest implements Serializable {
 
     private int offset;
     private int limit;
+    private int page;
 
     public PageRequest(int countOnPage) {
         if (countOnPage <= 0) {
             throw new IllegalArgumentException("countOnPage must be greater than zero");
         }
-        this.offset = 0;
         this.limit = countOnPage;
+
+        this.page = 1;
+        this.offset = 0;
     }
 
     public PageRequest(int countOnPage, int page) {
@@ -20,6 +23,7 @@ public class PageRequest implements Serializable {
         if (page <= 0) {
             page = 1;
         }
+        this.page = page;
         this.offset = (page - 1) * countOnPage;
     }
 
@@ -31,11 +35,16 @@ public class PageRequest implements Serializable {
         return limit;
     }
 
+    public int getPage() {
+        return page;
+    }
+
     @Override
     public String toString() {
         return "PageRequest{" +
                "offset=" + offset +
                ", limit=" + limit +
+               ", page=" + page +
                '}';
     }
 }

@@ -13,6 +13,7 @@ class PageRequestSpec extends Specification {
         def request = new PageRequest(PAGE_COUNT, -1)
         then:
         request.offset == 0
+        request.page == 1
         request.limit == PAGE_COUNT
     }
 
@@ -21,6 +22,7 @@ class PageRequestSpec extends Specification {
         def request = new PageRequest(PAGE_COUNT, 0)
         then:
         request.offset == 0
+        request.page == 1
         request.limit == PAGE_COUNT
     }
 
@@ -43,22 +45,25 @@ class PageRequestSpec extends Specification {
         def request = new PageRequest(PAGE_COUNT, 1)
         then:
         request.offset == 0
+        request.page == 1
         request.limit == PAGE_COUNT
     }
 
-    def "Second page"(){
+    def "Second page"() {
         when:
         def request = new PageRequest(PAGE_COUNT, 2)
         then:
         request.offset == PAGE_COUNT
+        request.page == 2
         request.limit == PAGE_COUNT
     }
 
-    def "Default page is first"(){
+    def "Default page is first"() {
         when:
         def request = new PageRequest(PAGE_COUNT)
         then:
         request.offset == 0
+        request.page == 1
         request.limit == PAGE_COUNT
     }
 }
