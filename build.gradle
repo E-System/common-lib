@@ -124,17 +124,17 @@ publishing {
     }
 }
 dependencies {
-    compile "org.apache.commons:commons-lang3:3.7"
+    compile "org.apache.commons:commons-lang3:3.8"
     compile "org.slf4j:slf4j-api:1.7.25"
-    compile "com.google.code.gson:gson:2.8.2"
-    compile "com.sun.mail:javax.mail:1.6.1"
+    compile "com.google.code.gson:gson:2.8.5"
+    compile "com.sun.mail:javax.mail:1.6.2"
     compile "de.svenkubiak:jBCrypt:0.4.1"
 
 
 
     testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
-    testCompile "cglib:cglib:3.2.0"
-    testCompile "org.objenesis:objenesis:2.2"
+    testCompile "cglib:cglib:3.2.7"
+    testCompile "org.objenesis:objenesis:2.6"
 }
 
 def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null

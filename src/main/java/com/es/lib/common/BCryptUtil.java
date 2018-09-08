@@ -28,8 +28,7 @@ public final class BCryptUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(BCryptUtil.class);
 
-    private BCryptUtil() {
-    }
+    private BCryptUtil() { }
 
     public static String hash(String value) {
         return BCrypt.hashpw(value, BCrypt.gensalt(12));
