@@ -175,7 +175,10 @@ public final class MoneyToStr {
 		if (theMoney == null) {
 			throw new IllegalArgumentException("theMoney is null");
 		}
-		Long intPart = theMoney.longValue();
+        if (theMoney < 0) {
+            return "минус " + convert(Math.abs(theMoney));
+        }
+        Long intPart = theMoney.longValue();
 		Long fractPart = Math.round((theMoney - intPart) * NUM100);
 		if (currency == Currency.PER1000) {
 			fractPart = Math.round((theMoney - intPart) * NUM1000);
