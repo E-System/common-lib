@@ -132,7 +132,7 @@ dependencies {
 
 
 
-    testCompile "org.spockframework:spock-core:1.1-groovy-2.5"
+    testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
     testCompile "cglib:cglib:3.2.10"
     testCompile "org.objenesis:objenesis:2.6"
 }
