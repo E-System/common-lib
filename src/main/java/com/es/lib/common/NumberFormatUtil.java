@@ -27,61 +27,121 @@ import java.text.ParseException;
  */
 public final class NumberFormatUtil {
 
-	private NumberFormatUtil() {
-	}
+    private NumberFormatUtil() { }
 
-	private static DecimalFormat getFormat03() {
-		return new DecimalFormatBuilder().
-				groupingUsed(false).
-				fractionDigits(0, 3).
-				decimalSymbol(',').build();
-	}
+    private static DecimalFormat getFormat03() {
+        return new DecimalFormatBuilder().
+            groupingUsed(false).
+            fractionDigits(0, 3).
+            decimalSymbol(',').build();
+    }
 
-	private static DecimalFormat getFormat22() {
-		return new DecimalFormatBuilder().
-				groupingUsed(false).
-				fractionDigits(2).
-				decimalSymbol(',').build();
-	}
+    private static DecimalFormat getFormat00() {
+        return new DecimalFormatBuilder().
+            groupingUsed(false).
+            fractionDigits(0).
+            decimalSymbol(',').build();
+    }
 
-	private static DecimalFormat getFormat00() {
-		return new DecimalFormatBuilder().
-				groupingUsed(false).
-				fractionDigits(0).
-				decimalSymbol(',').build();
-	}
+    public static String f03(Number value) {
+        if (value == null) {
+            return "NULL";
+        }
+        return getFormat03().format(value);
+    }
 
-	public static String f03(Number value) {
-		if (value == null) {
-			return "NULL";
-		}
-		return getFormat03().format(value);
-	}
+    public static Number p03(String value) throws ParseException {
+        return getFormat03().parse(value);
+    }
 
-	public static Number p03(String value) throws ParseException {
-		return getFormat03().parse(value);
-	}
+    public static String f22(double price) {
+        return new DecimalFormatBuilder()
+            .groupingUsed(false)
+            .fractionDigits(2)
+            .decimalSymbol(',').build()
+            .format(price);
+    }
 
-	public static String f22(double price) {
-		return getFormat22().format(price);
-	}
+    public static String f22(int price) {
+        return f22(price / 100.0d);
+    }
 
-	public static String f22(int price) {
-		return f22(price / 100.0d);
-	}
+    public static String f22(long price) {
+        return f22(price / 100.0d);
+    }
 
-	public static String f22(long price) {
-		return f22(price / 100.0d);
-	}
+    public static String f22(double price, char decimalSymbol) {
+        return new DecimalFormatBuilder()
+            .groupingUsed(false)
+            .fractionDigits(2)
+            .decimalSymbol(decimalSymbol).build()
+            .format(price);
+    }
 
-	public static String f00(Number percent) {
-		if (percent == null) {
-			return "NULL";
-		}
-		return getFormat00().format(percent);
-	}
+    public static String f22(int price, char decimalSymbol) {
+        return f22(price / 100.0d, decimalSymbol);
+    }
 
-	public static Number p00(String value) throws ParseException {
-		return getFormat00().parse(value);
-	}
+    public static String f22(long price, char decimalSymbol) {
+        return f22(price / 100.0d, decimalSymbol);
+    }
+
+    public static String f22(double price, char decimalSymbol, Integer groupingSize) {
+        return new DecimalFormatBuilder()
+            .groupingSize(groupingSize)
+            .fractionDigits(2)
+            .decimalSymbol(decimalSymbol).build()
+            .format(price);
+    }
+
+    public static String f22(int price, char decimalSymbol, Integer groupingSize) {
+        return f22(price / 100.0d, decimalSymbol, groupingSize);
+    }
+
+    public static String f22(long price, char decimalSymbol, Integer groupingSize) {
+        return f22(price / 100.0d, decimalSymbol, groupingSize);
+    }
+
+    public static String f22(double price, String decimalSymbol) {
+        return new DecimalFormatBuilder()
+            .groupingUsed(false)
+            .fractionDigits(2)
+            .decimalSymbol(decimalSymbol).build()
+            .format(price);
+    }
+
+    public static String f22(int price, String decimalSymbol) {
+        return f22(price / 100.0d, decimalSymbol);
+    }
+
+    public static String f22(long price, String decimalSymbol) {
+        return f22(price / 100.0d, decimalSymbol);
+    }
+
+    public static String f22(double price, String decimalSymbol, Integer groupingSize) {
+        return new DecimalFormatBuilder()
+            .groupingSize(groupingSize)
+            .fractionDigits(2)
+            .decimalSymbol(decimalSymbol).build()
+            .format(price);
+    }
+
+    public static String f22(int price, String decimalSymbol, Integer groupingSize) {
+        return f22(price / 100.0d, decimalSymbol, groupingSize);
+    }
+
+    public static String f22(long price, String decimalSymbol, Integer groupingSize) {
+        return f22(price / 100.0d, decimalSymbol, groupingSize);
+    }
+
+    public static String f00(Number percent) {
+        if (percent == null) {
+            return "NULL";
+        }
+        return getFormat00().format(percent);
+    }
+
+    public static Number p00(String value) throws ParseException {
+        return getFormat00().parse(value);
+    }
 }

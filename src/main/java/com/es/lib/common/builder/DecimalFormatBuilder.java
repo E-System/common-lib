@@ -25,49 +25,62 @@ import java.text.DecimalFormatSymbols;
  */
 public class DecimalFormatBuilder {
 
-	private DecimalFormat format;
+    private DecimalFormat format;
 
-	public DecimalFormatBuilder(String pattern) {
-		format = new DecimalFormat(pattern);
-	}
+    public DecimalFormatBuilder(String pattern) {
+        format = new DecimalFormat(pattern);
+    }
 
-	public DecimalFormatBuilder() {
-		format = new DecimalFormat();
-	}
+    public DecimalFormatBuilder() {
+        format = new DecimalFormat();
+    }
 
-	public DecimalFormatBuilder groupingUsed(boolean groupingUsed) {
-		format.setGroupingUsed(groupingUsed);
-		return this;
-	}
+    public DecimalFormatBuilder groupingUsed(boolean groupingUsed) {
+        format.setGroupingUsed(groupingUsed);
+        return this;
+    }
 
-	private DecimalFormatBuilder maximumFractionDigits(int digits) {
-		format.setMaximumFractionDigits(digits);
-		return this;
-	}
+    public DecimalFormatBuilder groupingSize(Integer groupingSize) {
+        format.setGroupingUsed(groupingSize != null);
+        format.setGroupingSize(groupingSize != null ? groupingSize : 3);
+        return this;
+    }
 
-	private DecimalFormatBuilder minimumFractionDigits(int digits) {
-		format.setMinimumFractionDigits(digits);
-		return this;
-	}
+    private DecimalFormatBuilder maximumFractionDigits(int digits) {
+        format.setMaximumFractionDigits(digits);
+        return this;
+    }
 
-	public DecimalFormatBuilder fractionDigits(int digits) {
-		return minimumFractionDigits(digits).
-				maximumFractionDigits(digits);
-	}
+    private DecimalFormatBuilder minimumFractionDigits(int digits) {
+        format.setMinimumFractionDigits(digits);
+        return this;
+    }
 
-	public DecimalFormatBuilder fractionDigits(int min, int max) {
-		return minimumFractionDigits(min).
-				maximumFractionDigits(max);
-	}
+    public DecimalFormatBuilder fractionDigits(int digits) {
+        return minimumFractionDigits(digits).
+            maximumFractionDigits(digits);
+    }
 
-	public DecimalFormatBuilder decimalSymbol(char symbol) {
-		DecimalFormatSymbols dfs = format.getDecimalFormatSymbols();
-		dfs.setDecimalSeparator(symbol);
-		format.setDecimalFormatSymbols(dfs);
-		return this;
-	}
+    public DecimalFormatBuilder fractionDigits(int min, int max) {
+        return minimumFractionDigits(min).
+            maximumFractionDigits(max);
+    }
 
-	public DecimalFormat build() {
-		return format;
-	}
+    public DecimalFormatBuilder decimalSymbol(char symbol) {
+        DecimalFormatSymbols dfs = format.getDecimalFormatSymbols();
+        dfs.setDecimalSeparator(symbol);
+        format.setDecimalFormatSymbols(dfs);
+        return this;
+    }
+
+    public DecimalFormatBuilder decimalSymbol(String symbol) {
+        if (symbol == null || symbol.length() == 0) {
+            throw new IllegalArgumentException("Need define at least one symbol in string");
+        }
+        return decimalSymbol(symbol.charAt(0));
+    }
+
+    public DecimalFormat build() {
+        return format;
+    }
 }
