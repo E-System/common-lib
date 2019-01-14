@@ -98,6 +98,22 @@ public final class NumberFormatUtil {
         return f22(price / 100.0d, decimalSymbol, groupingSize);
     }
 
+    public static String f22(double price, char decimalSymbol, Integer groupingSize, boolean chopZeroes) {
+        return chop(
+            f22(price, decimalSymbol, groupingSize),
+            "" + decimalSymbol,
+            chopZeroes
+        );
+    }
+
+    public static String f22(int price, char decimalSymbol, Integer groupingSize, boolean chopZeroes) {
+        return f22(price / 100.0d, decimalSymbol, groupingSize, chopZeroes);
+    }
+
+    public static String f22(long price, char decimalSymbol, Integer groupingSize, boolean chopZeroes) {
+        return f22(price / 100.0d, decimalSymbol, groupingSize, chopZeroes);
+    }
+
     public static String f22(double price, String decimalSymbol) {
         return new DecimalFormatBuilder()
             .groupingUsed(false)
@@ -130,6 +146,22 @@ public final class NumberFormatUtil {
         return f22(price / 100.0d, decimalSymbol, groupingSize);
     }
 
+    public static String f22(double price, String decimalSymbol, Integer groupingSize, boolean chopZeroes) {
+        return chop(
+            f22(price, decimalSymbol, groupingSize),
+            decimalSymbol,
+            chopZeroes
+        );
+    }
+
+    public static String f22(int price, String decimalSymbol, Integer groupingSize, boolean chopZeroes) {
+        return f22(price / 100.0d, decimalSymbol, groupingSize, chopZeroes);
+    }
+
+    public static String f22(long price, String decimalSymbol, Integer groupingSize, boolean chopZeroes) {
+        return f22(price / 100.0d, decimalSymbol, groupingSize, chopZeroes);
+    }
+
     public static String f00(Number percent) {
         if (percent == null) {
             return "NULL";
@@ -139,5 +171,15 @@ public final class NumberFormatUtil {
 
     public static Number p00(String value) throws ParseException {
         return getFormat00().parse(value);
+    }
+
+    private static String chop(String value, String decimalSymbol, boolean chop) {
+        if (value == null || value.isEmpty()) {
+            return value;
+        }
+        if (chop) {
+            return value.replace(decimalSymbol + "00", "");
+        }
+        return value;
     }
 }
