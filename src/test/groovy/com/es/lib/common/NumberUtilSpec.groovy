@@ -18,11 +18,15 @@ package com.es.lib.common
 
 import spock.lang.Specification
 
+import java.text.DecimalFormatSymbols
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 07.10.14
  */
 class NumberUtilSpec extends Specification {
+
+    static dfs = new DecimalFormatSymbols().groupingSeparator
 
     def "Format"() {
         expect:
@@ -82,7 +86,7 @@ class NumberUtilSpec extends Specification {
         1.0d           || "1.00"
         2.2d           || "2.20"
         3.333d         || "3.33"
-        1000000.00001f || "1 00 00 00.00"
+        1000000.00001f || "1" + dfs + "00" + dfs + "00" + dfs + "00.00"
         1              || "0.01"
         10             || "0.10"
         100            || "1.00"
@@ -98,7 +102,7 @@ class NumberUtilSpec extends Specification {
         1.0d           || "1.00"
         2.2d           || "2.20"
         3.333d         || "3.33"
-        1000000.00001f || "1 00 00 00.00"
+        1000000.00001f || "1" + dfs + "00" + dfs + "00" + dfs + "00.00"
         1              || "0.01"
         10             || "0.10"
         100            || "1.00"
@@ -114,7 +118,7 @@ class NumberUtilSpec extends Specification {
         1.0d           || "1.00"
         2.2d           || "2.20"
         3.333d         || "3.33"
-        1000000.00001f || "1 000 000.00"
+        1000000.00001f || "1" + dfs + "000" + dfs + "000.00"
         1              || "0.01"
         10             || "0.10"
         100            || "1.00"
@@ -130,7 +134,7 @@ class NumberUtilSpec extends Specification {
         1.0d           || "1.00"
         2.2d           || "2.20"
         3.333d         || "3.33"
-        1000000.00001f || "1 000 000.00"
+        1000000.00001f || "1" + dfs + "000" + dfs + "000.00"
         1              || "0.01"
         10             || "0.10"
         100            || "1.00"

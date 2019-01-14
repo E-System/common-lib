@@ -55,11 +55,7 @@ public final class NumberFormatUtil {
     }
 
     public static String f22(double price) {
-        return new DecimalFormatBuilder()
-            .groupingUsed(false)
-            .fractionDigits(2)
-            .decimalSymbol(',').build()
-            .format(price);
+        return f22(price, ',', null);
     }
 
     public static String f22(int price) {
