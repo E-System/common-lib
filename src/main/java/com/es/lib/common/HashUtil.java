@@ -85,13 +85,13 @@ public final class HashUtil {
     public static int crc16(final byte[] buffer) {
         int crc = 0xFFFF;
         for (byte aBuffer : buffer) {
-            crc = ((crc >>> 8) | (crc << 8)) & 0xffff;
-            crc ^= (aBuffer & 0xff);
-            crc ^= ((crc & 0xff) >> 4);
-            crc ^= (crc << 12) & 0xffff;
-            crc ^= ((crc & 0xFF) << 5) & 0xffff;
+            crc = ((crc >>> 8) | (crc << 8)) & 0xFFFF;
+            crc ^= (aBuffer & 0xFF);
+            crc ^= ((crc & 0xFF) >> 4);
+            crc ^= (crc << 12) & 0xFFFF;
+            crc ^= ((crc & 0xFF) << 5) & 0xFFFF;
         }
-        crc &= 0xffff;
+        crc &= 0xFFFF;
         return crc;
     }
 
@@ -111,7 +111,7 @@ public final class HashUtil {
                 if (c15 ^ bit) crc ^= polynom;
             }
         }
-        crc &= 0xffff;
+        crc &= 0xFFFF;
         return crc;
     }
 

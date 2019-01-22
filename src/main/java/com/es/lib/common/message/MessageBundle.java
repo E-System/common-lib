@@ -38,7 +38,7 @@ public class MessageBundle {
         }
     }
 
-    public String get(byte code) { return get(String.valueOf(code & 0xff)); }
+    public String get(byte code) { return get(String.valueOf(code & 0xFF)); }
 
     public String get(int code) {
         return get(String.valueOf(code));
@@ -46,7 +46,7 @@ public class MessageBundle {
 
     public String get(String code) { return properties.getProperty(code == null ? "null" : code); }
 
-    public String get(byte code, String defaultValue) { return get(String.valueOf(code & 0xff), defaultValue); }
+    public String get(byte code, String defaultValue) { return get(String.valueOf(code & 0xFF), defaultValue); }
 
     public String get(int code, String defaultValue) {
         return get(String.valueOf(code), defaultValue);

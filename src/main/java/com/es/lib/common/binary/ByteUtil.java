@@ -33,7 +33,7 @@ public class ByteUtil {
      * @return строку hex значения
      */
     public static String toHex(byte b) {
-        return String.format("%02X", b & 0xff);
+        return String.format("%02X", b & 0xFF);
     }
 
     /**
@@ -45,7 +45,7 @@ public class ByteUtil {
     public static String toHex(byte... b) {
         Objects.requireNonNull(b);
         return IntStream.range(0, b.length)
-            .mapToObj(i -> String.format("%02X", b[i] & 0xff))
+            .mapToObj(i -> String.format("%02X", b[i] & 0xFF))
             .collect(Collectors.joining(" "));
     }
 
@@ -121,7 +121,7 @@ public class ByteUtil {
         }
         byte[] r = new byte[width];
         for (int i = 0; i < width; i++) {
-            r[i] = (byte) (Integer.parseInt(s.substring(i * 2, i * 2 + 2), 16) & 0xff);
+            r[i] = (byte) (Integer.parseInt(s.substring(i * 2, i * 2 + 2), 16) & 0xFF);
         }
         return r;
     }
@@ -158,7 +158,7 @@ public class ByteUtil {
      */
 
     public static int getUnsignedShort(byte[] b, int index) {
-        return getShort(b, index) & 0xffff;
+        return getShort(b, index) & 0xFFFF;
     }
 
 
@@ -170,7 +170,7 @@ public class ByteUtil {
      * @return unsigned short (int) value
      */
     public static int getUnsignedShortLE(byte[] b, int index) {
-        return getShortLE(b, index) & 0xffff;
+        return getShortLE(b, index) & 0xFFFF;
     }
 
 
@@ -182,7 +182,7 @@ public class ByteUtil {
      * @return 3byte int value
      */
     public static int getMedium(byte[] b, int index) {
-        return (getShort(b, index) & 0xffff) << 8 | b[index + 2] & 255;
+        return (getShort(b, index) & 0xFFFF) << 8 | b[index + 2] & 255;
     }
 
     /**
@@ -193,7 +193,7 @@ public class ByteUtil {
      * @return 3byte int value
      */
     public static int getMediumLE(byte[] b, int index) {
-        return getShortLE(b, index) & 0xffff | (b[index + 2] & 255) << 16;
+        return getShortLE(b, index) & 0xFFFF | (b[index + 2] & 255) << 16;
     }
 
     /**
@@ -204,7 +204,7 @@ public class ByteUtil {
      * @return int value
      */
     public static int getInt(byte[] b, int index) {
-        return (getShort(b, index) & 0xffff) << 16 | getShort(b, index + 2) & 0xffff;
+        return (getShort(b, index) & 0xFFFF) << 16 | getShort(b, index + 2) & 0xFFFF;
     }
 
     /**
@@ -215,7 +215,7 @@ public class ByteUtil {
      * @return int value
      */
     public static int getIntLE(byte[] b, int index) {
-        return getShortLE(b, index) & 0xffff | (getShortLE(b, index + 2) & 0xffff) << 16;
+        return getShortLE(b, index) & 0xFFFF | (getShortLE(b, index + 2) & 0xFFFF) << 16;
     }
 
     /**
