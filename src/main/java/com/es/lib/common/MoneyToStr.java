@@ -176,7 +176,7 @@ public final class MoneyToStr {
 			throw new IllegalArgumentException("theMoney is null");
 		}
         if (theMoney < 0) {
-            return "минус " + convertName(Math.abs(theMoney));
+            return convertName(Math.abs(theMoney));
         }
         Long intPart = theMoney.longValue();
 		Long fractPart = Math.round((theMoney - intPart) * NUM100);
