@@ -62,6 +62,11 @@
 	     KopOneUnit="цент" KopTwoUnit="цена" KopFiveUnit="центов" KopSex="M"
 			/>
 
+    <BYN CurrID="933" CurrName="Белорусские рубли" language="RUS"
+         RubOneUnit="белорусский рубль" RubTwoUnit="белорусских рубля" RubFiveUnit="белорусских рублей" RubSex="M"
+         KopOneUnit="копейка" KopTwoUnit="копейки" KopFiveUnit="копеек" KopSex="F"
+    />
+
 	<PER10 CurrID="556" CurrName="Вiдсотки з десятими частинами" language="RUS"
 	       RubOneUnit="целая," RubTwoUnit="целых," RubFiveUnit="целых," RubSex="F"
 	       KopOneUnit="десятая процента" KopTwoUnit="десятых процента" KopFiveUnit="десятых процента" KopSex="F"

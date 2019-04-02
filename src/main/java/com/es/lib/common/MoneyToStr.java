@@ -171,20 +171,52 @@ public final class MoneyToStr {
 	 * @param theMoney the amount of money in format major.minor
 	 * @return the string description of money value
 	 */
-	public String convert(Double theMoney) {
+	public String convertName(Double theMoney) {
 		if (theMoney == null) {
 			throw new IllegalArgumentException("theMoney is null");
 		}
         if (theMoney < 0) {
-            return "минус " + convert(Math.abs(theMoney));
+            return "минус " + convertName(Math.abs(theMoney));
         }
         Long intPart = theMoney.longValue();
 		Long fractPart = Math.round((theMoney - intPart) * NUM100);
 		if (currency == Currency.PER1000) {
 			fractPart = Math.round((theMoney - intPart) * NUM1000);
 		}
-		return convert(intPart, fractPart);
+		return convert(intPart, fractPart, false, false);
 	}
+
+    /**
+     * Converts double value to the text description.
+     *
+     * @param theMoney the amount of money in format major.minor
+     * @return the string description of money value
+     */
+    public String convert(Double theMoney) {
+        if (theMoney == null) {
+            throw new IllegalArgumentException("theMoney is null");
+        }
+        if (theMoney < 0) {
+            return "минус " + convert(Math.abs(theMoney));
+        }
+        Long intPart = theMoney.longValue();
+        Long fractPart = Math.round((theMoney - intPart) * NUM100);
+        if (currency == Currency.PER1000) {
+            fractPart = Math.round((theMoney - intPart) * NUM1000);
+        }
+        return convert(intPart, fractPart);
+    }
+
+    /**
+     * Converts number to currency. Usage: MoneyToStr moneyToStr = new
+     * MoneyToStr("UAH"); String result = moneyToStr.convert(123D); Expected:
+     * result = сто двадцять три гривні 00 копійок
+     *
+     * @param theMoney   the amount of money major currency
+     * @param theKopeiki the amount of money minor currency
+     * @return the string description of money value
+     */
+    public String convert(Long theMoney, Long theKopeiki) { return convert(theMoney, theKopeiki, true, true); }
 
 	/**
 	 * Converts number to currency. Usage: MoneyToStr moneyToStr = new
@@ -195,7 +227,7 @@ public final class MoneyToStr {
 	 * @param theKopeiki the amount of money minor currency
 	 * @return the string description of money value
 	 */
-	public String convert(Long theMoney, Long theKopeiki) {
+	public String convert(Long theMoney, Long theKopeiki, boolean appendInt, boolean appendFract) {
 		if (theMoney == null) {
 			throw new IllegalArgumentException("theMoney is null");
 		}
@@ -207,12 +239,14 @@ public final class MoneyToStr {
 		Long theTriad;
 
 		Long intPart = theMoney;
-		if (intPart == 0) {
+		if (intPart == 0 && appendInt) {
 			money2str.append(messages.get("0")[0]).append(" ");
 		}
 		do {
 			theTriad = intPart % NUM1000;
-			money2str.insert(0, triad2Word(theTriad, triadNum, rubSex));
+			if(appendInt) {
+                money2str.insert(0, triad2Word(theTriad, triadNum, rubSex));
+            }
 			if (triadNum == 0) {
 				Long range10 = (theTriad % NUM100) / NUM10;
 				Long range = theTriad % NUM10;
@@ -238,28 +272,30 @@ public final class MoneyToStr {
 			triadNum++;
 		} while (intPart > 0);
 
-		if (pennies == Pennies.TEXT) {
-			money2str.append(" ").append(theKopeiki == 0 ? messages.get("0")[0] + " " : triad2Word(theKopeiki, 0L, kopSex));
-		} else {
-			money2str.append(" ").append(theKopeiki < 10 ? "0" + theKopeiki : theKopeiki).append(" ");
-		}
-		if (theKopeiki == NUM11 || theKopeiki == NUM12 || theKopeiki == NUM13 || theKopeiki == NUM14) {
-			money2str.append(kopFiveUnit);
-		} else {
-			switch ((byte) (theKopeiki % NUM10)) {
-				case NUM1:
-					money2str.append(kopOneUnit);
-					break;
-				case NUM2:
-				case NUM3:
-				case NUM4:
-					money2str.append(kopTwoUnit);
-					break;
-				default:
-					money2str.append(kopFiveUnit);
-					break;
-			}
-		}
+		if(appendFract) {
+            if (pennies == Pennies.TEXT) {
+                money2str.append(" ").append(theKopeiki == 0 ? messages.get("0")[0] + " " : triad2Word(theKopeiki, 0L, kopSex));
+            } else {
+                money2str.append(" ").append(theKopeiki < 10 ? "0" + theKopeiki : theKopeiki).append(" ");
+            }
+            if (theKopeiki == NUM11 || theKopeiki == NUM12 || theKopeiki == NUM13 || theKopeiki == NUM14) {
+                money2str.append(kopFiveUnit);
+            } else {
+                switch ((byte) (theKopeiki % NUM10)) {
+                    case NUM1:
+                        money2str.append(kopOneUnit);
+                        break;
+                    case NUM2:
+                    case NUM3:
+                    case NUM4:
+                        money2str.append(kopTwoUnit);
+                        break;
+                    default:
+                        money2str.append(kopFiveUnit);
+                        break;
+                }
+            }
+        }
 		return money2str.toString().trim();
 	}
 
@@ -390,6 +426,10 @@ public final class MoneyToStr {
 		 * .
 		 */
 		RUR,
+        /**
+         *  Белорусский рубль с 1 июля 2016
+         */
+        BYN,
 		/**
 		 * .
 		 */
