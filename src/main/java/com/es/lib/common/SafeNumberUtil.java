@@ -36,6 +36,14 @@ public class SafeNumberUtil {
         return value != null ? value.doubleValue() : defValue;
     }
 
+    public static Double parseDouble(String value, Double defValue) {
+        try {
+            return Double.parseDouble(value);
+        } catch (Exception e) {
+            return defValue;
+        }
+    }
+
     /**
      * Получить значение value если value != null, иначе 0.0d
      *
@@ -44,6 +52,43 @@ public class SafeNumberUtil {
      */
     public static double getDouble(Number value) {
         return getDouble(value, 0.0d);
+    }
+
+    public static Double parseDouble(String value) {
+        return parseDouble(value, null);
+    }
+
+    /**
+     * Получить значение value если value != null, иначе defValue
+     *
+     * @param value    число
+     * @param defValue число по умолчанию
+     * @return значение value если value != null, иначе defValue
+     */
+    public static float getFloat(Number value, float defValue) {
+        return value != null ? value.floatValue() : defValue;
+    }
+
+    public static Float parseFloat(String value, Float defValue) {
+        try {
+            return Float.parseFloat(value);
+        } catch (Exception e) {
+            return defValue;
+        }
+    }
+
+    /**
+     * Получить значение value если value != null, иначе 0.0d
+     *
+     * @param value число
+     * @return значение value если value != null, иначе 0.0d
+     */
+    public static float getFloat(Number value) {
+        return getFloat(value, 0.0f);
+    }
+
+    public static Float parseFloat(String value) {
+        return parseFloat(value, null);
     }
 
     /**
@@ -57,6 +102,14 @@ public class SafeNumberUtil {
         return value != null ? value.longValue() : defValue;
     }
 
+    public static Long parseLong(String value, Long defValue) {
+        try {
+            return Long.parseLong(value);
+        } catch (Exception e) {
+            return defValue;
+        }
+    }
+
     /**
      * Получить значение value если value != null, иначе 0L
      *
@@ -65,6 +118,10 @@ public class SafeNumberUtil {
      */
     public static long getLong(Number value) {
         return getLong(value, 0L);
+    }
+
+    public static Long parseLong(String value) {
+        return parseLong(value, null);
     }
 
     /**
@@ -78,6 +135,14 @@ public class SafeNumberUtil {
         return value != null ? value.shortValue() : defValue;
     }
 
+    public static Short parseShort(String value, Short defValue) {
+        try {
+            return Short.parseShort(value);
+        } catch (Exception e) {
+            return defValue;
+        }
+    }
+
     /**
      * Получить значение value если value != null, иначе 0
      *
@@ -86,6 +151,10 @@ public class SafeNumberUtil {
      */
     public static short getShort(Number value) {
         return getShort(value, (short) 0);
+    }
+
+    public static Short parseShort(String value) {
+        return parseShort(value, null);
     }
 
     /**
@@ -99,6 +168,14 @@ public class SafeNumberUtil {
         return value != null ? value.intValue() : defValue;
     }
 
+    public static Integer parseInt(String value, Integer defValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return defValue;
+        }
+    }
+
     /**
      * Получить значение value если value != null, иначе 0
      *
@@ -107,6 +184,10 @@ public class SafeNumberUtil {
      */
     public static int getInt(Number value) {
         return getInt(value, 0);
+    }
+
+    public static Integer parseInt(String value) {
+        return parseInt(value, null);
     }
 
     /**
