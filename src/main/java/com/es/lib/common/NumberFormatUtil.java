@@ -27,7 +27,7 @@ import java.text.ParseException;
  */
 public final class NumberFormatUtil {
 
-    private NumberFormatUtil() { }
+    public NumberFormatUtil() { }
 
     private static DecimalFormat getFormat03() {
         return new DecimalFormatBuilder().
