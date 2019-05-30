@@ -16,9 +16,11 @@
 
 package com.es.lib.common;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.io.Reader;
 
 /**
@@ -27,23 +29,44 @@ import java.io.Reader;
  */
 public final class JsonUtil {
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    static {
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
     private JsonUtil() { }
 
     public static <T> T fromJson(String json, Class<T> classOfT) {
-        return getProcessor().fromJson(json, classOfT);
+        try {
+            return OBJECT_MAPPER.readValue(json, classOfT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static <T> T fromJson(Reader reader, Class<T> classOfT) { return getProcessor().fromJson(reader, classOfT); }
+    public static <T> T fromJson(Reader reader, Class<T> classOfT) {
+        try {
+            return OBJECT_MAPPER.readValue(reader, classOfT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    public static <T> T fromJson(String json, TypeToken<T> token) {
-        return getProcessor().fromJson(json, token.getType());
+    public static <T> T fromJson(String json, TypeReference<T> typeReference) {
+        try {
+            return OBJECT_MAPPER.readValue(json, typeReference);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String toJson(Object object) {
-        return getProcessor().toJson(object);
-    }
+        try {
+            return OBJECT_MAPPER.writeValueAsString(object);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-    private static Gson getProcessor() {
-        return new Gson();
     }
 }
