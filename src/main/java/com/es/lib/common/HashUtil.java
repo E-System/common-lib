@@ -95,9 +95,9 @@ public final class HashUtil {
         return crc;
     }
 
-    public static int CRC16CCITT(byte[] data) { return CRC16CCITT(data, 0, 0); }
+    public static int crc16ccitt(byte[] data) { return crc16ccitt(data, 0, 0); }
 
-    public static int CRC16CCITT(byte[] data, int skipIndex, int skipLen) {
+    public static int crc16ccitt(byte[] data, int skipIndex, int skipLen) {
         int crc = 0xFFFF;          // init
         int polynom = 0x1021;   // 0001 0000 0010 0001
         for (int i = 0; i < data.length; i++) {
@@ -115,13 +115,13 @@ public final class HashUtil {
         return crc;
     }
 
-    public static int XOR(byte[] data) { return XOR(data, 0, 0); }
+    public static int xor(byte[] data) { return xor(data, 0, 0); }
 
-    public static int XOR(byte[] data, int skipIndex, int skipLen) {
-        return XOR(data, skipIndex, skipLen, data.length);
+    public static int xor(byte[] data, int skipIndex, int skipLen) {
+        return xor(data, skipIndex, skipLen, data.length);
     }
 
-    public static int XOR(byte[] data, int skipIndex, int skipLen, int lastIdx) {
+    public static int xor(byte[] data, int skipIndex, int skipLen, int lastIdx) {
         byte res = 0x00;
         for (int i = 0; i < lastIdx; i++) {
             if (i >= skipIndex && i < skipIndex + skipLen) {
