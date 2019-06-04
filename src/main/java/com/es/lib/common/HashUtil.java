@@ -19,7 +19,10 @@ package com.es.lib.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
+import java.util.Base64;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -27,6 +30,8 @@ import java.security.MessageDigest;
  */
 public final class HashUtil {
 
+    private static final String ALGORITHM_MD5 = "MD5";
+    private static final String ALGORITHM_SHA256 = "SHA256";
     private static final Logger LOG = LoggerFactory.getLogger(HashUtil.class);
     private static final String HEXES = "0123456789abcdef";
 
@@ -60,15 +65,40 @@ public final class HashUtil {
     }
 
     public static String md5(String value) {
-        return hash(value, "MD5");
+        return hash(value, ALGORITHM_MD5);
     }
 
     public static String md5(byte[] value) {
-        return hash(value, "MD5");
+        return hash(value, ALGORITHM_MD5);
     }
 
     public static boolean isCorrect(final String text, final String hash) {
         return md5(text).equals(hash);
+    }
+
+    public static String hmac(String algorithm, String value, String secret) {
+        try {
+            String alg = "Hmac" + algorithm;
+            Mac hmac = Mac.getInstance(alg);
+            SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(Constant.DEFAULT_ENCODING), alg);
+            hmac.init(secret_key);
+
+            return Base64.getEncoder().encodeToString(hmac.doFinal(value.getBytes(Constant.DEFAULT_ENCODING)));
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            return null;
+        }
+    }
+
+    /**
+     * Calculate SHA256 hmac
+     *
+     * @param value  message text
+     * @param secret secret key
+     * @return Base64 of calculated hash
+     */
+    public static String hmacSha256(String value, String secret) {
+        return hmac(ALGORITHM_SHA256, value, secret);
     }
 
     public static String getHex(byte[] raw) {

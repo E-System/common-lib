@@ -24,16 +24,16 @@ import spock.lang.Specification
  */
 class HashUtilSpec extends Specification {
 
-    def "CRC16CCITT required not null array"() {
+    def "crc16ccitt required not null array"() {
         when:
-        HashUtil.CRC16CCITT(null)
+        HashUtil.crc16ccitt(null)
         then:
         thrown NullPointerException
     }
 
-    def "CRC16CCITT must be correct"() {
+    def "crc16ccitt must be correct"() {
         expect:
-        HashUtil.CRC16CCITT(src) == result
+        HashUtil.crc16ccitt(src) == result
         where:
         src                       || result
         '1234567890'.bytes        || 0x3218
@@ -41,9 +41,9 @@ class HashUtilSpec extends Specification {
         '1234567890qwertyu'.bytes || 0x92D8
     }
 
-    def "CRC16CCITT with skip must be correct without IndexOutException "() {
+    def "crc16ccitt with skip must be correct without IndexOutException "() {
         expect:
-        HashUtil.CRC16CCITT(src, skipIdx, skipLen) == HashUtil.CRC16CCITT(target)
+        HashUtil.crc16ccitt(src, skipIdx, skipLen) == HashUtil.crc16ccitt(target)
         where:
         src                       || skipIdx || skipLen || target
         '1234567890'.bytes        || 0       || 2       || '34567890'.bytes
@@ -54,5 +54,9 @@ class HashUtilSpec extends Specification {
         '1234567890'.bytes        || -100    || -200    || '1234567890'.bytes
     }
 
+    def "hmacSha256"() {
+        expect:
+        HashUtil.hmacSha256("Test message", "secret_key") == "ABpes7dX951jzumPtmtNFeo4MS9ycL+sN1O1UnKUJeY="
+    }
 }
 
