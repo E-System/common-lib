@@ -24,18 +24,17 @@ package com.es.lib.common.exception;
  */
 public class ESException extends Exception {
 
-	public ESException() {
-	}
+    public ESException() { }
 
-	public ESException(String message) {
-		super(message);
-	}
+    public ESException(String message) {
+        super(message);
+    }
 
-	public ESException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public ESException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public ESException(Throwable cause) {
-		super(cause);
-	}
+    public ESException(Throwable cause) {
+        super(cause);
+    }
 }

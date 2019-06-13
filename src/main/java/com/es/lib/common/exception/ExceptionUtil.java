@@ -22,14 +22,13 @@ package com.es.lib.common.exception;
  */
 public final class ExceptionUtil {
 
-	private ExceptionUtil() {
-	}
+    private ExceptionUtil() { }
 
-	public static Throwable getRootCause(Throwable t) {
-		Throwable cur = t;
-		while (cur.getCause() != null) {
-			cur = cur.getCause();
-		}
-		return cur;
-	}
+    public static Throwable getRootCause(Throwable t) {
+        Throwable cur = t;
+        while (cur.getCause() != null) {
+            cur = cur.getCause();
+        }
+        return cur;
+    }
 }

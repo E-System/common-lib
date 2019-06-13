@@ -24,18 +24,17 @@ package com.es.lib.common.exception;
  */
 public class ESRuntimeException extends RuntimeException {
 
-	public ESRuntimeException() {
-	}
+    public ESRuntimeException() { }
 
-	public ESRuntimeException(String message) {
-		super(message);
-	}
+    public ESRuntimeException(String message) {
+        super(message);
+    }
 
-	public ESRuntimeException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public ESRuntimeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	public ESRuntimeException(Throwable cause) {
-		super(cause);
-	}
+    public ESRuntimeException(Throwable cause) {
+        super(cause);
+    }
 }
