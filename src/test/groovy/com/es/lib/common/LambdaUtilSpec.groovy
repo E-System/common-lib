@@ -3,6 +3,7 @@ package com.es.lib.common
 import spock.lang.Specification
 
 import java.util.function.Consumer
+import java.util.function.Supplier
 
 class LambdaUtilSpec extends Specification {
 
@@ -92,5 +93,69 @@ class LambdaUtilSpec extends Specification {
         expect:
         value == 1
         value2 == 2
+    }
+
+    class A {
+        String a
+    }
+
+    class B {
+        A a
+    }
+
+    class C {
+        B b
+    }
+
+    def "Safe with null"() {
+        expect:
+        LambdaUtil.safeGet(new Supplier<String>() {
+            @Override
+            String get() {
+                new C().b.a.a
+            }
+        }) == null
+    }
+
+    def "Safe with defaultValue"() {
+        expect:
+        LambdaUtil.safeGet(new Supplier<String>() {
+            @Override
+            String get() {
+                new C().b.a.a
+            }
+        }, "512") == "512"
+    }
+
+    def "Safe with defaultSupplier"() {
+        expect:
+        LambdaUtil.safeGet(new Supplier<String>() {
+            @Override
+            String get() {
+                new C().b.a.a
+            }
+        }, new Supplier<String>() {
+            @Override
+            String get() {
+                return "444"
+            }
+        }) == "444"
+    }
+
+    def "Safe with filled"() {
+        when:
+        A a = new A()
+        a.a = "123"
+        B b = new B()
+        b.a = a
+        C c = new C()
+        c.b = b
+        then:
+        LambdaUtil.safeGet(new Supplier<String>() {
+            @Override
+            String get() {
+                c.b.a.a
+            }
+        }) == "123"
     }
 }
