@@ -39,6 +39,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -144,6 +145,9 @@ if (emailTestEnabled) {
         systemProperty 'test_email_login', "${test_email_login}"
         systemProperty 'test_email_password', "${test_email_password}"
     }
+}
+test {
+    finalizedBy jacocoTestReport
 }
 
 def sonarAvailable = properties['sonar_url'] != null && properties['sonar_user'] != null && properties['sonar_password'] != null
