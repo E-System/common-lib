@@ -22,5 +22,6 @@ package com.es.lib.common.email.config;
  */
 public enum EmailServerType {
     SMTP,
+    SMTPS,
     POP3
 }

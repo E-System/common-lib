@@ -17,6 +17,7 @@
 package com.es.lib.common.email
 
 import com.es.lib.common.email.config.EmailAuth
+import com.es.lib.common.email.config.EmailServerType
 import com.es.lib.common.email.config.SMTPServerConfiguration
 import spock.lang.IgnoreIf
 import spock.lang.Specification
@@ -42,6 +43,19 @@ class EmailSenderSpec extends Specification {
         )
     }
 
+    def createSmtpsSender() {
+        return new EmailSender(
+            new SMTPServerConfiguration(
+                EmailServerType.SMTPS,
+                SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
+                new EmailAuth(
+                    System.getProperty("test_email_login"),
+                    System.getProperty("test_email_password")
+                )
+            )
+        )
+    }
+
     @IgnoreIf({
         System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
     })
@@ -49,6 +63,17 @@ class EmailSenderSpec extends Specification {
     def "Email должен быть отправлен"() {
         when:
         def sender = createSender()
+        then:
+        sender.send(EmailMessage.create("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body " + new Date()).build())
+    }
+
+    @IgnoreIf({
+        System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
+    })
+    @Timeout(20)
+    def "Email должен быть отправлен (SMTPS)"() {
+        when:
+        def sender = createSmtpsSender()
         then:
         sender.send(EmailMessage.create("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body " + new Date()).build())
     }
