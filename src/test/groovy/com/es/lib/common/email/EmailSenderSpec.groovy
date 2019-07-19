@@ -17,7 +17,6 @@
 package com.es.lib.common.email
 
 import com.es.lib.common.email.config.EmailAuth
-import com.es.lib.common.email.config.EmailServerType
 import com.es.lib.common.email.config.SMTPServerConfiguration
 import spock.lang.IgnoreIf
 import spock.lang.Specification
@@ -70,11 +69,11 @@ class EmailSenderSpec extends Specification {
         System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
     })
     @Timeout(20)
-    def "Email должен быть отправлен (SMTPS)"() {
+    def "Email должен быть отправлен (TLS)"() {
         when:
         def sender = createSmtpsSender()
         then:
-        sender.send(EmailMessage.create("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body " + new Date()).build())
+        sender.send(EmailMessage.create("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body (TLS) " + new Date()).build())
     }
 
     @IgnoreIf({

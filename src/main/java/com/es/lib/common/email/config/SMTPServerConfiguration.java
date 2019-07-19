@@ -92,12 +92,4 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
     public SMTPServerConfiguration(EmailServer server, EmailAuth auth, Map<String, Object> parameters, boolean debug) {
         super(EmailServerType.SMTP, server, auth, parameters, debug);
     }
-
-    public SMTPServerConfiguration(EmailServerType serverType, EmailServer server, EmailAuth auth) {
-        super(serverType, server, auth);
-    }
-
-    public SMTPServerConfiguration(EmailServerType serverType, EmailServer server, EmailAuth auth, Map<String, Object> parameters, boolean debug) {
-        super(serverType, server, auth, parameters, debug);
-    }
 }
