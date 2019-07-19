@@ -75,7 +75,7 @@ public class EmailServerConfiguration implements Serializable {
             formatRow("mail." + type + ".auth", true) +
             formatRow("mail." + type + ".timeout", server.getTimeout()) +
             formatRow("mail." + type + ".port", server.getPort()) +
-            formatSsl() +
+            formatSslOrTls() +
             formatDebug() +
             formatRow("mail." + type + ".quitwait", false) +
             formatParameters()
@@ -105,15 +105,20 @@ public class EmailServerConfiguration implements Serializable {
         return sb.toString();
     }
 
-    private String formatSsl() {
-        if (!server.isSsl()) {
+    private String formatSslOrTls() {
+        if (!server.isSsl() && !server.isTls()) {
             return "\n";
         }
+        if (server.isSsl()) {
+            String type = getTypeAsString();
+            return formatRow("mail." + type + ".ssl.enable", true) +
+                   formatRow("mail." + type + ".socketFactory.port", server.getPort()) +
+                   formatRow("mail." + type + ".socketFactory.class", "javax.net.ssl.SSLSocketFactory") +
+                   formatRow("mail." + type + ".socketFactory.fallback", false);
+        }
         String type = getTypeAsString();
-        return formatRow("mail." + type + ".ssl.enable", true) +
-               formatRow("mail." + type + ".socketFactory.port", server.getPort()) +
-               formatRow("mail." + type + ".socketFactory.class", "javax.net.ssl.SSLSocketFactory") +
-               formatRow("mail." + type + ".socketFactory.fallback", false);
+        return formatRow("mail." + type + ".starttls.enable", true) +
+               formatRow("mail." + type + ".starttls.required", true);
     }
 
     private String formatDebug() {

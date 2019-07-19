@@ -33,13 +33,13 @@ class EmailSenderSpec extends Specification {
 
     def createSender() {
         return new EmailSender(
-                new SMTPServerConfiguration(
-                        SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
-                        new EmailAuth(
-                                System.getProperty("test_email_login"),
-                                System.getProperty("test_email_password")
-                        )
+            new SMTPServerConfiguration(
+                SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
+                new EmailAuth(
+                    System.getProperty("test_email_login"),
+                    System.getProperty("test_email_password")
                 )
+            )
         )
     }
 
@@ -47,7 +47,7 @@ class EmailSenderSpec extends Specification {
         return new EmailSender(
             new SMTPServerConfiguration(
                 EmailServerType.SMTPS,
-                SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
+                SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server") + "_tls"),
                 new EmailAuth(
                     System.getProperty("test_email_login"),
                     System.getProperty("test_email_password")
@@ -88,15 +88,15 @@ class EmailSenderSpec extends Specification {
         def file = Files.createTempFile("тестовый файл", "txt").toFile();
         file.write('Пробное содержимое')
         def attachment = new EmailAttachment(
-                new EmailFileContent(
-                        file.absolutePath,
-                        "Тестовое имя файла.txt"
-                )
+            new EmailFileContent(
+                file.absolutePath,
+                "Тестовое имя файла.txt"
+            )
         )
         def message = EmailMessage
-                .create("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
-                .attachment(attachment)
-                .build()
+            .create("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
+            .attachment(attachment)
+            .build()
         then:
         sender.send(message)
     }
@@ -110,16 +110,16 @@ class EmailSenderSpec extends Specification {
         def sender = createSender()
         def fileContent = 'Пробное содержимое'
         def attachment = new EmailAttachment(
-                new EmailByteArrayContent(
-                        fileContent.getBytes(),
-                        'text/plain',
-                        "Тестовое имя файла (из байт).txt"
-                )
+            new EmailByteArrayContent(
+                fileContent.getBytes(),
+                'text/plain',
+                "Тестовое имя файла (из байт).txt"
+            )
         )
         def message = EmailMessage
-                .create("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
-                .attachment(attachment)
-                .build()
+            .create("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
+            .attachment(attachment)
+            .build()
         then:
         sender.send(message)
     }

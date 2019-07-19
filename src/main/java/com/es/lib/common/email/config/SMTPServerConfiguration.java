@@ -31,28 +31,56 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
 
     static {
         PRESETS.put(
-                "gmail",
-                new EmailServer(
-                        "smtp.gmail.com",
-                        DEFAULT_SSL_PORT,
-                        true
-                )
+            "gmail",
+            new EmailServer(
+                "smtp.gmail.com",
+                DEFAULT_SSL_PORT,
+                true
+            )
         );
         PRESETS.put(
-                "mailru",
-                new EmailServer(
-                        "smtp.mail.ru",
-                        DEFAULT_SSL_PORT,
-                        true
-                )
+            "gmail_tls",
+            new EmailServer(
+                "smtp.gmail.com",
+                DEFAULT_SSL_PORT,
+                false,
+                true
+            )
         );
         PRESETS.put(
-                "yandex",
-                new EmailServer(
-                        "smtp.yandex.ru",
-                        DEFAULT_SSL_PORT,
-                        true
-                )
+            "mailru",
+            new EmailServer(
+                "smtp.mail.ru",
+                DEFAULT_SSL_PORT,
+                true
+            )
+        );
+        PRESETS.put(
+            "mailru_tls",
+            new EmailServer(
+                "smtp.mail.ru",
+                DEFAULT_SSL_PORT,
+                false,
+                true
+            )
+        );
+        PRESETS.put(
+            "yandex",
+            new EmailServer(
+                "smtp.yandex.ru",
+                DEFAULT_SSL_PORT,
+                true
+            )
+        );
+
+        PRESETS.put(
+            "yandex_tls",
+            new EmailServer(
+                "smtp.yandex.ru",
+                DEFAULT_SSL_PORT,
+                false,
+                true
+            )
         );
     }
 

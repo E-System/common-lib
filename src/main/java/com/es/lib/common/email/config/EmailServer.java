@@ -27,6 +27,7 @@ public class EmailServer implements Cloneable, Serializable {
     private String host;
     private int port;
     private boolean ssl;
+    private boolean tls;
     private int timeout;
 
     public EmailServer() {
@@ -38,10 +39,23 @@ public class EmailServer implements Cloneable, Serializable {
         this.host = host;
         this.port = port;
         this.ssl = ssl;
+        this.tls = false;
     }
 
     public EmailServer(String host, int port, boolean ssl, int timeout) {
         this(host, port, ssl);
+        this.timeout = timeout;
+    }
+
+    public EmailServer(String host, int port, boolean ssl, boolean tls) {
+        this.host = host;
+        this.port = port;
+        this.ssl = ssl;
+        this.tls = tls;
+    }
+
+    public EmailServer(String host, int port, boolean ssl, boolean tls, int timeout) {
+        this(host, port, ssl, tls);
         this.timeout = timeout;
     }
 
@@ -69,6 +83,10 @@ public class EmailServer implements Cloneable, Serializable {
         this.ssl = ssl;
     }
 
+    public boolean isTls() {
+        return tls;
+    }
+
     public int getTimeout() {
         return timeout;
     }
@@ -83,6 +101,7 @@ public class EmailServer implements Cloneable, Serializable {
         object.host = host;
         object.port = port;
         object.ssl = ssl;
+        object.tls = tls;
         object.timeout = timeout;
         return object;
     }
@@ -93,6 +112,7 @@ public class EmailServer implements Cloneable, Serializable {
                "host='" + host + '\'' +
                ", port=" + port +
                ", ssl=" + ssl +
+               ", tls=" + tls +
                ", timeout=" + timeout +
                '}';
     }
