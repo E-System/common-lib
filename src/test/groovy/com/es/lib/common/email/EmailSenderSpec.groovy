@@ -46,7 +46,6 @@ class EmailSenderSpec extends Specification {
     def createSmtpsSender() {
         return new EmailSender(
             new SMTPServerConfiguration(
-                EmailServerType.SMTPS,
                 SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server") + "_tls"),
                 new EmailAuth(
                     System.getProperty("test_email_login"),
