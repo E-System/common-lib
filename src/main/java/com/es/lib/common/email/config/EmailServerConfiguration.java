@@ -113,9 +113,7 @@ public class EmailServerConfiguration implements Serializable {
         return formatRow("mail." + type + ".ssl.enable", true) +
                formatRow("mail." + type + ".socketFactory.port", server.getPort()) +
                formatRow("mail." + type + ".socketFactory.class", "javax.net.ssl.SSLSocketFactory") +
-               formatRow("mail." + type + ".socketFactory.fallback", false) +
-               formatRow("mail." + type + ".starttls.enable", true) +
-               formatRow("mail." + type + ".starttls.required", true);
+               formatRow("mail." + type + ".socketFactory.fallback", false);
     }
 
     private String formatDebug() {
