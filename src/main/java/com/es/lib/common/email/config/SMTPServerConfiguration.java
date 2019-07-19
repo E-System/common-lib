@@ -26,6 +26,7 @@ import java.util.Map;
 public class SMTPServerConfiguration extends EmailServerConfiguration {
 
     public static final int DEFAULT_SSL_PORT = 465;
+    public static final int DEFAULT_TLS_PORT = 587;
 
     public static final Map<String, EmailServer> PRESETS = new HashMap<>();
 
@@ -42,7 +43,7 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
             "gmail_tls",
             new EmailServer(
                 "smtp.gmail.com",
-                DEFAULT_SSL_PORT,
+                DEFAULT_TLS_PORT,
                 false,
                 true
             )
@@ -59,7 +60,7 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
             "mailru_tls",
             new EmailServer(
                 "smtp.mail.ru",
-                DEFAULT_SSL_PORT,
+                DEFAULT_TLS_PORT,
                 false,
                 true
             )
@@ -77,7 +78,7 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
             "yandex_tls",
             new EmailServer(
                 "smtp.yandex.ru",
-                DEFAULT_SSL_PORT,
+                DEFAULT_TLS_PORT,
                 false,
                 true
             )
