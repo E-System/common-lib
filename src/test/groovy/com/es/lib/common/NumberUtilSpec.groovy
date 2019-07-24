@@ -156,6 +156,22 @@ class NumberUtilSpec extends Specification {
         100            || "1"
     }
 
+    def "Format with string point delimiter with grouping size 3 and chop zeroes and 3 decimals"() {
+        expect:
+        NumberFormatUtil.format(a, ".", 3, 3, true) == b
+        where:
+        a              || b
+        0.001d         || "0.001"
+        0.01d          || "0.010"
+        1.0d           || "1"
+        2.2d           || "2.200"
+        3.333d         || "3.333"
+        1000000.00001f || "1" + dfs + "000" + dfs + "000"
+        1              || "0.010"
+        10             || "0.100"
+        100            || "1"
+    }
+
 
     def "Format with null or empty string point delimiter throw exception"() {
         when:

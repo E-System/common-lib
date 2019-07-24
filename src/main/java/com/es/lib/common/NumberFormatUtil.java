@@ -17,6 +17,7 @@
 package com.es.lib.common;
 
 import com.es.lib.common.builder.DecimalFormatBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -102,6 +103,7 @@ public final class NumberFormatUtil {
         return chop(
             f22(price, decimalSymbol, groupingSize),
             "" + decimalSymbol,
+            null,
             chopZeroes
         );
     }
@@ -138,6 +140,14 @@ public final class NumberFormatUtil {
             .format(price);
     }
 
+    public static String format(double price, String decimalSymbol, Integer groupingSize, Integer decimalCount) {
+        return new DecimalFormatBuilder()
+            .groupingSize(groupingSize)
+            .fractionDigits(decimalCount != null ? decimalCount : 2)
+            .decimalSymbol(decimalSymbol).build()
+            .format(price);
+    }
+
     public static String f22(int price, String decimalSymbol, Integer groupingSize) {
         return f22(price / 100.0d, decimalSymbol, groupingSize);
     }
@@ -150,6 +160,24 @@ public final class NumberFormatUtil {
         return chop(
             f22(price, decimalSymbol, groupingSize),
             decimalSymbol,
+            null,
+            chopZeroes
+        );
+    }
+
+    public static String format(int price, String decimalSymbol, Integer groupingSize, Integer decimalCount, boolean chopZeroes) {
+        return format(price / 100.0d, decimalSymbol, groupingSize, decimalCount, chopZeroes);
+    }
+
+    public static String format(long price, String decimalSymbol, Integer groupingSize, Integer decimalCount, boolean chopZeroes) {
+        return format(price / 100.0d, decimalSymbol, groupingSize, decimalCount, chopZeroes);
+    }
+
+    public static String format(double price, String decimalSymbol, Integer groupingSize, Integer decimalCount, boolean chopZeroes) {
+        return chop(
+            format(price, decimalSymbol, groupingSize, decimalCount),
+            decimalSymbol,
+            decimalCount,
             chopZeroes
         );
     }
@@ -173,12 +201,12 @@ public final class NumberFormatUtil {
         return getFormat00().parse(value);
     }
 
-    private static String chop(String value, String decimalSymbol, boolean chop) {
+    private static String chop(String value, String decimalSymbol, Integer decimalCount, boolean chop) {
         if (value == null || value.isEmpty()) {
             return value;
         }
         if (chop) {
-            return value.replace(decimalSymbol + "00", "");
+            return value.replace(decimalSymbol + StringUtils.repeat('0', decimalCount != null ? decimalCount : 2), "");
         }
         return value;
     }
