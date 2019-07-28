@@ -28,9 +28,9 @@ public class OGRNValidatorUtil {
         if (length != 13 && length != 15) {
             throw new BadLengthException();
         }
-        try{
+        try {
             Long.parseLong(value);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new BadValueException();
         }
         if (length == 13) {
@@ -79,15 +79,19 @@ public class OGRNValidatorUtil {
             if (length != 13) {
                 throw new BadLengthException();
             }
-            try{
+            try {
                 Long.parseLong(value);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 throw new BadValueException();
             }
         }
-        long num12 = (long) Math.floor((Long.valueOf(value) / 10) % 11);
-        long dgt13 = num12 == 10 ? 0 : num12;
-        if (ValidationUtil.getInt(value, 12) != dgt13) {
+        try {
+            long num12 = (long) Math.floor((Long.valueOf(value) / 10) % 11);
+            long dgt13 = num12 == 10 ? 0 : num12;
+            if (ValidationUtil.getInt(value, 12) != dgt13) {
+                throw new BadValueException();
+            }
+        } catch (NumberFormatException e) {
             throw new BadValueException();
         }
     }
@@ -113,9 +117,13 @@ public class OGRNValidatorUtil {
                 throw new BadValueException();
             }
         }
-        long num14 = (long) Math.floor((Long.valueOf(value) / 10) % 13);
-        long dgt15 = num14 % 10;
-        if (ValidationUtil.getInt(value, 14) != dgt15) {
+        try {
+            long num14 = (long) Math.floor((Long.valueOf(value) / 10) % 13);
+            long dgt15 = num14 % 10;
+            if (ValidationUtil.getInt(value, 14) != dgt15) {
+                throw new BadValueException();
+            }
+        } catch (NumberFormatException e) {
             throw new BadValueException();
         }
     }
