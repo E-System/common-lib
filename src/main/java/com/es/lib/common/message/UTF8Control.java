@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
  */
 public class UTF8Control extends ResourceBundle.Control {
 
+    @Override
     public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IllegalAccessException, InstantiationException, IOException {
         String bundleName = toBundleName(baseName, locale);
         String resourceName = toResourceName(bundleName, "properties");
@@ -49,5 +50,13 @@ public class UTF8Control extends ResourceBundle.Control {
             }
         }
         return bundle;
+    }
+
+    @Override
+    public Locale getFallbackLocale(String baseName, Locale locale) {
+        if (baseName == null || locale == null) {
+            throw new NullPointerException();
+        }
+        return null;
     }
 }
