@@ -24,7 +24,7 @@ import java.util.Collection;
 
 public final class PasswordUtil {
 
-    private static final int DEFAULT_LENGTH = 6;
+    public static final int DEFAULT_LENGTH = 6;
 
     private PasswordUtil() { }
 
