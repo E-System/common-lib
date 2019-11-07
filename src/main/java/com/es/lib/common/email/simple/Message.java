@@ -16,6 +16,7 @@
 
 package com.es.lib.common.email.simple;
 
+import com.es.lib.common.collection.CollectionUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -34,7 +35,7 @@ public class Message {
 
     private String subject;
     private String text;
-    private Collection<MessageAttachment> attachments = new ArrayList<>();
+    private Collection<MessageAttachment> attachments;
 
     public Message(String subject, String text) {
         this.subject = subject;
@@ -42,6 +43,6 @@ public class Message {
     }
 
     public boolean isAttachmentAvailable() {
-        return attachments != null && !attachments.isEmpty();
+        return CollectionUtil.isNotEmpty(attachments);
     }
 }
