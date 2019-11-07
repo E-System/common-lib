@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
+@Getter
 @ToString
 @AllArgsConstructor
 public class ClientInfo {
@@ -16,11 +17,8 @@ public class ClientInfo {
     private static final String PLATFORM_VERSION_KEY = "es-platform-version";
     private static final String APP_VERSION_KEY = "es-app-version";
 
-    @Getter
     private Platform platform;
-    @Getter
     private String platformVersion;
-    @Getter
     private String appVersion;
 
     public static ClientInfo create(Map<String, String> headers) {
