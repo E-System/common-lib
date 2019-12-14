@@ -111,7 +111,7 @@ class EmailSenderSpec extends Specification {
             new EmailByteArrayContent(
                 fileContent.getBytes(),
                 'text/plain',
-                "Тестовое имя файла (из байт).txt"
+                'Тестовое имя файла (из байт).txt'
             )
         )
         def message = EmailMessage

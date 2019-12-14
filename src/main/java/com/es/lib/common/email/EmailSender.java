@@ -102,8 +102,12 @@ public class EmailSender extends BaseEmailProcessor {
             EmailRootAttachment attachment = emailMessage.getRootAttachment();
             if (attachment.getContent().isByteArray()) {
                 EmailByteArrayContent content = (EmailByteArrayContent) attachment.getContent();
+                ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(content.getBytes(), content.getType());
+                if (StringUtils.isNotEmpty(content.getName())) {
+                    byteArrayDataSource.setName(content.getName());
+                }
                 message.setContent(
-                    new ByteArrayDataSource(content.getBytes(), content.getType()),
+                    byteArrayDataSource,
                     content.getType()
                 );
             } else {
