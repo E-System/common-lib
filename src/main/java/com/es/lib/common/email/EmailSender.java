@@ -20,15 +20,17 @@ import com.es.lib.common.collection.CollectionUtil;
 import com.es.lib.common.email.common.BaseEmailProcessor;
 import com.es.lib.common.email.config.SMTPServerConfiguration;
 import com.sun.mail.smtp.SMTPMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,9 +44,8 @@ import static javax.mail.Part.ATTACHMENT;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Slf4j
 public class EmailSender extends BaseEmailProcessor {
-
-    private static final Logger LOG = LoggerFactory.getLogger(EmailSender.class);
 
     public EmailSender(SMTPServerConfiguration configuration) throws IOException {
         super(configuration);
@@ -55,7 +56,7 @@ public class EmailSender extends BaseEmailProcessor {
 
         String from = StringUtils.isEmpty(emailMessage.getFrom()) ? getLogin() : emailMessage.getFrom();
         String backAddress = StringUtils.isEmpty(emailMessage.getBackAddress()) ? getLogin() : emailMessage.getBackAddress();
-        LOG.trace("From: {}; Back Address: {}", from, backAddress);
+        log.trace("From: {}; Back Address: {}", from, backAddress);
         smtpMessage.setFrom(new InternetAddress(backAddress, from));
         if (StringUtils.isNotEmpty(emailMessage.getBackAddress())) {
             smtpMessage.setReplyTo(
@@ -71,7 +72,7 @@ public class EmailSender extends BaseEmailProcessor {
         } catch (AddressException e) {
             sender = new InternetAddress(getLogin());
         }
-        LOG.trace("Sender: {}", sender);
+        log.trace("Sender: {}", sender);
         smtpMessage.setEnvelopeFrom(sender.getAddress());
         smtpMessage.setSender(sender);
 
@@ -184,7 +185,7 @@ public class EmailSender extends BaseEmailProcessor {
                         size += ("Content-Length: " + size + "\r\n").length();
                         value = String.valueOf(size);
                         message.setHeader("Content-Length", value);
-                        LOG.trace("Find SIZE extension. Calculate: {}", value);
+                        log.trace("Find SIZE extension. Calculate: {}", value);
                     }
 
                     baos.close();

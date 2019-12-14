@@ -17,8 +17,8 @@
 package com.es.lib.common.config;
 
 import com.es.lib.common.os.OSUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -29,10 +29,10 @@ import java.util.function.Supplier;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 16.07.15
  */
+@Slf4j
+@Getter
 @Deprecated
 public class GlobalConfig {
-
-    private static final Logger LOG = LoggerFactory.getLogger(GlobalConfig.class);
 
     private String name;
     private String version;
@@ -52,26 +52,14 @@ public class GlobalConfig {
             name = props.getProperty("name");
             version = props.getProperty("version");
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 
     public void log() {
-        LOG.info("OS: {}", os);
-        LOG.info("Application: {}-{}", name, version);
-        LOG.info("Server time zone: {}", TimeZone.getDefault());
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public OSUtil.OS getOs() {
-        return os;
+        log.info("OS: {}", os);
+        log.info("Application: {}-{}", name, version);
+        log.info("Server time zone: {}", TimeZone.getDefault());
     }
 
     private static class InstanceWrapper {

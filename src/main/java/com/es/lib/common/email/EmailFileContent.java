@@ -16,10 +16,17 @@
 
 package com.es.lib.common.email;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Getter
+@ToString(callSuper = true)
+@AllArgsConstructor
 public class EmailFileContent extends EmailAttachmentContent {
 
     private String target;
@@ -28,32 +35,5 @@ public class EmailFileContent extends EmailAttachmentContent {
 
     public EmailFileContent(String target, String name) {
         this(target, name, null);
-    }
-
-    public EmailFileContent(String target, String name, String contentType) {
-        this.target = target;
-        this.name = name;
-        this.contentType = contentType;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    @Override
-    public String toString() {
-        return "EmailFileContent{" +
-               "target='" + target + '\'' +
-               ", name='" + name + '\'' +
-               ", contentType='" + contentType + '\'' +
-               "} " + super.toString();
     }
 }

@@ -1,15 +1,13 @@
 package com.es.lib.common.server;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 07.05.2018
  */
+@Slf4j
 public final class ServerInfoUtil {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ServerInfoUtil.class);
 
     private ServerInfoUtil() {}
 
@@ -18,6 +16,6 @@ public final class ServerInfoUtil {
         String name = (slashPos == -1 ? serverInfo : serverInfo.substring(0, slashPos));
         String version = (slashPos == -1 ? null : serverInfo.substring(slashPos + 1));
         boolean tomcat = name.toLowerCase().contains("tomcat");
-        LOG.info("Container: {} {} (Tomcat: {})", name, version, tomcat);
+        log.info("Container: {} {} (Tomcat: {})", name, version, tomcat);
     }
 }

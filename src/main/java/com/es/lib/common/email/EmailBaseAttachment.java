@@ -16,21 +16,20 @@
 
 package com.es.lib.common.email;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Getter
+@ToString
+@AllArgsConstructor
 public class EmailBaseAttachment {
 
     private EmailAttachmentContent content;
-
-    public EmailBaseAttachment(EmailAttachmentContent content) {
-        this.content = content;
-    }
-
-    public EmailAttachmentContent getContent() {
-        return content;
-    }
 
     public boolean isSingle() {
         return this instanceof EmailRootAttachment;
@@ -38,12 +37,5 @@ public class EmailBaseAttachment {
 
     public boolean isMulti() {
         return this instanceof EmailAttachment;
-    }
-
-    @Override
-    public String toString() {
-        return "EmailBaseAttachment{" +
-               "content=" + content +
-               '}';
     }
 }

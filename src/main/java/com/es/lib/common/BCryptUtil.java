@@ -16,17 +16,15 @@
 
 package com.es.lib.common;
 
+import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Slf4j
 public final class BCryptUtil {
-
-    private static final Logger LOG = LoggerFactory.getLogger(BCryptUtil.class);
 
     private BCryptUtil() { }
 
@@ -38,7 +36,7 @@ public final class BCryptUtil {
         try {
             return text != null && BCrypt.checkpw(text, hash);
         } catch (IllegalArgumentException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return false;
         }
     }

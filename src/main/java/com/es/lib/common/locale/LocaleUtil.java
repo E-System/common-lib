@@ -1,9 +1,8 @@
 package com.es.lib.common.locale;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 
@@ -11,9 +10,8 @@ import java.util.Locale;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.01.2018
  */
+@Slf4j
 public final class LocaleUtil {
-
-    private static final Logger LOG = LoggerFactory.getLogger(LocaleUtil.class);
 
     private LocaleUtil() { }
 
@@ -24,7 +22,7 @@ public final class LocaleUtil {
         try {
             return LocaleUtils.toLocale(code);
         } catch (Exception e) {
-            LOG.error("Invalid locale: {}", code);
+            log.error("Invalid locale: {}", code);
         }
         return null;
     }

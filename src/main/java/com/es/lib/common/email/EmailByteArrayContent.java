@@ -16,10 +16,17 @@
 
 package com.es.lib.common.email;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Getter
+@AllArgsConstructor
+@ToString(callSuper = true)
 public class EmailByteArrayContent extends EmailAttachmentContent {
 
     private byte[] bytes;
@@ -28,32 +35,5 @@ public class EmailByteArrayContent extends EmailAttachmentContent {
 
     public EmailByteArrayContent(byte[] bytes, String type) {
         this(bytes, type, null);
-    }
-
-    public EmailByteArrayContent(byte[] bytes, String type, String name) {
-        this.bytes = bytes;
-        this.type = type;
-        this.name = name;
-    }
-
-    public byte[] getBytes() {
-        return bytes;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "EmailByteArrayContent{" +
-               "bytes=" + bytes +
-               ", type='" + type + '\'' +
-               ", name='" + name + '\'' +
-               "} " + super.toString();
     }
 }

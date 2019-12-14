@@ -16,6 +16,10 @@
 
 package com.es.lib.common.email;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -23,6 +27,9 @@ import java.util.Map;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Getter
+@ToString
+@AllArgsConstructor
 public class EmailMessage {
 
     private final String backAddress;
@@ -49,74 +56,5 @@ public class EmailMessage {
             .destinations(destinations)
             .subject(subject)
             .message(message);
-    }
-
-    EmailMessage(String backAddress, String from, String destinations, String subject, String message, Map<String, String> headers, Collection<EmailAttachment> attachments, Map<String, String> extensions, String id, EmailRootAttachment rootAttachment) {
-        this.backAddress = backAddress;
-        this.from = from;
-        this.destinations = destinations;
-        this.subject = subject;
-        this.message = message;
-        this.headers = headers;
-        this.attachments = attachments;
-        this.extensions = extensions;
-        this.id = id;
-        this.rootAttachment = rootAttachment;
-    }
-
-    public String getBackAddress() {
-        return backAddress;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public String getDestinations() {
-        return destinations;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public Collection<EmailAttachment> getAttachments() {
-        return attachments;
-    }
-
-    public Map<String, String> getExtensions() {
-        return extensions;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public EmailRootAttachment getRootAttachment() {
-        return rootAttachment;
-    }
-
-    @Override
-    public String toString() {
-        return "EmailMessage{" +
-               "backAddress='" + backAddress + '\'' +
-               ", from='" + from + '\'' +
-               ", destinations='" + destinations + '\'' +
-               ", subject='" + subject + '\'' +
-               ", message='" + message + '\'' +
-               ", headers=" + headers +
-               ", attachments=" + attachments +
-               ", extensions=" + extensions +
-               ", id='" + id + '\'' +
-               ", rootAttachment=" + rootAttachment +
-               '}';
     }
 }

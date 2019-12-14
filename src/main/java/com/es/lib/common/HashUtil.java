@@ -16,8 +16,7 @@
 
 package com.es.lib.common;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -28,11 +27,11 @@ import java.util.Base64;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Slf4j
 public final class HashUtil {
 
     private static final String ALGORITHM_MD5 = "MD5";
     private static final String ALGORITHM_SHA256 = "SHA256";
-    private static final Logger LOG = LoggerFactory.getLogger(HashUtil.class);
     private static final String HEXES = "0123456789abcdef";
 
     private HashUtil() {
@@ -47,7 +46,7 @@ public final class HashUtil {
             digest.update(value);
             return getHex(digest.digest());
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return null;
         }
     }
@@ -59,7 +58,7 @@ public final class HashUtil {
         try {
             return hash(value.getBytes(Constant.DEFAULT_ENCODING), algorithm);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return null;
         }
     }
@@ -85,7 +84,7 @@ public final class HashUtil {
 
             return Base64.getEncoder().encodeToString(hmac.doFinal(value.getBytes(Constant.DEFAULT_ENCODING)));
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return null;
         }
     }

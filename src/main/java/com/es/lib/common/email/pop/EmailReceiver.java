@@ -19,6 +19,7 @@ package com.es.lib.common.email.pop;
 import com.es.lib.common.HashUtil;
 import com.es.lib.common.email.common.BaseEmailProcessor;
 import com.es.lib.common.email.config.POP3ServerConfiguration;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +37,8 @@ import java.util.*;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 15.05.16
  */
+@Slf4j
 public class EmailReceiver extends BaseEmailProcessor {
-
-    private static final Logger LOG = LoggerFactory.getLogger(EmailReceiver.class);
 
     public EmailReceiver(POP3ServerConfiguration configuration) throws IOException {
         super(configuration);
@@ -64,14 +64,13 @@ public class EmailReceiver extends BaseEmailProcessor {
             for (Message message : messages) {
                 Map<String, String> headers = getAllHeaders(message);
 
-                Map<String, File> attachments = new HashMap<>();
                 String realPathPrefix = pathPrefix;
                 String messageId = headers.get("Message-ID");
                 if (StringUtils.isNotEmpty(messageId)) {
                     realPathPrefix += "/" + HashUtil.md5(messageId);
                 }
-                attachments.putAll(processAttachments(realPathPrefix, message));
-                LOG.trace("Attachments: {}", attachments);
+                Map<String, File> attachments = new HashMap<>(processAttachments(realPathPrefix, message));
+                log.trace("Attachments: {}", attachments);
 
                 result.add(
                     new ReceivedMessage(
@@ -93,14 +92,14 @@ public class EmailReceiver extends BaseEmailProcessor {
                 try {
                     inbox.close(true);
                 } catch (MessagingException e) {
-                    LOG.warn(e.getMessage());
+                    log.warn(e.getMessage());
                 }
             }
             if (store != null) {
                 try {
                     store.close();
                 } catch (MessagingException e) {
-                    LOG.warn(e.getMessage());
+                    log.warn(e.getMessage());
                 }
 
             }

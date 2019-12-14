@@ -9,8 +9,6 @@
 package com.es.lib.common.message;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ResourceBundle;
 
@@ -19,8 +17,6 @@ import java.util.ResourceBundle;
  * @since 16.07.15
  */
 public class MessageBundle {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MessageBundle.class);
 
     private String path;
 

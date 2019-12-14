@@ -16,10 +16,15 @@
 
 package com.es.lib.common.email;
 
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Getter
+@ToString(callSuper = true)
 public class EmailAttachment extends EmailBaseAttachment {
 
     private String cid;
@@ -31,16 +36,5 @@ public class EmailAttachment extends EmailBaseAttachment {
     public EmailAttachment(String cid, EmailAttachmentContent content) {
         super(content);
         this.cid = cid;
-    }
-
-    public String getCid() {
-        return cid;
-    }
-
-    @Override
-    public String toString() {
-        return "EmailAttachment{" +
-               "cid='" + cid + '\'' +
-               "} " + super.toString();
     }
 }

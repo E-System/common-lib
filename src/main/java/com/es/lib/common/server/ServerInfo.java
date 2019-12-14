@@ -16,17 +16,15 @@
 
 package com.es.lib.common.server;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Slf4j
 @Deprecated
 public final class ServerInfo {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ServerInfo.class);
 
     private String name;
     private String version;
@@ -46,7 +44,7 @@ public final class ServerInfo {
     }
 
     public void log() {
-        LOG.info("Container: {} {} (Tomcat: {})", name, version, tomcat);
+        log.info("Container: {} {} (Tomcat: {})", name, version, tomcat);
     }
 
     public String getName() {

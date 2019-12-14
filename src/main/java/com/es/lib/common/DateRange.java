@@ -17,6 +17,8 @@
 package com.es.lib.common;
 
 import com.es.lib.common.builder.DateBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -29,20 +31,17 @@ import java.util.stream.Stream;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Data
+@AllArgsConstructor
 public class DateRange {
 
     private Date dbegin;
     private Date dend;
 
-    private DateRange(Date dbegin, Date dend) {
-        this.dbegin = dbegin;
-        this.dend = dend;
-    }
-
     public static Collection<SItem> getAll(TimeZone timeZone, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
-            .map(v -> v.getItem(timeZone, lastNextDay))
-            .collect(Collectors.toList());
+                     .map(v -> v.getItem(timeZone, lastNextDay))
+                     .collect(Collectors.toList());
     }
 
     public static Collection<SItem> getAll(TimeZone timeZone) {
@@ -57,29 +56,8 @@ public class DateRange {
         return Interval.TODAY.getRange(timeZone, lastNextDay);
     }
 
-    public Date getDbegin() {
-        return dbegin;
-    }
-
-    public void setDbegin(Date dbegin) {
-        this.dbegin = dbegin;
-    }
-
-    public Date getDend() {
-        return dend;
-    }
-
-    public void setDend(Date dend) {
-        this.dend = dend;
-    }
-
     public String getIntervalString() {
         return DateUtil.format(getDbegin(), DateUtil.CALENDAR_DATE_PATTERN) + "|" + DateUtil.format(getDend(), DateUtil.CALENDAR_DATE_PATTERN);
-    }
-
-    @Override
-    public String toString() {
-        return "DateRange[dbegin=" + dbegin + ", dend=" + dend + ']';
     }
 
     public enum Interval {

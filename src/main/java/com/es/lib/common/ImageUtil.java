@@ -16,8 +16,7 @@
 
 package com.es.lib.common;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -33,12 +32,10 @@ import java.util.function.Consumer;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Slf4j
 public final class ImageUtil {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImageUtil.class);
-
-    private ImageUtil() {
-    }
+    private ImageUtil() { }
 
     private static RenderedImage resize(Image originalImage, int scaledWidth, int scaledHeight) {
         BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_RGB);
@@ -69,12 +66,12 @@ public final class ImageUtil {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
-        LOG.debug("Input image size: {} - {}", width, height);
+        log.debug("Input image size: {} - {}", width, height);
         // Calculate the new Height if not specified
         boolean success;
         if (width > maxWidth) {
             int saveHeight = maxWidth * Math.max(width, height) / Math.min(width, height);
-            LOG.info("Output image size: {} - {}", maxWidth, saveHeight);
+            log.info("Output image size: {} - {}", maxWidth, saveHeight);
             success = ImageIO.write(
                 resize(bufferedImage, maxWidth, saveHeight),
                 getImageType(contentType),
@@ -97,7 +94,7 @@ public final class ImageUtil {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             resizeToStream(inputStream, contentType, baos, maxWidth);
             byte[] bytes = baos.toByteArray();
-            LOG.debug("Result file size after resize: {}", bytes.length);
+            log.debug("Result file size after resize: {}", bytes.length);
             return bytes;
         }
     }
