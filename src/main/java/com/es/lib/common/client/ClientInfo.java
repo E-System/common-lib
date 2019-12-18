@@ -13,7 +13,9 @@ import java.util.Map;
 @AllArgsConstructor
 public class ClientInfo {
 
-    private static final String PLATFORM_KEY = "es-app-platform";
+    private static final String APP_PLATFORM_KEY = "es-app-platform";
+    private static final String APP_PLATFORM_VERSION_KEY = "es-app-platform-version";
+    @Deprecated
     private static final String PLATFORM_VERSION_KEY = "es-platform-version";
     private static final String APP_VERSION_KEY = "es-app-version";
 
@@ -27,11 +29,14 @@ public class ClientInfo {
         }
         Platform platform = Platform.undefined;
         try {
-            platform = Platform.valueOf(headers.get(PLATFORM_KEY).toLowerCase());
+            platform = Platform.valueOf(headers.get(APP_PLATFORM_KEY).toLowerCase());
         } catch (Exception ignored) { }
         return new ClientInfo(
             platform,
-            StringUtils.defaultIfBlank(headers.get(PLATFORM_VERSION_KEY), ""),
+            StringUtils.defaultIfBlank(
+                headers.get(PLATFORM_VERSION_KEY),
+                StringUtils.defaultIfBlank(headers.get(APP_PLATFORM_VERSION_KEY), "")
+            ),
             StringUtils.defaultIfBlank(headers.get(APP_VERSION_KEY), "")
         );
     }
