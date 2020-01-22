@@ -241,7 +241,7 @@ public final class DateUtil {
         return createDateFormat(format).parse(date);
     }
 
-    public static TemporalAccessor parseLocal(String date, String format) throws DateTimeParseException {
+    public static TemporalAccessor parseToTemporal(String date, String format) throws DateTimeParseException {
         if (date == null) {
             return null;
         }
