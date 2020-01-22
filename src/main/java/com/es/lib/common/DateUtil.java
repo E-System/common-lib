@@ -19,7 +19,10 @@ package com.es.lib.common;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.Calendar;
@@ -187,7 +190,7 @@ public final class DateUtil {
     }
 
     public static String format(Date date, String format) {
-        if (date == null){
+        if (date == null) {
             return null;
         }
         return createDateFormat(format).format(date);
@@ -202,7 +205,7 @@ public final class DateUtil {
     }
 
     public static String format(TimeZone timeZone, Date date, String format) {
-        if (date == null){
+        if (date == null) {
             return null;
         }
         return createDateFormat(format, timeZone).format(date);
@@ -217,7 +220,7 @@ public final class DateUtil {
     }
 
     public static String format(Locale locale, Date date, String format) {
-        if (date == null){
+        if (date == null) {
             return null;
         }
         return createDateFormat(format, locale).format(date);
@@ -232,10 +235,17 @@ public final class DateUtil {
     }
 
     public static Date parse(String date, String format) throws ParseException {
-        if (date == null){
+        if (date == null) {
             return null;
         }
         return createDateFormat(format).parse(date);
+    }
+
+    public static TemporalAccessor parseLocal(String date, String format) throws DateTimeParseException {
+        if (date == null) {
+            return null;
+        }
+        return DateTimeFormatter.ofPattern(format).parse(date);
     }
 
     private static SimpleDateFormat createDateFormat(String format) {
