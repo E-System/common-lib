@@ -16,6 +16,7 @@
 
 package com.es.lib.common
 
+
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -190,5 +191,19 @@ class DateUtilSpec extends Specification {
         then:
         result != null
         result.getTime() == date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    }
+
+    def "Parse with default pattern"() {
+        when:
+        def date = DateUtil.parse("27.09.1985", DateUtil.CALENDAR_DATE_PATTERN)
+        then:
+        DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 00:00:00"
+    }
+
+    def "Parse with invalid date"() {
+        when:
+        def date = DateUtil.parse("27.09.1985 10:20:30", DateUtil.CALENDAR_DATE_PATTERN)
+        then:
+        DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 00:00:00"
     }
 }

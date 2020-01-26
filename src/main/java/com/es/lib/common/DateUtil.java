@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.Calendar;
@@ -239,13 +239,6 @@ public final class DateUtil {
             return null;
         }
         return createDateFormat(format).parse(date);
-    }
-
-    public static TemporalAccessor parseToTemporal(String date, String format) throws DateTimeParseException {
-        if (date == null) {
-            return null;
-        }
-        return DateTimeFormatter.ofPattern(format).parse(date);
     }
 
     private static SimpleDateFormat createDateFormat(String format) {
