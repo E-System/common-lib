@@ -3,6 +3,8 @@ package com.es.lib.common.model;
 import com.es.lib.common.collection.CollectionUtil;
 import com.es.lib.common.text.FioChopper;
 import com.es.lib.common.text.TextUtil;
+import lombok.Getter;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -12,6 +14,8 @@ import java.util.List;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 23.09.16
  */
+@Getter
+@ToString
 public class FullName {
 
     private String surname;
@@ -44,18 +48,6 @@ public class FullName {
         this.patronymic = patronymic;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
     public String getPatronymicFull() {
         String result = StringUtils.defaultString(getPatronymic(), "");
         if (CollectionUtil.isNotEmpty(others)) {
@@ -71,10 +63,6 @@ public class FullName {
             result += (" " + String.join(" ", others));
         }
         return result.trim();
-    }
-
-    public List<String> getOthers() {
-        return others;
     }
 
     public List<String> toList() {
@@ -122,15 +110,5 @@ public class FullName {
         return StringUtils.isEmpty(surname)
                && StringUtils.isEmpty(name)
                && StringUtils.isEmpty(patronymic);
-    }
-
-    @Override
-    public String toString() {
-        return "FullName{" +
-               "surname='" + surname + '\'' +
-               ", name='" + name + '\'' +
-               ", patronymic='" + patronymic + '\'' +
-               ", others=" + others +
-               '}';
     }
 }

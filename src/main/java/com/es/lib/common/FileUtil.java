@@ -77,7 +77,6 @@ public final class FileUtil {
         return checkedInputStream.getChecksum().getValue();
     }
 
-
     /**
      * Прочитать поток в строку
      *
