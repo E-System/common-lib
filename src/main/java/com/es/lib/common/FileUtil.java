@@ -16,6 +16,7 @@
 
 package com.es.lib.common;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
@@ -65,6 +66,15 @@ public final class FileUtil {
             }
             return Pair.of(sb.toString(), cis.getChecksum().getValue());
         }
+    }
+
+    private static long copyWithCrc32(InputStream from, File to) throws IOException {
+        CheckedInputStream checkedInputStream = new CheckedInputStream(from, new CRC32());
+        FileUtils.copyInputStreamToFile(
+            checkedInputStream,
+            to
+        );
+        return checkedInputStream.getChecksum().getValue();
     }
 
 

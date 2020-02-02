@@ -64,6 +64,5 @@ public final class JsonUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
