@@ -68,7 +68,7 @@ public final class FileUtil {
         }
     }
 
-    private static long copyWithCrc32(InputStream from, File to) throws IOException {
+    public static long copyWithCrc32(InputStream from, File to) throws IOException {
         CheckedInputStream checkedInputStream = new CheckedInputStream(from, new CRC32());
         FileUtils.copyInputStreamToFile(
             checkedInputStream,
