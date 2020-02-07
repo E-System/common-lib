@@ -79,4 +79,12 @@ class MimeUtilSpec extends Specification {
         "ico"    || "image/x-icon"
         "ppt"    || "application/vnd.ms-powerpoint"
     }
+
+    def "Content file name disposition"(){
+        expect:
+        MimeUtil.contentDisposition(true, "Hello.txt") == "attachment; filename=\"Hello.txt\"; filename*=UTF-8''Hello.txt"
+        MimeUtil.contentDisposition(false, "Hello.txt") == "inline; filename=\"Hello.txt\"; filename*=UTF-8''Hello.txt"
+        MimeUtil.contentDisposition(true, "Тест.txt") == "attachment; filename=\"Тест.txt\"; filename*=UTF-8''%D0%A2%D0%B5%D1%81%D1%82.txt"
+        MimeUtil.contentDisposition(false, "Тест.txt") == "inline; filename=\"Тест.txt\"; filename*=UTF-8''%D0%A2%D0%B5%D1%81%D1%82.txt"
+    }
 }
