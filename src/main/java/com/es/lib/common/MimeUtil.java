@@ -7,6 +7,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,5 +99,10 @@ public final class MimeUtil {
             return DEFAULT_TYPE;
         }
         return result;
+    }
+
+    public static String contentDisposition(boolean attachment, String fileName) throws UnsupportedEncodingException {
+        String encoded = URLEncoder.encode(fileName, Charset.defaultCharset().name()).replace("+", "%20");
+        return (attachment ? "attachment" : "inline") + "; filename=\"" + fileName + "\"; filename*=UTF-8''" + encoded;
     }
 }
