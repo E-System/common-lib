@@ -13,7 +13,6 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 package com.es.lib.common.file;
 
 import java.io.File;
@@ -24,7 +23,7 @@ import java.util.Comparator;
 import java.util.stream.Stream;
 
 /**
- * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 11.03.16
  */
 public final class DeleteFileUtil {
