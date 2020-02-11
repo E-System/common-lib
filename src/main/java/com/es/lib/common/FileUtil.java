@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.zip.CRC32;
@@ -66,6 +67,10 @@ public final class FileUtil {
             }
             return Pair.of(sb.toString(), cis.getChecksum().getValue());
         }
+    }
+
+    public static long copyWithCrc32(InputStream from, Path to) throws IOException {
+        return copyWithCrc32(from, to.toFile());
     }
 
     public static long copyWithCrc32(InputStream from, File to) throws IOException {
