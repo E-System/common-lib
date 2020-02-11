@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
@@ -56,6 +57,12 @@ public final class FileUtil {
 
     public static Map.Entry<String, Long> readCrc32(File file) throws IOException {
         return readCrc32(new FileInputStream(file));
+    }
+
+    public static Map.Entry<String, Long> readCrc32(Path file) throws IOException {
+        try (InputStream is = Files.newInputStream(file)) {
+            return readCrc32(is);
+        }
     }
 
     public static Map.Entry<String, Long> readCrc32(InputStream inputStream) throws IOException {
