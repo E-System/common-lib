@@ -19,9 +19,6 @@ package com.es.lib.common;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
@@ -234,12 +231,21 @@ public final class DateUtil {
         return format(locale, date, CALENDAR_DATE_PATTERN_WITH_TIME);
     }
 
+    public static Date parse(String date) throws ParseException {
+        return parse(date, CALENDAR_DATE_PATTERN);
+    }
+
+    public static Date parseWithTime(String date) throws ParseException {
+        return parse(date, CALENDAR_DATE_PATTERN_WITH_TIME);
+    }
+
     public static Date parse(String date, String format) throws ParseException {
         if (date == null) {
             return null;
         }
         return createDateFormat(format).parse(date);
     }
+
 
     private static SimpleDateFormat createDateFormat(String format) {
         return new SimpleDateFormat(format);

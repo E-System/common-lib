@@ -200,6 +200,20 @@ class DateUtilSpec extends Specification {
         DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 00:00:00"
     }
 
+    def "Parse with default pattern (in method)"() {
+        when:
+        def date = DateUtil.parse("27.09.1985")
+        then:
+        DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 00:00:00"
+    }
+
+    def "Parse with default pattern (in method) with time"() {
+        when:
+        def date = DateUtil.parseWithTime("27.09.1985 23:20:15")
+        then:
+        DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 23:20:15"
+    }
+
     def "Parse with invalid date"() {
         when:
         def date = DateUtil.parse("27.09.1985 10:20:30", DateUtil.CALENDAR_DATE_PATTERN)
