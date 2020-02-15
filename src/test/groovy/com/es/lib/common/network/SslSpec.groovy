@@ -1,19 +1,19 @@
-package com.es.lib.common
+package com.es.lib.common.network
 
 import spock.lang.Specification
 
 import java.security.NoSuchAlgorithmException
 
-class SSLUtilSpec extends Specification {
+class SslSpec extends Specification {
 
     def "CreateSSLContext"() {
         expect:
-        SSLUtil.createSSLContext() != null
+        Ssl.context() != null
     }
 
     def "CreateSSLContext with undefined sslType"() {
         when:
-        SSLUtil.createSSLContext("ABC")
+        Ssl.context("ABC")
         then:
         def ex = thrown(NoSuchAlgorithmException)
         ex.message == 'ABC SSLContext not available'

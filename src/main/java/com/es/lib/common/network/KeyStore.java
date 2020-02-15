@@ -34,10 +34,10 @@ public class KeyStore {
 
     private Path path;
     private String storePassword;
-    private String password;
+    private String keyPassword;
     private String type;
 
-    public static KeyStore create(Path path, String storePassword, String password) {
+    public static KeyStore create(Path path, String storePassword, String keyPassword) {
         String extension = FilenameUtils.getExtension(path.toString());
         String type;
         switch (extension.toLowerCase()) {
@@ -54,10 +54,10 @@ public class KeyStore {
         if (type == null) {
             throw new IllegalArgumentException("Unable to determine key type by file: " + path.toString());
         }
-        return create(path, storePassword, password, type);
+        return create(path, storePassword, keyPassword, type);
     }
 
-    public static KeyStore create(Path path, String storePassword, String password, String type) {
-        return new KeyStore(path, storePassword, password, type);
+    public static KeyStore create(Path path, String storePassword, String keyPassword, String type) {
+        return new KeyStore(path, storePassword, keyPassword, type);
     }
 }
