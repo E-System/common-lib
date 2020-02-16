@@ -39,7 +39,7 @@ public class Ssl {
         return sslContext;
     }
 
-    private static TrustManager trustManager() {
+    public static TrustManager trustManager() {
         return new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() {
                 return null;
@@ -49,6 +49,10 @@ public class Ssl {
 
             public void checkServerTrusted(X509Certificate[] certs, String authType) { }
         };
+    }
+
+    public static HostnameVerifier allowAllHostVerifier() {
+        return (s, sslSession) -> true;
     }
 
     private static KeyManager[] keyManager(com.es.lib.common.network.KeyStore keyStore) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
