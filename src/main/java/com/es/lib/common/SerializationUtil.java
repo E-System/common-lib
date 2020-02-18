@@ -41,7 +41,7 @@ public class SerializationUtil {
 
     public static String replaceDelimiters(String value, String target) {
         if (value != null) {
-            value = value.replaceAll(",|\\.", target);
+            value = value.replaceAll("[,.]", target);
         }
         return value;
     }
