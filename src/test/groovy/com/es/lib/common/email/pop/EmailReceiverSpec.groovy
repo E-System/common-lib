@@ -16,8 +16,9 @@
 
 package com.es.lib.common.email.pop
 
-import com.es.lib.common.email.config.EmailAuth
+
 import com.es.lib.common.email.config.POP3ServerConfiguration
+import com.es.lib.common.security.Credentials
 import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Timeout
@@ -35,13 +36,13 @@ class EmailReceiverSpec extends Specification {
     def "GetAll"() {
         when:
         def receiver = new EmailReceiver(
-                new POP3ServerConfiguration(
-                        POP3ServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
-                        new EmailAuth(
-                                System.getProperty("test_email_login"),
-                                System.getProperty("test_email_password")
-                        )
+            new POP3ServerConfiguration(
+                POP3ServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
+                new Credentials(
+                    System.getProperty("test_email_login"),
+                    System.getProperty("test_email_password")
                 )
+            )
         )
         then:
         def messages = receiver.getAll("/tmp", false)

@@ -16,6 +16,8 @@
 
 package com.es.lib.common.email.config;
 
+import com.es.lib.common.security.Credentials;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,11 +87,11 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
         );
     }
 
-    public SMTPServerConfiguration(EmailServer server, EmailAuth auth) {
-        super(EmailServerType.SMTP, server, auth);
+    public SMTPServerConfiguration(EmailServer server, Credentials credentials) {
+        super(EmailServer.Type.SMTP, server, credentials);
     }
 
-    public SMTPServerConfiguration(EmailServer server, EmailAuth auth, Map<String, Object> parameters, boolean debug) {
-        super(EmailServerType.SMTP, server, auth, parameters, debug);
+    public SMTPServerConfiguration(EmailServer server, Credentials credentials, Map<String, Object> parameters, boolean debug) {
+        super(EmailServer.Type.SMTP, server, credentials, parameters, debug);
     }
 }

@@ -19,6 +19,10 @@ package com.es.lib.common.email;
 import com.es.lib.common.collection.CollectionUtil;
 import com.es.lib.common.email.common.BaseEmailProcessor;
 import com.es.lib.common.email.config.SMTPServerConfiguration;
+import com.es.lib.common.model.data.ByteData;
+import com.es.lib.common.model.data.FileData;
+import com.es.lib.common.model.data.StreamData;
+import com.es.lib.common.model.data.TypedData;
 import com.sun.mail.smtp.SMTPMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -33,9 +37,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import static javax.mail.Part.ATTACHMENT;
@@ -100,22 +102,25 @@ public class EmailSender extends BaseEmailProcessor {
     private void generateBody(EmailMessage emailMessage, SMTPMessage message) throws MessagingException, IOException {
         if (emailMessage.getRootAttachment() != null) {
             EmailRootAttachment attachment = emailMessage.getRootAttachment();
-            if (attachment.getContent().isByteArray()) {
-                EmailByteArrayContent content = (EmailByteArrayContent) attachment.getContent();
-                ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(content.getBytes(), content.getType());
-                if (StringUtils.isNotEmpty(content.getName())) {
-                    byteArrayDataSource.setName(content.getName());
+            if (attachment.getData().isBytes() || attachment.getData().isStream()) {
+                ByteArrayDataSource byteArrayDataSource;
+                if (attachment.getData().isBytes()) {
+                    ByteData data = (ByteData) attachment.getData();
+                    byteArrayDataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
+                } else {
+                    StreamData data = (StreamData) attachment.getData();
+                    byteArrayDataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
                 }
-                message.setContent(
-                    byteArrayDataSource,
-                    content.getType()
-                );
+                if (StringUtils.isNotEmpty(attachment.getData().getFileName())) {
+                    byteArrayDataSource.setName(attachment.getData().getFileName());
+                }
+                message.setContent(byteArrayDataSource, ((TypedData) attachment.getData()).getContentType());
             } else {
-                EmailFileContent content = (EmailFileContent) attachment.getContent();
+                FileData data = (FileData) attachment.getData();
 
-                FileDataSource fds = new FileDataSource(new File(content.getTarget()));
+                FileDataSource fds = new FileDataSource(data.getContent().toFile());
                 message.setDataHandler(new DataHandler(fds));
-                message.setFileName(StringUtils.isNotEmpty(content.getName()) ? content.getName() : fds.getName());
+                message.setFileName(StringUtils.isNotEmpty(data.getFileName()) ? data.getFileName() : fds.getName());
                 message.setDisposition(ATTACHMENT);
             }
         } else if (CollectionUtil.isEmpty(emailMessage.getAttachments())) {
@@ -131,25 +136,31 @@ public class EmailSender extends BaseEmailProcessor {
         }
     }
 
-    private void processAttachments(EmailMessage emailMessage, Multipart multipart) throws MessagingException, UnsupportedEncodingException {
+    private void processAttachments(EmailMessage emailMessage, Multipart multipart) throws MessagingException, IOException {
         for (EmailAttachment attachment : emailMessage.getAttachments()) {
             BodyPart mimeBodyPart = new MimeBodyPart();
 
             DataSource dataSource;
-            if (attachment.getContent().isByteArray()) {
-                EmailByteArrayContent content = (EmailByteArrayContent) attachment.getContent();
-                dataSource = new ByteArrayDataSource(content.getBytes(), content.getType());
+            if (attachment.getData().isBytes() || attachment.getData().isStream()) {
+                if (attachment.getData().isBytes()) {
+                    ByteData data = (ByteData) attachment.getData();
+                    dataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
+                } else {
+                    StreamData data = (StreamData) attachment.getData();
+                    dataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
+                }
+
                 mimeBodyPart.setDataHandler(new DataHandler(dataSource));
-                mimeBodyPart.addHeader("Content-Transfer-Encoding", "base64");
-                mimeBodyPart.addHeader("Content-Type", content.getType() + "; charset=utf-8");
-                if (StringUtils.isNotBlank(content.getName())) {
-                    mimeBodyPart.setFileName(content.getName());
+                //  mimeBodyPart.addHeader("Content-Transfer-Encoding", "base64");
+                // mimeBodyPart.addHeader("Content-Type", ((TypedData) attachment.getData()).getContentType() + "; charset=utf-8");
+                if (StringUtils.isNotBlank(attachment.getData().getFileName())) {
+                    mimeBodyPart.setFileName(attachment.getData().getFileName());
                 }
             } else {
-                EmailFileContent content = (EmailFileContent) attachment.getContent();
-                dataSource = new FileDataSource(content.getTarget());
+                FileData content = (FileData) attachment.getData();
+                dataSource = new FileDataSource(content.getContent().toFile());
                 mimeBodyPart.setDataHandler(new DataHandler(dataSource));
-                mimeBodyPart.setFileName(content.getName());
+                mimeBodyPart.setFileName(content.getFileName());
             }
 
 

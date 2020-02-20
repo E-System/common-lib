@@ -45,6 +45,6 @@ public class BaseEmailProcessor implements Serializable {
     }
 
     protected String getLogin() {
-        return config.getAuth().getLogin();
+        return config.getCredentials().getLogin();
     }
 }

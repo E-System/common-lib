@@ -16,6 +16,7 @@
 
 package com.es.lib.common.email;
 
+import com.es.lib.common.model.data.OutputData;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -29,12 +30,12 @@ public class EmailAttachment extends EmailBaseAttachment {
 
     private String cid;
 
-    public EmailAttachment(EmailAttachmentContent content) {
-        super(content);
+    public EmailAttachment(OutputData data) {
+        super(data);
     }
 
-    public EmailAttachment(String cid, EmailAttachmentContent content) {
-        super(content);
+    public EmailAttachment(String cid, OutputData data) {
+        super(data);
         this.cid = cid;
     }
 }

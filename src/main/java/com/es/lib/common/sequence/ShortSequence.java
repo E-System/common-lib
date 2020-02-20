@@ -20,15 +20,16 @@ package com.es.lib.common.sequence;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Deprecated
 public class ShortSequence extends NumberSequence<Short> {
 
-	@Override
-	public Short next() {
-		return --value;
-	}
+    @Override
+    public Short next() {
+        return --value;
+    }
 
-	@Override
-	public void clear() {
-		value = 0;
-	}
+    @Override
+    public void clear() {
+        value = 0;
+    }
 }

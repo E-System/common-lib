@@ -7,10 +7,9 @@ import com.es.lib.common.validation.BadValueException;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.07.16
  */
-public class KPPValidatorUtil {
+public final class KPPValidatorUtil {
 
-    private KPPValidatorUtil() {
-    }
+    private KPPValidatorUtil() { }
 
     /**
      * Validate KPP

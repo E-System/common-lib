@@ -24,14 +24,13 @@ import com.es.lib.common.validation.ValidationUtil;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
-public class INNValidatorUtil {
+public final class INNValidatorUtil {
 
     private static int[] N10_WEIGHTS = {2, 4, 10, 3, 5, 9, 4, 6, 8};
     private static int[] N11_WEIGHTS = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
     private static int[] N12_WEIGHTS = {3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
 
-    private INNValidatorUtil() {
-    }
+    private INNValidatorUtil() { }
 
     /**
      * Validate INN

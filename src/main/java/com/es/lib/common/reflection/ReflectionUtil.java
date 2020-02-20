@@ -34,8 +34,7 @@ import java.util.Map;
  */
 public final class ReflectionUtil {
 
-    private ReflectionUtil() {
-    }
+    private ReflectionUtil() { }
 
     /**
      * Проверить является ли объект указанного типа
@@ -77,10 +76,12 @@ public final class ReflectionUtil {
 
     public static <T> Collection<T> getStaticObjects(Class<?> holder) throws IllegalAccessException {
         Collection<T> result = new LinkedList<>();
-        for (Field field : holder.getFields()) {
-            int mod = field.getModifiers();
-            if (Modifier.isStatic(mod) && Modifier.isFinal(mod)) {
-                result.add((T) field.get(holder));
+        if (holder != null) {
+            for (Field field : holder.getFields()) {
+                int mod = field.getModifiers();
+                if (Modifier.isStatic(mod) && Modifier.isFinal(mod)) {
+                    result.add((T) field.get(holder));
+                }
             }
         }
         return result;
@@ -104,10 +105,6 @@ public final class ReflectionUtil {
     }
 
     public static <T> Collection<T> getInnerClassStaticObjectByName(Class<?> holder, String name) throws IllegalAccessException {
-        return getStaticObjects(
-                getInnerClassByName(
-                        holder, name
-                )
-        );
+        return getStaticObjects(getInnerClassByName(holder, name));
     }
 }

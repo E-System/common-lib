@@ -16,6 +16,8 @@
 
 package com.es.lib.common.email.config;
 
+import com.es.lib.common.security.Credentials;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,36 +33,36 @@ public class POP3ServerConfiguration extends EmailServerConfiguration {
 
     static {
         PRESETS.put(
-                "gmail",
-                new EmailServer(
-                        "pop3.gmail.com",
-                        DEFAULT_SSL_PORT,
-                        true
-                )
+            "gmail",
+            new EmailServer(
+                "pop3.gmail.com",
+                DEFAULT_SSL_PORT,
+                true
+            )
         );
         PRESETS.put(
-                "mailru",
-                new EmailServer(
-                        "pop3.mail.ru",
-                        DEFAULT_SSL_PORT,
-                        true
-                )
+            "mailru",
+            new EmailServer(
+                "pop3.mail.ru",
+                DEFAULT_SSL_PORT,
+                true
+            )
         );
         PRESETS.put(
-                "yandex",
-                new EmailServer(
-                        "pop3.yandex.ru",
-                        DEFAULT_SSL_PORT,
-                        true
-                )
+            "yandex",
+            new EmailServer(
+                "pop3.yandex.ru",
+                DEFAULT_SSL_PORT,
+                true
+            )
         );
     }
 
-    public POP3ServerConfiguration(EmailServer parameter, EmailAuth auth) {
-        super(EmailServerType.POP3, parameter, auth);
+    public POP3ServerConfiguration(EmailServer parameter, Credentials credentials) {
+        super(EmailServer.Type.POP3, parameter, credentials);
     }
 
-    public POP3ServerConfiguration(EmailServer server, EmailAuth auth, Map<String, Object> parameters, boolean debug) {
-        super(EmailServerType.POP3, server, auth, parameters, debug);
+    public POP3ServerConfiguration(EmailServer server, Credentials credentials, Map<String, Object> parameters, boolean debug) {
+        super(EmailServer.Type.POP3, server, credentials, parameters, debug);
     }
 }

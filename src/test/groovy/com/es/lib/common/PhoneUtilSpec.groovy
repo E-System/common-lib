@@ -37,7 +37,7 @@ class PhoneUtilSpec extends Specification {
         "+7 905 981 79 16" || "79059817916"
     }
 
-    def "Checnk on mobile phone"() {
+    def "Check on mobile phone"() {
         expect:
         PhoneUtil.isMobile(value) == result
         where:

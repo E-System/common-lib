@@ -16,6 +16,7 @@
 
 package com.es.lib.common.binary;
 
+import java.io.*;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -25,6 +26,54 @@ import java.util.stream.IntStream;
  * @since 12.06.15
  */
 public class ByteUtil {
+
+    /**
+     * Deserialize object
+     *
+     * @param arr - исходный массив байт
+     * @return десериализованный объект
+     */
+    public static <T> T deserialize(byte[] arr, Class<T> clz) {
+        ByteArrayInputStream bis = new ByteArrayInputStream(arr);
+        try (ObjectInput in = new ObjectInputStream(bis)) {
+            return (T) in.readObject();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     * Serialize object
+     *
+     * @param obj Object to serialize
+     * @return Byte array with serialized object
+     */
+    public static byte[] serialize(Object obj) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try (ObjectOutput out = new ObjectOutputStream(bos)) {
+            out.writeObject(obj);
+            return bos.toByteArray();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    public static int xor(byte[] data) { return xor(data, 0, 0); }
+
+    public static int xor(byte[] data, int skipIndex, int skipLen) {
+        return xor(data, skipIndex, skipLen, data.length);
+    }
+
+    public static int xor(byte[] data, int skipIndex, int skipLen, int lastIdx) {
+        byte res = 0x00;
+        for (int i = 0; i < lastIdx; i++) {
+            if (i >= skipIndex && i < skipIndex + skipLen) {
+                continue;
+            }
+            res ^= data[i];
+        }
+        return res;
+    }
 
     /**
      * Форматирует байт в hex значении
@@ -45,8 +94,8 @@ public class ByteUtil {
     public static String toHex(byte... b) {
         Objects.requireNonNull(b);
         return IntStream.range(0, b.length)
-            .mapToObj(i -> String.format("%02X", b[i] & 0xFF))
-            .collect(Collectors.joining(" "));
+                        .mapToObj(i -> String.format("%02X", b[i] & 0xFF))
+                        .collect(Collectors.joining(" "));
     }
 
     /**

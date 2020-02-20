@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Deprecated
 public abstract class NumberSequence<T extends Number> implements Serializable {
 
     protected T value;

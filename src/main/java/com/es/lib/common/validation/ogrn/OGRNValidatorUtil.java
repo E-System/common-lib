@@ -8,10 +8,9 @@ import com.es.lib.common.validation.ValidationUtil;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.07.16
  */
-public class OGRNValidatorUtil {
+public final class OGRNValidatorUtil {
 
-    private OGRNValidatorUtil() {
-    }
+    private OGRNValidatorUtil() { }
 
     /**
      * General validate OGRN with 13 and 15 length

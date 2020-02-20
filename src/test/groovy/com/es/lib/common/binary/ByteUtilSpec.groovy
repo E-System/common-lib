@@ -24,6 +24,16 @@ import spock.lang.Specification
  */
 class ByteUtilSpec extends Specification {
 
+    def "Serialize and deserialize"() {
+        when:
+        def map = ["k1": "v1"]
+        def serialized = ByteUtil.serialize(map)
+        def deserialized = ByteUtil.deserialize(serialized, Map.class)
+        then:
+        serialized != null
+        deserialized['k1'] == 'v1'
+    }
+
     def "Должен быть корректно отформатирован байт в hex виде(верхний регистр)"() {
         expect:
         ByteUtil.toHex((byte) 0) == "00"

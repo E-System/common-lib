@@ -86,11 +86,11 @@ class FullNameSpec extends Specification {
 
     def "Сокращения с правой стороны"() {
         expect:
-        new FullName(value).choppedRight == result
+        new FullName(value).initialsRight == result
         where:
         value                        | result
-        null                         | null
-        ""                           | null
+        null                         | ""
+        ""                           | ""
         "aaa"                        | "aaa"
         "aaa bbb"                    | "aaa b."
         "aaa \t bbb"                 | "aaa b."
@@ -104,11 +104,11 @@ class FullNameSpec extends Specification {
 
     def "Сокращения с левой стороны"() {
         expect:
-        new FullName(value).choppedLeft == result
+        new FullName(value).initialsLeft == result
         where:
         value                        | result
-        null                         | null
-        ""                           | null
+        null                         | ""
+        ""                           | ""
         "aaa"                        | "aaa"
         "aaa bbb"                    | "b. aaa"
         "aaa \t bbb"                 | "b. aaa"
@@ -135,5 +135,49 @@ class FullNameSpec extends Specification {
         value                      | result
         null                       | ""
         "Рахметов Иприс Алюб Углы" | "Иприс Алюб Углы"
+    }
+
+    def "Right chop (статика)"() {
+        expect:
+        FullName.initiator().get(value) == result
+        where:
+        value                          | result
+        ""                             | ""
+        "aaa"                          | "aaa"
+        "aaa bbb"                      | "aaa b."
+        "aaa \t bbb"                   | "aaa b."
+        "aaa bbb ccc"                  | "aaa b. c."
+        "aaa   bbb   ccc"              | "aaa b. c."
+        "aaa  \n bbb   ccc"            | "aaa b. c."
+        "aaa   bbb   ccc d."           | "aaa b. c. d."
+        "aaa   bbb   ccc d.          " | "aaa b. c. d."
+    }
+
+    def "Right chop2 (статика)"() {
+        expect:
+        FullName.initiator().get(new FullName(s, n, p)) == result
+        where:
+        s      | n      | p      | result
+        null   | null   | null   | ""
+        ""     | ""     | ""     | ""
+        " "    | " "    | " "    | ""
+        "aaa"  | "aaa"  | "aaa"  | "aaa a. a."
+        "aaa " | "aaa " | "aaa " | "aaa a. a."
+    }
+
+    def "Left chop (static)"() {
+        expect:
+        FullName.initiator(true).get(value as String) == result
+        where:
+        value                          | result
+        ""                             | ""
+        "aaa"                          | "aaa"
+        "aaa bbb"                      | "b. aaa"
+        "aaa \t bbb"                   | "b. aaa"
+        "aaa bbb ccc"                  | "b. c. aaa"
+        "aaa   bbb   ccc"              | "b. c. aaa"
+        "aaa  \n bbb   ccc"            | "b. c. aaa"
+        "aaa   bbb   ccc d."           | "b. c. d. aaa"
+        "aaa   bbb   ccc d.          " | "b. c. d. aaa"
     }
 }

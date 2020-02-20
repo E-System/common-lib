@@ -16,13 +16,15 @@
 
 package com.es.lib.common.email;
 
+import com.es.lib.common.model.data.OutputData;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
 public class EmailRootAttachment extends EmailBaseAttachment {
 
-    public EmailRootAttachment(EmailAttachmentContent content) {
-        super(content);
+    public EmailRootAttachment(OutputData data) {
+        super(data);
     }
 }

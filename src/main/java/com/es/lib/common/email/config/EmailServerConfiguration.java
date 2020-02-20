@@ -17,6 +17,10 @@
 package com.es.lib.common.email.config;
 
 import com.es.lib.common.collection.CollectionUtil;
+import com.es.lib.common.security.Credentials;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -31,40 +35,19 @@ import java.util.Properties;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 15.10.15
  */
+@Getter
+@ToString
+@RequiredArgsConstructor
 public class EmailServerConfiguration implements Serializable {
 
-    private final EmailServerType serverType;
+    private final EmailServer.Type serverType;
     private final EmailServer server;
-    private final EmailAuth auth;
+    private final Credentials credentials;
     private final Map<String, Object> parameters;
     private final boolean debug;
 
-    EmailServerConfiguration(EmailServerType serverType, EmailServer server, EmailAuth auth) {
-        this(serverType, server, auth, new HashMap<>(), false);
-    }
-
-    EmailServerConfiguration(EmailServerType serverType, EmailServer server, EmailAuth auth, Map<String, Object> parameters, boolean debug) {
-        this.serverType = serverType;
-        this.server = server;
-        this.auth = auth;
-        this.parameters = parameters;
-        this.debug = debug;
-    }
-
-    public EmailServerType getServerType() {
-        return serverType;
-    }
-
-    public EmailServer getServer() {
-        return server;
-    }
-
-    public EmailAuth getAuth() {
-        return auth;
-    }
-
-    public boolean isDebug() {
-        return debug;
+    EmailServerConfiguration(EmailServer.Type serverType, EmailServer server, Credentials credentials) {
+        this(serverType, server, credentials, new HashMap<>(), false);
     }
 
     public Properties getProperty() throws IOException {
@@ -87,8 +70,8 @@ public class EmailServerConfiguration implements Serializable {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(
-                    getAuth().getLogin(),
-                    getAuth().getPassword()
+                    getCredentials().getLogin(),
+                    getCredentials().getPassword()
                 );
             }
         };
@@ -144,14 +127,5 @@ public class EmailServerConfiguration implements Serializable {
             )
         );
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "EmailServerConfiguration{" +
-               "serverType=" + serverType +
-               ", server=" + server +
-               ", auth=" + auth +
-               '}';
     }
 }

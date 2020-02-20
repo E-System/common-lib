@@ -319,10 +319,12 @@ public final class CollectionUtil {
         return null;
     }
 
+    @SafeVarargs
     public static <T> T coalesce(T... items) {
         return firstBySelector(Objects::nonNull, items);
     }
 
+    @SafeVarargs
     public static <T> T firstBySelector(Predicate<T> selector, T... items) {
         if (items == null) {
             return null;

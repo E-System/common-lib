@@ -1,5 +1,6 @@
 package com.es.lib.common.client
 
+import com.es.lib.common.model.ClientInfo
 import spock.lang.Specification
 
 class ClientInfoSpec extends Specification {

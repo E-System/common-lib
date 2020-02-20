@@ -16,8 +16,10 @@
 
 package com.es.lib.common.email
 
-import com.es.lib.common.email.config.EmailAuth
+
 import com.es.lib.common.email.config.SMTPServerConfiguration
+import com.es.lib.common.security.Credentials
+import com.es.lib.common.model.data.OutputData
 import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Timeout
@@ -34,7 +36,7 @@ class EmailSenderSpec extends Specification {
         return new EmailSender(
             new SMTPServerConfiguration(
                 SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
-                new EmailAuth(
+                new Credentials(
                     System.getProperty("test_email_login"),
                     System.getProperty("test_email_password")
                 )
@@ -46,7 +48,7 @@ class EmailSenderSpec extends Specification {
         return new EmailSender(
             new SMTPServerConfiguration(
                 SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server") + "_tls"),
-                new EmailAuth(
+                new Credentials(
                     System.getProperty("test_email_login"),
                     System.getProperty("test_email_password")
                 )
@@ -62,7 +64,7 @@ class EmailSenderSpec extends Specification {
         when:
         def sender = createSender()
         then:
-        sender.send(EmailMessage.create("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body " + new Date()).build())
+        sender.send(EmailMessage.builder("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body " + new Date()).build())
     }
 
     @IgnoreIf({
@@ -73,7 +75,7 @@ class EmailSenderSpec extends Specification {
         when:
         def sender = createSmtpsSender()
         then:
-        sender.send(EmailMessage.create("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body (TLS) " + new Date()).build())
+        sender.send(EmailMessage.builder("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body (TLS) " + new Date()).build())
     }
 
     @IgnoreIf({
@@ -83,16 +85,17 @@ class EmailSenderSpec extends Specification {
     def "Email должен быть отправлен с русским названием вложения"() {
         when:
         def sender = createSender()
-        def file = Files.createTempFile("тестовый файл", "txt").toFile();
+        def file = Files.createTempFile("тестовый файл", "txt")
         file.write('Пробное содержимое')
         def attachment = new EmailAttachment(
-            new EmailFileContent(
-                file.absolutePath,
-                "Тестовое имя файла.txt"
+            OutputData.create(
+                "Тестовое имя файла (из файла).txt",
+                file.toString(),
+                file
             )
         )
         def message = EmailMessage
-            .create("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
+            .builder("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
             .attachment(attachment)
             .build()
         then:
@@ -108,14 +111,14 @@ class EmailSenderSpec extends Specification {
         def sender = createSender()
         def fileContent = 'Пробное содержимое'
         def attachment = new EmailAttachment(
-            new EmailByteArrayContent(
-                fileContent.getBytes(),
+            OutputData.create(
+                'Тестовое имя файла (из байт).txt',
                 'text/plain',
-                'Тестовое имя файла (из байт).txt'
+                fileContent.getBytes(),
             )
         )
         def message = EmailMessage
-            .create("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
+            .builder("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
             .attachment(attachment)
             .build()
         then:

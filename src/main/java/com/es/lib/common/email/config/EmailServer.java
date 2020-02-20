@@ -24,6 +24,11 @@ import java.io.Serializable;
  */
 public class EmailServer implements Cloneable, Serializable {
 
+    public enum Type {
+        SMTP,
+        POP3
+    }
+
     private String host;
     private int port;
     private boolean ssl;

@@ -17,7 +17,7 @@
 package com.es.lib.common;
 
 /**
- * Базовые, часто используемые, константы
+ * Base constants
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
@@ -25,23 +25,23 @@ package com.es.lib.common;
 public interface Constant {
 
     /**
-     * Кодировка по умолчанию
+     * Default encoding
      */
     String DEFAULT_ENCODING = "utf8";
     /**
-     * Количестов элементов, выводимых в автокомплите
+     * Default autocomplete size
      */
     int AUTO_COMPLETE_SIZE = 20;
     /**
-     * Минимальное значение процента
+     * Min percent value
      */
     double PERCENT_MIN = 0.0d;
     /**
-     * Максимальное значение процента
+     * Max percent value
      */
     double PERCENT_MAX = 100.0d;
     /**
-     * Максимальное количество дней в месяце
+     * Max days count in month
      */
     int MAX_MONTH_DAYS = 31;
 }

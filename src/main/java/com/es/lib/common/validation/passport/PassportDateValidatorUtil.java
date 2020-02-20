@@ -30,8 +30,7 @@ import java.util.Date;
  */
 public final class PassportDateValidatorUtil {
 
-    private PassportDateValidatorUtil() {
-    }
+    private PassportDateValidatorUtil() { }
 
     public static void validate(Date passportDate, Date birthDate) throws BadValueException {
         validate(passportDate, birthDate, null);

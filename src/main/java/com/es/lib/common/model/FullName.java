@@ -1,7 +1,6 @@
 package com.es.lib.common.model;
 
 import com.es.lib.common.collection.CollectionUtil;
-import com.es.lib.common.text.FioChopper;
 import com.es.lib.common.text.TextUtil;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -27,7 +27,7 @@ public class FullName {
         if (StringUtils.isBlank(fullName)) {
             return;
         }
-        final String[] parts = TextUtil.splitAsArray(fullName);
+        final String[] parts = TextUtil.splitBy("\\s+").toArray(fullName);
         if (parts.length >= 1) {
             surname = parts[0];
         }
@@ -92,12 +92,20 @@ public class FullName {
         return result.trim();
     }
 
-    public String getChoppedLeft() {
-        return FioChopper.leftFullName(this);
+    public String getInitialsRight() {
+        return initiator().get(this);
     }
 
-    public String getChoppedRight() {
-        return FioChopper.rightFullName(this);
+    public String getInitialsLeft() {
+        return initiator(true).get(this);
+    }
+
+    public static Initiator initiator() {
+        return initiator(false);
+    }
+
+    public static Initiator initiator(boolean left) {
+        return new Initiator(left);
     }
 
     public boolean isAllBlank() {
@@ -110,5 +118,55 @@ public class FullName {
         return StringUtils.isEmpty(surname)
                && StringUtils.isEmpty(name)
                && StringUtils.isEmpty(patronymic);
+    }
+
+    public static class Initiator {
+
+        private boolean left;
+
+        Initiator(boolean left) {
+            this.left = left;
+        }
+
+        public String get(FullName fullName) {
+            if (fullName == null || fullName.isAllBlank()) {
+                return "";
+            }
+            final List<String> parts = fullName.toList();
+            if (parts.isEmpty()) {
+                return "";
+            }
+            return processList(parts);
+        }
+
+        public String get(String fullName) {
+            if (StringUtils.isBlank(fullName)) {
+                return "";
+            }
+            List<String> parts = TextUtil.splitBy("\\s+").toList(fullName);
+            if (parts.isEmpty()) {
+                return fullName;
+            }
+            return processList(parts);
+        }
+
+
+        private String processList(List<String> parts) {
+            if (parts.size() == 1) {
+                return parts.get(0).trim();
+            }
+            String result = left ? "" : parts.get(0).trim() + " ";
+            StringJoiner joiner = new StringJoiner(" ");
+            for (String p : parts.subList(1, parts.size())) {
+                if (StringUtils.isNotBlank(p)) {
+                    joiner.add(p.trim().substring(0, 1) + ".");
+                }
+            }
+            result += joiner.toString();
+            if (left) {
+                result += (" " + parts.get(0));
+            }
+            return result;
+        }
     }
 }

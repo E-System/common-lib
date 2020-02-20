@@ -26,8 +26,7 @@ import com.es.lib.common.validation.ValidationUtil;
  */
 public class SNILSValidatorUtil {
 
-    private SNILSValidatorUtil() {
-    }
+    private SNILSValidatorUtil() { }
 
     /**
      * Validate SNILS

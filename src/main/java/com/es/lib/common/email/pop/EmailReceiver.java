@@ -16,13 +16,11 @@
 
 package com.es.lib.common.email.pop;
 
-import com.es.lib.common.HashUtil;
+import com.es.lib.common.security.HashUtil;
 import com.es.lib.common.email.common.BaseEmailProcessor;
 import com.es.lib.common.email.config.POP3ServerConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.mail.*;
 import java.io.File;

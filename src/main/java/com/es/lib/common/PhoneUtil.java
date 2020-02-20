@@ -17,6 +17,7 @@
 package com.es.lib.common;
 
 import com.es.lib.common.collection.CollectionUtil;
+import com.es.lib.common.text.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -36,8 +37,7 @@ public final class PhoneUtil {
     private static final Function<String, Map.Entry<String, Boolean>> typeMapper = v -> Pair.of(v, isMobile(v));
     private static final Function<String, Map.Entry<String, Boolean>> cleanTypeMapper = v -> Pair.of(clean(v), isMobile(v));
 
-    private PhoneUtil() {
-    }
+    private PhoneUtil() { }
 
     /**
      * Clean phone number (remove spaces, braces, dashes...)
@@ -74,7 +74,7 @@ public final class PhoneUtil {
      * @return Phone pairs
      */
     public static Collection<Map.Entry<String, Boolean>> split(String value, boolean clean) {
-        final Collection<String> phones = StringSplitter.process(value, new StringSplitter.Splitter("(,|;)"));
+        final Collection<String> phones = TextUtil.splitBy("(,|;)").toList(value);
         return phones.stream().map(clean ? cleanTypeMapper : typeMapper).collect(Collectors.toList());
     }
 
