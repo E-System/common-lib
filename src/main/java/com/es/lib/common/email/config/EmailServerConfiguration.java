@@ -17,7 +17,7 @@
 package com.es.lib.common.email.config;
 
 import com.es.lib.common.collection.CollectionUtil;
-import com.es.lib.common.security.Credentials;
+import com.es.lib.common.security.model.Credentials;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;

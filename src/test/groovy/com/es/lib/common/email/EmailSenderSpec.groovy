@@ -18,7 +18,7 @@ package com.es.lib.common.email
 
 
 import com.es.lib.common.email.config.SMTPServerConfiguration
-import com.es.lib.common.security.Credentials
+import com.es.lib.common.security.model.Credentials
 import com.es.lib.common.model.data.OutputData
 import spock.lang.IgnoreIf
 import spock.lang.Specification

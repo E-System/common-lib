@@ -16,7 +16,7 @@
 
 package com.es.lib.common.email.config;
 
-import com.es.lib.common.security.Credentials;
+import com.es.lib.common.security.model.Credentials;
 
 import java.util.HashMap;
 import java.util.Map;

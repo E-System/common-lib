@@ -1,6 +1,5 @@
-package com.es.lib.common.security
+package com.es.lib.common.security.model
 
-import com.es.lib.common.security.Proxy
 import spock.lang.Specification
 
 class ProxySpec extends Specification {

@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.es.lib.common.security;
+package com.es.lib.common.security.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

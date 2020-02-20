@@ -1,6 +1,5 @@
-package com.es.lib.common.security
+package com.es.lib.common.security.model
 
-import com.es.lib.common.security.KeyStore
 import spock.lang.Specification
 
 import java.nio.file.Paths

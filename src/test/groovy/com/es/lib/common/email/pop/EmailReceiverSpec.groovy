@@ -18,7 +18,7 @@ package com.es.lib.common.email.pop
 
 
 import com.es.lib.common.email.config.POP3ServerConfiguration
-import com.es.lib.common.security.Credentials
+import com.es.lib.common.security.model.Credentials
 import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Timeout

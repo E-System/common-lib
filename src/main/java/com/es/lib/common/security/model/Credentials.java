@@ -13,13 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.es.lib.common.security;
+package com.es.lib.common.security.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import java.net.InetSocketAddress;
+import java.io.Serializable;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -28,17 +28,13 @@ import java.net.InetSocketAddress;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class Proxy {
+public class Credentials implements Serializable, Cloneable {
 
-    private final java.net.Proxy.Type type;
-    private final String host;
-    private final int port;
+    private final String login;
+    private final String password;
 
-    public Proxy(String host, int port) {
-        this(java.net.Proxy.Type.HTTP, host, port);
-    }
-
-    public java.net.Proxy toNative() {
-        return new java.net.Proxy(getType(), new InetSocketAddress(getHost(), getPort()));
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new Credentials(login, password);
     }
 }

@@ -23,12 +23,12 @@ public class Ssl {
         return context(sslType, null, trustManager());
     }
 
-    public static SSLContext context(com.es.lib.common.security.KeyStore keyStore)
+    public static SSLContext context(com.es.lib.common.security.model.KeyStore keyStore)
         throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         return context(SSL_TYPE_DEFAULT, keyStore);
     }
 
-    public static SSLContext context(String sslType, com.es.lib.common.security.KeyStore keyStore)
+    public static SSLContext context(String sslType, com.es.lib.common.security.model.KeyStore keyStore)
         throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
         return context(sslType, keyManager(keyStore), trustManager());
     }
@@ -55,7 +55,7 @@ public class Ssl {
         return (s, sslSession) -> true;
     }
 
-    private static KeyManager[] keyManager(com.es.lib.common.security.KeyStore keyStore) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
+    private static KeyManager[] keyManager(com.es.lib.common.security.model.KeyStore keyStore) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
         java.security.KeyStore clientStore = load(keyStore);
 
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
@@ -63,7 +63,7 @@ public class Ssl {
         return kmf.getKeyManagers();
     }
 
-    private static java.security.KeyStore load(com.es.lib.common.security.KeyStore keyStore) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
+    private static java.security.KeyStore load(com.es.lib.common.security.model.KeyStore keyStore) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException {
         java.security.KeyStore clientStore = KeyStore.getInstance(keyStore.getType());
         try (InputStream storeStream = Files.newInputStream(keyStore.getPath())) {
             clientStore.load(storeStream, asArray(keyStore.getStorePassword()));
