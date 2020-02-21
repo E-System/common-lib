@@ -30,13 +30,13 @@ public class DeleteFileVisitor extends SimpleFileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        Files.delete(file);
+        Files.deleteIfExists(file);
         return FileVisitResult.CONTINUE;
     }
 
     @Override
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-        Files.delete(dir);
+        Files.deleteIfExists(dir);
         return FileVisitResult.CONTINUE;
     }
 }

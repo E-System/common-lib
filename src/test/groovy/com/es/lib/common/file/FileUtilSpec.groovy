@@ -27,6 +27,17 @@ import java.nio.file.Paths
  */
 class FileUtilSpec extends Specification {
 
+    def "Copy with crc32"() {
+        when:
+        def file = Paths.get('/tmp/cwcr/copy_with_crc_test.txt')
+        def res = FileUtil.copyWithCrc32(new ByteArrayInputStream('Hello'.bytes), file)
+        then:
+        Files.exists(file)
+        new String(Files.readAllBytes(file)) == 'Hello'
+        res == 4157704578
+        FileUtil.delete(file)
+    }
+
     def "Read with crc32"() {
         when:
         def file = Files.createTempFile("defined_file_from_spock_test", ".txt")
@@ -37,7 +48,6 @@ class FileUtilSpec extends Specification {
         res.key == 'Hello'
         res.value == 4157704578
     }
-
 
     def "Silent delete null file expect false"() {
         expect:

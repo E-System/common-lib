@@ -73,6 +73,7 @@ public final class FileUtil {
 
     public static long copyWithCrc32(InputStream from, Path to) throws IOException {
         CheckedInputStream checkedInputStream = new CheckedInputStream(from, new CRC32());
+        Files.createDirectories(to.getParent());
         Files.copy(checkedInputStream, to);
         return checkedInputStream.getChecksum().getValue();
     }
