@@ -221,6 +221,23 @@ class CollectionUtilSpec extends Specification {
         ['OTHER_RU_RU': '1', 'OTHER_EN_US': '2']                           | 'KEYWORDS' | false        || [:]
     }
 
+    def "removeByPrefix"() {
+        expect:
+        CollectionUtil.removeByPrefix(map, prefix) == result
+        where:
+        map                                                                | prefix      || result
+        null                                                               | '123'       || null
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | ''          || ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'KEYWORDS'  || [:]
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'OTHER'     || ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']
+        ['KEYWORDS_RU_RU': "1", 'KEYWORDS_EN_US': '2', 'OTHER_RU_RU': '3'] | 'KEYWORDS'  || ['OTHER_RU_RU': '3']
+        ['OTHER_RU_RU': '1', 'OTHER_EN_US': '2']                           | 'KEYWORDS'  || ['OTHER_RU_RU': '1', 'OTHER_EN_US': '2']
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'KEYWORDS_' || [:]
+        ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']                     | 'OTHER_'    || ['KEYWORDS_RU_RU': '1', 'KEYWORDS_EN_US': '2']
+        ['KEYWORDS_RU_RU': "1", 'KEYWORDS_EN_US': '2', 'OTHER_RU_RU': '3'] | 'KEYWORDS_' || ['OTHER_RU_RU': '3']
+        ['OTHER_RU_RU': '1', 'OTHER_EN_US': '2']                           | 'KEYWORDS_' || ['OTHER_RU_RU': '1', 'OTHER_EN_US': '2']
+    }
+
     def "FindWithIndex"() {
         expect:
         CollectionUtil.findWithIndex(input, new Predicate<Object>() {
