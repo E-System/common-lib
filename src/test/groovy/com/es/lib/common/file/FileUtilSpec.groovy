@@ -225,6 +225,14 @@ class FileUtilSpec extends Specification {
         "ppt"           || "application/vnd.ms-powerpoint"
     }
 
+    def "Get mime from path"() {
+        expect:
+        FileUtil.mime(Paths.get('/tmp/config.xml')) == 'application/xml'
+        FileUtil.mime(Paths.get('config.xml')) == 'application/xml'
+        FileUtil.mime(Paths.get('xml')) == 'application/xml'
+    }
+
+
     def "Content file name disposition"() {
         expect:
         FileUtil.fileNameDisposition(true, "Hello.txt") == "attachment; filename=\"Hello.txt\"; filename*=UTF-8''Hello.txt"

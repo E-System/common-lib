@@ -49,6 +49,10 @@ public final class FileUtil {
         return Mime.get(fileName);
     }
 
+    public static String mime(Path file) {
+        return mime(file.toString());
+    }
+
     public static String fileNameDisposition(boolean attachment, String fileName) throws UnsupportedEncodingException {
         String encoded = URLEncoder.encode(fileName, Charset.defaultCharset().name()).replace("+", "%20");
         return (attachment ? "attachment" : "inline") + "; filename=\"" + fileName + "\"; filename*=UTF-8''" + encoded;
