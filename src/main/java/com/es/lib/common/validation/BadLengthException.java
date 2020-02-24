@@ -22,6 +22,4 @@ package com.es.lib.common.validation;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
-public class BadLengthException extends Exception {
-
-}
+public class BadLengthException extends Exception {}
