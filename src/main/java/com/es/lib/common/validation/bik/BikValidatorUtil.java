@@ -17,7 +17,7 @@ public class BikValidatorUtil {
             throw new BadValueException();
         }
         val = Integer.parseInt(value.substring(6));
-        if (val <= 50) {
+        if (val < 50) {
             throw new BadValueException();
         }
     }
