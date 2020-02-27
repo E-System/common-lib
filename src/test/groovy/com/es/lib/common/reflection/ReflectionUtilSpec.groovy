@@ -16,6 +16,7 @@
 
 package com.es.lib.common.reflection
 
+
 import spock.lang.Specification
 
 import java.lang.annotation.Annotation
@@ -157,7 +158,24 @@ class ReflectionUtilSpec extends Specification {
         then:
         result != null
         result instanceof SomeClass2
-        ((SomeClass2)result).i == 0
+        ((SomeClass2) result).i == 0
+    }
+
+    def "getTypesAnnotatedWith"() {
+        when:
+        def res = ReflectionUtil.getTypesAnnotatedWith(["com.es"], TestAnnotation.class)
+        then:
+        res.size() == 1
+        res[0] instanceof Class
+    }
+
+    def "getResources"() {
+        when:
+        def res = ReflectionUtil.getResources("com.es", null)
+        then:
+        res.size() > 0
+        res.contains('com/es/lib/common/build.properties')
+        res.contains('com/es/lib/common/currlist.xml')
     }
 
     private static class SomeClass {

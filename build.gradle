@@ -131,6 +131,8 @@ dependencies {
     compile "com.sun.mail:javax.mail:1.6.2"
     compile "de.svenkubiak:jBCrypt:0.4.1"
     compile "commons-io:commons-io:2.6"
+    compile "org.reflections:reflections:0.9.12"
+
     compileOnly "org.projectlombok:lombok:1.18.12"
     annotationProcessor "org.projectlombok:lombok:1.18.12"
 
