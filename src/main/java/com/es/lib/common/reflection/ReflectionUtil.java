@@ -19,10 +19,7 @@ package com.es.lib.common.reflection;
 import com.es.lib.common.exception.ESRuntimeException;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -106,5 +103,39 @@ public final class ReflectionUtil {
 
     public static <T> Collection<T> getInnerClassStaticObjectByName(Class<?> holder, String name) throws IllegalAccessException {
         return getStaticObjects(getInnerClassByName(holder, name));
+    }
+
+    public static Object createDefaultInstance(Class<?> valueClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        try {
+            return create(valueClass.getDeclaredConstructor());
+        } catch (NoSuchMethodException ignore) {}
+        try {
+            return create(valueClass.getDeclaredConstructor(String.class), "0");
+        } catch (NoSuchMethodException ignore) {}
+        try {
+            return create(valueClass.getDeclaredConstructor(Integer.class), 0);
+        } catch (NoSuchMethodException ignore) {}
+        try {
+            return create(valueClass.getDeclaredConstructor(Short.class), (short) 0);
+        } catch (NoSuchMethodException ignore) {}
+        try {
+            return create(valueClass.getDeclaredConstructor(Long.class), 0L);
+        } catch (NoSuchMethodException ignore) {}
+        try {
+            return create(valueClass.getDeclaredConstructor(Double.class), 0.0d);
+        } catch (NoSuchMethodException ignore) {}
+        return valueClass;
+    }
+
+    private static Object create(Constructor<?> constructor, Object... args) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        boolean constructorNotAccessible = !constructor.isAccessible();
+        if (constructorNotAccessible) {
+            constructor.setAccessible(true);
+        }
+        Object result = constructor.newInstance(args);
+        if (constructorNotAccessible) {
+            constructor.setAccessible(false);
+        }
+        return result;
     }
 }

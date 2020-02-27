@@ -98,6 +98,84 @@ class ReflectionUtilSpec extends Specification {
         Versions | "UNKNOWN"  | []
     }
 
+    def "createDefaultInstance Integer"() {
+        when:
+        def result = ReflectionUtil.createDefaultInstance(Integer)
+        then:
+        result != null
+        result instanceof Integer
+        result == 0
+    }
+
+    def "createDefaultInstance Short"() {
+        when:
+        def result = ReflectionUtil.createDefaultInstance(Short)
+        then:
+        result != null
+        result instanceof Short
+        result == 0
+    }
+
+    def "createDefaultInstance Long"() {
+        when:
+        def result = ReflectionUtil.createDefaultInstance(Long)
+        then:
+        result != null
+        result instanceof Long
+        result == 0
+    }
+
+    def "createDefaultInstance Double"() {
+        when:
+        def result = ReflectionUtil.createDefaultInstance(Double)
+        then:
+        result != null
+        result instanceof Double
+        result == 0
+    }
+
+    def "createDefaultInstance String"() {
+        when:
+        def result = ReflectionUtil.createDefaultInstance(String)
+        then:
+        result != null
+        result instanceof String
+        result == ''
+    }
+
+    def "createDefaultInstance SomeClass without default constructor return input class"() {
+        when:
+        def result = ReflectionUtil.createDefaultInstance(SomeClass)
+        then:
+        result != null
+        result instanceof Class<SomeClass>
+    }
+
+    def "createDefaultInstance SomeClass with default constructor"() {
+        when:
+        def result = ReflectionUtil.createDefaultInstance(SomeClass2)
+        then:
+        result != null
+        result instanceof SomeClass2
+        ((SomeClass2)result).i == 0
+    }
+
+    private static class SomeClass {
+        Integer i
+
+        SomeClass(Integer i, boolean ok) {
+
+        }
+    }
+
+    private static class SomeClass2 {
+        Integer i
+
+        SomeClass2(Integer i) {
+            this.i = i;
+        }
+    }
+
     private static class TestAnnotationQualifier implements TestAnnotation {
 
         @Override
