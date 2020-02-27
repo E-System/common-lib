@@ -164,9 +164,13 @@ class ReflectionUtilSpec extends Specification {
     def "getTypesAnnotatedWith"() {
         when:
         def res = ReflectionUtil.getTypesAnnotatedWith(["com.es"], TestAnnotation.class)
+        def res2 = ReflectionUtil.getTypesAnnotatedWith("com.es", TestAnnotation.class)
         then:
         res.size() == 1
         res[0] instanceof Class
+        res2.size() == 1
+        res2[0] instanceof Class
+        res == res2
     }
 
     def "getResources"() {

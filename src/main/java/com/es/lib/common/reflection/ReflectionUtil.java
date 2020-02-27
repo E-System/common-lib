@@ -102,6 +102,10 @@ public final class ReflectionUtil {
         return result;
     }
 
+    public static Set<Class<?>> getTypesAnnotatedWith(String packageName, Class<? extends Annotation> annotation) {
+        return getTypesAnnotatedWith(Collections.singletonList(packageName), annotation);
+    }
+
     public static Set<Class<?>> getTypesAnnotatedWith(Collection<String> packages, Class<? extends Annotation> annotation) {
         ConfigurationBuilder builder = new ConfigurationBuilder();
         packages.forEach(builder::forPackages);
