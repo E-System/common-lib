@@ -21,6 +21,7 @@ import spock.lang.Specification
 
 import java.lang.annotation.Annotation
 import java.lang.annotation.Documented
+import java.util.function.Function
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -28,7 +29,7 @@ import java.lang.annotation.Documented
  */
 class ReflectionUtilSpec extends Specification {
 
-    def "fields"() {
+    def "getDeclaredFields"() {
         when:
         def res1 = ReflectionUtil.getDeclaredFields(ParentEntityClass)
         def res2 = ReflectionUtil.getDeclaredFields(EntityClass)
@@ -40,6 +41,22 @@ class ReflectionUtilSpec extends Specification {
         res3.containsKey('id')
         res3.containsKey('name')
         res3.containsKey('ref')
+    }
+
+    def "toMap"() {
+        when:
+        def res = ReflectionUtil.toMap(new EntityClass2(1, "1", new EntityClass(2, "2")), new Function<Object, Object>() {
+            @Override
+            Object apply(Object o) {
+                if (o instanceof ParentEntityClass){
+                    return ((ParentEntityClass)o).getId()
+                }else{
+                    return o
+                }
+            }
+        })
+        then:
+        println res
     }
 
     def "ExtractTypes"() {
@@ -277,14 +294,33 @@ class ReflectionUtilSpec extends Specification {
 
     private static class ParentEntityClass {
         private Integer id
+
+        ParentEntityClass(Integer id) {
+            this.id = id
+        }
+
+        Integer getId() {
+            return id
+        }
     }
 
     private static class EntityClass extends ParentEntityClass {
         private String name
+
+        EntityClass(Integer id, String name) {
+            super(id)
+            this.name = name
+        }
     }
 
     private static class EntityClass2 extends ParentEntityClass {
         private String name
         private EntityClass ref
+
+        EntityClass2(Integer id, String name, EntityClass ref) {
+            super(id)
+            this.name = name
+            this.ref = ref
+        }
     }
 }

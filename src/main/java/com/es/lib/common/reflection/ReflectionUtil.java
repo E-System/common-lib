@@ -24,6 +24,7 @@ import org.reflections.util.ConfigurationBuilder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -33,6 +34,24 @@ import java.util.function.Predicate;
 public final class ReflectionUtil {
 
     private ReflectionUtil() { }
+
+    public static Map<String, Object> toMap(final Object instance, Function<Object, Object> converter) throws IllegalAccessException {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Field> fields = getDeclaredFields(instance.getClass());
+        for (Map.Entry<String, Field> entry : fields.entrySet()) {
+            Field field = entry.getValue();
+            boolean notAccessible = !field.isAccessible();
+            if (notAccessible) {
+                field.setAccessible(true);
+            }
+            Object value = field.get(instance);
+            if (notAccessible) {
+                field.setAccessible(false);
+            }
+            result.put(entry.getKey(), converter != null ? converter.apply(value) : value);
+        }
+        return result;
+    }
 
     public static Map<String, Field> getDeclaredFields(Class<?> cls) {
         Map<String, Field> result = new LinkedHashMap<>();
