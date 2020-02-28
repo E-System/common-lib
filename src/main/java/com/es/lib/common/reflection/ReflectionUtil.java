@@ -35,7 +35,7 @@ public final class ReflectionUtil {
 
     private ReflectionUtil() { }
 
-    public static Map<String, Object> toMap(final Object instance, Function<Object, Object> converter) throws IllegalAccessException {
+    public static Map<String, Object> toMap(final Object instance, Function<Object, Object> converter) {
         Map<String, Object> result = new HashMap<>();
         Map<String, Field> fields = getDeclaredFields(instance.getClass());
         for (Map.Entry<String, Field> entry : fields.entrySet()) {
@@ -44,7 +44,10 @@ public final class ReflectionUtil {
             if (notAccessible) {
                 field.setAccessible(true);
             }
-            Object value = field.get(instance);
+            Object value = null;
+            try {
+                value = field.get(instance);
+            } catch (Exception ignore) {}
             if (notAccessible) {
                 field.setAccessible(false);
             }
