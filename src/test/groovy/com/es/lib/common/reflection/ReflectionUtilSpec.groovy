@@ -28,6 +28,20 @@ import java.lang.annotation.Documented
  */
 class ReflectionUtilSpec extends Specification {
 
+    def "fields"() {
+        when:
+        def res1 = ReflectionUtil.fields(ParentEntityClass)
+        def res2 = ReflectionUtil.fields(EntityClass)
+        def res3 = ReflectionUtil.fields(EntityClass2)
+        then:
+        res1.containsKey('id')
+        res2.containsKey('id')
+        res2.containsKey('name')
+        res3.containsKey('id')
+        res3.containsKey('name')
+        res3.containsKey('ref')
+    }
+
     def "ExtractTypes"() {
         expect:
         ReflectionUtil.extractTypes(type) == result
@@ -259,5 +273,18 @@ class ReflectionUtilSpec extends Specification {
         public static final class UNKNOWN {
 
         }
+    }
+
+    private static class ParentEntityClass {
+        private Integer id
+    }
+
+    private static class EntityClass extends ParentEntityClass {
+        private String name
+    }
+
+    private static class EntityClass2 extends ParentEntityClass {
+        private String name
+        private EntityClass ref
     }
 }

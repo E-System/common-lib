@@ -34,15 +34,16 @@ public final class ReflectionUtil {
 
     private ReflectionUtil() { }
 
-    /**
-     * Проверить является ли объект указанного типа
-     *
-     * @param value объект
-     * @param type  тип для проверки
-     * @return true - объект указанного типа
-     */
-    public static boolean isInstance(Object value, Class<?> type) {
-        return type.isInstance(value);
+    public static Map<String, Field> getDeclaredFields(Class<?> cls) {
+        Map<String, Field> result = new LinkedHashMap<>();
+        Class<?> superclass = cls.getSuperclass();
+        if (superclass != null) {
+            result.putAll(getDeclaredFields(superclass));
+        }
+        for (Field field : cls.getDeclaredFields()) {
+            result.put(field.getName(), field);
+        }
+        return result;
     }
 
     public static Type[] extractTypes(Type type) {
