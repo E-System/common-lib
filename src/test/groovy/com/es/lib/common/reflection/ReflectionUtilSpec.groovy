@@ -30,9 +30,9 @@ class ReflectionUtilSpec extends Specification {
 
     def "fields"() {
         when:
-        def res1 = ReflectionUtil.fields(ParentEntityClass)
-        def res2 = ReflectionUtil.fields(EntityClass)
-        def res3 = ReflectionUtil.fields(EntityClass2)
+        def res1 = ReflectionUtil.getDeclaredFields(ParentEntityClass)
+        def res2 = ReflectionUtil.getDeclaredFields(EntityClass)
+        def res3 = ReflectionUtil.getDeclaredFields(EntityClass2)
         then:
         res1.containsKey('id')
         res2.containsKey('id')
