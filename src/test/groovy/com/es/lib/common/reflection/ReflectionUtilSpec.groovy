@@ -48,15 +48,35 @@ class ReflectionUtilSpec extends Specification {
         def res = ReflectionUtil.toMap(new EntityClass2(1, "1", new EntityClass(2, "2")), new Function<Object, Object>() {
             @Override
             Object apply(Object o) {
-                if (o instanceof ParentEntityClass){
-                    return ((ParentEntityClass)o).getId()
-                }else{
+                if (o instanceof ParentEntityClass) {
+                    return ((ParentEntityClass) o).getId()
+                } else {
                     return o
                 }
             }
         })
         then:
-        println res
+        res['id'] == 1
+        res['name'] == '1'
+        res['ref'] == 2
+    }
+
+    def "toMap with exclude"() {
+        when:
+        def res = ReflectionUtil.toMap(new EntityClass2(1, "1", new EntityClass(2, "2")), ['id', 'name'], new Function<Object, Object>() {
+            @Override
+            Object apply(Object o) {
+                if (o instanceof ParentEntityClass) {
+                    return ((ParentEntityClass) o).getId()
+                } else {
+                    return o
+                }
+            }
+        })
+        then:
+        res['id'] == null
+        res['name'] == null
+        res['ref'] == 2
     }
 
     def "ExtractTypes"() {

@@ -16,6 +16,7 @@
 
 package com.es.lib.common.reflection;
 
+import com.es.lib.common.collection.CollectionUtil;
 import com.es.lib.common.exception.ESRuntimeException;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -36,10 +37,25 @@ public final class ReflectionUtil {
     private ReflectionUtil() { }
 
     public static Map<String, Object> toMap(final Object instance, Function<Object, Object> converter) {
+        return toMap(instance, null, converter);
+    }
+
+    public static Map<String, Object> toMap(final Object instance, Collection<String> exclude, Function<Object, Object> converter) {
+        return toMap(instance, exclude, true, converter);
+    }
+
+    public static Map<String, Object> toMap(final Object instance, Collection<String> exclude, boolean excludeStatic, Function<Object, Object> converter) {
         Map<String, Object> result = new HashMap<>();
         Map<String, Field> fields = getDeclaredFields(instance.getClass());
+        boolean checkExclude = CollectionUtil.isNotEmpty(exclude);
         for (Map.Entry<String, Field> entry : fields.entrySet()) {
             Field field = entry.getValue();
+            if (excludeStatic && Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
+            if (checkExclude && exclude.contains(entry.getKey())) {
+                continue;
+            }
             boolean notAccessible = !field.isAccessible();
             if (notAccessible) {
                 field.setAccessible(true);
