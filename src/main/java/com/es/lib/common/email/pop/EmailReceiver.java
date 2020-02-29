@@ -65,7 +65,7 @@ public class EmailReceiver extends BaseEmailProcessor {
                 String realPathPrefix = pathPrefix;
                 String messageId = headers.get("Message-ID");
                 if (StringUtils.isNotEmpty(messageId)) {
-                    realPathPrefix += "/" + HashUtil.md5(messageId);
+                    realPathPrefix += "/" + HashUtil.md5().create(messageId);
                 }
                 Map<String, File> attachments = new HashMap<>(processAttachments(realPathPrefix, message));
                 log.trace("Attachments: {}", attachments);

@@ -16,15 +16,7 @@
 
 package com.es.lib.common.security;
 
-import com.es.lib.common.Constant;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.util.Base64;
-import java.util.zip.CRC32;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -39,120 +31,60 @@ public final class HashUtil {
 
     private HashUtil() { }
 
-    public static String hash(byte[] value, String algorithm) {
-        if (value == null) {
-            return null;
-        }
-        try {
-            MessageDigest digest = MessageDigest.getInstance(algorithm);
-            digest.update(value);
-            return getHex(digest.digest());
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
-        }
+    public static Hash bcrypt() {
+        return bcrypt(12);
     }
 
-    public static String hash(String value, String algorithm) {
-        if (value == null) {
-            return null;
-        }
-        try {
-            return hash(value.getBytes(Constant.DEFAULT_ENCODING), algorithm);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
-        }
+    public static Hash bcrypt(int level) {
+        return new HashBCrypt(level);
     }
 
-    public static String md5(String value) {
-        return hash(value, ALGORITHM_MD5);
+    public static Hash md5() {
+        return hash(ALGORITHM_MD5);
     }
 
-    public static String md5(byte[] value) {
-        return hash(value, ALGORITHM_MD5);
-    }
-
-    public static boolean isCorrect(final String text, final String hash) {
-        return md5(text).equals(hash);
-    }
-
-    public static String hmac(String algorithm, String value, String secret) {
-        try {
-            String alg = "Hmac" + algorithm;
-            Mac hmac = Mac.getInstance(alg);
-            SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(Constant.DEFAULT_ENCODING), alg);
-            hmac.init(secret_key);
-
-            return Base64.getEncoder().encodeToString(hmac.doFinal(value.getBytes(Constant.DEFAULT_ENCODING)));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
-        }
+    public static Hash hash(String algorithm) {
+        return new HashBasic(algorithm);
     }
 
     /**
-     * Calculate SHA256 hmac
+     * Create SHA256 hmac instance
      *
-     * @param value  message text
      * @param secret secret key
-     * @return Base64 of calculated hash
+     * @return SHA256 hmac instance
      */
-    public static String hmacSha256(String value, String secret) {
-        return hmac(ALGORITHM_SHA256, value, secret);
+    public static Hash hmacSha256(String secret) {
+        return hmac(ALGORITHM_SHA256, secret);
     }
 
-    public static String getHex(byte[] raw) {
-        if (raw == null) {
+    public static Hash hmac(String algorithm, String secret) {
+        return new HashHmac(algorithm, secret);
+    }
+
+    public static NumericHash crc32() {
+        return new Crc32Hash();
+    }
+
+    public static NumericHash crc16() {
+        return new Crc16Hash();
+    }
+
+    public static NumericHash crc16ccitt() {
+        return crc16ccitt(0, 0);
+    }
+
+    public static NumericHash crc16ccitt(int skipIndex, int skipLen) {
+        return new Crc16ccittHash(skipIndex, skipLen);
+    }
+
+    public static String toHex(final byte[] value) {
+        if (value == null) {
             return null;
         }
-        final StringBuilder hex = new StringBuilder(0x2 * raw.length);
-        for (final byte b : raw) {
+        final StringBuilder hex = new StringBuilder(0x2 * value.length);
+        for (final byte b : value) {
             hex.append(HEXES.charAt((b & 240) >> 0x4)).append(HEXES.charAt(b & 15));
         }
         return hex.toString();
-    }
-
-    public static long crc32(String string) throws UnsupportedEncodingException {
-        return crc32(string.getBytes(Constant.DEFAULT_ENCODING));
-    }
-
-    public static long crc32(byte[] bytes) {
-        CRC32 crc = new CRC32();
-        crc.update(bytes);
-        return crc.getValue();
-    }
-
-    public static int crc16(final byte[] buffer) {
-        int crc = 0xFFFF;
-        for (byte aBuffer : buffer) {
-            crc = ((crc >>> 8) | (crc << 8)) & 0xFFFF;
-            crc ^= (aBuffer & 0xFF);
-            crc ^= ((crc & 0xFF) >> 4);
-            crc ^= (crc << 12) & 0xFFFF;
-            crc ^= ((crc & 0xFF) << 5) & 0xFFFF;
-        }
-        crc &= 0xFFFF;
-        return crc;
-    }
-
-    public static int crc16ccitt(byte[] data) { return crc16ccitt(data, 0, 0); }
-
-    public static int crc16ccitt(byte[] data, int skipIndex, int skipLen) {
-        int crc = 0xFFFF;          // init
-        int polynom = 0x1021;   // 0001 0000 0010 0001
-        for (int i = 0; i < data.length; i++) {
-            if (i >= skipIndex && i < skipIndex + skipLen) {
-                continue;
-            }
-            for (int j = 0; j < 8; j++) {
-                boolean bit = ((data[i] >> (7 - j) & 1) == 1);
-                boolean c15 = ((crc >> 15 & 1) == 1);
-                crc <<= 1;
-                if (c15 ^ bit) crc ^= polynom;
-            }
-        }
-        crc &= 0xFFFF;
-        return crc;
     }
 }

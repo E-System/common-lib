@@ -20,10 +20,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -226,7 +223,7 @@ class DateUtilSpec extends Specification {
         def nextDate = date.plusYears(1)
         def result = DateUtil.pretty(false).get(date, nextDate)
         then:
-        result == '1 год'
+        result == (date.getDayOfMonth() == 29 && date.getMonth() == Month.FEBRUARY ? '11 мес. 30 дн.' : '1 год')
     }
 
     def "Pretty - one year and one day"() {
