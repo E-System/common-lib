@@ -7,19 +7,19 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class HashBasic implements Hash {
+public class BasicHash implements Hash {
 
     private final String algorithm;
 
     @Override
-    public String create(String value) {
+    public String get(String value) {
         if (value == null) {
             return null;
         }
         try {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
             digest.update(value.getBytes(StandardCharsets.UTF_8));
-            return HashUtil.toHex(digest.digest());
+            return Hex.get(digest.digest());
         } catch (Exception ignore) {
             return null;
         }

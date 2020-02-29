@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class HashBCrypt implements Hash {
+public class BCryptHash implements Hash {
 
     private final int level;
 
     @Override
-    public String create(String value) {
+    public String get(String value) {
         return BCrypt.hashpw(value, BCrypt.gensalt(level));
     }
 

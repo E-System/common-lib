@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 import java.util.zip.CRC32;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Crc32Hash implements NumericHash {
+public class CRC32Hash implements CRCHash {
 
     @Override
-    public long create(byte[] value) {
+    public long get(byte[] value) {
         CRC32 crc = new CRC32();
         crc.update(value);
         return crc.getValue();

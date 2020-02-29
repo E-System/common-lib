@@ -16,9 +16,9 @@
 
 package com.es.lib.common.email.pop;
 
-import com.es.lib.common.security.HashUtil;
 import com.es.lib.common.email.common.BaseEmailProcessor;
 import com.es.lib.common.email.config.POP3ServerConfiguration;
+import com.es.lib.common.security.Hash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -65,7 +65,7 @@ public class EmailReceiver extends BaseEmailProcessor {
                 String realPathPrefix = pathPrefix;
                 String messageId = headers.get("Message-ID");
                 if (StringUtils.isNotEmpty(messageId)) {
-                    realPathPrefix += "/" + HashUtil.md5().create(messageId);
+                    realPathPrefix += "/" + Hash.md5().get(messageId);
                 }
                 Map<String, File> attachments = new HashMap<>(processAttachments(realPathPrefix, message));
                 log.trace("Attachments: {}", attachments);

@@ -1,6 +1,6 @@
 package com.es.lib.common.model;
 
-import com.es.lib.common.security.HashUtil;
+import com.es.lib.common.security.Hash;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -29,7 +29,7 @@ public class BuildInfo implements Serializable {
         this.name = name;
         this.version = version;
         this.date = date;
-        hash = HashUtil.md5().create(name + version + date);
+        hash = Hash.md5().get(name + version + date);
     }
 
     public Map<String, String> asMap() {

@@ -4,13 +4,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class Crc16ccittHash implements NumericHash {
+public class CRC16ccittHash implements CRCHash {
 
     private final int skipIndex;
     private final int skipLen;
 
     @Override
-    public long create(byte[] value) {
+    public long get(byte[] value) {
         int crc = 0xFFFF;          // init
         int polynom = 0x1021;   // 0001 0000 0010 0001
         for (int i = 0; i < value.length; i++) {

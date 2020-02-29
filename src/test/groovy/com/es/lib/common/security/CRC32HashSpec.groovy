@@ -22,19 +22,19 @@ import spock.lang.Specification
  * @author Vitaliy Savchenko - savchenko.v@ext-system.com
  * @since 13.10.16
  */
-class HashUtilSpec extends Specification {
+class CRC32HashSpec extends Specification {
 
     def "crc16ccitt required not null value"() {
         when:
-        HashUtil.crc16ccitt().create(null as byte[])
-        HashUtil.crc16ccitt().create(null as String)
+        CRCHash.crc16ccitt().get(null as byte[])
+        CRCHash.crc16ccitt().get(null as String)
         then:
         thrown NullPointerException
     }
 
     def "crc16ccitt must be correct"() {
         expect:
-        HashUtil.crc16ccitt().create(src) == result
+        CRCHash.crc16ccitt().get(src) == result
         where:
         src                       || result
         '1234567890'.bytes        || 0x3218
@@ -44,7 +44,7 @@ class HashUtilSpec extends Specification {
 
     def "crc16ccitt with skip must be correct without IndexOutException "() {
         expect:
-        HashUtil.crc16ccitt(skipIdx, skipLen).create(src) == HashUtil.crc16ccitt().create(target)
+        CRCHash.crc16ccitt(skipIdx, skipLen).get(src) == CRCHash.crc16ccitt().get(target)
         where:
         src                       || skipIdx || skipLen || target
         '1234567890'.bytes        || 0       || 2       || '34567890'.bytes
@@ -53,11 +53,6 @@ class HashUtilSpec extends Specification {
         '1234567890'.bytes        || 0       || 0       || '1234567890'.bytes
         '1234567890'.bytes        || 100     || 200     || '1234567890'.bytes
         '1234567890'.bytes        || -100    || -200    || '1234567890'.bytes
-    }
-
-    def "hmacSha256"() {
-        expect:
-        HashUtil.hmacSha256("secret_key").create("Test message") == "ABpes7dX951jzumPtmtNFeo4MS9ycL+sN1O1UnKUJeY="
     }
 }
 

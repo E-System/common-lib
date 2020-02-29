@@ -9,13 +9,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class HashHmac implements Hash {
+public class HmacHash implements Hash {
 
     private final String algorithm;
     private final String secret;
 
     @Override
-    public String create(String value) {
+    public String get(String value) {
         try {
             String alg = "Hmac" + algorithm;
             Mac mac = Mac.getInstance(alg);

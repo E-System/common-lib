@@ -4,10 +4,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class Crc16Hash implements NumericHash {
+public class CRC16Hash implements CRCHash {
 
     @Override
-    public long create(byte[] value) {
+    public long get(byte[] value) {
         int crc = 0xFFFF;
         for (byte v : value) {
             crc = ((crc >>> 8) | (crc << 8)) & 0xFFFF;
