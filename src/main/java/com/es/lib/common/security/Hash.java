@@ -1,56 +1,51 @@
 package com.es.lib.common.security;
 
-public interface Hash {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    String ALGORITHM_MD5 = "MD5";
-    String ALGORITHM_SHA256 = "SHA256";
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class Hash {
 
-    String get(String value);
+    private static final String ALGORITHM_MD5 = "MD5";
+    private static final String ALGORITHM_SHA256 = "SHA256";
 
-    default boolean valid(String value, String hash) {
-        if (hash == null || value == null) {
-            return false;
-        }
-        return get(value).equals(hash);
-    }
-
-    static Hash bcrypt() {
+    public static StrHash bcrypt() {
         return bcrypt(12);
     }
 
-    static Hash bcrypt(int level) {
+    public static StrHash bcrypt(int level) {
         return new BCryptHash(level);
     }
 
-    static Hash md5() {
+    public static StrHash md5() {
         return hash(ALGORITHM_MD5);
     }
 
-    static Hash hash(String algorithm) {
+    public static StrHash hash(String algorithm) {
         return new BasicHash(algorithm);
     }
 
-    static Hash hmacSha256(String secret) {
+    public static StrHash hmacSha256(String secret) {
         return hmac(ALGORITHM_SHA256, secret);
     }
 
-    static Hash hmac(String algorithm, String secret) {
+    public static StrHash hmac(String algorithm, String secret) {
         return new HmacHash(algorithm, secret);
     }
 
-    static CRCHash crc32() {
+    public static CRCHash crc32() {
         return new CRC32Hash();
     }
 
-    static CRCHash crc16() {
+    public static CRCHash crc16() {
         return new CRC16Hash();
     }
 
-    static CRCHash crc16ccitt() {
+    public static CRCHash crc16ccitt() {
         return crc16ccitt(0, 0);
     }
 
-    static CRCHash crc16ccitt(int skipIndex, int skipLen) {
+    public static CRCHash crc16ccitt(int skipIndex, int skipLen) {
         return new CRC16ccittHash(skipIndex, skipLen);
     }
 }

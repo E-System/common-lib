@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class BCryptHash implements Hash {
+public class BCryptHash implements StrHash {
 
     private final int level;
 

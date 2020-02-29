@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class HmacHash implements Hash {
+public class HmacHash implements StrHash {
 
     private final String algorithm;
     private final String secret;

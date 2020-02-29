@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class BasicHash implements Hash {
+public class BasicHash implements StrHash {
 
     private final String algorithm;
 
