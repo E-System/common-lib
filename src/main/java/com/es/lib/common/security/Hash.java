@@ -30,17 +30,27 @@ public interface Hash {
         return new BasicHash(algorithm);
     }
 
-    /**
-     * Create SHA256 hmac instance
-     *
-     * @param secret secret key
-     * @return SHA256 hmac instance
-     */
     static Hash hmacSha256(String secret) {
         return hmac(ALGORITHM_SHA256, secret);
     }
 
     static Hash hmac(String algorithm, String secret) {
         return new HmacHash(algorithm, secret);
+    }
+
+    static CRCHash crc32() {
+        return new CRC32Hash();
+    }
+
+    static CRCHash crc16() {
+        return new CRC16Hash();
+    }
+
+    static CRCHash crc16ccitt() {
+        return crc16ccitt(0, 0);
+    }
+
+    static CRCHash crc16ccitt(int skipIndex, int skipLen) {
+        return new CRC16ccittHash(skipIndex, skipLen);
     }
 }

@@ -24,9 +24,55 @@ import spock.lang.Specification
  */
 class HashSpec extends Specification {
 
+    def "BCrypt"() {
+        expect:
+        Hash.bcrypt().get("Hello").startsWith('$2a$12$')
+    }
+
+    def "CRC32"() {
+        expect:
+        Hash.crc32().get("Hello") == 4157704578
+    }
+
+    def "CRC16"() {
+        expect:
+        Hash.crc16().get("Hello") == 56026
+    }
+
     def "hmacSha256"() {
         expect:
         Hash.hmacSha256("secret_key").get("Test message") == "ABpes7dX951jzumPtmtNFeo4MS9ycL+sN1O1UnKUJeY="
+    }
+
+    def "crc16ccitt required not null value"() {
+        when:
+        Hash.crc16ccitt().get(null as byte[])
+        Hash.crc16ccitt().get(null as String)
+        then:
+        thrown NullPointerException
+    }
+
+    def "crc16ccitt must be correct"() {
+        expect:
+        Hash.crc16ccitt().get(src) == result
+        where:
+        src                       || result
+        '1234567890'.bytes        || 0x3218
+        'qwertyu'.bytes           || 0x4DBE
+        '1234567890qwertyu'.bytes || 0x92D8
+    }
+
+    def "crc16ccitt with skip must be correct without IndexOutException "() {
+        expect:
+        Hash.crc16ccitt(skipIdx, skipLen).get(src) == Hash.crc16ccitt().get(target)
+        where:
+        src                       || skipIdx || skipLen || target
+        '1234567890'.bytes        || 0       || 2       || '34567890'.bytes
+        'qwertyu'.bytes           || 2       || 3       || 'qwyu'.bytes
+        '1234567890qwertyu'.bytes || 10      || 1       || '1234567890wertyu'.bytes
+        '1234567890'.bytes        || 0       || 0       || '1234567890'.bytes
+        '1234567890'.bytes        || 100     || 200     || '1234567890'.bytes
+        '1234567890'.bytes        || -100    || -200    || '1234567890'.bytes
     }
 }
 
