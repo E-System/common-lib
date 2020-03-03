@@ -6,9 +6,9 @@ import com.es.lib.common.validation.ValidateException;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.07.16
  */
-public final class KPPValidatorUtil {
+public final class KppValidatorUtil {
 
-    private KPPValidatorUtil() { }
+    private KppValidatorUtil() { }
 
     /**
      * Validate KPP

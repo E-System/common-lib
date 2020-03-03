@@ -23,9 +23,9 @@ import com.es.lib.common.validation.ValidationUtil;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
-public class SNILSValidatorUtil {
+public class SnilsValidatorUtil {
 
-    private SNILSValidatorUtil() { }
+    private SnilsValidatorUtil() { }
 
     /**
      * Validate SNILS

@@ -8,11 +8,11 @@ import spock.lang.Specification
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.07.16
  */
-class KPPValidatorUtilSpec extends Specification {
+class KppValidatorUtilSpec extends Specification {
 
     def "ValidateException for value with length != 9"() {
         when:
-        KPPValidatorUtil.validate(value)
+        KppValidatorUtil.validate(value)
         then:
         thrown(ValidateException)
         where:
@@ -21,12 +21,12 @@ class KPPValidatorUtilSpec extends Specification {
 
     def "Success when null value"() {
         expect:
-        KPPValidatorUtil.validate(null as String)
+        KppValidatorUtil.validate(null as String)
     }
 
     def "BadValueException for invalid value"() {
         when:
-        KPPValidatorUtil.validate(value)
+        KppValidatorUtil.validate(value)
         then:
         thrown(ValidateException)
         where:
@@ -35,7 +35,7 @@ class KPPValidatorUtilSpec extends Specification {
 
     def "Success for: 9 symbols: 1111AZ122"() {
         when:
-        KPPValidatorUtil.validate(value)
+        KppValidatorUtil.validate(value)
         then:
         true
         where:
