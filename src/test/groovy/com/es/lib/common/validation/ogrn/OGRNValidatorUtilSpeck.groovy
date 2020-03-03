@@ -13,7 +13,7 @@ class OGRNValidatorUtilSpeck extends Specification {
 
     def "BadLengthException for value with length != 13 and length != 15"() {
         when:
-        OGRNValidatorUtil.validate(value, null)
+        OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.ANY)
         then:
         thrown(BadLengthException)
         where:
@@ -22,7 +22,7 @@ class OGRNValidatorUtilSpeck extends Specification {
 
     def "BadLengthException for value with length != 13"() {
         when:
-        OGRNValidatorUtil.validate(value, 13)
+        OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.OGRN)
         then:
         thrown(BadLengthException)
         where:
@@ -31,7 +31,7 @@ class OGRNValidatorUtilSpeck extends Specification {
 
     def "BadLengthException for value with length != 15"() {
         when:
-        OGRNValidatorUtil.validate(value, 15)
+        OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.OGRNIP)
         then:
         thrown(BadLengthException)
         where:
@@ -40,14 +40,14 @@ class OGRNValidatorUtilSpeck extends Specification {
 
     def "Success when null value"() {
         expect:
-        OGRNValidatorUtil.validate(null as String, null)
-        OGRNValidatorUtil.validate(null as String, 13)
-        OGRNValidatorUtil.validate(null as String, 15)
+        OGRNValidatorUtil.validate(null as String, OGRNValidatorUtil.Type.ANY)
+        OGRNValidatorUtil.validate(null as String, OGRNValidatorUtil.Type.OGRN)
+        OGRNValidatorUtil.validate(null as String, OGRNValidatorUtil.Type.OGRNIP)
     }
 
     def "BadValueException for invalid value"() {
         when:
-        OGRNValidatorUtil.validate(value, null)
+        OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.ANY)
         then:
         thrown(BadValueException)
         where:
@@ -56,8 +56,8 @@ class OGRNValidatorUtilSpeck extends Specification {
 
     def "Success for: 13 symbols: 5077746887312"() {
         when:
-        OGRNValidatorUtil.validate(value, null)
-        OGRNValidatorUtil.validate(value, 13)
+        OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.ANY)
+        OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.OGRN)
         then:
         true
         where:
@@ -66,8 +66,8 @@ class OGRNValidatorUtilSpeck extends Specification {
 
     def "Success for: 15 symbols: 304500116000221"() {
         when:
-        OGRNValidatorUtil.validate(value, null)
-        OGRNValidatorUtil.validate(value, 15)
+        OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.ANY)
+        OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.OGRNIP)
         then:
         true
         where:

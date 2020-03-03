@@ -19,12 +19,12 @@ public final class OGRNValidatorUtil {
      * @throws BadValueException  when invalid length
      * @throws BadLengthException when invalid value
      */
-    public static void validate(String value, Integer expectLen) throws BadLengthException, BadValueException {
+    public static void validate(String value, Type type) throws BadLengthException, BadValueException {
         if (value == null) {
             return;
         }
         int len = value.length();
-        if ((expectLen != null && len != expectLen) || (expectLen == null && len != 13 && len != 15)) {
+        if ((type != Type.ANY && len != type.value) || (type == Type.ANY && len != Type.OGRN.value && len != Type.OGRNIP.value)) {
             throw new BadLengthException();
         }
         try {
@@ -72,6 +72,21 @@ public final class OGRNValidatorUtil {
             }
         } catch (NumberFormatException e) {
             throw new BadValueException();
+        }
+    }
+
+    public enum Type {
+        ANY(null),
+        OGRN(13),
+        OGRNIP(15);
+        private Integer value;
+
+        Type(Integer value) {
+            this.value = value;
+        }
+
+        public Integer getValue() {
+            return value;
         }
     }
 }
