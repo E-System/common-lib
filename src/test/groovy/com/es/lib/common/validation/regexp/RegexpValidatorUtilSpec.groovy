@@ -1,6 +1,6 @@
 package com.es.lib.common.validation.regexp
 
-import com.es.lib.common.validation.BadValueException
+import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 class RegexpValidatorUtilSpec extends Specification {
@@ -16,7 +16,7 @@ class RegexpValidatorUtilSpec extends Specification {
         when:
         RegexpValidatorUtil.validate("Hello", "\\d")
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
     }
 
     def "Success pattern"() {

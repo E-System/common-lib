@@ -16,7 +16,7 @@
 
 package com.es.lib.common.validation.passport
 
-import com.es.lib.common.validation.BadValueException
+import com.es.lib.common.validation.ValidateException
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -48,7 +48,7 @@ class PassportDateValidatorUtilSpec extends Specification {
         when:
         PassportDateValidatorUtil.validate(pd, bd)
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
         where:
         pd                      | bd
         sdf.parse("27.09.1990") | sdf.parse("27.09.1985")

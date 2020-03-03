@@ -1,16 +1,16 @@
 package com.es.lib.common.validation.bik
 
-import com.es.lib.common.validation.BadLengthException
-import com.es.lib.common.validation.BadValueException
+
+import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 class BikValidatorUtilSpec extends Specification {
 
-    def "BadLengthException for value with length != 9"() {
+    def "ValidateException for value with length != 9"() {
         when:
         BikValidatorUtil.validate(value)
         then:
-        thrown(BadLengthException)
+        thrown(ValidateException)
         where:
         value << ["", "1", "12345678", "12345678910"]
     }
@@ -24,7 +24,7 @@ class BikValidatorUtilSpec extends Specification {
         when:
         BikValidatorUtil.validate(value)
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
         where:
         value << ["AAAA12123", "AAAA12BBB", "AAAAAAAAA", "фывапролд", "1111az122", "1й1111122", "041212049"]
     }

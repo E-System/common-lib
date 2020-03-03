@@ -16,8 +16,7 @@
 
 package com.es.lib.common.validation.snils;
 
-import com.es.lib.common.validation.BadLengthException;
-import com.es.lib.common.validation.BadValueException;
+import com.es.lib.common.validation.ValidateException;
 import com.es.lib.common.validation.ValidationUtil;
 
 /**
@@ -32,18 +31,17 @@ public class SNILSValidatorUtil {
      * Validate SNILS
      *
      * @param value string with SNILS
-     * @throws BadValueException  when invalid length
-     * @throws BadLengthException when invalid value
+     * @throws ValidateException when invalid length
      */
-    public static void validate(String value) throws BadValueException, BadLengthException {
+    public static void validate(String value) throws ValidateException {
         if (value == null) {
             return;
         }
         if (value.length() != 11) {
-            throw new BadLengthException();
+            throw new ValidateException();
         }
         if (!getControlNumber(value).equals(value.substring(9, 11))) {
-            throw new BadValueException();
+            throw new ValidateException();
         }
     }
 

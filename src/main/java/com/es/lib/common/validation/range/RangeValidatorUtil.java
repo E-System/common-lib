@@ -1,6 +1,6 @@
 package com.es.lib.common.validation.range;
 
-import com.es.lib.common.validation.BadValueException;
+import com.es.lib.common.validation.ValidateException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Matcher;
@@ -10,7 +10,7 @@ public final class RangeValidatorUtil {
 
     private RangeValidatorUtil() { }
 
-    public static void validate(String value, String ranges) throws BadValueException {
+    public static void validate(String value, String ranges) throws ValidateException {
         if (value == null || StringUtils.isBlank(ranges)) {
             return;
         }
@@ -57,6 +57,6 @@ public final class RangeValidatorUtil {
                 }
             }
         } catch (Exception ignore) { }
-        throw new BadValueException();
+        throw new ValidateException();
     }
 }

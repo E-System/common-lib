@@ -16,8 +16,7 @@
 
 package com.es.lib.common.validation.inn;
 
-import com.es.lib.common.validation.BadLengthException;
-import com.es.lib.common.validation.BadValueException;
+import com.es.lib.common.validation.ValidateException;
 import com.es.lib.common.validation.ValidationUtil;
 
 /**
@@ -36,16 +35,15 @@ public final class INNValidatorUtil {
      * Validate INN
      *
      * @param value string with INN
-     * @throws BadValueException  when invalid length
-     * @throws BadLengthException when invalid value
+     * @throws ValidateException when invalid length
      */
-    public static void validate(String value) throws BadValueException, BadLengthException {
+    public static void validate(String value) throws ValidateException {
         if (value == null) {
             return;
         }
         int len = value.length();
         if (len != 10 && len != 12) {
-            throw new BadLengthException();
+            throw new ValidateException();
         }
         if (len == 10) {
             validate10(value);
@@ -54,16 +52,16 @@ public final class INNValidatorUtil {
         }
     }
 
-    private static void validate12(String value) throws BadValueException {
+    private static void validate12(String value) throws ValidateException {
         if ((ValidationUtil.getInt(value, 10) != getControlNumber(value, N11_WEIGHTS))
             || (ValidationUtil.getInt(value, 11) != getControlNumber(value, N12_WEIGHTS))) {
-            throw new BadValueException();
+            throw new ValidateException();
         }
     }
 
-    private static void validate10(String value) throws BadValueException {
+    private static void validate10(String value) throws ValidateException {
         if (ValidationUtil.getInt(value, 9) != getControlNumber(value, N10_WEIGHTS)) {
-            throw new BadValueException();
+            throw new ValidateException();
         }
     }
 

@@ -1,7 +1,6 @@
 package com.es.lib.common.validation.kpp;
 
-import com.es.lib.common.validation.BadLengthException;
-import com.es.lib.common.validation.BadValueException;
+import com.es.lib.common.validation.ValidateException;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -15,18 +14,17 @@ public final class KPPValidatorUtil {
      * Validate KPP
      *
      * @param value string with KPP
-     * @throws BadValueException  when invalid length
-     * @throws BadLengthException when invalid value
+     * @throws ValidateException when invalid length
      */
-    public static void validate(String value) throws BadLengthException, BadValueException {
+    public static void validate(String value) throws ValidateException {
         if (value == null) {
             return;
         }
         if (value.length() != 9) {
-            throw new BadLengthException();
+            throw new ValidateException();
         }
         if (!value.matches("\\d{4}[\\dA-Z][\\dA-Z]\\d{3}")) {
-            throw new BadValueException();
+            throw new ValidateException();
         }
     }
 }

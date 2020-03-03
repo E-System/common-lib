@@ -17,9 +17,9 @@
 package com.es.lib.common.validation;
 
 /**
- * Исключение некорретной длины переданного значения
+ * Исключения некорректного значения
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
-public class BadLengthException extends Exception {}
+public class ValidateException extends Exception {}

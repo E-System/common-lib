@@ -1,7 +1,7 @@
 package com.es.lib.common.validation.kpp
 
-import com.es.lib.common.validation.BadLengthException
-import com.es.lib.common.validation.BadValueException
+
+import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 /**
@@ -10,11 +10,11 @@ import spock.lang.Specification
  */
 class KPPValidatorUtilSpec extends Specification {
 
-    def "BadLengthException for value with length != 9"() {
+    def "ValidateException for value with length != 9"() {
         when:
         KPPValidatorUtil.validate(value)
         then:
-        thrown(BadLengthException)
+        thrown(ValidateException)
         where:
         value << ["", "1", "12345678", "12345678910"]
     }
@@ -28,7 +28,7 @@ class KPPValidatorUtilSpec extends Specification {
         when:
         KPPValidatorUtil.validate(value)
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
         where:
         value << ["AAAA12123", "AAAA12BBB", "AAAAAAAAA", "фывапролд", "1111az122", "1й1111122"]
     }

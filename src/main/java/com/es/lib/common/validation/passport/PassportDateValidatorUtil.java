@@ -16,7 +16,7 @@
 
 package com.es.lib.common.validation.passport;
 
-import com.es.lib.common.validation.BadValueException;
+import com.es.lib.common.validation.ValidateException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,11 +32,11 @@ public final class PassportDateValidatorUtil {
 
     private PassportDateValidatorUtil() { }
 
-    public static void validate(Date passportDate, Date birthDate) throws BadValueException {
+    public static void validate(Date passportDate, Date birthDate) throws ValidateException {
         validate(passportDate, birthDate, null);
     }
 
-    public static void validate(Date passportDate, Date birthDate, LocalDate now) throws BadValueException {
+    public static void validate(Date passportDate, Date birthDate, LocalDate now) throws ValidateException {
         if (passportDate == null || birthDate == null) {
             return;
         }
@@ -49,7 +49,7 @@ public final class PassportDateValidatorUtil {
         if (isInvalidStep(fullYears, passportYears, 45)
             || isInvalidStep(fullYears, passportYears, 20)
             || isInvalidStep(fullYears, passportYears, 14)) {
-            throw new BadValueException();
+            throw new ValidateException();
         }
     }
 

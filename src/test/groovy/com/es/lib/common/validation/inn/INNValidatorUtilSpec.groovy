@@ -16,8 +16,8 @@
 
 package com.es.lib.common.validation.inn
 
-import com.es.lib.common.validation.BadLengthException
-import com.es.lib.common.validation.BadValueException
+
+import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 /**
@@ -26,11 +26,11 @@ import spock.lang.Specification
  */
 class INNValidatorUtilSpec extends Specification {
 
-    def "BadLengthException for value with length != 10 and length != 12"() {
+    def "ValidateException for value with length != 10 and length != 12"() {
         when:
         INNValidatorUtil.validate(value)
         then:
-        thrown(BadLengthException)
+        thrown(ValidateException)
         where:
         value << ["", "1", "12", "123456789", "12345678901", "1234567890123"]
     }
@@ -44,7 +44,7 @@ class INNValidatorUtilSpec extends Specification {
         when:
         INNValidatorUtil.validate(value)
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
         where:
         value << ["1234567890", "1111111111", "123456789012", "111111111111", "7й30002293"]
     }

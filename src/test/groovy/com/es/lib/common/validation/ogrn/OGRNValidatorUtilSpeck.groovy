@@ -1,8 +1,7 @@
 package com.es.lib.common.validation.ogrn
 
-import com.es.lib.common.validation.BadLengthException
-import com.es.lib.common.validation.BadValueException
-import com.es.lib.common.validation.kpp.KPPValidatorUtil
+
+import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 /**
@@ -11,29 +10,29 @@ import spock.lang.Specification
  */
 class OGRNValidatorUtilSpeck extends Specification {
 
-    def "BadLengthException for value with length != 13 and length != 15"() {
+    def "ValidateException for value with length != 13 and length != 15"() {
         when:
         OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.ANY)
         then:
-        thrown(BadLengthException)
+        thrown(ValidateException)
         where:
         value << ["", "1", "12345678", "123456789101", "12345678901234", "1234567890123456"]
     }
 
-    def "BadLengthException for value with length != 13"() {
+    def "ValidateException for value with length != 13"() {
         when:
         OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.OGRN)
         then:
-        thrown(BadLengthException)
+        thrown(ValidateException)
         where:
         value << ["", "1", "12345678", "123456789101", "12345678901234", "123456789012345", "1234567890123456"]
     }
 
-    def "BadLengthException for value with length != 15"() {
+    def "ValidateException for value with length != 15"() {
         when:
         OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.OGRNIP)
         then:
-        thrown(BadLengthException)
+        thrown(ValidateException)
         where:
         value << ["", "1", "12345678", "123456789101", "1234567890123", "12345678901234", "1234567890123456"]
     }
@@ -49,7 +48,7 @@ class OGRNValidatorUtilSpeck extends Specification {
         when:
         OGRNValidatorUtil.validate(value, OGRNValidatorUtil.Type.ANY)
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
         where:
         value << ["5077746887311", "1077746887312", "3й4500116000221"]
     }

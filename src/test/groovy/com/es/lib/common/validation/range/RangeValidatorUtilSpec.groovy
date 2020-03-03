@@ -1,6 +1,6 @@
 package com.es.lib.common.validation.range
 
-import com.es.lib.common.validation.BadValueException
+import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 class RangeValidatorUtilSpec extends Specification {
@@ -15,7 +15,7 @@ class RangeValidatorUtilSpec extends Specification {
         when:
         RangeValidatorUtil.validate("Hello", "\\d")
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
     }
 
     def "Success pattern"() {
@@ -36,6 +36,6 @@ class RangeValidatorUtilSpec extends Specification {
         RangeValidatorUtil.validate("123", "(123;124]")
         RangeValidatorUtil.validate("123", "(123;124)")
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
     }
 }

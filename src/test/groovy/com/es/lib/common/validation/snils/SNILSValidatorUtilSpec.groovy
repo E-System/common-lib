@@ -16,9 +16,8 @@
 
 package com.es.lib.common.validation.snils
 
-import com.es.lib.common.validation.BadLengthException
-import com.es.lib.common.validation.BadValueException
-import com.es.lib.common.validation.inn.INNValidatorUtil
+
+import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 /**
@@ -27,11 +26,11 @@ import spock.lang.Specification
  */
 class SNILSValidatorUtilSpec extends Specification {
 
-    def "BadLengthException for value with length != 11"() {
+    def "ValidateException for value with length != 11"() {
         when:
         SNILSValidatorUtil.validate(value)
         then:
-        thrown(BadLengthException)
+        thrown(ValidateException)
         where:
         value << ["", "1", "12", "123456789", "1234567890", "1234567890123"]
     }
@@ -45,7 +44,7 @@ class SNILSValidatorUtilSpec extends Specification {
         when:
         SNILSValidatorUtil.validate(value)
         then:
-        thrown(BadValueException)
+        thrown(ValidateException)
         where:
         value << ["11223344596", "08765430301", "08265430200", "08765430311", "1й223344595"]
     }

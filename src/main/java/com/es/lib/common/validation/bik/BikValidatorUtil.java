@@ -1,27 +1,26 @@
 package com.es.lib.common.validation.bik;
 
-import com.es.lib.common.validation.BadLengthException;
-import com.es.lib.common.validation.BadValueException;
+import com.es.lib.common.validation.ValidateException;
 
 public class BikValidatorUtil {
 
-    public static void validate(String value) throws BadValueException, BadLengthException {
-        if (value == null){
+    public static void validate(String value) throws ValidateException {
+        if (value == null) {
             return;
         }
         if (value.length() != 9) {
-            throw new BadLengthException();
+            throw new ValidateException();
         }
         if (!value.matches("\\d{9}")) {
-            throw new BadValueException();
+            throw new ValidateException();
         }
         int val = Integer.parseInt(value.substring(0, 2));
         if (val != 4) {
-            throw new BadValueException();
+            throw new ValidateException();
         }
         val = Integer.parseInt(value.substring(6));
         if (val < 50) {
-            throw new BadValueException();
+            throw new ValidateException();
         }
     }
 }
