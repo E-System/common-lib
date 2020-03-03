@@ -19,7 +19,10 @@ public final class KPPValidatorUtil {
      * @throws BadLengthException when invalid value
      */
     public static void validate(String value) throws BadLengthException, BadValueException {
-        if (value == null || value.length() != 9) {
+        if (value == null) {
+            return;
+        }
+        if (value.length() != 9) {
             throw new BadLengthException();
         }
         if (!value.matches("\\d{4}[\\dA-Z][\\dA-Z]\\d{3}")) {

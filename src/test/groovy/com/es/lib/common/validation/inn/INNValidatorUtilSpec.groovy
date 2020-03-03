@@ -35,11 +35,9 @@ class INNValidatorUtilSpec extends Specification {
         value << ["", "1", "12", "123456789", "12345678901", "1234567890123"]
     }
 
-    def "BadLengthException when null value"() {
-        when:
+    def "Success when null value"() {
+        expect:
         INNValidatorUtil.validate(null as String)
-        then:
-        thrown(BadLengthException)
     }
 
     def "BadValueException for invalid value"() {

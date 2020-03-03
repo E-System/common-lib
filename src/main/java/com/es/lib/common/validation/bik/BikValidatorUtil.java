@@ -6,7 +6,10 @@ import com.es.lib.common.validation.BadValueException;
 public class BikValidatorUtil {
 
     public static void validate(String value) throws BadValueException, BadLengthException {
-        if (value == null || value.length() != 9) {
+        if (value == null){
+            return;
+        }
+        if (value.length() != 9) {
             throw new BadLengthException();
         }
         if (!value.matches("\\d{9}")) {

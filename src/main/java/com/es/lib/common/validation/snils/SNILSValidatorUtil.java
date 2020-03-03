@@ -37,7 +37,7 @@ public class SNILSValidatorUtil {
      */
     public static void validate(String value) throws BadValueException, BadLengthException {
         if (value == null) {
-            throw new BadLengthException();
+            return;
         }
         if (value.length() != 11) {
             throw new BadLengthException();

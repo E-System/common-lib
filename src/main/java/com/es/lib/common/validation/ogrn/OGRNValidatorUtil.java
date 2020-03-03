@@ -19,12 +19,12 @@ public final class OGRNValidatorUtil {
      * @throws BadValueException  when invalid length
      * @throws BadLengthException when invalid value
      */
-    public static void validate(String value) throws BadLengthException, BadValueException {
+    public static void validate(String value, Integer expectLen) throws BadLengthException, BadValueException {
         if (value == null) {
-            throw new BadLengthException();
+            return;
         }
-        int length = value.length();
-        if (length != 13 && length != 15) {
+        int len = value.length();
+        if ((expectLen != null && len != expectLen) || (expectLen == null && len != 13 && len != 15)) {
             throw new BadLengthException();
         }
         try {
@@ -32,10 +32,10 @@ public final class OGRNValidatorUtil {
         } catch (NumberFormatException e) {
             throw new BadValueException();
         }
-        if (length == 13) {
-            validate13(value, false);
+        if (len == 13) {
+            validate13(value);
         } else {
-            validate15(value, false);
+            validate15(value);
         }
     }
 
@@ -43,49 +43,11 @@ public final class OGRNValidatorUtil {
      * Validate OGRN with length equal 13
      *
      * @param value string with OGRN
-     * @throws BadValueException  when invalid length
-     * @throws BadLengthException when invalid value
+     * @throws BadValueException when invalid length
      */
-    public static void validate13(String value) throws BadLengthException, BadValueException {
-        validate13(value, true);
-    }
-
-    /**
-     * Validate OGRN with length equal 15
-     *
-     * @param value string with OGRN
-     * @throws BadValueException  when invalid length
-     * @throws BadLengthException when invalid value
-     */
-    public static void validate15(String value) throws BadLengthException, BadValueException {
-        validate15(value, true);
-    }
-
-    /**
-     * Validate OGRN with length equal 13
-     *
-     * @param value    string with OGRN
-     * @param preCheck Execute common check
-     * @throws BadValueException  when invalid length
-     * @throws BadLengthException when invalid value
-     */
-    private static void validate13(String value, boolean preCheck) throws BadLengthException, BadValueException {
-        if (preCheck) {
-            if (value == null) {
-                throw new BadLengthException();
-            }
-            int length = value.length();
-            if (length != 13) {
-                throw new BadLengthException();
-            }
-            try {
-                Long.parseLong(value);
-            } catch (NumberFormatException e) {
-                throw new BadValueException();
-            }
-        }
+    private static void validate13(String value) throws BadValueException {
         try {
-            long num12 = (long) Math.floor((Long.valueOf(value) / 10) % 11);
+            long num12 = (long) Math.floor((Long.parseLong(value) / 10) % 11);
             long dgt13 = num12 == 10 ? 0 : num12;
             if (ValidationUtil.getInt(value, 12) != dgt13) {
                 throw new BadValueException();
@@ -98,26 +60,12 @@ public final class OGRNValidatorUtil {
     /**
      * Validate OGRN with length equal 15
      *
-     * @param value    string with OGRN
-     * @param preCheck Execute common check
-     * @throws BadValueException  when invalid length
-     * @throws BadLengthException when invalid value
+     * @param value string with OGRN
+     * @throws BadValueException when invalid length
      */
-    private static void validate15(String value, boolean preCheck) throws BadLengthException, BadValueException {
-        if (preCheck) {
-            if (value == null) {
-                throw new BadLengthException();
-            }
-            int length = value.length();
-            if (length != 15) {
-                throw new BadLengthException();
-            }
-            if (value.matches("\\D")) {
-                throw new BadValueException();
-            }
-        }
+    private static void validate15(String value) throws BadValueException {
         try {
-            long num14 = (long) Math.floor((Long.valueOf(value) / 10) % 13);
+            long num14 = (long) Math.floor((Long.parseLong(value) / 10) % 13);
             long dgt15 = num14 % 10;
             if (ValidationUtil.getInt(value, 14) != dgt15) {
                 throw new BadValueException();

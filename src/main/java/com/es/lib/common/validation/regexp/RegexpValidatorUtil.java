@@ -8,10 +8,10 @@ public final class RegexpValidatorUtil {
     private RegexpValidatorUtil() { }
 
     public static void validate(String value, String pattern) throws BadValueException {
-        if (StringUtils.isBlank(pattern)) {
+        if (value == null || StringUtils.isBlank(pattern)) {
             return;
         }
-        if (value != null && !value.matches(pattern)) {
+        if (!value.matches(pattern)) {
             throw new BadValueException();
         }
     }

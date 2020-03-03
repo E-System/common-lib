@@ -20,10 +20,9 @@ package com.es.lib.common.validation;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
-public class ValidationUtil {
+public final class ValidationUtil {
 
-    private ValidationUtil() {
-    }
+    private ValidationUtil() { }
 
     /**
      * Получить дробное число из объекта(toString)

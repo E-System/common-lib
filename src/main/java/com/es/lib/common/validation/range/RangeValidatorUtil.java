@@ -11,7 +11,7 @@ public final class RangeValidatorUtil {
     private RangeValidatorUtil() { }
 
     public static void validate(String value, String ranges) throws BadValueException {
-        if (StringUtils.isBlank(ranges)) {
+        if (value == null || StringUtils.isBlank(ranges)) {
             return;
         }
         try {

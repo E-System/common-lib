@@ -40,7 +40,6 @@ public final class PassportDateValidatorUtil {
         if (passportDate == null || birthDate == null) {
             return;
         }
-
         LocalDate ldBirth = LocalDateTime.ofInstant(birthDate.toInstant(), ZoneId.systemDefault()).toLocalDate();
         long fullYears = ChronoUnit.YEARS.between(ldBirth, now != null ? now : LocalDate.now());
 

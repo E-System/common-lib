@@ -41,12 +41,13 @@ public final class INNValidatorUtil {
      */
     public static void validate(String value) throws BadValueException, BadLengthException {
         if (value == null) {
+            return;
+        }
+        int len = value.length();
+        if (len != 10 && len != 12) {
             throw new BadLengthException();
         }
-        if (value.length() != 10 && value.length() != 12) {
-            throw new BadLengthException();
-        }
-        if (value.length() == 10) {
+        if (len == 10) {
             validate10(value);
         } else {
             validate12(value);

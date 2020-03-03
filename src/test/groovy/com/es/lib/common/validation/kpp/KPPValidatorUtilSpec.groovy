@@ -19,11 +19,9 @@ class KPPValidatorUtilSpec extends Specification {
         value << ["", "1", "12345678", "12345678910"]
     }
 
-    def "BadLengthException when null value"() {
-        when:
+    def "Success when null value"() {
+        expect:
         KPPValidatorUtil.validate(null as String)
-        then:
-        thrown(BadLengthException)
     }
 
     def "BadValueException for invalid value"() {
