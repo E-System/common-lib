@@ -14,10 +14,8 @@
  *    limitations under the License.
  */
 
-package com.es.lib.common.validation.inn
+package com.es.lib.common.validation
 
-
-import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 /**
@@ -26,34 +24,28 @@ import spock.lang.Specification
  */
 class InnValidatorUtilSpec extends Specification {
 
-    def "ValidateException for value with length != 10 and length != 12"() {
-        when:
-        InnValidatorUtil.validate(value)
-        then:
-        thrown(ValidateException)
+    def "False for value with length != 10 and length != 12"() {
+        expect:
+        !InnValidatorUtil.isValid(value)
         where:
         value << ["", "1", "12", "123456789", "12345678901", "1234567890123"]
     }
 
-    def "Success when null value"() {
+    def "True when null value"() {
         expect:
-        InnValidatorUtil.validate(null as String)
+        InnValidatorUtil.isValid(null as String)
     }
 
-    def "BadValueException for invalid value"() {
-        when:
-        InnValidatorUtil.validate(value)
-        then:
-        thrown(ValidateException)
+    def "False for invalid value"() {
+        expect:
+        !InnValidatorUtil.isValid(value)
         where:
         value << ["1234567890", "1111111111", "123456789012", "111111111111", "7й30002293"]
     }
 
-    def "Success for: 12 symbols: 500100732259, 10 symbols: 7830002293"() {
-        when:
-        InnValidatorUtil.validate(value)
-        then:
-        true
+    def "True for: 12 symbols: 500100732259, 10 symbols: 7830002293"() {
+        expect:
+        InnValidatorUtil.isValid(value)
         where:
         value << ["500100732259", "7830002293"]
     }

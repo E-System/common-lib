@@ -14,10 +14,8 @@
  *    limitations under the License.
  */
 
-package com.es.lib.common.validation.snils
+package com.es.lib.common.validation
 
-
-import com.es.lib.common.validation.ValidateException
 import spock.lang.Specification
 
 /**
@@ -26,34 +24,28 @@ import spock.lang.Specification
  */
 class SnilsValidatorUtilSpec extends Specification {
 
-    def "ValidateException for value with length != 11"() {
-        when:
-        SnilsValidatorUtil.validate(value)
-        then:
-        thrown(ValidateException)
+    def "False for value with length != 11"() {
+        expect:
+        !SnilsValidatorUtil.isValid(value)
         where:
         value << ["", "1", "12", "123456789", "1234567890", "1234567890123"]
     }
 
-    def "Success when null value"() {
+    def "True when null value"() {
         expect:
-        SnilsValidatorUtil.validate(null as String)
+        SnilsValidatorUtil.isValid(null as String)
     }
 
-    def "BadValueException for invalid value"() {
-        when:
-        SnilsValidatorUtil.validate(value)
-        then:
-        thrown(ValidateException)
+    def "False for invalid value"() {
+        expect:
+        !SnilsValidatorUtil.isValid(value)
         where:
         value << ["11223344596", "08765430301", "08265430200", "08765430311", "1й223344595"]
     }
 
-    def "Success for: 11 symbols: 08765430300, 08765430200, 08765430300, 08675430300, 11223344595"() {
-        when:
-        SnilsValidatorUtil.validate(value)
-        then:
-        true
+    def "True for: 11 symbols: 08765430300, 08765430200, 08765430300, 08675430300, 11223344595"() {
+        expect:
+        SnilsValidatorUtil.isValid(value)
         where:
         value << ["08765430300", "08765430200", "08765430300", "08675430300", "11223344595"]
     }

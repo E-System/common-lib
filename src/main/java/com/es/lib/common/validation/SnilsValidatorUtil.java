@@ -14,9 +14,8 @@
  *    limitations under the License.
  */
 
-package com.es.lib.common.validation.snils;
+package com.es.lib.common.validation;
 
-import com.es.lib.common.validation.ValidateException;
 import com.es.lib.common.validation.ValidationUtil;
 
 /**
@@ -31,18 +30,15 @@ public class SnilsValidatorUtil {
      * Validate SNILS
      *
      * @param value string with SNILS
-     * @throws ValidateException when invalid length
      */
-    public static void validate(String value) throws ValidateException {
+    public static boolean isValid(String value) {
         if (value == null) {
-            return;
+            return true;
         }
         if (value.length() != 11) {
-            throw new ValidateException();
+            return false;
         }
-        if (!getControlNumber(value).equals(value.substring(9, 11))) {
-            throw new ValidateException();
-        }
+        return getControlNumber(value).equals(value.substring(9, 11));
     }
 
     private static String getControlNumber(String value) {

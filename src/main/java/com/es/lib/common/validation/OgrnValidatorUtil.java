@@ -1,6 +1,5 @@
-package com.es.lib.common.validation.ogrn;
+package com.es.lib.common.validation;
 
-import com.es.lib.common.validation.ValidateException;
 import com.es.lib.common.validation.ValidationUtil;
 
 /**
@@ -15,25 +14,24 @@ public final class OgrnValidatorUtil {
      * General validate OGRN with 13 and 15 length
      *
      * @param value string with OGRN
-     * @throws ValidateException when invalid length
      */
-    public static void validate(String value, Type type) throws ValidateException {
+    public static boolean isValid(String value, Type type) {
         if (value == null) {
-            return;
+            return true;
         }
         int len = value.length();
         if ((type != Type.ANY && len != type.value) || (type == Type.ANY && len != Type.OGRN.value && len != Type.OGRNIP.value)) {
-            throw new ValidateException();
+            return false;
         }
         try {
             Long.parseLong(value);
         } catch (NumberFormatException e) {
-            throw new ValidateException();
+            return false;
         }
         if (len == 13) {
-            validate13(value);
+            return isValid13(value);
         } else {
-            validate15(value);
+            return isValid15(value);
         }
     }
 
@@ -41,36 +39,36 @@ public final class OgrnValidatorUtil {
      * Validate OGRN with length equal 13
      *
      * @param value string with OGRN
-     * @throws ValidateException when invalid length
      */
-    private static void validate13(String value) throws ValidateException {
+    private static boolean isValid13(String value) {
         try {
             long num12 = (long) Math.floor((Long.parseLong(value) / 10) % 11);
             long dgt13 = num12 == 10 ? 0 : num12;
             if (ValidationUtil.getInt(value, 12) != dgt13) {
-                throw new ValidateException();
+                return false;
             }
         } catch (NumberFormatException e) {
-            throw new ValidateException();
+            return false;
         }
+        return true;
     }
 
     /**
      * Validate OGRN with length equal 15
      *
      * @param value string with OGRN
-     * @throws ValidateException when invalid length
      */
-    private static void validate15(String value) throws ValidateException {
+    private static boolean isValid15(String value) {
         try {
             long num14 = (long) Math.floor((Long.parseLong(value) / 10) % 13);
             long dgt15 = num14 % 10;
             if (ValidationUtil.getInt(value, 14) != dgt15) {
-                throw new ValidateException();
+                return false;
             }
         } catch (NumberFormatException e) {
-            throw new ValidateException();
+            return false;
         }
+        return true;
     }
 
     public enum Type {

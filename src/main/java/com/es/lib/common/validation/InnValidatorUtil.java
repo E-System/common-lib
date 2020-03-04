@@ -14,9 +14,8 @@
  *    limitations under the License.
  */
 
-package com.es.lib.common.validation.inn;
+package com.es.lib.common.validation;
 
-import com.es.lib.common.validation.ValidateException;
 import com.es.lib.common.validation.ValidationUtil;
 
 /**
@@ -35,34 +34,29 @@ public final class InnValidatorUtil {
      * Validate INN
      *
      * @param value string with INN
-     * @throws ValidateException when invalid length
      */
-    public static void validate(String value) throws ValidateException {
+    public static boolean isValid(String value) {
         if (value == null) {
-            return;
+            return true;
         }
         int len = value.length();
         if (len != 10 && len != 12) {
-            throw new ValidateException();
+            return false;
         }
         if (len == 10) {
-            validate10(value);
+            return isValid10(value);
         } else {
-            validate12(value);
+            return isValid12(value);
         }
     }
 
-    private static void validate12(String value) throws ValidateException {
-        if ((ValidationUtil.getInt(value, 10) != getControlNumber(value, N11_WEIGHTS))
-            || (ValidationUtil.getInt(value, 11) != getControlNumber(value, N12_WEIGHTS))) {
-            throw new ValidateException();
-        }
+    private static boolean isValid12(String value) {
+        return (ValidationUtil.getInt(value, 10) == getControlNumber(value, N11_WEIGHTS))
+               && (ValidationUtil.getInt(value, 11) == getControlNumber(value, N12_WEIGHTS));
     }
 
-    private static void validate10(String value) throws ValidateException {
-        if (ValidationUtil.getInt(value, 9) != getControlNumber(value, N10_WEIGHTS)) {
-            throw new ValidateException();
-        }
+    private static boolean isValid10(String value) {
+        return ValidationUtil.getInt(value, 9) == getControlNumber(value, N10_WEIGHTS);
     }
 
     private static int getControlNumber(String value, int[] weights) {

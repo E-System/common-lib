@@ -14,9 +14,8 @@
  *    limitations under the License.
  */
 
-package com.es.lib.common.validation.passport
+package com.es.lib.common.validation
 
-import com.es.lib.common.validation.ValidateException
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -32,11 +31,9 @@ class PassportDateValidatorUtilSpec extends Specification {
     @Shared
     def sdf = new SimpleDateFormat("dd.MM.yyyy")
 
-    def "Валидация должна проходить если дата паспорта или дата рождения не указана"() {
-        when:
-        PassportDateValidatorUtil.validate(pd, bd)
-        then:
-        true
+    def "True for null values"() {
+        expect:
+        PassportDateValidatorUtil.isValid(pd, bd)
         where:
         pd         | bd
         null       | null
@@ -44,11 +41,9 @@ class PassportDateValidatorUtilSpec extends Specification {
         new Date() | null
     }
 
-    def "Должно быть исключение если паспорт не менялся в 14, 20, 45"() {
-        when:
-        PassportDateValidatorUtil.validate(pd, bd)
-        then:
-        thrown(ValidateException)
+    def "False passport not changed in 14, 20, 45 years"() {
+        expect:
+        !PassportDateValidatorUtil.isValid(pd, bd)
         where:
         pd                      | bd
         sdf.parse("27.09.1990") | sdf.parse("27.09.1985")
@@ -58,11 +53,9 @@ class PassportDateValidatorUtilSpec extends Specification {
         sdf.parse("27.09.2009") | sdf.parse("27.09.1965")
     }
 
-    def "Не должно быть исключение если паспорт менялся в 14, 20, 45"() {
-        when:
-        PassportDateValidatorUtil.validate(pd, bd, LocalDate.of(2015, 9, 26))
-        then:
-        true
+    def "True if passport changed in 14, 20, 45 years"() {
+        expect:
+        PassportDateValidatorUtil.isValid(pd, bd, LocalDate.of(2015, 9, 26))
         where:
         pd                      | bd
         sdf.parse("27.09.2009") | sdf.parse("27.09.1995")

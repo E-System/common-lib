@@ -14,9 +14,7 @@
  *    limitations under the License.
  */
 
-package com.es.lib.common.validation.passport;
-
-import com.es.lib.common.validation.ValidateException;
+package com.es.lib.common.validation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,13 +30,13 @@ public final class PassportDateValidatorUtil {
 
     private PassportDateValidatorUtil() { }
 
-    public static void validate(Date passportDate, Date birthDate) throws ValidateException {
-        validate(passportDate, birthDate, null);
+    public static boolean isValid(Date passportDate, Date birthDate) {
+        return isValid(passportDate, birthDate, null);
     }
 
-    public static void validate(Date passportDate, Date birthDate, LocalDate now) throws ValidateException {
+    public static boolean isValid(Date passportDate, Date birthDate, LocalDate now) {
         if (passportDate == null || birthDate == null) {
-            return;
+            return true;
         }
         LocalDate ldBirth = LocalDateTime.ofInstant(birthDate.toInstant(), ZoneId.systemDefault()).toLocalDate();
         long fullYears = ChronoUnit.YEARS.between(ldBirth, now != null ? now : LocalDate.now());
@@ -46,14 +44,12 @@ public final class PassportDateValidatorUtil {
         LocalDate ldPassport = LocalDateTime.ofInstant(passportDate.toInstant(), ZoneId.systemDefault()).toLocalDate();
         long passportYears = ChronoUnit.YEARS.between(ldBirth, ldPassport);
 
-        if (isInvalidStep(fullYears, passportYears, 45)
-            || isInvalidStep(fullYears, passportYears, 20)
-            || isInvalidStep(fullYears, passportYears, 14)) {
-            throw new ValidateException();
-        }
+        return isValidStep(fullYears, passportYears, 45)
+               && isValidStep(fullYears, passportYears, 20)
+               && isValidStep(fullYears, passportYears, 14);
     }
 
-    private static boolean isInvalidStep(long fullYears, long passportYears, long value) {
-        return fullYears >= value && passportYears < value;
+    private static boolean isValidStep(long fullYears, long passportYears, long value) {
+        return fullYears < value || passportYears >= value;
     }
 }
