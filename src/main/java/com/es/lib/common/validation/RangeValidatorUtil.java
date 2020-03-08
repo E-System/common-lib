@@ -16,14 +16,13 @@ public final class RangeValidatorUtil {
         try {
             double numValue = Double.parseDouble(value);
 
-            Pattern r = Pattern.compile("([\\[\\(][^\\]^\\)]*[\\]\\)])");
+            Pattern r = Pattern.compile("([\\[(][^]^)]*[])])");
             Matcher m = r.matcher(ranges);
             while (m.find()) {
                 String range = m.group();
-                System.out.println("RANGE: " + range);
                 boolean leftInclude = range.startsWith("[");
                 boolean rightInclude = range.endsWith("]");
-                String[] items = range.replaceAll("[\\[]|[\\(]|[\\]]|[\\)]", "").split(";", 2);
+                String[] items = range.replaceAll("[\\[]|[(]|[]]|[)]", "").split(";", 2);
                 if (items.length < 2) {
                     continue;
                 }
@@ -36,7 +35,6 @@ public final class RangeValidatorUtil {
                     try {
                         double lVal = Double.parseDouble(lItem);
                         if ((leftInclude && numValue >= lVal) || numValue > lVal) {
-                            System.out.println("FIRST RETURN");
                             return true;
                         }
                     } catch (Exception ignore) { }
@@ -44,7 +42,6 @@ public final class RangeValidatorUtil {
                     try {
                         double rVal = Double.parseDouble(rItem);
                         if ((rightInclude && numValue <= rVal) || numValue < rVal) {
-                            System.out.println("SECOND RETURN");
                             return true;
                         }
                     } catch (Exception ignore) { }
@@ -53,7 +50,6 @@ public final class RangeValidatorUtil {
                         double lVal = Double.parseDouble(lItem);
                         double rVal = Double.parseDouble(rItem);
                         if (((leftInclude && numValue >= lVal) || numValue > lVal) && ((rightInclude && numValue <= rVal) || (!rightInclude && numValue < rVal))) {
-                            System.out.println("THIRD RETURN");
                             return true;
                         }
                     } catch (Exception ignore) { }
