@@ -24,7 +24,7 @@ class OgrnValidatorUtilSpeck extends Specification {
 
     def "False for value with length != 15"() {
         expect:
-        !OgrnValidatorUtil.isValid(value, OgrnValidatorUtil.Type.OGRNIP)
+        !OgrnValidatorUtil.isValid(value, OgrnType.OGRNIP)
         where:
         value << ["", "1", "12345678", "123456789101", "1234567890123", "12345678901234", "1234567890123456"]
     }
