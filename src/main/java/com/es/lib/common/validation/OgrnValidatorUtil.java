@@ -1,7 +1,5 @@
 package com.es.lib.common.validation;
 
-import com.es.lib.common.validation.ValidationUtil;
-
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.07.16
@@ -15,12 +13,12 @@ public final class OgrnValidatorUtil {
      *
      * @param value string with OGRN
      */
-    public static boolean isValid(String value, Type type) {
+    public static boolean isValid(String value, OgrnType type) {
         if (value == null) {
             return true;
         }
         int len = value.length();
-        if ((type != Type.ANY && len != type.value) || (type == Type.ANY && len != Type.OGRN.value && len != Type.OGRNIP.value)) {
+        if ((type != OgrnType.ANY && len != type.getValue()) || (type == OgrnType.ANY && len != OgrnType.OGRN.getValue() && len != OgrnType.OGRNIP.getValue())) {
             return false;
         }
         try {
@@ -69,20 +67,5 @@ public final class OgrnValidatorUtil {
             return false;
         }
         return true;
-    }
-
-    public enum Type {
-        ANY(null),
-        OGRN(13),
-        OGRNIP(15);
-        private Integer value;
-
-        Type(Integer value) {
-            this.value = value;
-        }
-
-        public Integer getValue() {
-            return value;
-        }
     }
 }
