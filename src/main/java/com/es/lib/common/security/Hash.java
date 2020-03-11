@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Hash {
 
+    private static final String ALGORITHM_SHA1 = "SHA-1";
     private static final String ALGORITHM_MD5 = "MD5";
     private static final String ALGORITHM_SHA256 = "SHA256";
 
@@ -19,6 +20,10 @@ public final class Hash {
 
     public static StrHash md5() {
         return hash(ALGORITHM_MD5);
+    }
+
+    public static StrHash sha1() {
+        return hash(ALGORITHM_SHA1);
     }
 
     public static StrHash hash(String algorithm) {

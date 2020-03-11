@@ -39,6 +39,11 @@ class HashSpec extends Specification {
         Hash.crc16().get("Hello") == 56026
     }
 
+    def "SHA-1"() {
+        expect:
+        Hash.sha1().get("Hello") == 'f7ff9e8b7bb2e09b70935a5d785e0cc5d9d0abf0'
+    }
+
     def "hmacSha256"() {
         expect:
         Hash.hmacSha256("secret_key").get("Test message") == "ABpes7dX951jzumPtmtNFeo4MS9ycL+sN1O1UnKUJeY="
