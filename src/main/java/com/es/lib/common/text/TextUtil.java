@@ -30,6 +30,14 @@ public final class TextUtil {
         return value;
     }
 
+    public static String[] rows(String src, String spaceSymbol, int firstLength) {
+        return StringRowSplitter.split(src, spaceSymbol, firstLength);
+    }
+
+    public static String[] rows(String src, String spaceSymbol, int firstLength, int secondLength) {
+        return StringRowSplitter.split(src, spaceSymbol, firstLength, secondLength);
+    }
+
     public static Splitter splitBy(String regexp) {
         return new Splitter(regexp, null, true);
     }

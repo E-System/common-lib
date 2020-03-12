@@ -2,6 +2,7 @@ package com.es.lib.common.text
 
 import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class TextUtilSpec extends Specification {
 
@@ -126,5 +127,109 @@ class TextUtilSpec extends Specification {
         ""           | TextUtil.splitBy(",").splitBy(":") || []
         "1:2,2:3"    | TextUtil.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
         "1:2, 2 : 3" | TextUtil.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
+    }
+
+    def "Split on 2 rows"() {
+        expect:
+        TextUtil.rows(str, space, len) == result
+        where:
+        str            | space | len | result
+        ""             | ""    | 0   | ["", ""].toArray()
+        null           | ""    | 0   | ["", ""].toArray()
+
+        "a"            | ""    | 0   | ["", "a"].toArray()
+        "a"            | ""    | 1   | ["a", ""].toArray()
+
+        "asd asd asd"  | ""    | 0   | ["", "asd asd asd"].toArray()
+        "asd asd asd"  | ""    | 1   | ["", "asd asd asd"].toArray()
+        "asd asd asd"  | ""    | 2   | ["", "asd asd asd"].toArray()
+        "asd asd asd"  | ""    | 3   | ["asd", "asd asd"].toArray()
+        "asd asd asd"  | ""    | 4   | ["asd", "asd asd"].toArray()
+        "asd asd asd"  | ""    | 5   | ["asd", "asd asd"].toArray()
+        "asd asd asd"  | ""    | 6   | ["asd", "asd asd"].toArray()
+        "asd asd asd"  | ""    | 7   | ["asd asd", "asd"].toArray()
+        "asd asd asd"  | ""    | 8   | ["asd asd", "asd"].toArray()
+        "asd asd asd"  | ""    | 9   | ["asd asd", "asd"].toArray()
+        "asd asd asd"  | ""    | 10  | ["asd asd", "asd"].toArray()
+        "asd asd asd"  | ""    | 11  | ["asd asd asd", ""].toArray()
+        "asd asd asd"  | ""    | 12  | ["asd asd asd", ""].toArray()
+
+        "asd  asd asd" | ""    | 0   | ["", "asd  asd asd"].toArray()
+        "asd  asd asd" | ""    | 1   | ["", "asd  asd asd"].toArray()
+        "asd  asd asd" | ""    | 2   | ["", "asd  asd asd"].toArray()
+        "asd  asd asd" | ""    | 3   | ["asd", " asd asd"].toArray()
+        "asd  asd asd" | ""    | 4   | ["asd", " asd asd"].toArray()
+        "asd  asd asd" | ""    | 5   | ["asd ", "asd asd"].toArray()
+        "asd  asd asd" | ""    | 6   | ["asd ", "asd asd"].toArray()
+        "asd  asd asd" | ""    | 7   | ["asd ", "asd asd"].toArray()
+        "asd  asd asd" | ""    | 8   | ["asd  asd", "asd"].toArray()
+        "asd  asd asd" | ""    | 9   | ["asd  asd", "asd"].toArray()
+        "asd  asd asd" | ""    | 10  | ["asd  asd", "asd"].toArray()
+        "asd  asd asd" | ""    | 11  | ["asd  asd", "asd"].toArray()
+        "asd  asd asd" | ""    | 12  | ["asd  asd asd", ""].toArray()
+        "asd  asd asd" | ""    | 13  | ["asd  asd asd", ""].toArray()
+        "asd  asd asd" | ""    | 14  | ["asd  asd asd", ""].toArray()
+    }
+
+    def "Split on 3 rows"() {
+        expect:
+        TextUtil.rows(str, space, len, len2) == result
+        where:
+        str            | space | len | len2 | result
+        ""             | ""    | 0   | 0    | ["", "", ""].toArray()
+        null           | ""    | 0   | 0    | ["", "", ""].toArray()
+
+        "a"            | ""    | 0   | 0    | ["", "", "a"].toArray()
+        "a"            | ""    | 1   | 0    | ["a", "", ""].toArray()
+
+        "asd asd asd"  | ""    | 0   | 0    | ["", "", "asd asd asd"].toArray()
+        "asd asd asd"  | ""    | 1   | 0    | ["", "", "asd asd asd"].toArray()
+        "asd asd asd"  | ""    | 2   | 0    | ["", "", "asd asd asd"].toArray()
+        "asd asd asd"  | ""    | 3   | 0    | ["asd", "", "asd asd"].toArray()
+        "asd asd asd"  | ""    | 3   | 3    | ["asd", "asd", "asd"].toArray()
+        "asd asd asd"  | ""    | 4   | 0    | ["asd", "", "asd asd"].toArray()
+        "asd asd asd"  | ""    | 4   | 3    | ["asd", "asd", "asd"].toArray()
+        "asd asd asd"  | ""    | 5   | 0    | ["asd", "", "asd asd"].toArray()
+        "asd asd asd"  | ""    | 6   | 0    | ["asd", "", "asd asd"].toArray()
+        "asd asd asd"  | ""    | 7   | 0    | ["asd asd", "", "asd"].toArray()
+        "asd asd asd"  | ""    | 8   | 0    | ["asd asd", "", "asd"].toArray()
+        "asd asd asd"  | ""    | 9   | 0    | ["asd asd", "", "asd"].toArray()
+        "asd asd asd"  | ""    | 10  | 0    | ["asd asd", "", "asd"].toArray()
+        "asd asd asd"  | ""    | 11  | 0    | ["asd asd asd", "", ""].toArray()
+        "asd asd asd"  | ""    | 12  | 0    | ["asd asd asd", "", ""].toArray()
+
+        "asd  asd asd" | ""    | 0   | 0    | ["", "", "asd  asd asd"].toArray()
+        "asd  asd asd" | ""    | 1   | 0    | ["", "", "asd  asd asd"].toArray()
+        "asd  asd asd" | ""    | 2   | 0    | ["", "", "asd  asd asd"].toArray()
+        "asd  asd asd" | ""    | 3   | 0    | ["asd", "", "asd asd"].toArray()
+        "asd  asd asd" | ""    | 3   | 3    | ["asd", "asd", "asd"].toArray()
+        "asd  asd asd" | ""    | 4   | 0    | ["asd", "", "asd asd"].toArray()
+        "asd  asd asd" | ""    | 5   | 0    | ["asd ", "", "asd asd"].toArray()
+        "asd  asd asd" | ""    | 6   | 0    | ["asd ", "", "asd asd"].toArray()
+        "asd  asd asd" | ""    | 7   | 0    | ["asd ", "", "asd asd"].toArray()
+        "asd  asd asd" | ""    | 8   | 0    | ["asd  asd", "", "asd"].toArray()
+        "asd  asd asd" | ""    | 9   | 0    | ["asd  asd", "", "asd"].toArray()
+        "asd  asd asd" | ""    | 10  | 0    | ["asd  asd", "", "asd"].toArray()
+        "asd  asd asd" | ""    | 11  | 0    | ["asd  asd", "", "asd"].toArray()
+        "asd  asd asd" | ""    | 12  | 0    | ["asd  asd asd", "", ""].toArray()
+        "asd  asd asd" | ""    | 13  | 0    | ["asd  asd asd", "", ""].toArray()
+        "asd  asd asd" | ""    | 14  | 0    | ["asd  asd asd", "", ""].toArray()
+
+        "asd  asd asd" | " "    | 0   | 0    | [" ", " ", "asd  asd asd"].toArray()
+        "asd  asd asd" | " "    | 1   | 0    | [" ", " ", "asd  asd asd"].toArray()
+        "asd  asd asd" | " "    | 2   | 0    | [" ", " ", "asd  asd asd"].toArray()
+        "asd  asd asd" | " "    | 3   | 0    | ["asd", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "    | 3   | 3    | ["asd", "asd", "asd"].toArray()
+        "asd  asd asd" | " "    | 4   | 0    | ["asd", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "    | 5   | 0    | ["asd ", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "    | 6   | 0    | ["asd ", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "    | 7   | 0    | ["asd ", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "    | 8   | 0    | ["asd  asd", " ", "asd"].toArray()
+        "asd  asd asd" | " "    | 9   | 0    | ["asd  asd", " ", "asd"].toArray()
+        "asd  asd asd" | " "    | 10  | 0    | ["asd  asd", " ", "asd"].toArray()
+        "asd  asd asd" | " "    | 11  | 0    | ["asd  asd", " ", "asd"].toArray()
+        "asd  asd asd" | " "    | 12  | 0    | ["asd  asd asd", " ", " "].toArray()
+        "asd  asd asd" | " "    | 13  | 0    | ["asd  asd asd", " ", " "].toArray()
+        "asd  asd asd" | " "    | 14  | 0    | ["asd  asd asd", " ", " "].toArray()
     }
 }
