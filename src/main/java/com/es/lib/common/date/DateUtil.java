@@ -156,7 +156,7 @@ public final class DateUtil {
         return clearTime(cal).getTime();
     }
 
-    public static Date tommorow(TimeZone timeZone) {
+    public static Date tomorrow(TimeZone timeZone) {
         Calendar cal = Calendar.getInstance(timeZone);
         cal.add(Calendar.DAY_OF_MONTH, 1);
         return clearTime(cal).getTime();
@@ -188,8 +188,12 @@ public final class DateUtil {
     }
 
     public static String format(Date date, String format) {
+        return format(date, format, null);
+    }
+
+    public static String format(Date date, String format, String defaultValue) {
         if (date == null) {
-            return null;
+            return defaultValue;
         }
         return createDateFormat(format).format(date);
     }
@@ -232,6 +236,22 @@ public final class DateUtil {
         return format(locale, date, CALENDAR_DATE_PATTERN_WITH_TIME);
     }
 
+    public static String formatNow() {
+        return formatNow(CALENDAR_DATE_PATTERN);
+    }
+
+    public static String formatNowWithTime() {
+        return formatNow(CALENDAR_DATE_PATTERN_WITH_TIME);
+    }
+
+    public static String formatNow(String format) {
+        return formatNow(format, TimeZone.getDefault());
+    }
+
+    public static String formatNow(String format, TimeZone timeZone) {
+        return format(DateUtil.now(timeZone), format);
+    }
+
     public static Date parse(String date) throws ParseException {
         return parse(date, CALENDAR_DATE_PATTERN);
     }
@@ -263,13 +283,9 @@ public final class DateUtil {
     }
 
     public static Calendar getCalendar(Date date, TimeZone timeZone) {
-        Calendar cal = getCalendar(timeZone);
+        Calendar cal = Calendar.getInstance(timeZone);
         cal.setTime(date);
         return cal;
-    }
-
-    public static Calendar getCalendar(TimeZone timeZone) {
-        return Calendar.getInstance(timeZone);
     }
 
     /**

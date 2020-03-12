@@ -282,4 +282,24 @@ class MoneyUtilSpec extends Specification {
         2000000.11d | "белорусских рублей"
         -949.85d    | "белорусских рублей"
     }
+
+    def "String without numbers"() {
+        expect:
+        MoneyUtil.formatFullText().convert(1234.10) == 'одна тысяча двести тридцать четыре рубля десять копеек'
+    }
+
+    def "In end is pennies"() {
+        expect:
+        MoneyUtil.formatFullText().convert(1234.10).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.11).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.12).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.13).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.14).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.15).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.16).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.17).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.18).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.19).endsWith('копеек')
+        MoneyUtil.formatFullText().convert(1234.20).endsWith('копеек')
+    }
 }

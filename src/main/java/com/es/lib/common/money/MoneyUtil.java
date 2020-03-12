@@ -8,12 +8,24 @@ public final class MoneyUtil {
 
     private MoneyUtil() {}
 
+    public static MoneyToStr formatFullText() {
+        return formatFullText("RUB");
+    }
+
     public static MoneyToStr format() {
         return format("RUB");
     }
 
+    public static MoneyToStr formatFullText(String currency) {
+        return formatFullText(currency, "RUS");
+    }
+
     public static MoneyToStr format(String currency) {
         return format(currency, "RUS");
+    }
+
+    public static MoneyToStr formatFullText(String currency, String language) {
+        return format(currency, language, false);
     }
 
     public static MoneyToStr format(String currency, String language) {
