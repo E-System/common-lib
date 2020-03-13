@@ -18,6 +18,8 @@ package com.es.lib.common.date
 
 import spock.lang.Specification
 
+import java.time.ZoneId
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 05.03.15
@@ -26,47 +28,47 @@ class DateRangeSpec extends Specification {
 
     def "Interval generate with next day"() {
         expect:
-        def range = interval.getRange(timeZone)
+        def range = interval.getRange(zoneId)
         range.dbegin == dbegin
         range.dend == dend
         where:
-        interval                         | timeZone         | dbegin                                                                                                  | dend
-        DateRange.Interval.TODAY         | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().build()                                                  | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(1).build()
-        DateRange.Interval.YESTERDAY     | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(-1).build()                                | DateUtil.builder(TimeZone.default).clearTime().build()
-        DateRange.Interval.LAST_7_DAYS   | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(-7).build()                                | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(1).build()
-        DateRange.Interval.CURRENT_WEEK  | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfWeek(Calendar.MONDAY).build()                    | DateUtil.builder(TimeZone.default).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
-        DateRange.Interval.LAST_WEEK     | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build() | DateUtil.builder(TimeZone.default).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
-        DateRange.Interval.CURRENT_MONTH | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).build()                                 | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(1).build()
-        DateRange.Interval.LAST_MONTH    | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().addMonth(-1).setDayOfMonth(1).build()                    | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).build()
-        DateRange.Interval.CURRENT_TRIAD | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).build()                                 | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(3).build()
-        DateRange.Interval.LAST_TRIAD    | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(-3).build()                    | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).build()
-        DateRange.Interval.CURRENT_YEAR  | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).build()                     | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(1).build()
-        DateRange.Interval.LAST_YEAR     | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).build()
+        interval                         | zoneId                 | dbegin                                                                                  | dend
+        DateRange.Interval.TODAY         | ZoneId.systemDefault() | DateUtil.builder().clearTime().build()                                                  | DateUtil.builder().clearTime().addDayOfMonth(1).build()
+        DateRange.Interval.YESTERDAY     | ZoneId.systemDefault() | DateUtil.builder().clearTime().addDayOfMonth(-1).build()                                | DateUtil.builder().clearTime().build()
+        DateRange.Interval.LAST_7_DAYS   | ZoneId.systemDefault() | DateUtil.builder().clearTime().addDayOfMonth(-7).build()                                | DateUtil.builder().clearTime().addDayOfMonth(1).build()
+        DateRange.Interval.CURRENT_WEEK  | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfWeek(Calendar.MONDAY).build()                    | DateUtil.builder().clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
+        DateRange.Interval.LAST_WEEK     | ZoneId.systemDefault() | DateUtil.builder().clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build() | DateUtil.builder().clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
+        DateRange.Interval.CURRENT_MONTH | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).build()                                 | DateUtil.builder().clearTime().setDayOfMonth(1).addMonth(1).build()
+        DateRange.Interval.LAST_MONTH    | ZoneId.systemDefault() | DateUtil.builder().clearTime().addMonth(-1).setDayOfMonth(1).build()                    | DateUtil.builder().clearTime().setDayOfMonth(1).build()
+        DateRange.Interval.CURRENT_TRIAD | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).build()                                 | DateUtil.builder().clearTime().setDayOfMonth(1).addMonth(3).build()
+        DateRange.Interval.LAST_TRIAD    | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).addMonth(-3).build()                    | DateUtil.builder().clearTime().setDayOfMonth(1).build()
+        DateRange.Interval.CURRENT_YEAR  | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).setMonth(0).build()                     | DateUtil.builder().clearTime().addDayOfMonth(1).build()
+        DateRange.Interval.LAST_YEAR     | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | DateUtil.builder().clearTime().setDayOfMonth(1).setMonth(0).build()
     }
 
     def "Interval generate with current day"() {
         expect:
-        def range = interval.getRange(timeZone, false)
+        def range = interval.getRange(zoneId, false)
         range.dbegin == dbegin
         range.dend == dend
         where:
-        interval                         | timeZone         | dbegin                                                                                                  | dend
-        DateRange.Interval.TODAY         | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().build()                                                  | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.YESTERDAY     | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(-1).build()                                | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_7_DAYS   | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(-7).build()                                | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.CURRENT_WEEK  | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfWeek(Calendar.MONDAY).build()                    | DateUtil.builder(TimeZone.default).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_WEEK     | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build() | DateUtil.builder(TimeZone.default).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.CURRENT_MONTH | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).build()                                 | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_MONTH    | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().addMonth(-1).setDayOfMonth(1).build()                    | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.CURRENT_TRIAD | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).build()                                 | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(3).addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_TRIAD    | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).addMonth(-3).build()                    | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.CURRENT_YEAR  | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).build()                     | DateUtil.builder(TimeZone.default).clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_YEAR     | TimeZone.default | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | DateUtil.builder(TimeZone.default).clearTime().setDayOfMonth(1).setMonth(0).addDayOfMonth(-1).build()
+        interval                         | zoneId                 | dbegin                                                                                  | dend
+        DateRange.Interval.TODAY         | ZoneId.systemDefault() | DateUtil.builder().clearTime().build()                                                  | DateUtil.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.YESTERDAY     | ZoneId.systemDefault() | DateUtil.builder().clearTime().addDayOfMonth(-1).build()                                | DateUtil.builder().clearTime().addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_7_DAYS   | ZoneId.systemDefault() | DateUtil.builder().clearTime().addDayOfMonth(-7).build()                                | DateUtil.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.CURRENT_WEEK  | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfWeek(Calendar.MONDAY).build()                    | DateUtil.builder().clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_WEEK     | ZoneId.systemDefault() | DateUtil.builder().clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build() | DateUtil.builder().clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.CURRENT_MONTH | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).build()                                 | DateUtil.builder().clearTime().setDayOfMonth(1).addMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_MONTH    | ZoneId.systemDefault() | DateUtil.builder().clearTime().addMonth(-1).setDayOfMonth(1).build()                    | DateUtil.builder().clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.CURRENT_TRIAD | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).build()                                 | DateUtil.builder().clearTime().setDayOfMonth(1).addMonth(3).addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_TRIAD    | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).addMonth(-3).build()                    | DateUtil.builder().clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.CURRENT_YEAR  | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).setMonth(0).build()                     | DateUtil.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
+        DateRange.Interval.LAST_YEAR     | ZoneId.systemDefault() | DateUtil.builder().clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | DateUtil.builder().clearTime().setDayOfMonth(1).setMonth(0).addDayOfMonth(-1).build()
     }
 
     def "Generate list of all intervals"() {
         when:
-        def ranges = DateUtil.ranges(TimeZone.default)
+        def ranges = DateUtil.ranges(ZoneId.systemDefault())
         then:
         ranges.size() == DateRange.Interval.values().length
         ranges[0].title == DateRange.Interval.TODAY.toString()

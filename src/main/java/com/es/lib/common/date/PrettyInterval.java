@@ -1,6 +1,6 @@
 package com.es.lib.common.date;
 
-import com.es.lib.common.date.DateUtil;
+import com.es.lib.common.Constant;
 import com.es.lib.common.text.TextUtil;
 
 import java.time.Duration;
@@ -16,10 +16,6 @@ import java.util.Date;
  */
 public final class PrettyInterval {
 
-    private static final int MINUTES_PER_HOUR = 60;
-    private static final int SECONDS_PER_MINUTE = 60;
-    private static final int SECONDS_PER_HOUR = SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
-
     private final boolean useBraces;
 
     PrettyInterval(boolean useBraces) {
@@ -27,7 +23,7 @@ public final class PrettyInterval {
     }
 
     public String get(Date date) {
-        return get(DateUtil.convert(date));
+        return get(DateUtil.converter().get(date));
     }
 
     public String get(LocalDateTime date) {
@@ -35,7 +31,8 @@ public final class PrettyInterval {
     }
 
     public String get(Date date, Date dateNext) {
-        return get(DateUtil.convert(date), DateUtil.convert(dateNext));
+        DateConverter converter = DateUtil.converter();
+        return get(converter.get(date), converter.get(dateNext));
     }
 
     public String get(LocalDateTime date, LocalDateTime dateNext) {
@@ -89,9 +86,9 @@ public final class PrettyInterval {
 
         long seconds = duration.getSeconds();
 
-        long hours = seconds / SECONDS_PER_HOUR;
-        long minutes = ((seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
-        long secs = (seconds % SECONDS_PER_MINUTE);
+        long hours = seconds / Constant.SECONDS_IN_HOUR;
+        long minutes = ((seconds % Constant.SECONDS_IN_HOUR) / Constant.SECONDS_IN_MINUTE);
+        long secs = (seconds % Constant.SECONDS_IN_MINUTE);
 
         return new long[]{hours, minutes, secs};
     }

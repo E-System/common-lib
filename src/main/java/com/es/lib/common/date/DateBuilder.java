@@ -16,6 +16,7 @@
 
 package com.es.lib.common.date;
 
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -28,8 +29,8 @@ public class DateBuilder {
 
     private final Calendar calendar;
 
-    DateBuilder(TimeZone timeZone) {
-        calendar = Calendar.getInstance(timeZone);
+    DateBuilder(ZoneId zoneId) {
+        calendar = Calendar.getInstance(TimeZone.getTimeZone(zoneId));
     }
 
     public DateBuilder clearTime() {

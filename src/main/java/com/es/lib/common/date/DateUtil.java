@@ -16,15 +16,17 @@
 
 package com.es.lib.common.date;
 
+import com.es.lib.common.Constant;
 import com.es.lib.common.model.SItem;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,25 +36,34 @@ import java.util.stream.Stream;
  */
 public final class DateUtil {
 
-    public static final String CALENDAR_DATE_PATTERN = "dd.MM.yyyy";
-    public static final String CALENDAR_DATE_PATTERN_WITH_TIME = "dd.MM.yyyy HH:mm:ss";
-
     private DateUtil() {}
 
-    public static Date nextDay(Date date, TimeZone timeZone) {
-        return Date.from(
-            ZonedDateTime.ofInstant(
-                date.toInstant(),
-                timeZone.toZoneId()
-            ).plusDays(1).toInstant()
-        );
+    public static boolean isZoneValid(String id) {
+        try {
+            ZoneId zoneId = ZoneId.of(id);
+            return zoneId != null && zoneId.getId().equals(id);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    public static boolean contains(Date dbegin, Date dend, Date date, TimeZone timeZone) {
-        LocalDateTime start = LocalDateTime.ofInstant(dbegin.toInstant(), timeZone.toZoneId());
-        LocalDateTime end = dend != null ? LocalDateTime.ofInstant(dend.toInstant(), timeZone.toZoneId()) : null;
-        LocalDateTime dt = LocalDateTime.ofInstant(date.toInstant(), timeZone.toZoneId());
+    public static Collection<ZoneId> availableZones() {
+        return ZoneId.getAvailableZoneIds().stream()
+                     .filter(v -> v.matches(Constant.DEFAULT_ZONES_PREFIXES))
+                     .map(ZoneId::of)
+                     .sorted(Comparator.comparing(ZoneId::getId))
+                     .collect(Collectors.toList());
+    }
+
+    public static boolean contains(Date startDate, Date endDate, Date date, ZoneId zoneId) {
+        LocalDateTime start = LocalDateTime.ofInstant(startDate.toInstant(), zoneId);
+        LocalDateTime end = endDate != null ? LocalDateTime.ofInstant(endDate.toInstant(), zoneId) : null;
+        LocalDateTime dt = LocalDateTime.ofInstant(date.toInstant(), zoneId);
         return dt.isAfter(start) && !(end != null && !dt.isBefore(end));
+    }
+
+    public static boolean contains(LocalDateTime startDate, LocalDateTime endDate, LocalDateTime date) {
+        return date.isAfter(startDate) && !(endDate != null && !date.isBefore(endDate));
     }
 
     /**
@@ -97,195 +108,14 @@ public final class DateUtil {
     /**
      * Проверить что дата в будущем (более текущей даты)
      *
-     * @param date     дата для проверки
-     * @param timeZone таймзона
+     * @param date   дата для проверки
+     * @param zoneId таймзона
      * @return true - дата в будущем (более текущей даты)
      */
-    public static boolean isAfterNow(Date date, TimeZone timeZone) {
-        LocalDateTime dt = LocalDateTime.ofInstant(date.toInstant(), timeZone.toZoneId());
-        LocalDateTime now = LocalDateTime.now(timeZone.toZoneId());
+    public static boolean isAfterNow(Date date, ZoneId zoneId) {
+        LocalDateTime dt = LocalDateTime.ofInstant(date.toInstant(), zoneId);
+        LocalDateTime now = LocalDateTime.now(zoneId);
         return dt.isAfter(now);
-    }
-
-    /**
-     * Get start of month
-     *
-     * @return Start of month
-     */
-    public static Date monthStart() {
-        return monthStart(ZoneId.systemDefault());
-    }
-
-    /**
-     * Get start of month
-     *
-     * @param zoneId Timezone
-     * @return Start of month
-     */
-    public static Date monthStart(ZoneId zoneId) {
-        return Date.from(
-            LocalDate.now().withDayOfMonth(1).atStartOfDay(zoneId).toInstant()
-        );
-    }
-
-    /**
-     * Get today begin
-     *
-     * @return Today begin
-     */
-    public static Date todayBegin() {
-        return Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    private static Calendar clearTime(Calendar cal) {
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal;
-    }
-
-    public static Date yesterday(TimeZone timeZone) {
-        Calendar cal = Calendar.getInstance(timeZone);
-        cal.add(Calendar.DAY_OF_MONTH, -1);
-        return clearTime(cal).getTime();
-    }
-
-    public static Date today(TimeZone timeZone) {
-        Calendar cal = Calendar.getInstance(timeZone);
-        return clearTime(cal).getTime();
-    }
-
-    public static Date tomorrow(TimeZone timeZone) {
-        Calendar cal = Calendar.getInstance(timeZone);
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        return clearTime(cal).getTime();
-    }
-
-    public static Date todayWithHour(TimeZone timeZone, Integer hour) {
-        Calendar cal = Calendar.getInstance(timeZone);
-        if (hour != null) {
-            cal.set(Calendar.HOUR_OF_DAY, hour);
-        }
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
-    }
-
-    public static Date now(TimeZone timeZone) {
-        return Calendar.getInstance(timeZone).getTime();
-    }
-
-    public static Date nowOffset(TimeZone timeZone, int field, int amount) {
-        Calendar calendar = Calendar.getInstance(timeZone);
-        calendar.add(field, amount);
-        return calendar.getTime();
-    }
-
-    public static String getYearIndex(Date date) {
-        return format(date, "yy");
-    }
-
-    public static String format(Date date, String format) {
-        return format(date, format, null);
-    }
-
-    public static String format(Date date, String format, String defaultValue) {
-        if (date == null) {
-            return defaultValue;
-        }
-        return createDateFormat(format).format(date);
-    }
-
-    public static String format(Date date) {
-        return format(date, CALENDAR_DATE_PATTERN);
-    }
-
-    public static String formatWithTime(Date date) {
-        return format(date, CALENDAR_DATE_PATTERN_WITH_TIME);
-    }
-
-    public static String format(TimeZone timeZone, Date date, String format) {
-        if (date == null) {
-            return null;
-        }
-        return createDateFormat(format, timeZone).format(date);
-    }
-
-    public static String format(TimeZone timeZone, Date date) {
-        return format(timeZone, date, CALENDAR_DATE_PATTERN);
-    }
-
-    public static String formatWithTime(TimeZone timeZone, Date date) {
-        return format(timeZone, date, CALENDAR_DATE_PATTERN_WITH_TIME);
-    }
-
-    public static String format(Locale locale, Date date, String format) {
-        if (date == null) {
-            return null;
-        }
-        return createDateFormat(format, locale).format(date);
-    }
-
-    public static String format(Locale locale, Date date) {
-        return format(locale, date, CALENDAR_DATE_PATTERN);
-    }
-
-    public static String formatWithTime(Locale locale, Date date) {
-        return format(locale, date, CALENDAR_DATE_PATTERN_WITH_TIME);
-    }
-
-    public static String formatNow() {
-        return formatNow(CALENDAR_DATE_PATTERN);
-    }
-
-    public static String formatNowWithTime() {
-        return formatNow(CALENDAR_DATE_PATTERN_WITH_TIME);
-    }
-
-    public static String formatNow(String format) {
-        return formatNow(format, TimeZone.getDefault());
-    }
-
-    public static String formatNow(String format, TimeZone timeZone) {
-        return format(DateUtil.now(timeZone), format);
-    }
-
-    public static Date parse(String date) throws ParseException {
-        return parse(date, CALENDAR_DATE_PATTERN);
-    }
-
-    public static Date parseWithTime(String date) throws ParseException {
-        return parse(date, CALENDAR_DATE_PATTERN_WITH_TIME);
-    }
-
-    public static Date parse(String date, String format) throws ParseException {
-        if (date == null) {
-            return null;
-        }
-        return createDateFormat(format).parse(date);
-    }
-
-
-    private static SimpleDateFormat createDateFormat(String format) {
-        return new SimpleDateFormat(format);
-    }
-
-    private static SimpleDateFormat createDateFormat(String format, TimeZone timeZone) {
-        SimpleDateFormat result = createDateFormat(format);
-        result.setTimeZone(timeZone);
-        return result;
-    }
-
-    private static SimpleDateFormat createDateFormat(String format, Locale locale) {
-        return new SimpleDateFormat(format, locale);
-    }
-
-    public static Calendar getCalendar(Date date, TimeZone timeZone) {
-        Calendar cal = Calendar.getInstance(timeZone);
-        cal.setTime(date);
-        return cal;
     }
 
     /**
@@ -314,56 +144,6 @@ public final class DateUtil {
         return date.get(woy);
     }
 
-    /**
-     * Convert Date to LocalDateTime
-     *
-     * @param date   Date
-     * @param zoneId Timezone
-     * @return Local date
-     */
-    public static LocalDateTime convert(Date date, ZoneId zoneId) {
-        if (date == null) {
-            return null;
-        }
-        Instant instant = Instant.ofEpochMilli(date.getTime());
-        return LocalDateTime.ofInstant(instant, zoneId);
-    }
-
-    /**
-     * Convert Date to LocalDateTime
-     *
-     * @param date Date
-     * @return Local Date
-     */
-    public static LocalDateTime convert(Date date) {
-        return convert(date, ZoneId.systemDefault());
-    }
-
-    /**
-     * Convert LocalDateTime to Date
-     *
-     * @param date   Local date
-     * @param zoneId Timezone
-     * @return Date
-     */
-    public static Date convert(LocalDateTime date, ZoneId zoneId) {
-        if (date == null) {
-            return null;
-        }
-        Instant instant = date.atZone(zoneId).toInstant();
-        return Date.from(instant);
-    }
-
-    /**
-     * Convert LocalDateTime to Date
-     *
-     * @param date Local date
-     * @return Date
-     */
-    public static Date convert(LocalDateTime date) {
-        return convert(date, ZoneId.systemDefault());
-    }
-
     public static PrettyInterval pretty() {
         return pretty(false);
     }
@@ -373,29 +153,73 @@ public final class DateUtil {
     }
 
 
-    public static Collection<SItem> ranges(TimeZone timeZone, boolean lastNextDay) {
+    public static Collection<SItem> ranges(ZoneId zoneId, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
-                     .map(v -> v.getItem(timeZone, lastNextDay))
+                     .map(v -> v.getItem(zoneId, lastNextDay))
                      .collect(Collectors.toList());
     }
 
-    public static Collection<SItem> ranges(TimeZone timeZone) {
-        return ranges(timeZone, true);
+    public static Collection<SItem> ranges(ZoneId zoneId) {
+        return ranges(zoneId, true);
     }
 
-    public static DateRange defaultRange(TimeZone timeZone) {
-        return defaultRange(timeZone, true);
+    public static DateRange defaultRange(ZoneId zoneId) {
+        return defaultRange(zoneId, true);
     }
 
-    public static DateRange defaultRange(TimeZone timeZone, boolean lastNextDay) {
-        return DateRange.Interval.TODAY.getRange(timeZone, lastNextDay);
+    public static DateRange defaultRange(ZoneId zoneId, boolean lastNextDay) {
+        return DateRange.Interval.TODAY.getRange(zoneId, lastNextDay);
     }
 
-    public static DateBuilder builder(TimeZone timeZone) {
-        return new DateBuilder(timeZone);
+    public static DateBuilder builder() {
+        return builder(ZoneId.systemDefault());
+    }
+
+    public static DateBuilder builder(ZoneId zoneId) {
+        return new DateBuilder(zoneId);
     }
 
     public static TimeConverter timeConverter() {
         return TimeConverter.getInstance();
+    }
+
+    public static DateFormatter formatter() {
+        return formatter(null);
+    }
+
+    public static DateFormatter formatter(ZoneId zoneId) {
+        return formatter(zoneId, null);
+    }
+
+    public static DateFormatter formatter(ZoneId zoneId, Locale locale) {
+        return new DateFormatter(zoneId, locale);
+    }
+
+    public static DateParser parser() {
+        return parser(null);
+    }
+
+    public static DateParser parser(ZoneId zoneId) {
+        return parser(zoneId, null);
+    }
+
+    public static DateParser parser(ZoneId zoneId, Locale locale) {
+        return new DateParser(zoneId, locale);
+    }
+
+    public static DateConverter converter() {
+        return converter(ZoneId.systemDefault());
+    }
+
+    public static DateConverter converter(ZoneId zoneId) {
+        return new DateConverter(zoneId);
+    }
+
+    public static DateGenerator generator() {
+        return generator(ZoneId.systemDefault());
+    }
+
+    public static DateGenerator generator(ZoneId zoneId) {
+        return new DateGenerator(zoneId);
     }
 }

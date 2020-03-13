@@ -43,12 +43,34 @@ class DateUtilSpec extends Specification {
         dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
     }
 
+    def "isZoneValid"() {
+        expect:
+        DateUtil.isZoneValid(id) == result
+        where:
+        id                 || result
+        'Asia/Krasnoyarsk' || true
+        'Europe/Moscow'    || true
+        'Europe/M'         || false
+    }
+
+    def "availableZones"() {
+        when:
+        def zones = DateUtil.availableZones()
+        println(zones)
+        then:
+        zones.contains(ZoneId.of('Asia/Krasnoyarsk'))
+        zones.contains(ZoneId.of('Europe/Moscow'))
+        !zones.contains(ZoneId.of('SystemV/PST8PDT'))
+        !zones.contains(ZoneId.of('Zulu'))
+        !zones.contains(ZoneId.of('UTC'))
+    }
+
     def "NextDay"() {
         expect:
-        DateUtil.nextDay(date, zone) == result
+        DateUtil.generator(zone).nextDay(date) == result
         where:
-        date                             | zone                                  | result
-        sdf.parse("06.02.2015 23:30:00") | TimeZone.getTimeZone("Europe/Moscow") | sdf.parse("07.02.2015 23:30:00")
+        date                             | zone                       | result
+        sdf.parse("06.02.2015 23:30:00") | ZoneId.of("Europe/Moscow") | sdf.parse("07.02.2015 23:30:00")
     }
 
     def "Contains"() {
@@ -56,20 +78,20 @@ class DateUtilSpec extends Specification {
         DateUtil.contains(dbegin, dend, date, timeZone)
         where:
         dbegin                           | dend                             | date       | timeZone
-        sdf.parse("06.02.2015 00:00:00") | sdf.parse("07.02.3015 00:00:00") | new Date() | TimeZone.getTimeZone("Europe/Moscow")
+        sdf.parse("06.02.2015 00:00:00") | sdf.parse("07.02.3015 00:00:00") | new Date() | ZoneId.of("Europe/Moscow")
     }
 
     def "IsAfterNow"() {
         expect:
-        DateUtil.isAfterNow(date, timeZone) == result
+        DateUtil.isAfterNow(date, zoneId) == result
         where:
-        date                                                  | timeZone                              | result
-        new Date()                                            | TimeZone.default                      | false
-        sdf.parse("06.02." + (currentYear + 1) + " 23:00:00") | TimeZone.default                      | true
-        sdf.parse("05.02." + (currentYear - 1) + " 23:00:00") | TimeZone.default                      | false
-        new Date()                                            | TimeZone.getTimeZone("Europe/Moscow") | false
-        sdf.parse("06.02." + (currentYear + 1) + " 23:00:00") | TimeZone.getTimeZone("Europe/Moscow") | true
-        sdf.parse("05.02." + (currentYear - 1) + " 23:00:00") | TimeZone.getTimeZone("Europe/Moscow") | false
+        date                                                  | zoneId                     | result
+        new Date()                                            | ZoneId.systemDefault()     | false
+        sdf.parse("06.02." + (currentYear + 1) + " 23:00:00") | ZoneId.systemDefault()     | true
+        sdf.parse("05.02." + (currentYear - 1) + " 23:00:00") | ZoneId.systemDefault()     | false
+        new Date()                                            | ZoneId.of("Europe/Moscow") | false
+        sdf.parse("06.02." + (currentYear + 1) + " 23:00:00") | ZoneId.of("Europe/Moscow") | true
+        sdf.parse("05.02." + (currentYear - 1) + " 23:00:00") | ZoneId.of("Europe/Moscow") | false
     }
 
     def "IsBeforeToday"() {
@@ -84,17 +106,17 @@ class DateUtilSpec extends Specification {
 
     def "Получение даты в начале месяца"() {
         expect:
-        DateUtil.monthStart() == result
+        DateUtil.generator().monthStart() == result
         where:
-        result << Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        result << Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
     }
 
     def "Получение даты в начале месяца (в Москве)"() {
         expect:
-        DateUtil.monthStart() == result
+        DateUtil.generator().monthStart() == result
         where:
         zone                       | result
-        ZoneId.of("Europe/Moscow") | Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        ZoneId.of("Europe/Moscow") | Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
     }
 
     def "Количество дней между датами"() {
@@ -119,14 +141,14 @@ class DateUtilSpec extends Specification {
 
     def "Начало сегодня"() {
         expect:
-        DateUtil.todayBegin() == result
+        DateUtil.generator().todayBegin() == result
         where:
-        result << Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant());
+        result << Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant())
     }
 
     def "Форматим название месяца"() {
         expect:
-        DateUtil.format(date, format) == result
+        DateUtil.formatter().format(date, format) == result
         where:
         date                             | format             | result
         sdf.parse("02.05.2015 00:00:00") | "«dd» MMMM yyyyг." | "«02» мая 2015г."
@@ -135,11 +157,11 @@ class DateUtilSpec extends Specification {
 
     def "Форматирование с таймзоной"() {
         expect:
-        DateUtil.format(timeZone, date, format) == result
+        DateUtil.formatter(zoneId).format(date, format) == result
         where:
-        timeZone                              | date                             | format                || result
-        TimeZone.default                      | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
-        TimeZone.getTimeZone('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
+        zoneId                     | date                             | format                || result
+        ZoneId.systemDefault()     | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
+        ZoneId.of('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
     }
 
     def "Получение дня недели"() {
@@ -169,7 +191,7 @@ class DateUtilSpec extends Specification {
         given:
         def date = new Date()
         when:
-        def result = DateUtil.convert(date)
+        def result = DateUtil.converter().get(date)
         println(date)
         println(result)
         then:
@@ -181,7 +203,7 @@ class DateUtilSpec extends Specification {
         given:
         def date = LocalDateTime.now()
         when:
-        def result = DateUtil.convert(date)
+        def result = DateUtil.converter().get(date)
         println(date)
         println(result)
         then:
@@ -191,30 +213,30 @@ class DateUtilSpec extends Specification {
 
     def "Parse with default pattern"() {
         when:
-        def date = DateUtil.parse("27.09.1985", DateUtil.CALENDAR_DATE_PATTERN)
+        def date = DateUtil.parser().parse("27.09.1985", false)
         then:
-        DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 00:00:00"
+        DateUtil.formatter().format(date, true) == "27.09.1985 00:00:00"
     }
 
     def "Parse with default pattern (in method)"() {
         when:
-        def date = DateUtil.parse("27.09.1985")
+        def date = DateUtil.parser().parse("27.09.1985", false)
         then:
-        DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 00:00:00"
+        DateUtil.formatter().format(date, true) == "27.09.1985 00:00:00"
     }
 
     def "Parse with default pattern (in method) with time"() {
         when:
-        def date = DateUtil.parseWithTime("27.09.1985 23:20:15")
+        def date = DateUtil.parser().parse("27.09.1985 23:20:15", true)
         then:
-        DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 23:20:15"
+        DateUtil.formatter().format(date, true) == "27.09.1985 23:20:15"
     }
 
     def "Parse with invalid date"() {
         when:
-        def date = DateUtil.parse("27.09.1985 10:20:30", DateUtil.CALENDAR_DATE_PATTERN)
+        def date = DateUtil.parser().parse("27.09.1985 10:20:30", false)
         then:
-        DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 00:00:00"
+        DateUtil.formatter().format(date, true) == "27.09.1985 00:00:00"
     }
 
     def "Pretty - one year"() {

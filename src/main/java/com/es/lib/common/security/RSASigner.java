@@ -20,6 +20,8 @@ package com.es.lib.common.security;
 import com.es.lib.common.Constant;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
@@ -35,17 +37,17 @@ public final class RSASigner {
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
     private final String algoritm;
-    private final String charset;
+    private final Charset charset;
 
     public RSASigner(PrivateKey privateKey, PublicKey publicKey) {
-        this(privateKey, publicKey, "SHA1withRSA", Constant.DEFAULT_ENCODING);
+        this(privateKey, publicKey, "SHA1withRSA", StandardCharsets.UTF_8);
     }
 
     public RSASigner(PrivateKey privateKey, PublicKey publicKey, String algorithm) {
-        this(privateKey, publicKey, algorithm, Constant.DEFAULT_ENCODING);
+        this(privateKey, publicKey, algorithm, StandardCharsets.UTF_8);
     }
 
-    public RSASigner(PrivateKey privateKey, PublicKey publicKey, String algoritm, String charset) {
+    public RSASigner(PrivateKey privateKey, PublicKey publicKey, String algoritm, Charset charset) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
         this.algoritm = algoritm;

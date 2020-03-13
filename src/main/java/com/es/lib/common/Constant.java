@@ -16,6 +16,9 @@
 
 package com.es.lib.common;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Base constants
  *
@@ -25,9 +28,31 @@ package com.es.lib.common;
 public interface Constant {
 
     /**
+     * Default timezone prefixes
+     */
+    String DEFAULT_ZONES_PREFIXES = "^(Africa|America|Asia|Atlantic|Australia|Europe|Indian|Pacific)/.*";
+    /**
+     * Default date pattern
+     */
+    String DEFAULT_DATE_PATTERN = "dd.MM.yyyy";
+    /**
+     * Default date pattern with time
+     */
+    String DEFAULT_DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
+
+    /**
+     * Sortable date pattern with time
+     */
+    String SORTABLE_DATE_TIME_PATTERN = "yyyy.MM.dd HH:mm:ss";
+    /**
+     * Sortable date pattern
+     */
+    String SORTABLE_DATE_PATTERN = "yyyy.MM.dd";
+
+    /**
      * Default encoding
      */
-    String DEFAULT_ENCODING = "utf8";
+    Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
     /**
      * Default autocomplete size
      */
@@ -44,4 +69,11 @@ public interface Constant {
      * Max days count in month
      */
     int MAX_MONTH_DAYS = 31;
+
+    int SECONDS_IN_MINUTE = 60;
+    int MINUTES_IN_HOUR = 60;
+    int HOURS_IN_DAY = 24;
+    int SECONDS_IN_HOUR = SECONDS_IN_MINUTE * MINUTES_IN_HOUR;
+    int MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR;
+    int SECONDS_IN_DAY = MINUTES_IN_DAY * SECONDS_IN_HOUR;
 }

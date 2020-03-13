@@ -16,7 +16,6 @@
 
 package com.es.lib.common.file;
 
-import com.es.lib.common.Constant;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +24,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -70,7 +70,7 @@ public final class FileUtil {
 
     public static Map.Entry<String, Long> readCrc32(InputStream inputStream) throws IOException {
         try (CheckedInputStream cis = new CheckedInputStream(inputStream, new CRC32())) {
-            String value = IOUtils.toString(cis, Constant.DEFAULT_ENCODING);
+            String value = IOUtils.toString(cis, StandardCharsets.UTF_8);
             return Pair.of(value, cis.getChecksum().getValue());
         }
     }
@@ -83,11 +83,7 @@ public final class FileUtil {
     }
 
     public static String toString(InputStream inputStream) throws IOException {
-        return toString(inputStream, Constant.DEFAULT_ENCODING);
-    }
-
-    public static String toString(InputStream inputStream, String encoding) throws IOException {
-        return IOUtils.toString(inputStream, encoding);
+        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
     public static byte[] toBytes(InputStream inputStream) throws IOException {
