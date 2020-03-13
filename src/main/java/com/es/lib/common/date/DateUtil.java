@@ -395,10 +395,6 @@ public final class DateUtil {
         return new DateBuilder(timeZone);
     }
 
-    public static DateBuilder builder(Calendar calendar) {
-        return new DateBuilder(calendar);
-    }
-
     public static TimeConverter timeConverter() {
         return TimeConverter.getInstance();
     }

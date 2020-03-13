@@ -32,10 +32,6 @@ public class DateBuilder {
         calendar = Calendar.getInstance(timeZone);
     }
 
-    DateBuilder(Calendar calendar) {
-        this.calendar = calendar;
-    }
-
     public DateBuilder clearTime() {
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
