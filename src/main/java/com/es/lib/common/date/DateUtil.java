@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -148,8 +149,16 @@ public final class DateUtil {
         return pretty(false);
     }
 
+    public static PrettyInterval pretty(BiFunction<PrettyInterval.DurationType, Long, String> localization) {
+        return pretty(false, localization);
+    }
+
     public static PrettyInterval pretty(boolean useBraces) {
-        return new PrettyInterval(useBraces);
+        return pretty(useBraces, null);
+    }
+
+    public static PrettyInterval pretty(boolean useBraces, BiFunction<PrettyInterval.DurationType, Long, String> localization) {
+        return new PrettyInterval(useBraces, localization);
     }
 
 
