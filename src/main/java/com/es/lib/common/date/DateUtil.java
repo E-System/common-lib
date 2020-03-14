@@ -57,10 +57,11 @@ public final class DateUtil {
     }
 
     public static boolean contains(Date startDate, Date endDate, Date date, ZoneId zoneId) {
-        LocalDateTime start = LocalDateTime.ofInstant(startDate.toInstant(), zoneId);
-        LocalDateTime end = endDate != null ? LocalDateTime.ofInstant(endDate.toInstant(), zoneId) : null;
-        LocalDateTime dt = LocalDateTime.ofInstant(date.toInstant(), zoneId);
-        return dt.isAfter(start) && !(end != null && !dt.isBefore(end));
+        return contains(
+            LocalDateTime.ofInstant(startDate.toInstant(), zoneId),
+            endDate != null ? LocalDateTime.ofInstant(endDate.toInstant(), zoneId) : null,
+            LocalDateTime.ofInstant(date.toInstant(), zoneId)
+        );
     }
 
     public static boolean contains(LocalDateTime startDate, LocalDateTime endDate, LocalDateTime date) {
