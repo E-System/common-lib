@@ -37,7 +37,7 @@ public class DateRange {
     private final Date dend;
 
     public String getIntervalString() {
-        DateFormatter formatter = DateUtil.formatter();
+        DateFormatter formatter = Dates.formatter();
         return formatter.format(getDbegin(), false) + "|" + formatter.format(getDend(), false);
     }
 
@@ -46,8 +46,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().build(),
-                    DateUtil.builder(zoneId).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
+                    Dates.builder(zoneId).clearTime().build(),
+                    Dates.builder(zoneId).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
@@ -55,8 +55,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().addDayOfMonth(-1).build(),
-                    DateUtil.builder(zoneId).clearTime().addDayOfMonth(lastNextDay ? 0 : -1).build()
+                    Dates.builder(zoneId).clearTime().addDayOfMonth(-1).build(),
+                    Dates.builder(zoneId).clearTime().addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
@@ -64,8 +64,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().addDayOfMonth(-7).build(),
-                    DateUtil.builder(zoneId).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
+                    Dates.builder(zoneId).clearTime().addDayOfMonth(-7).build(),
+                    Dates.builder(zoneId).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
@@ -73,8 +73,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().setDayOfWeek(Calendar.MONDAY).build(),
-                    DateUtil.builder(zoneId).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(lastNextDay ? 1 : 0).build()
+                    Dates.builder(zoneId).clearTime().setDayOfWeek(Calendar.MONDAY).build(),
+                    Dates.builder(zoneId).clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
@@ -82,8 +82,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build(),
-                    DateUtil.builder(zoneId).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(lastNextDay ? 1 : 0).build()
+                    Dates.builder(zoneId).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build(),
+                    Dates.builder(zoneId).clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
@@ -91,8 +91,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).build(),
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).addMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).build(),
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).addMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
@@ -100,8 +100,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().addMonth(-1).setDayOfMonth(1).build(),
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
+                    Dates.builder(zoneId).clearTime().addMonth(-1).setDayOfMonth(1).build(),
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
@@ -109,8 +109,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).build(),
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).addMonth(3).addDayOfMonth(lastNextDay ? 0 : -1).build()
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).build(),
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).addMonth(3).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
@@ -118,8 +118,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).addMonth(-3).build(),
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).addMonth(-3).build(),
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         },
@@ -127,8 +127,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).setMonth(0).build(),
-                    DateUtil.builder(zoneId).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).setMonth(0).build(),
+                    Dates.builder(zoneId).clearTime().addDayOfMonth(lastNextDay ? 1 : 0).build()
                 );
             }
         },
@@ -136,8 +136,8 @@ public class DateRange {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
                 return new DateRange(
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build(),
-                    DateUtil.builder(zoneId).clearTime().setDayOfMonth(1).setMonth(0).addDayOfMonth(lastNextDay ? 0 : -1).build()
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build(),
+                    Dates.builder(zoneId).clearTime().setDayOfMonth(1).setMonth(0).addDayOfMonth(lastNextDay ? 0 : -1).build()
                 );
             }
         };

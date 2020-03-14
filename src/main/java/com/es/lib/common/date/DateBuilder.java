@@ -34,60 +34,63 @@ public class DateBuilder {
     }
 
     public DateBuilder clearTime() {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return this;
+        return set(Calendar.HOUR_OF_DAY, 0)
+            .set(Calendar.MINUTE, 0)
+            .set(Calendar.SECOND, 0)
+            .set(Calendar.MILLISECOND, 0);
     }
 
     public DateBuilder addDayOfMonth(int days) {
-        calendar.add(Calendar.DAY_OF_MONTH, days);
-        return this;
+        return add(Calendar.DAY_OF_MONTH, days);
     }
 
     public DateBuilder setDayOfMonth(int day) {
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        return this;
+        return set(Calendar.DAY_OF_MONTH, day);
     }
 
     public DateBuilder setDayOfWeek(int day) {
-        calendar.set(Calendar.DAY_OF_WEEK, day);
-        return this;
+        return set(Calendar.DAY_OF_WEEK, day);
     }
 
     public DateBuilder addDayOfWeek(int days) {
-        calendar.add(Calendar.DAY_OF_WEEK, days);
-        return this;
+        return add(Calendar.DAY_OF_WEEK, days);
     }
 
     public DateBuilder addWeekOfMonth(int weeks) {
-        calendar.add(Calendar.WEEK_OF_MONTH, weeks);
-        return this;
+        return add(Calendar.WEEK_OF_MONTH, weeks);
     }
 
     public DateBuilder setWeekOfMonth(int week) {
-        calendar.set(Calendar.WEEK_OF_MONTH, week);
-        return this;
+        return set(Calendar.WEEK_OF_MONTH, week);
     }
 
     public DateBuilder addMonth(int months) {
-        calendar.add(Calendar.MONTH, months);
-        return this;
+        return add(Calendar.MONTH, months);
     }
 
     public DateBuilder setMonth(int month) {
-        calendar.set(Calendar.MONTH, month);
-        return this;
+        return set(Calendar.MONTH, month);
     }
 
     public DateBuilder addYear(int year) {
-        calendar.add(Calendar.YEAR, year);
-        return this;
+        return add(Calendar.YEAR, year);
     }
 
     public DateBuilder setYear(int year) {
-        calendar.set(Calendar.YEAR, year);
+        return set(Calendar.YEAR, year);
+    }
+
+    public DateBuilder setHourOfDay(Integer hour) {
+        return set(Calendar.HOUR_OF_DAY, hour != null ? hour : 0);
+    }
+
+    public DateBuilder add(int field, int amount) {
+        calendar.add(field, amount);
+        return this;
+    }
+
+    public DateBuilder set(int field, Integer amount) {
+        calendar.set(field, amount != null ? amount : 0);
         return this;
     }
 

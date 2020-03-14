@@ -37,7 +37,7 @@ class PrettySpec extends Specification {
         when:
         def date = LocalDateTime.now()
         def nextDate = date.plusYears(1)
-        def result = DateUtil.pretty(false).get(date, nextDate)
+        def result = Dates.pretty(false).get(date, nextDate)
         then:
         result == (date.getDayOfMonth() == 29 && date.getMonth() == Month.FEBRUARY ? '11 мес. 30 дн.' : '1 год')
     }
@@ -46,7 +46,7 @@ class PrettySpec extends Specification {
         when:
         def date = LocalDateTime.now()
         def nextDate = date.plusYears(1).plusDays(1)
-        def result = DateUtil.pretty(false).get(date, nextDate)
+        def result = Dates.pretty(false).get(date, nextDate)
         then:
         result == '1 год 1 дн.'
     }
@@ -55,7 +55,7 @@ class PrettySpec extends Specification {
         when:
         def date = LocalDateTime.now()
         def nextDate = date.plusYears(1).plusDays(1)
-        def result = DateUtil.pretty(false, LOCALIZATION).get(date, nextDate)
+        def result = Dates.pretty(false, LOCALIZATION).get(date, nextDate)
         then:
         result == '1 year 1 d.'
     }
@@ -64,7 +64,7 @@ class PrettySpec extends Specification {
         when:
         def date = LocalDateTime.now()
         def nextDate = date.plusYears(1).plusDays(1).plusHours(2)
-        def result = DateUtil.pretty(false).get(date, nextDate)
+        def result = Dates.pretty(false).get(date, nextDate)
         then:
         result == '1 год 1 дн. 2 ч.'
     }
@@ -73,7 +73,7 @@ class PrettySpec extends Specification {
         when:
         def date = LocalDateTime.now()
         def nextDate = date.plusHours(2)
-        def result = DateUtil.pretty(false).get(date, nextDate)
+        def result = Dates.pretty(false).get(date, nextDate)
         then:
         result == '2 ч.'
     }
@@ -82,7 +82,7 @@ class PrettySpec extends Specification {
         when:
         def date = LocalDateTime.now()
         def nextDate = date.plusHours(2).plusMinutes(11).plusSeconds(34)
-        def result = DateUtil.pretty(false).get(date, nextDate)
+        def result = Dates.pretty(false).get(date, nextDate)
         then:
         result == '2 ч. 11 м. 34 c.'
     }
@@ -91,7 +91,7 @@ class PrettySpec extends Specification {
         when:
         def date = LocalDateTime.now()
         def nextDate = date.plusHours(2).plusMinutes(11).plusSeconds(34)
-        def result = DateUtil.pretty(true).get(date, nextDate)
+        def result = Dates.pretty(true).get(date, nextDate)
         then:
         result == '(2 ч. 11 м. 34 c.)'
     }

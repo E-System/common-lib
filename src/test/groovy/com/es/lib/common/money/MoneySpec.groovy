@@ -6,11 +6,11 @@ import spock.lang.Specification
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 04.04.2018
  */
-class MoneyUtilSpec extends Specification {
+class MoneySpec extends Specification {
 
     def "Exclude tax double"() {
         expect:
-        MoneyUtil.taxExclude(value as double, percent as double, onlyPercent) == result as double
+        Money.taxExclude(value as double, percent as double, onlyPercent) == result as double
         where:
         value      | percent | onlyPercent || result
         0.0d       | 0.0d    | true        || 0.0d
@@ -43,7 +43,7 @@ class MoneyUtilSpec extends Specification {
 
     def "Exclude tax long"() {
         expect:
-        MoneyUtil.taxExclude(value as long, percent as double, onlyPercent) == result as long
+        Money.taxExclude(value as long, percent as double, onlyPercent) == result as long
         where:
         value | percent | onlyPercent || result
         0L    | 0.0d    | true        || 0L
@@ -74,7 +74,7 @@ class MoneyUtilSpec extends Specification {
 
     def "Exclude tax int"() {
         expect:
-        MoneyUtil.taxExclude(value as int, percent as double, onlyPercent) == result as int
+        Money.taxExclude(value as int, percent as double, onlyPercent) == result as int
         where:
         value | percent | onlyPercent || result
         0     | 0.0d    | true        || 0
@@ -105,7 +105,7 @@ class MoneyUtilSpec extends Specification {
 
     def "Include tax double"() {
         expect:
-        MoneyUtil.taxInclude(value as double, percent as double, onlyPercent) == result as double
+        Money.taxInclude(value as double, percent as double, onlyPercent) == result as double
         where:
         value      | percent | onlyPercent || result
         0.0d       | 0.0d    | true        || 0.0d
@@ -138,7 +138,7 @@ class MoneyUtilSpec extends Specification {
 
     def "Include tax long"() {
         expect:
-        MoneyUtil.taxInclude(value as long, percent as double, onlyPercent) == result as long
+        Money.taxInclude(value as long, percent as double, onlyPercent) == result as long
         where:
         value | percent | onlyPercent || result
         0L    | 0.0d    | true        || 0L
@@ -169,7 +169,7 @@ class MoneyUtilSpec extends Specification {
 
     def "Include tax int"() {
         expect:
-        MoneyUtil.taxInclude(value as int, percent as double, onlyPercent) == result as int
+        Money.taxInclude(value as int, percent as double, onlyPercent) == result as int
         where:
         value | percent | onlyPercent || result
         0     | 0.0d    | true        || 0
@@ -200,7 +200,7 @@ class MoneyUtilSpec extends Specification {
 
     def "Format"() {
         expect:
-        MoneyUtil.format().convert(a) == b
+        Money.format().convert(a) == b
         where:
         a           | b
         0.01d       | "ноль рублей 01 копейка"
@@ -229,7 +229,7 @@ class MoneyUtilSpec extends Specification {
 
     def "Format BYN RUS"() {
         expect:
-        MoneyUtil.format("BYN").convert(a) == b
+        Money.format("BYN").convert(a) == b
         where:
         a           | b
         0.01d       | "ноль белорусских рублей 01 копейка"
@@ -257,7 +257,7 @@ class MoneyUtilSpec extends Specification {
 
     def "Format BYN RUS names"() {
         expect:
-        MoneyUtil.format("BYN").convertName(a) == b
+        Money.format("BYN").convertName(a) == b
         where:
         a           | b
         0.01d       | "белорусских рублей"
@@ -285,21 +285,21 @@ class MoneyUtilSpec extends Specification {
 
     def "String without numbers"() {
         expect:
-        MoneyUtil.formatFullText().convert(1234.10) == 'одна тысяча двести тридцать четыре рубля десять копеек'
+        Money.formatFullText().convert(1234.10) == 'одна тысяча двести тридцать четыре рубля десять копеек'
     }
 
     def "In end is pennies"() {
         expect:
-        MoneyUtil.formatFullText().convert(1234.10).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.11).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.12).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.13).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.14).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.15).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.16).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.17).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.18).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.19).endsWith('копеек')
-        MoneyUtil.formatFullText().convert(1234.20).endsWith('копеек')
+        Money.formatFullText().convert(1234.10).endsWith('копеек')
+        Money.formatFullText().convert(1234.11).endsWith('копеек')
+        Money.formatFullText().convert(1234.12).endsWith('копеек')
+        Money.formatFullText().convert(1234.13).endsWith('копеек')
+        Money.formatFullText().convert(1234.14).endsWith('копеек')
+        Money.formatFullText().convert(1234.15).endsWith('копеек')
+        Money.formatFullText().convert(1234.16).endsWith('копеек')
+        Money.formatFullText().convert(1234.17).endsWith('копеек')
+        Money.formatFullText().convert(1234.18).endsWith('копеек')
+        Money.formatFullText().convert(1234.19).endsWith('копеек')
+        Money.formatFullText().convert(1234.20).endsWith('копеек')
     }
 }

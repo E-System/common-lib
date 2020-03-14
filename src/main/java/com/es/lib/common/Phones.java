@@ -32,12 +32,12 @@ import java.util.stream.Collectors;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 11.08.15
  */
-public final class PhoneUtil {
+public final class Phones {
 
     private static final Function<String, Map.Entry<String, Boolean>> typeMapper = v -> Pair.of(v, isMobile(v));
     private static final Function<String, Map.Entry<String, Boolean>> cleanTypeMapper = v -> Pair.of(clean(v), isMobile(v));
 
-    private PhoneUtil() { }
+    private Phones() { }
 
     /**
      * Clean phone number (remove spaces, braces, dashes...)

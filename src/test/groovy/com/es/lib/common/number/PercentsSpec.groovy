@@ -16,18 +16,44 @@
 
 package com.es.lib.common.number
 
-import com.es.lib.common.number.PercentUtil
 import spock.lang.Specification
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 18.07.15
  */
-class PercentUtilSpec extends Specification {
+class PercentsSpec extends Specification {
+
+    def "Get percent value"() {
+        expect:
+        Percents.value(v1 as int, v2 as int) == result
+        where:
+        v1  | v2  || result
+        100 | 200 || 50.0
+        20  | 200 || 10.0
+        0   | 100 || 0.0
+        100 | 0   || 0.0
+        1   | 100 || 1.0
+    }
+
+    def "Get percent value (BigDecimal) with null"() {
+        expect:
+        Percents.value(v1 as BigDecimal, v2 as BigDecimal) == result
+        where:
+        v1   | v2   || result
+        100  | 200  || 50.0
+        20   | 200  || 10.0
+        0    | 100  || 0.0
+        100  | 0    || 0.0
+        1    | 100  || 1.0
+        null | 100  || 0
+        100  | null || 0
+        null | null || 0
+    }
 
     def "Get int percent value"() {
         expect:
-        PercentUtil.get(value1 as int, value2 as double) == result as int
+        Percents.get(value1 as int, value2 as double) == result as int
         where:
         value1 | value2 || result
         0      | 0.0d   || 0
@@ -43,7 +69,7 @@ class PercentUtilSpec extends Specification {
 
     def "Get long percent value"() {
         expect:
-        PercentUtil.get(value1 as long, value2 as double) == result as long
+        Percents.get(value1 as long, value2 as double) == result as long
         where:
         value1 | value2 || result
         0L     | 0.0d   || 0L
@@ -59,7 +85,7 @@ class PercentUtilSpec extends Specification {
 
     def "Get int percent with int percent value"() {
         expect:
-        PercentUtil.get(value, percent) == result
+        Percents.get(value, percent) == result
         where:
         value | percent || result
         0     | 0        | 0
@@ -72,7 +98,7 @@ class PercentUtilSpec extends Specification {
 
     def "Get int value + value percent"() {
         expect:
-        PercentUtil.getTotal(value1 as int, value2 as double) == result as int
+        Percents.getTotal(value1 as int, value2 as double) == result as int
         where:
         value1 | value2 || result
         0      | 0.0d   || 0
@@ -88,7 +114,7 @@ class PercentUtilSpec extends Specification {
 
     def "Get long value + value percent"() {
         expect:
-        PercentUtil.getTotal(value1 as long, value2 as double) == result as long
+        Percents.getTotal(value1 as long, value2 as double) == result as long
         where:
         value1 | value2 || result
         0L     | 0.0d   || 0L
@@ -104,7 +130,7 @@ class PercentUtilSpec extends Specification {
 
     def "Get double percent from value"() {
         expect:
-        PercentUtil.getDecimal(value, percent) == result
+        Percents.getDecimal(value, percent) == result
         where:
         value | percent || result
         0     | 0        | 0

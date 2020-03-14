@@ -28,6 +28,18 @@ import java.nio.charset.StandardCharsets;
 public interface Constant {
 
     /**
+     * Default grouping size (Example 1 000 000.12)
+     */
+    int DEFAULT_GROUPING_SIZE = 3;
+    /**
+     * Default decimal count (Example 10.12)
+     */
+    int DEFAULT_DECIMAL_COUNT = 2;
+    int DEFAULT_SCALE = 6;
+    int PRECISED_SCALE = 7;
+
+    long SCALED_LONG_MULTIPLIER = 1000000;
+    /**
      * Default timezone prefixes
      */
     String DEFAULT_ZONES_PREFIXES = "^(Africa|America|Asia|Atlantic|Australia|Europe|Indian|Pacific)/.*";
@@ -76,4 +88,8 @@ public interface Constant {
     int SECONDS_IN_HOUR = SECONDS_IN_MINUTE * MINUTES_IN_HOUR;
     int MINUTES_IN_DAY = HOURS_IN_DAY * MINUTES_IN_HOUR;
     int SECONDS_IN_DAY = MINUTES_IN_DAY * SECONDS_IN_HOUR;
+
+    long MILLIS_IN_SECOND = 1000;
+    long MILLIS_IN_MINUTE = SECONDS_IN_MINUTE * MILLIS_IN_SECOND;
+    long MILLIS_IN_HOUR = MINUTES_IN_HOUR * MILLIS_IN_MINUTE;
 }

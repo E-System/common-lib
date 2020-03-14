@@ -59,14 +59,14 @@ public class EntityClassExtractor<T> implements Serializable {
         if (type instanceof ParameterizedType) {
             return extractParametrized(type, index);
         }
-        throw new IllegalArgumentException("ENTITY CLASS NOT DETERMINED");
+        throw new IllegalArgumentException("Generic type with index " + index + " not determined");
     }
 
     protected <K> Class<K> extractParametrized(Type type, int index) {
         ParameterizedType paramType = (ParameterizedType) type;
         if (paramType.getActualTypeArguments().length == 2) {
             if (paramType.getActualTypeArguments()[index] instanceof TypeVariable) {
-                throw new IllegalArgumentException("ENTITY CLASS NOT DETERMINED");
+                throw new IllegalArgumentException("Generic type with index " + index + " not determined on type " + type);
             } else {
                 return (Class<K>) paramType.getActualTypeArguments()[index];
             }

@@ -34,7 +34,7 @@ public class DateFormatter extends DateProcessor {
     }
 
     public String now(String format) {
-        return format(DateUtil.generator(zoneId).now(), format);
+        return format(Dates.generator(zoneId).now(), format);
     }
 
     public String yearIndex(Date date) {

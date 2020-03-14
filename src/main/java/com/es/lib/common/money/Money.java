@@ -4,9 +4,9 @@ package com.es.lib.common.money;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 04.04.2018
  */
-public final class MoneyUtil {
+public final class Money {
 
-    private MoneyUtil() {}
+    private Money() {}
 
     public static MoneyToStr formatFullText() {
         return formatFullText("RUB");

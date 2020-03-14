@@ -14,21 +14,24 @@
  *    limitations under the License.
  */
 
-package com.es.lib.common.exception;
+package com.es.lib.common.reflection;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
- * @since 16.07.15
+ * @since 10.04.15
  */
-public final class ExceptionUtil {
+public class EntityClassExtractor2<T1, T2> extends EntityClassExtractor<T1> {
 
-    private ExceptionUtil() { }
+    private Class<T2> secondEntityClass;
 
-    public static Throwable getRootCause(Throwable t) {
-        Throwable cur = t;
-        while (cur.getCause() != null) {
-            cur = cur.getCause();
+    public Class<T2> getSecondEntityClass() {
+        if (secondEntityClass == null) {
+            secondEntityClass = extractClass(1);
         }
-        return cur;
+        return secondEntityClass;
+    }
+
+    public T2 createSecondInstance() {
+        return create(getSecondEntityClass());
     }
 }

@@ -1,5 +1,6 @@
 package com.es.lib.common.date;
 
+import com.es.lib.common.Constant;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -8,10 +9,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 public final class TimeConverter {
 
-    public static final long MULTIPLIER_MILLISECOND = 1000;
-    public static final long MULTIPLIER_MINUTE = 60 * MULTIPLIER_MILLISECOND;
-    public static final long MULTIPLIER_HOUR = 60 * MULTIPLIER_MINUTE;
-
     private TimeConverter() { }
 
     public static TimeConverter getInstance() {
@@ -19,11 +16,11 @@ public final class TimeConverter {
     }
 
     public String toString(long value) {
-        long hours = value / MULTIPLIER_HOUR;
-        value %= MULTIPLIER_HOUR;
-        long mins = value / MULTIPLIER_MINUTE;
-        value %= MULTIPLIER_MINUTE;
-        long secs = value / MULTIPLIER_MILLISECOND;
+        long hours = value / Constant.MILLIS_IN_HOUR;
+        value %= Constant.MILLIS_IN_HOUR;
+        long mins = value / Constant.MILLIS_IN_MINUTE;
+        value %= Constant.MILLIS_IN_MINUTE;
+        long secs = value / Constant.MILLIS_IN_SECOND;
         return String.format("%02d", hours) + ":" +
                String.format("%02d", mins) +
                (secs == 0 ? "" : (":" + String.format("%02d", secs)));
@@ -39,14 +36,14 @@ public final class TimeConverter {
             return null;
         }
         long hours = parse(values[0]);
-        result += hours * MULTIPLIER_HOUR;
+        result += hours * Constant.MILLIS_IN_HOUR;
         if (values.length > 1) {
             long min = parse(values[1]);
-            result += min * MULTIPLIER_MINUTE;
+            result += min * Constant.MILLIS_IN_MINUTE;
         }
         if (values.length > 2) {
             long sec = parse(values[2]);
-            result += sec * MULTIPLIER_MILLISECOND;
+            result += sec * Constant.MILLIS_IN_SECOND;
         }
         return result;
     }

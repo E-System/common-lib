@@ -23,11 +23,11 @@ import spock.lang.Specification
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 11.08.15
  */
-class PhoneUtilSpec extends Specification {
+class PhonesSpec extends Specification {
 
     def "Clean number"() {
         expect:
-        PhoneUtil.clean(value) == result
+        Phones.clean(value) == result
         where:
         value              || result
         null               || null
@@ -39,7 +39,7 @@ class PhoneUtilSpec extends Specification {
 
     def "Check on mobile phone"() {
         expect:
-        PhoneUtil.isMobile(value) == result
+        Phones.isMobile(value) == result
         where:
         value              || result
         null               || false
@@ -55,7 +55,7 @@ class PhoneUtilSpec extends Specification {
 
     def "Split input to array of numbers"() {
         expect:
-        PhoneUtil.split(value, clean) == result
+        Phones.split(value, clean) == result
         where:
         value                                | clean || result
         ""                                   | false || []
@@ -66,7 +66,7 @@ class PhoneUtilSpec extends Specification {
 
     def "Join numbers by types"() {
         expect:
-        PhoneUtil.joinByType(values, ", ") == result
+        Phones.joinByType(values, ", ") == result
         where:
         values                                                                                  || result
         []                                                                                      || null
@@ -76,7 +76,7 @@ class PhoneUtilSpec extends Specification {
 
     def "Split numbers by types"() {
         expect:
-        PhoneUtil.groupByType(values, false, ", ") == result
+        Phones.groupByType(values, false, ", ") == result
         where:
         values                                            || result
         ""                                                || null
@@ -87,7 +87,7 @@ class PhoneUtilSpec extends Specification {
 
     def "Format number"() {
         expect:
-        PhoneUtil.format(value, mask, full) == result
+        Phones.format(value, mask, full) == result
         where:
         value        | mask               | full  || result
         null         | null               | true  || ''

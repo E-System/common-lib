@@ -20,18 +20,18 @@ package com.es.lib.common.reflection;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
-public class DoubleEntityClassExtractor<T1, T2> extends EntityClassExtractor<T1> {
+public class EntityClassExtractor3<T1, T2, T3> extends EntityClassExtractor2<T1, T2> {
 
-    private Class<T2> secondEntityClass;
+    private Class<T3> thirdEntityClass;
 
-    public Class<T2> getSecondEntityClass() {
-        if (secondEntityClass == null) {
-            secondEntityClass = extractClass(1);
+    public Class<T3> getThirdEntityClass() {
+        if (thirdEntityClass == null) {
+            thirdEntityClass = extractClass(2);
         }
-        return secondEntityClass;
+        return thirdEntityClass;
     }
 
-    public T2 createSecondInstance() {
-        return create(getSecondEntityClass());
+    public T3 createThirdInstance() {
+        return create(getThirdEntityClass());
     }
 }

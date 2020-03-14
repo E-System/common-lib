@@ -35,9 +35,9 @@ import java.util.stream.Stream;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
-public final class DateUtil {
+public final class Dates {
 
-    private DateUtil() {}
+    private Dates() {}
 
     public static boolean isZoneValid(String id) {
         try {

@@ -16,15 +16,56 @@
 
 package com.es.lib.common.number;
 
+import java.math.BigDecimal;
+
 /**
  * Calculate percent
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 07.11.15
  */
-public final class PercentUtil {
+public final class Percents {
 
-    private PercentUtil() { }
+    private Percents() { }
+
+    /**
+     * Get percent of part in full
+     *
+     * @param part Part sum
+     * @param full Full sum
+     * @return Percent of part in full (part / full)
+     */
+    public static BigDecimal value(double part, double full) {
+        if (full == 0.0) {
+            return BigDecimal.ZERO;
+        }
+        return BigDecimal.valueOf((part / full) * 100);
+    }
+
+    /**
+     * Get percent of part in full
+     *
+     * @param part Part sum
+     * @param full Full sum
+     * @return Percent of part in full (part / full)
+     */
+    public static BigDecimal value(BigDecimal part, BigDecimal full) {
+        if (part == null || full == null) {
+            return BigDecimal.ZERO;
+        }
+        return value(part.doubleValue(), full.doubleValue());
+    }
+
+    /**
+     * Get percent of part in full
+     *
+     * @param part Part sum
+     * @param full Full sum
+     * @return Percent of part in full (part / full)
+     */
+    public static BigDecimal value(int part, int full) {
+        return value(part * 1.0d, full * 1.0d);
+    }
 
     /**
      * Calculate int percent form value

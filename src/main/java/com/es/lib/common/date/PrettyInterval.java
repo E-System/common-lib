@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,7 @@ public final class PrettyInterval {
     }
 
     public String get(Date date) {
-        return get(DateUtil.converter().get(date));
+        return get(Dates.converter().get(date));
     }
 
     public String get(LocalDateTime date) {
@@ -38,7 +37,7 @@ public final class PrettyInterval {
     }
 
     public String get(Date date, Date dateNext) {
-        DateConverter converter = DateUtil.converter();
+        DateConverter converter = Dates.converter();
         return get(converter.get(date), converter.get(dateNext));
     }
 

@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.io.Reader;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -34,33 +33,37 @@ public final class JsonUtil {
 
     private JsonUtil() { }
 
-    public static <T> T fromJson(String json, Class<T> classOfT) {
+    public static <T> T fromJson(String json, Class<T> classOfT, ObjectMapper objectMapper) {
         try {
-            return OBJECT_MAPPER.readValue(json, classOfT);
+            return objectMapper.readValue(json, classOfT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static <T> T fromJson(Reader reader, Class<T> classOfT) {
-        try {
-            return OBJECT_MAPPER.readValue(reader, classOfT);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static <T> T fromJson(String json, Class<T> classOfT) {
+        return fromJson(json, classOfT, OBJECT_MAPPER);
     }
 
     public static <T> T fromJson(String json, TypeReference<T> typeReference) {
+        return fromJson(json, typeReference, OBJECT_MAPPER);
+    }
+
+    public static <T> T fromJson(String json, TypeReference<T> typeReference, ObjectMapper objectMapper) {
         try {
-            return OBJECT_MAPPER.readValue(json, typeReference);
+            return objectMapper.readValue(json, typeReference);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static String toJson(Object object) {
+        return toJson(object, OBJECT_MAPPER);
+    }
+
+    public static String toJson(Object object, ObjectMapper objectMapper) {
         try {
-            return OBJECT_MAPPER.writeValueAsString(object);
+            return objectMapper.writeValueAsString(object);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

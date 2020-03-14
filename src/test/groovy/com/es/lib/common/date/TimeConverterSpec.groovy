@@ -10,7 +10,7 @@ class TimeConverterSpec extends Specification {
 
     def "AsString"() {
         expect:
-        DateUtil.timeConverter().toString(value) == result
+        Dates.timeConverter().toString(value) == result
         where:
         value   || result
         0       || "00:00"
@@ -24,7 +24,7 @@ class TimeConverterSpec extends Specification {
 
     def "AsLong"() {
         expect:
-        DateUtil.timeConverter().toLong(value) == result
+        Dates.timeConverter().toLong(value) == result
         where:
         value      || result
         null       || null
@@ -41,7 +41,7 @@ class TimeConverterSpec extends Specification {
 
     def "AsLong with masks"() {
         expect:
-        DateUtil.timeConverter().toLong(value) == result
+        Dates.timeConverter().toLong(value) == result
         where:
         value        || result
         null         || null

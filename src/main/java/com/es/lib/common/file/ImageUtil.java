@@ -67,7 +67,6 @@ public final class ImageUtil {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
         log.debug("Input image size: {} - {}", width, height);
-        // Calculate the new Height if not specified
         boolean success;
         if (width > maxWidth) {
             int saveHeight = maxWidth * Math.max(width, height) / Math.min(width, height);
@@ -122,9 +121,5 @@ public final class ImageUtil {
             graphics.drawString(message, Math.round((width - dimension.width) * 0.5f), Math.round((height + dimension.height) * 0.5f));
             graphics.dispose();
         });
-    }
-
-    public static void writeDefaultEmptyImage(int width, int height, OutputStream outputStream) throws IOException {
-        writeDefaultEmptyImage(width, height, "НЕТ ИЗОБРАЖЕНИЯ", outputStream);
     }
 }

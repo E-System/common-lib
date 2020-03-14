@@ -28,7 +28,7 @@ import java.time.temporal.ChronoUnit
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 06.02.15
  */
-class DateUtilSpec extends Specification {
+class DatesSpec extends Specification {
 
     @Shared
     int currentYear = LocalDateTime.now().year
@@ -45,7 +45,7 @@ class DateUtilSpec extends Specification {
 
     def "isZoneValid"() {
         expect:
-        DateUtil.isZoneValid(id) == result
+        Dates.isZoneValid(id) == result
         where:
         id                 || result
         'Asia/Krasnoyarsk' || true
@@ -55,7 +55,7 @@ class DateUtilSpec extends Specification {
 
     def "availableZones"() {
         when:
-        def zones = DateUtil.availableZones()
+        def zones = Dates.availableZones()
         println(zones)
         then:
         zones.contains(ZoneId.of('Asia/Krasnoyarsk'))
@@ -67,7 +67,7 @@ class DateUtilSpec extends Specification {
 
     def "NextDay"() {
         expect:
-        DateUtil.generator(zone).nextDay(date) == result
+        Dates.generator(zone).nextDay(date) == result
         where:
         date                             | zone                       | result
         sdf.parse("06.02.2015 23:30:00") | ZoneId.of("Europe/Moscow") | sdf.parse("07.02.2015 23:30:00")
@@ -75,7 +75,7 @@ class DateUtilSpec extends Specification {
 
     def "Contains"() {
         expect:
-        DateUtil.contains(dbegin, dend, date, timeZone)
+        Dates.contains(dbegin, dend, date, timeZone)
         where:
         dbegin                           | dend                             | date       | timeZone
         sdf.parse("06.02.2015 00:00:00") | sdf.parse("07.02.3015 00:00:00") | new Date() | ZoneId.of("Europe/Moscow")
@@ -83,7 +83,7 @@ class DateUtilSpec extends Specification {
 
     def "IsAfterNow"() {
         expect:
-        DateUtil.isAfterNow(date, zoneId) == result
+        Dates.isAfterNow(date, zoneId) == result
         where:
         date                                                  | zoneId                     | result
         new Date()                                            | ZoneId.systemDefault()     | false
@@ -96,7 +96,7 @@ class DateUtilSpec extends Specification {
 
     def "IsBeforeToday"() {
         expect:
-        DateUtil.isBeforeToday(date) == result
+        Dates.isBeforeToday(date) == result
         where:
         date                                                                 | result
         LocalDateTime.parse("01.01." + (currentYear - 1) + " 23:00:00", dtf) | true
@@ -106,14 +106,14 @@ class DateUtilSpec extends Specification {
 
     def "Получение даты в начале месяца"() {
         expect:
-        DateUtil.generator().monthStart() == result
+        Dates.generator().monthStart() == result
         where:
         result << Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
     }
 
     def "Получение даты в начале месяца (в Москве)"() {
         expect:
-        DateUtil.generator().monthStart() == result
+        Dates.generator().monthStart() == result
         where:
         zone                       | result
         ZoneId.of("Europe/Moscow") | Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
@@ -121,7 +121,7 @@ class DateUtilSpec extends Specification {
 
     def "Количество дней между датами"() {
         expect:
-        DateUtil.between(ChronoUnit.DAYS, start, end) == result
+        Dates.between(ChronoUnit.DAYS, start, end) == result
         where:
         start                            | end                              | result
         new Date()                       | new Date()                       | 0
@@ -131,7 +131,7 @@ class DateUtilSpec extends Specification {
 
     def "Количество часов между датами"() {
         expect:
-        DateUtil.between(ChronoUnit.HOURS, start, end) == result
+        Dates.between(ChronoUnit.HOURS, start, end) == result
         where:
         start                            | end                              | result
         new Date()                       | new Date()                       | 0
@@ -141,14 +141,14 @@ class DateUtilSpec extends Specification {
 
     def "Начало сегодня"() {
         expect:
-        DateUtil.generator().todayBegin() == result
+        Dates.generator().today() == result
         where:
         result << Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant())
     }
 
     def "Форматим название месяца"() {
         expect:
-        DateUtil.formatter().format(date, format) == result
+        Dates.formatter().format(date, format) == result
         where:
         date                             | format             | result
         sdf.parse("02.05.2015 00:00:00") | "«dd» MMMM yyyyг." | "«02» мая 2015г."
@@ -157,7 +157,7 @@ class DateUtilSpec extends Specification {
 
     def "Форматирование с таймзоной"() {
         expect:
-        DateUtil.formatter(zoneId).format(date, format) == result
+        Dates.formatter(zoneId).format(date, format) == result
         where:
         zoneId                     | date                             | format                || result
         ZoneId.systemDefault()     | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
@@ -166,7 +166,7 @@ class DateUtilSpec extends Specification {
 
     def "Получение дня недели"() {
         expect:
-        DateUtil.getWeekDay(year, month, day) == result
+        Dates.getWeekDay(year, month, day) == result
         where:
         year | month | day || result
         2015 | 8     | 10  || DayOfWeek.MONDAY
@@ -180,7 +180,7 @@ class DateUtilSpec extends Specification {
 
     def "Получить номер недели в пределах года"() {
         expect:
-        DateUtil.getWeekNumber(year, month, day) == result
+        Dates.getWeekNumber(year, month, day) == result
         where:
         year | month | day || result
         2015 | 1     | 1   || 1
@@ -191,7 +191,7 @@ class DateUtilSpec extends Specification {
         given:
         def date = new Date()
         when:
-        def result = DateUtil.converter().get(date)
+        def result = Dates.converter().get(date)
         println(date)
         println(result)
         then:
@@ -203,7 +203,7 @@ class DateUtilSpec extends Specification {
         given:
         def date = LocalDateTime.now()
         when:
-        def result = DateUtil.converter().get(date)
+        def result = Dates.converter().get(date)
         println(date)
         println(result)
         then:
@@ -213,29 +213,29 @@ class DateUtilSpec extends Specification {
 
     def "Parse with default pattern"() {
         when:
-        def date = DateUtil.parser().parse("27.09.1985", false)
+        def date = Dates.parser().parse("27.09.1985", false)
         then:
-        DateUtil.formatter().format(date, true) == "27.09.1985 00:00:00"
+        Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
     }
 
     def "Parse with default pattern (in method)"() {
         when:
-        def date = DateUtil.parser().parse("27.09.1985", false)
+        def date = Dates.parser().parse("27.09.1985", false)
         then:
-        DateUtil.formatter().format(date, true) == "27.09.1985 00:00:00"
+        Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
     }
 
     def "Parse with default pattern (in method) with time"() {
         when:
-        def date = DateUtil.parser().parse("27.09.1985 23:20:15", true)
+        def date = Dates.parser().parse("27.09.1985 23:20:15", true)
         then:
-        DateUtil.formatter().format(date, true) == "27.09.1985 23:20:15"
+        Dates.formatter().format(date, true) == "27.09.1985 23:20:15"
     }
 
     def "Parse with invalid date"() {
         when:
-        def date = DateUtil.parser().parse("27.09.1985 10:20:30", false)
+        def date = Dates.parser().parse("27.09.1985 10:20:30", false)
         then:
-        DateUtil.formatter().format(date, true) == "27.09.1985 00:00:00"
+        Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
     }
 }

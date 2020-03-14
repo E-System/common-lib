@@ -38,12 +38,31 @@ public final class SystemUtil {
 
     private SystemUtil() { }
 
+    /**
+     * Sleep thread for timeout (Interrupt current thread if InterruptedException thrown in sleep)
+     *
+     * @param timeout Timeout to sleep
+     */
     public static void sleep(long timeout) {
         try {
             Thread.sleep(timeout);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    /**
+     * Get throwable root cause
+     *
+     * @param t Throwable
+     * @return Root cause ot throwable (Top)
+     */
+    public static Throwable rootCause(Throwable t) {
+        Throwable cur = t;
+        while (cur.getCause() != null) {
+            cur = cur.getCause();
+        }
+        return cur;
     }
 
     /**
@@ -68,7 +87,7 @@ public final class SystemUtil {
     public static String getAppConfigPath(String vendorName, String appName) {
         switch (SystemUtil.getOS()) {
             case WINDOWS:
-                if(StringUtils.isBlank(System.getenv("LOCALAPPDATA"))) {
+                if (StringUtils.isBlank(System.getenv("LOCALAPPDATA"))) {
                     return Paths.get(System.getenv("APPDATA"), vendorName, appName).toString();
                 }
                 return Paths.get(System.getenv("LOCALAPPDATA"), vendorName, appName).toString();
