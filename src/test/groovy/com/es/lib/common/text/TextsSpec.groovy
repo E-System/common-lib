@@ -2,13 +2,12 @@ package com.es.lib.common.text
 
 import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
-import spock.lang.Unroll
 
-class TextUtilSpec extends Specification {
+class TextsSpec extends Specification {
 
     def "Evaluate int"() {
         expect:
-        TextUtil.pluralize(value, str1, str2, str3) == result
+        Texts.pluralize(value, str1, str2, str3) == result
         where:
         value | str1   | str2  | str3   | result
         0     | 'день' | 'дня' | 'дней' | 'дней'
@@ -28,7 +27,7 @@ class TextUtilSpec extends Specification {
 
     def "Evaluate long"() {
         expect:
-        TextUtil.pluralize(value, str1, str2, str3) == result
+        Texts.pluralize(value, str1, str2, str3) == result
         where:
         value | str1   | str2  | str3   | result
         0L    | 'день' | 'дня' | 'дней' | 'дней'
@@ -48,7 +47,7 @@ class TextUtilSpec extends Specification {
 
     def "RemoveDelimiters"() {
         expect:
-        TextUtil.removeDelimiters(value) == result
+        Texts.removeDelimiters(value) == result
         where:
         value          | result
         'г.,'          | 'г'
@@ -61,7 +60,7 @@ class TextUtilSpec extends Specification {
 
     def "ReplaceDelimiters"() {
         expect:
-        TextUtil.replaceDelimiters(value, target) == result
+        Texts.replaceDelimiters(value, target) == result
         where:
         value         | target | result
         'г.,'         | '|'    | 'г||'
@@ -74,7 +73,7 @@ class TextUtilSpec extends Specification {
 
     def "Simple keyboard symbol convert"() {
         expect:
-        TextUtil.keyboard(value, englishToRussian) == result
+        Texts.keyboard(value, englishToRussian) == result
         where:
         value                  | englishToRussian || result
         ""                     | true             || ""
@@ -91,7 +90,7 @@ class TextUtilSpec extends Specification {
 
     def "Simple keyboard symbol convert (upper case with Shift)"() {
         expect:
-        TextUtil.keyboard(value, englishToRussian) == result
+        Texts.keyboard(value, englishToRussian) == result
         where:
         value    | englishToRussian || result
         ""       | true             || ""
@@ -110,12 +109,12 @@ class TextUtilSpec extends Specification {
         splitter.toList(value) == result
         where:
         value   | splitter                     || result
-        ""      | TextUtil.splitBy(";")        || []
-        "1;2"   | TextUtil.splitBy(";")        || ["1", "2"]
-        "1; 2"  | TextUtil.splitBy(";")        || ["1", "2"]
-        "1; 2"  | TextUtil.splitBy(";", true)  || ["1", "2"]
-        "1; 2"  | TextUtil.splitBy(";", false) || ["1", " 2"]
-        "1;; 2" | TextUtil.splitBy(";", 3)     || ["1", "", "2"]
+        ""      | Texts.splitBy(";")        || []
+        "1;2"   | Texts.splitBy(";")        || ["1", "2"]
+        "1; 2"  | Texts.splitBy(";")        || ["1", "2"]
+        "1; 2"  | Texts.splitBy(";", true)  || ["1", "2"]
+        "1; 2"  | Texts.splitBy(";", false) || ["1", " 2"]
+        "1;; 2" | Texts.splitBy(";", 3)     || ["1", "", "2"]
 
     }
 
@@ -124,14 +123,14 @@ class TextUtilSpec extends Specification {
         splitter.toPairs(value) == result
         where:
         value        | splitter                           || result
-        ""           | TextUtil.splitBy(",").splitBy(":") || []
-        "1:2,2:3"    | TextUtil.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
-        "1:2, 2 : 3" | TextUtil.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
+        ""           | Texts.splitBy(",").splitBy(":") || []
+        "1:2,2:3"    | Texts.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
+        "1:2, 2 : 3" | Texts.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
     }
 
     def "Split on 2 rows"() {
         expect:
-        TextUtil.rows(str, space, len) == result
+        Texts.rows(str, space, len) == result
         where:
         str            | space | len | result
         ""             | ""    | 0   | ["", ""].toArray()
@@ -173,7 +172,7 @@ class TextUtilSpec extends Specification {
 
     def "Split on 3 rows"() {
         expect:
-        TextUtil.rows(str, space, len, len2) == result
+        Texts.rows(str, space, len, len2) == result
         where:
         str            | space | len | len2 | result
         ""             | ""    | 0   | 0    | ["", "", ""].toArray()

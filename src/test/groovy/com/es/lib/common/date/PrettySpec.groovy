@@ -1,6 +1,6 @@
 package com.es.lib.common.date
 
-import com.es.lib.common.text.TextUtil
+import com.es.lib.common.text.Texts
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -16,7 +16,7 @@ class PrettySpec extends Specification {
         String apply(PrettyInterval.DurationType type, Long value) {
             switch (type) {
                 case PrettyInterval.DurationType.YEAR:
-                    return value + " " + TextUtil.pluralize(value, "year", "years", "years")
+                    return value + " " + Texts.pluralize(value, "year", "years", "years")
                 case PrettyInterval.DurationType.MONTH:
                     return value + " mon."
                 case PrettyInterval.DurationType.DAY:

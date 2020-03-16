@@ -62,7 +62,11 @@ public final class Numbers {
     }
 
     public static NumberFormatter formatter(int decimalCount, boolean chopZeroes, String decimalSymbol, int groupingSize) {
-        return new NumberFormatter(decimalCount, chopZeroes, decimalSymbol, groupingSize);
+        return formatter(decimalCount, decimalCount, chopZeroes, decimalSymbol, groupingSize);
+    }
+
+    public static NumberFormatter formatter(int minDecimalCount, int maxDecimalCount, boolean chopZeroes, String decimalSymbol, int groupingSize) {
+        return new NumberFormatter(minDecimalCount, maxDecimalCount, chopZeroes, decimalSymbol, groupingSize);
     }
 
     public static double remain(double value, double mult, boolean scale) {

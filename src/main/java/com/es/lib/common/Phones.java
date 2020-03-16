@@ -17,7 +17,7 @@
 package com.es.lib.common;
 
 import com.es.lib.common.collection.CollectionUtil;
-import com.es.lib.common.text.TextUtil;
+import com.es.lib.common.text.Texts;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -74,7 +74,7 @@ public final class Phones {
      * @return Phone pairs
      */
     public static Collection<Map.Entry<String, Boolean>> split(String value, boolean clean) {
-        final Collection<String> phones = TextUtil.splitBy("(,|;)").toList(value);
+        final Collection<String> phones = Texts.splitBy("(,|;)").toList(value);
         return phones.stream().map(clean ? cleanTypeMapper : typeMapper).collect(Collectors.toList());
     }
 

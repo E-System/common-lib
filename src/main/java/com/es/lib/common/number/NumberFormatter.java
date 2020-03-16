@@ -11,7 +11,8 @@ import java.text.DecimalFormatSymbols;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class NumberFormatter {
 
-    private final int decimalCount;
+    private final int minDecimalCount;
+    private final int maxDecimalCount;
     private final boolean chopZeroes;
     private final String decimalSymbol;
     private final Integer groupingSize;
@@ -91,8 +92,8 @@ public class NumberFormatter {
         boolean groupingUsed = groupingSize != null && groupingSize > 0;
         result.setGroupingUsed(groupingUsed);
         result.setGroupingSize(groupingUsed ? groupingSize : Constant.DEFAULT_GROUPING_SIZE);
-        result.setMaximumFractionDigits(decimalCount);
-        result.setMinimumFractionDigits(decimalCount);
+        result.setMinimumFractionDigits(minDecimalCount);
+        result.setMaximumFractionDigits(maxDecimalCount);
         if (StringUtils.isNotBlank(decimalSymbol)) {
             DecimalFormatSymbols dfs = result.getDecimalFormatSymbols();
             dfs.setDecimalSeparator(decimalSymbol.charAt(0));
@@ -102,11 +103,11 @@ public class NumberFormatter {
     }
 
     private String chop(String value) {
-        if (value == null || value.isEmpty()) {
+        if (value == null || value.isEmpty() || minDecimalCount != maxDecimalCount) {
             return value;
         }
         if (chopZeroes) {
-            return value.replace(decimalSymbol + StringUtils.repeat('0', decimalCount), "");
+            return value.replace(decimalSymbol + StringUtils.repeat('0', maxDecimalCount), "");
         }
         return value;
     }

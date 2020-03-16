@@ -7,9 +7,9 @@ import java.util.function.Function;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 23.09.16
  */
-public final class TextUtil {
+public final class Texts {
 
-    private TextUtil() { }
+    private Texts() { }
 
     public static String removeDelimiters(String value) {
         return replaceDelimiters(value, "");

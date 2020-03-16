@@ -1,7 +1,7 @@
 package com.es.lib.common.date;
 
 import com.es.lib.common.Constant;
-import com.es.lib.common.text.TextUtil;
+import com.es.lib.common.text.Texts;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Duration;
@@ -95,7 +95,7 @@ public final class PrettyInterval {
     public static BiFunction<DurationType, Long, String> DEFAULT_LOCALIZATION = (type, value) -> {
         switch (type) {
             case YEAR:
-                return value + " " + TextUtil.pluralize(value, "год", "года", "лет");
+                return value + " " + Texts.pluralize(value, "год", "года", "лет");
             case MONTH:
                 return value + " мес.";
             case DAY:

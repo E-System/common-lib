@@ -1,7 +1,7 @@
 package com.es.lib.common.model;
 
 import com.es.lib.common.collection.CollectionUtil;
-import com.es.lib.common.text.TextUtil;
+import com.es.lib.common.text.Texts;
 import lombok.Getter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +27,7 @@ public class FullName {
         if (StringUtils.isBlank(fullName)) {
             return;
         }
-        final String[] parts = TextUtil.splitBy("\\s+").toArray(fullName);
+        final String[] parts = Texts.splitBy("\\s+").toArray(fullName);
         if (parts.length >= 1) {
             surname = parts[0];
         }
@@ -143,7 +143,7 @@ public class FullName {
             if (StringUtils.isBlank(fullName)) {
                 return "";
             }
-            List<String> parts = TextUtil.splitBy("\\s+").toList(fullName);
+            List<String> parts = Texts.splitBy("\\s+").toList(fullName);
             if (parts.isEmpty()) {
                 return fullName;
             }
