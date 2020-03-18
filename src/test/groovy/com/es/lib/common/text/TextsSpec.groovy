@@ -108,7 +108,7 @@ class TextsSpec extends Specification {
         expect:
         splitter.toList(value) == result
         where:
-        value   | splitter                     || result
+        value   | splitter                  || result
         ""      | Texts.splitBy(";")        || []
         "1;2"   | Texts.splitBy(";")        || ["1", "2"]
         "1; 2"  | Texts.splitBy(";")        || ["1", "2"]
@@ -122,7 +122,7 @@ class TextsSpec extends Specification {
         expect:
         splitter.toPairs(value) == result
         where:
-        value        | splitter                           || result
+        value        | splitter                        || result
         ""           | Texts.splitBy(",").splitBy(":") || []
         "1:2,2:3"    | Texts.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
         "1:2, 2 : 3" | Texts.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
@@ -214,21 +214,74 @@ class TextsSpec extends Specification {
         "asd  asd asd" | ""    | 13  | 0    | ["asd  asd asd", "", ""].toArray()
         "asd  asd asd" | ""    | 14  | 0    | ["asd  asd asd", "", ""].toArray()
 
-        "asd  asd asd" | " "    | 0   | 0    | [" ", " ", "asd  asd asd"].toArray()
-        "asd  asd asd" | " "    | 1   | 0    | [" ", " ", "asd  asd asd"].toArray()
-        "asd  asd asd" | " "    | 2   | 0    | [" ", " ", "asd  asd asd"].toArray()
-        "asd  asd asd" | " "    | 3   | 0    | ["asd", " ", "asd asd"].toArray()
-        "asd  asd asd" | " "    | 3   | 3    | ["asd", "asd", "asd"].toArray()
-        "asd  asd asd" | " "    | 4   | 0    | ["asd", " ", "asd asd"].toArray()
-        "asd  asd asd" | " "    | 5   | 0    | ["asd ", " ", "asd asd"].toArray()
-        "asd  asd asd" | " "    | 6   | 0    | ["asd ", " ", "asd asd"].toArray()
-        "asd  asd asd" | " "    | 7   | 0    | ["asd ", " ", "asd asd"].toArray()
-        "asd  asd asd" | " "    | 8   | 0    | ["asd  asd", " ", "asd"].toArray()
-        "asd  asd asd" | " "    | 9   | 0    | ["asd  asd", " ", "asd"].toArray()
-        "asd  asd asd" | " "    | 10  | 0    | ["asd  asd", " ", "asd"].toArray()
-        "asd  asd asd" | " "    | 11  | 0    | ["asd  asd", " ", "asd"].toArray()
-        "asd  asd asd" | " "    | 12  | 0    | ["asd  asd asd", " ", " "].toArray()
-        "asd  asd asd" | " "    | 13  | 0    | ["asd  asd asd", " ", " "].toArray()
-        "asd  asd asd" | " "    | 14  | 0    | ["asd  asd asd", " ", " "].toArray()
+        "asd  asd asd" | " "   | 0   | 0    | [" ", " ", "asd  asd asd"].toArray()
+        "asd  asd asd" | " "   | 1   | 0    | [" ", " ", "asd  asd asd"].toArray()
+        "asd  asd asd" | " "   | 2   | 0    | [" ", " ", "asd  asd asd"].toArray()
+        "asd  asd asd" | " "   | 3   | 0    | ["asd", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "   | 3   | 3    | ["asd", "asd", "asd"].toArray()
+        "asd  asd asd" | " "   | 4   | 0    | ["asd", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "   | 5   | 0    | ["asd ", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "   | 6   | 0    | ["asd ", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "   | 7   | 0    | ["asd ", " ", "asd asd"].toArray()
+        "asd  asd asd" | " "   | 8   | 0    | ["asd  asd", " ", "asd"].toArray()
+        "asd  asd asd" | " "   | 9   | 0    | ["asd  asd", " ", "asd"].toArray()
+        "asd  asd asd" | " "   | 10  | 0    | ["asd  asd", " ", "asd"].toArray()
+        "asd  asd asd" | " "   | 11  | 0    | ["asd  asd", " ", "asd"].toArray()
+        "asd  asd asd" | " "   | 12  | 0    | ["asd  asd asd", " ", " "].toArray()
+        "asd  asd asd" | " "   | 13  | 0    | ["asd  asd asd", " ", " "].toArray()
+        "asd  asd asd" | " "   | 14  | 0    | ["asd  asd asd", " ", " "].toArray()
+    }
+
+    def "Transliterate without transform"() {
+        expect:
+        Texts.transliterate(value) == result
+        where:
+        value                                                                                  || result
+        null                                                                                   || null
+        ''                                                                                     || ''
+        'Привет'                                                                               || 'Privet'
+        'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'Sesh zhe eschyo etih myagkih francuzskih bulok da vypey chayu'
+        'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'SHirokaya elektrifikaciya yuzhnyh guberniy dast moschnyy tolchok podyomu selskogo hozyaystva'
+        'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'Aerofotosyomka landshafta uzhe vyyavila zemli bogachey i procvetayuschih krestyan'
+    }
+
+    def "Transliterate to lowercase"() {
+        expect:
+        Texts.transliterateToLower(value) == result
+        where:
+        value                                                                                  || result
+        null                                                                                   || null
+        ''                                                                                     || ''
+        'Привет'                                                                               || 'privet'
+        'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'sesh zhe eschyo etih myagkih francuzskih bulok da vypey chayu'
+        'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'shirokaya elektrifikaciya yuzhnyh guberniy dast moschnyy tolchok podyomu selskogo hozyaystva'
+        'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'aerofotosyomka landshafta uzhe vyyavila zemli bogachey i procvetayuschih krestyan'
+    }
+
+    def "Transliterate to uppercase"() {
+        expect:
+        Texts.transliterateToUpper(value) == result
+        where:
+        value                                                                                  || result
+        null                                                                                   || null
+        ''                                                                                     || ''
+        'Привет'                                                                               || 'PRIVET'
+        'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'SESH ZHE ESCHYO ETIH MYAGKIH FRANCUZSKIH BULOK DA VYPEY CHAYU'
+        'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'SHIROKAYA ELEKTRIFIKACIYA YUZHNYH GUBERNIY DAST MOSCHNYY TOLCHOK PODYOMU SELSKOGO HOZYAYSTVA'
+        'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'AEROFOTOSYOMKA LANDSHAFTA UZHE VYYAVILA ZEMLI BOGACHEY I PROCVETAYUSCHIH KRESTYAN'
+    }
+
+    def "Transliterate to uppercase with underscore"() {
+        expect:
+        Texts.transliterateToUpper(value, "_") == result
+        where:
+        value                                                                                  || result
+        null                                                                                   || null
+        ''                                                                                     || ''
+        'Привет'                                                                               || 'PRIVET'
+        'Привет  привет'                                                                       || 'PRIVET__PRIVET'
+        'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'SESH_ZHE_ESCHYO_ETIH_MYAGKIH_FRANCUZSKIH_BULOK_DA_VYPEY_CHAYU'
+        'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'SHIROKAYA_ELEKTRIFIKACIYA_YUZHNYH_GUBERNIY_DAST_MOSCHNYY_TOLCHOK_PODYOMU_SELSKOGO_HOZYAYSTVA'
+        'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'AEROFOTOSYOMKA_LANDSHAFTA_UZHE_VYYAVILA_ZEMLI_BOGACHEY_I_PROCVETAYUSCHIH_KRESTYAN'
     }
 }
