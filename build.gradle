@@ -128,7 +128,7 @@ dependencies {
     compile "org.apache.commons:commons-lang3:3.9"
     compile "org.slf4j:slf4j-api:1.7.29"
     compile "com.fasterxml.jackson.core:jackson-databind:2.10.2"
-    compile "com.sun.mail:javax.mail:1.6.2"
+    compile "com.sun.mail:jakarta.mail:1.6.5"
     compile "de.svenkubiak:jBCrypt:0.4.1"
     compile "commons-io:commons-io:2.6"
     compile "org.reflections:reflections:0.9.12"
