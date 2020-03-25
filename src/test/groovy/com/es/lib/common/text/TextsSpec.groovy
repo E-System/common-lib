@@ -3,6 +3,8 @@ package com.es.lib.common.text
 import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
 
+import java.util.function.Function
+
 class TextsSpec extends Specification {
 
     def "Evaluate int"() {
@@ -283,5 +285,37 @@ class TextsSpec extends Specification {
         'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'SESH_ZHE_ESCHYO_ETIH_MYAGKIH_FRANCUZSKIH_BULOK_DA_VYPEY_CHAYU'
         'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'SHIROKAYA_ELEKTRIFIKACIYA_YUZHNYH_GUBERNIY_DAST_MOSCHNYY_TOLCHOK_PODYOMU_SELSKOGO_HOZYAYSTVA'
         'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'AEROFOTOSYOMKA_LANDSHAFTA_UZHE_VYYAVILA_ZEMLI_BOGACHEY_I_PROCVETAYUSCHIH_KRESTYAN'
+    }
+
+    Function<String, Object> RESOLVER = new Function<String, Object>() {
+
+        @Override
+        Object apply(String s) {
+            if (s == "com.es.profiles.active") {
+                return "develop"
+            }
+            return "NOT_FOUND"
+        }
+    }
+
+    def "Variable resolver extract"() {
+        expect:
+        VariableResolver.extract(seq) == value
+        where:
+        seq                                 | value
+        'jndi/db-${com.es.profiles.active}' | ['${com.es.profiles.active}': 'com.es.profiles.active']
+        'jndi/db-${asd}'                    | ['${asd}': 'asd']
+    }
+
+    def "Resolve variables"() {
+        expect:
+        Texts.resolveVariables(seq, RESOLVER) == value
+        where:
+        seq                                  | value
+        null                                 | null
+        ""                                   | ""
+        ['hello': 'hello']                   | ['hello': 'hello']
+        'jndi/db-${com.es.profiles.active}'  | 'jndi/db-develop'
+        'jndi/db-${com.es.profiles.active1}' | 'jndi/db-NOT_FOUND'
     }
 }

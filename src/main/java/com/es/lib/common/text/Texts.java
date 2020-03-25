@@ -62,6 +62,10 @@ public final class Texts {
         return Plural.convert(value, str1, str2, str3);
     }
 
+    public static Object resolveVariables(Object value, Function<String, Object> variableResolver) {
+        return VariableResolver.resolve(value, variableResolver);
+    }
+
     /**
      * Convert keyboard input from one layout to another по символам на клавиатуре(переводит и символа в ENGLISH в символ RUSSIAN в той же позиции)
      *
