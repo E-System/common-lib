@@ -18,6 +18,8 @@ package com.es.lib.common;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Base constants
@@ -92,4 +94,8 @@ public interface Constant {
     long MILLIS_IN_SECOND = 1000;
     long MILLIS_IN_MINUTE = SECONDS_IN_MINUTE * MILLIS_IN_SECOND;
     long MILLIS_IN_HOUR = MINUTES_IN_HOUR * MILLIS_IN_MINUTE;
+
+    Collection<String> WEEK_FULL = Arrays.asList("1", "2", "3", "4", "5", "6", "7");
+    Collection<String> WEEK_WORK = Arrays.asList("1", "2", "3", "4", "5");
+    Collection<String> WEEK_ENDS = Arrays.asList("6", "7");
 }
