@@ -1,5 +1,6 @@
 package com.es.lib.common.security;
 
+import com.es.lib.common.binary.ByteEncoder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -21,7 +22,7 @@ public class HmacHash implements StrHash {
             Mac mac = Mac.getInstance(alg);
             SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), alg);
             mac.init(secret_key);
-            return Base64.getEncoder().encodeToString(mac.doFinal(value.getBytes(StandardCharsets.UTF_8)));
+            return new ByteEncoder(mac.doFinal(value.getBytes(StandardCharsets.UTF_8))).encode();
         } catch (Exception ignore) {
             return null;
         }
