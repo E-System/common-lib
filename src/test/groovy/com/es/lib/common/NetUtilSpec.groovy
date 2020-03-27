@@ -175,5 +175,17 @@ class NetUtilSpec extends Specification {
         !NetUtil.isLocalNetwork("193.168.254.255")
         !NetUtil.isLocalNetwork("193.168.255.254")
     }
+
+    def "Matches"(){
+        expect:
+        NetUtil.matches("192.168.2.1", "192.168.2.1")
+        !NetUtil.matches("192.168.2.1", "192.168.2.0/32")
+        NetUtil.matches("192.168.2.5", "192.168.2.0/24")
+        !NetUtil.matches("92.168.2.1", "fe80:0:0:0:0:0:c0a8:1/120")
+        NetUtil.matches("fe80:0:0:0:0:0:c0a8:11", "fe80:0:0:0:0:0:c0a8:1/120")
+        !NetUtil.matches("fe80:0:0:0:0:0:c0a8:11", "fe80:0:0:0:0:0:c0a8:1/128")
+        !NetUtil.matches("fe80:0:0:0:0:0:c0a8:11", "192.168.2.0/32")
+
+    }
 }
 

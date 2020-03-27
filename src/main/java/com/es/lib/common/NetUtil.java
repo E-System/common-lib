@@ -16,8 +16,11 @@
 
 package com.es.lib.common;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
@@ -161,5 +164,50 @@ public class NetUtil {
      */
     public static boolean inRange(long ip, long begin, long end) {
         return ip >= begin && ip <= end;
+    }
+
+    public static boolean matches(String address, String subnet) {
+        int nMaskBits = -1;
+        if (subnet.indexOf(47) > 0) {
+            String[] addressAndMask = StringUtils.split(subnet, "/");
+            subnet = addressAndMask[0];
+            nMaskBits = Integer.parseInt(addressAndMask[1]);
+        }
+        InetAddress subnetAddress = parseAddress(subnet);
+        if (!(subnetAddress.getAddress().length * 8 >= nMaskBits)) {
+            throw new IllegalArgumentException(String.format("IP address %s is too short for bitmask of length %d", subnet, nMaskBits));
+        }
+
+        InetAddress remoteAddress = parseAddress(address);
+        if (!subnetAddress.getClass().equals(remoteAddress.getClass())) {
+            return false;
+        } else if (nMaskBits < 0) {
+            return remoteAddress.equals(subnetAddress);
+        } else {
+            byte[] remAddr = remoteAddress.getAddress();
+            byte[] reqAddr = subnetAddress.getAddress();
+            int nMaskFullBytes = nMaskBits / 8;
+            byte finalByte = (byte) ('\uff00' >> (nMaskBits & 7));
+
+            for (int i = 0; i < nMaskFullBytes; ++i) {
+                if (remAddr[i] != reqAddr[i]) {
+                    return false;
+                }
+            }
+
+            if (finalByte != 0) {
+                return (remAddr[nMaskFullBytes] & finalByte) == (reqAddr[nMaskFullBytes] & finalByte);
+            } else {
+                return true;
+            }
+        }
+    }
+
+    private static InetAddress parseAddress(String address) {
+        try {
+            return InetAddress.getByName(address);
+        } catch (UnknownHostException var3) {
+            throw new IllegalArgumentException("Failed to parse address" + address, var3);
+        }
     }
 }
