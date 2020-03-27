@@ -28,10 +28,10 @@ class ByteUtilSpec extends Specification {
         when:
         def map = ["k1": "v1"]
         def serialized = ByteUtil.serialize(map)
-        def deserialized = ByteUtil.deserialize(serialized, Map.class)
+        def result = ByteUtil.deserialize(serialized)
         then:
         serialized != null
-        deserialized['k1'] == 'v1'
+        result['k1'] == 'v1'
     }
 
     def "Должен быть корректно отформатирован байт в hex виде(верхний регистр)"() {

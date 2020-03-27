@@ -16,7 +16,9 @@
 
 package com.es.lib.common.binary;
 
-import java.io.*;
+import org.apache.commons.lang3.SerializationUtils;
+
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -33,10 +35,9 @@ public class ByteUtil {
      * @param arr - исходный массив байт
      * @return десериализованный объект
      */
-    public static <T> T deserialize(byte[] arr, Class<T> clz) {
-        ByteArrayInputStream bis = new ByteArrayInputStream(arr);
-        try (ObjectInput in = new ObjectInputStream(bis)) {
-            return (T) in.readObject();
+    public static <T> T deserialize(byte[] arr) {
+        try {
+            return SerializationUtils.deserialize(arr);
         } catch (Exception ex) {
             return null;
         }
@@ -48,11 +49,9 @@ public class ByteUtil {
      * @param obj Object to serialize
      * @return Byte array with serialized object
      */
-    public static byte[] serialize(Object obj) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try (ObjectOutput out = new ObjectOutputStream(bos)) {
-            out.writeObject(obj);
-            return bos.toByteArray();
+    public static byte[] serialize(Serializable obj) {
+        try {
+            return SerializationUtils.serialize(obj);
         } catch (Exception ex) {
             return null;
         }
