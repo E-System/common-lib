@@ -16,11 +16,13 @@
 
 package com.es.lib.common;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -67,5 +69,22 @@ public final class JsonUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static class UnixTimeDeserializer extends JsonDeserializer<Date> {
+
+        @Override
+        public Date deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+            return new Date(Long.parseLong(parser.getValueAsString()) * 1000);
+        }
+    }
+
+    public static class UnixTimeSerializer extends JsonSerializer<Date> {
+
+        @Override
+        public void serialize(Date value, JsonGenerator generator, SerializerProvider serializers) throws IOException {
+            generator.writeString(String.valueOf(value.getTime() / 1000));
+        }
+
     }
 }
