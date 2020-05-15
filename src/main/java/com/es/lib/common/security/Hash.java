@@ -31,11 +31,19 @@ public final class Hash {
     }
 
     public static StrHash hmacSha256(String secret) {
-        return hmac(ALGORITHM_SHA256, secret);
+        return hmacSha256(secret, false);
+    }
+
+    public static StrHash hmacSha256(String secret, boolean hexEncode) {
+        return hmac(ALGORITHM_SHA256, secret, hexEncode);
     }
 
     public static StrHash hmac(String algorithm, String secret) {
-        return new HmacHash(algorithm, secret);
+        return hmac(algorithm, secret, false);
+    }
+
+    public static StrHash hmac(String algorithm, String secret, boolean hexEncode) {
+        return new HmacHash(algorithm, secret, hexEncode);
     }
 
     public static CRCHash crc32() {

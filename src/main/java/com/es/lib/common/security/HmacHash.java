@@ -7,13 +7,13 @@ import lombok.AllArgsConstructor;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class HmacHash implements StrHash {
 
     private final String algorithm;
     private final String secret;
+    private final boolean hexEncode;
 
     @Override
     public String get(String value) {
@@ -22,7 +22,8 @@ public class HmacHash implements StrHash {
             Mac mac = Mac.getInstance(alg);
             SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), alg);
             mac.init(secret_key);
-            return new ByteEncoder(mac.doFinal(value.getBytes(StandardCharsets.UTF_8))).encode();
+            ByteEncoder encoder = new ByteEncoder(mac.doFinal(value.getBytes(StandardCharsets.UTF_8)));
+            return hexEncode ? encoder.hexEncode() : encoder.encode();
         } catch (Exception ignore) {
             return null;
         }
