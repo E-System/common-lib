@@ -44,4 +44,8 @@ public class ByteEncoder {
         }
         return result.toUpperCase();
     }
+
+    public String string() {
+        return bytes == null ? null : new String(bytes);
+    }
 }
