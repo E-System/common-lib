@@ -1,5 +1,6 @@
 package com.es.lib.common.binary;
 
+import com.es.lib.common.security.Hex;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -30,5 +31,17 @@ public class ByteEncoder {
             return null;
         }
         return encoder.encodeToString(bytes);
+    }
+
+    public String hexEncode() {
+        return hexEncode(false);
+    }
+
+    public String hexEncode(boolean upperCase) {
+        String result = Hex.get(bytes);
+        if (result == null || !upperCase) {
+            return result;
+        }
+        return result.toUpperCase();
     }
 }
