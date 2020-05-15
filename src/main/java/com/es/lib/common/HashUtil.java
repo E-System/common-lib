@@ -76,13 +76,20 @@ public final class HashUtil {
     }
 
     public static String hmac(String algorithm, String value, String secret) {
+        return hmac(algorithm, value, secret, false);
+    }
+
+    public static String hmac(String algorithm, String value, String secret, boolean hexEncode) {
         try {
             String alg = "Hmac" + algorithm;
             Mac hmac = Mac.getInstance(alg);
             SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(Constant.DEFAULT_ENCODING), alg);
             hmac.init(secret_key);
-
-            return Base64.getEncoder().encodeToString(hmac.doFinal(value.getBytes(Constant.DEFAULT_ENCODING)));
+            byte[] bytes = hmac.doFinal(value.getBytes(Constant.DEFAULT_ENCODING));
+            if (hexEncode) {
+                return getHex(bytes);
+            }
+            return Base64.getEncoder().encodeToString(bytes);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return null;
@@ -97,7 +104,19 @@ public final class HashUtil {
      * @return Base64 of calculated hash
      */
     public static String hmacSha256(String value, String secret) {
-        return hmac(ALGORITHM_SHA256, value, secret);
+        return hmacSha256(value, secret, false);
+    }
+
+    /**
+     * Calculate SHA256 hmac
+     *
+     * @param value     message text
+     * @param secret    secret key
+     * @param hexEncode encode to hex rather base64
+     * @return Base64 of calculated hash
+     */
+    public static String hmacSha256(String value, String secret, boolean hexEncode) {
+        return hmac(ALGORITHM_SHA256, value, secret, hexEncode);
     }
 
     public static String getHex(byte[] raw) {

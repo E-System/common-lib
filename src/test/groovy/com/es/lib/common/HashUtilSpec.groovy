@@ -58,5 +58,10 @@ class HashUtilSpec extends Specification {
         expect:
         HashUtil.hmacSha256("Test message", "secret_key") == "ABpes7dX951jzumPtmtNFeo4MS9ycL+sN1O1UnKUJeY="
     }
+
+    def "hmacSha256 hex"() {
+        expect:
+        HashUtil.hmacSha256("Test message", "secret_key", true) == "001a5eb3b757f79d63cee98fb66b4d15ea38312f7270bfac3753b552729425e6"
+    }
 }
 
