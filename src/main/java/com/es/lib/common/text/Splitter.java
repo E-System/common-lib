@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,6 +54,18 @@ public class Splitter {
             return Arrays.asList(parts);
         }
         return Stream.of(parts).map(String::trim).collect(Collectors.toList());
+    }
+
+    public <T> T to(String text, Function<String[], T> convert) {
+        String[] split = toArray(text);
+        if (split.length == 0) {
+            return null;
+        }
+        try {
+            return convert.apply(split);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     protected String[] internalSplit(String text) {

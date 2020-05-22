@@ -7,6 +7,35 @@ import java.util.function.Function
 
 class TextsSpec extends Specification {
 
+    static class SplitItem{
+        int v1
+        int v2
+
+        SplitItem(int v1, int v2) {
+            this.v1 = v1
+            this.v2 = v2
+        }
+
+        boolean equals(o) {
+            if (this.is(o)) return true
+            if (getClass() != o.class) return false
+
+            SplitItem splitItem = (SplitItem) o
+
+            if (v1 != splitItem.v1) return false
+            if (v2 != splitItem.v2) return false
+
+            return true
+        }
+
+        int hashCode() {
+            int result
+            result = v1
+            result = 31 * result + v2
+            return result
+        }
+    }
+
     def "Evaluate int"() {
         expect:
         Texts.pluralize(value, str1, str2, str3) == result
@@ -118,6 +147,24 @@ class TextsSpec extends Specification {
         "1; 2"  | Texts.splitBy(";", false) || ["1", " 2"]
         "1;; 2" | Texts.splitBy(";", 3)     || ["1", "", "2"]
 
+    }
+
+    def "Split with object"() {
+        expect:
+        splitter.to(value, new Function<String[], SplitItem>() {
+            @Override
+            SplitItem apply(String[] v) {
+                return new SplitItem(Integer.parseInt(v[0]), Integer.parseInt(v[1]))
+            }
+        }) == result
+        where:
+        value   | splitter                  || result
+        ""      | Texts.splitBy(";")        || null
+        "1;2"   | Texts.splitBy(";")        || new SplitItem(1, 2)
+        "1; 2"  | Texts.splitBy(";")        || new SplitItem(1, 2)
+        "1; 2"  | Texts.splitBy(";", true)  || new SplitItem(1, 2)
+        "1; 2"  | Texts.splitBy(";", false) || null
+        "1;; 2" | Texts.splitBy(";", 3)     || null
     }
 
     def "Split1"() {
