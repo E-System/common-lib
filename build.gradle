@@ -30,7 +30,7 @@ buildscript {
 }
 
 wrapper {
-    gradleVersion = '6.4'
+    gradleVersion = '6.4.1'
 }
 
 apply from: "build-${profile}.gradle"
