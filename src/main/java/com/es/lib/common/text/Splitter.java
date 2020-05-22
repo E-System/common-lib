@@ -56,7 +56,7 @@ public class Splitter {
         return Stream.of(parts).map(String::trim).collect(Collectors.toList());
     }
 
-    public <T> T to(String text, Function<String[], T> convert) {
+    public <T> T toObject(String text, Function<String[], T> convert) {
         String[] split = toArray(text);
         if (split.length == 0) {
             return null;

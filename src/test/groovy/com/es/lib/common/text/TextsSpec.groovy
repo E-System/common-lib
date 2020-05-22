@@ -149,9 +149,9 @@ class TextsSpec extends Specification {
 
     }
 
-    def "Split with object"() {
+    def "Split to object"() {
         expect:
-        splitter.to(value, new Function<String[], SplitItem>() {
+        splitter.toObject(value, new Function<String[], SplitItem>() {
             @Override
             SplitItem apply(String[] v) {
                 return new SplitItem(Integer.parseInt(v[0]), Integer.parseInt(v[1]))
