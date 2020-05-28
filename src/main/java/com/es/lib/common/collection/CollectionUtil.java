@@ -325,6 +325,9 @@ public final class CollectionUtil {
     }
 
     public static <T, K> Map<K, List<T>> groupBy(Collection<T> items, Function<? super T, ? extends K> classifier) {
+        if (items == null) {
+            return new HashMap<>();
+        }
         return items.stream().collect(Collectors.groupingBy(classifier));
     }
 

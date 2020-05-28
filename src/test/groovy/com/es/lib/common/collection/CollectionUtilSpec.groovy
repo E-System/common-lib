@@ -376,6 +376,11 @@ class CollectionUtilSpec extends Specification {
         result["2"][0].v2 == "1"
     }
 
+    def "groupBy with null list"() {
+        expect:
+        CollectionUtil.groupBy(null, null) == [:]
+    }
+
     class GroupClass {
         String v1
         String v2
