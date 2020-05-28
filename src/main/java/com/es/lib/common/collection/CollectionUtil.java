@@ -20,10 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 /**
@@ -325,6 +322,10 @@ public final class CollectionUtil {
             }
         }
         return null;
+    }
+
+    public static <T, K> Map<K, List<T>> groupBy(Collection<T> items, Function<? super T, ? extends K> classifier) {
+        return items.stream().collect(Collectors.groupingBy(classifier));
     }
 
     @SafeVarargs

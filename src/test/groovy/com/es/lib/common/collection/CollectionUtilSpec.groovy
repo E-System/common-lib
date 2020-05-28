@@ -21,6 +21,7 @@ import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
 
 import java.util.function.Consumer
+import java.util.function.Function
 import java.util.function.Predicate
 import java.util.function.Supplier
 
@@ -30,7 +31,7 @@ import java.util.function.Supplier
  */
 class CollectionUtilSpec extends Specification {
 
-    def "Удалить пустые значения"() {
+    def "Remove empty values"() {
         expect:
         CollectionUtil.removeEmptyValues(map as Map) == result
         where:
@@ -46,7 +47,7 @@ class CollectionUtilSpec extends Specification {
         ["k1": false, "k2": true, "k3": ""] || ["k1": false, "k2": true]
     }
 
-    def "Удалить null значения"() {
+    def "Remove null values"() {
         expect:
         CollectionUtil.removeNullValues(map as Map) == result
         where:
@@ -59,7 +60,7 @@ class CollectionUtilSpec extends Specification {
         ["k1": false, "k2": true, "k3": null] || ["k1": false, "k2": true]
     }
 
-    def "Получение первого элемента или null"() {
+    def "Get first or null"() {
         expect:
         CollectionUtil.getFirstOrNull(list) == result
         where:
@@ -70,7 +71,7 @@ class CollectionUtilSpec extends Specification {
         [1, 2] | 1
     }
 
-    def "Заджоинить не пустые элементы"() {
+    def "Join not empty values"() {
         expect:
         CollectionUtil.joinNotBlank(values, delimiter) == result
         where:
@@ -83,7 +84,7 @@ class CollectionUtilSpec extends Specification {
         ["44-15-12", "+79059817916", "    "] | ", "      || "44-15-12, +79059817916"
     }
 
-    def "Проверка признака равенства null значения пары"() {
+    def "Check pair value is null"() {
         expect:
         CollectionUtil.isValueNull(entry) == result
         where:
@@ -94,7 +95,7 @@ class CollectionUtilSpec extends Specification {
         new AbstractMap.SimpleEntry("abc", "asd") || false
     }
 
-    def "Проверка признака неравенства null значения пары"() {
+    def "Check pair value is not null"() {
         expect:
         CollectionUtil.isValueNonNull(entry) == result
         where:
@@ -105,7 +106,7 @@ class CollectionUtilSpec extends Specification {
         new AbstractMap.SimpleEntry("abc", "asd") || true
     }
 
-    def "Проверка признака равенства null ключа пары"() {
+    def "Check pair key is null"() {
         expect:
         CollectionUtil.isKeyNull(entry) == result
         where:
@@ -116,7 +117,7 @@ class CollectionUtilSpec extends Specification {
         new AbstractMap.SimpleEntry("abc", "asd") || false
     }
 
-    def "Проверка признака неравенства null ключа пары"() {
+    def "Check pair key is not null"() {
         expect:
         CollectionUtil.isKeyNonNull(entry) == result
         where:
@@ -355,5 +356,33 @@ class CollectionUtilSpec extends Specification {
         CollectionUtil.firstBySelector(predicate, 'Hello', null, null) == 'Hello'
         CollectionUtil.firstBySelector(predicate, '', 'Hello', null) == 'Hello'
         CollectionUtil.firstBySelector(predicate, '', null, 'Hello', null) == 'Hello'
+    }
+
+    def "groupBy"() {
+        when:
+        def items = [new GroupClass("1", "1"), new GroupClass("1", "2"), new GroupClass("2", "1")]
+        then:
+        def result = CollectionUtil.groupBy(items, new Function<GroupClass, String>() {
+            @Override
+            String apply(GroupClass t) {
+                return t.v1
+            }
+        })
+        expect:
+        result["1"].size() == 2
+        result["1"][0].v2 == "1"
+        result["1"][1].v2 == "2"
+        result["2"].size() == 1
+        result["2"][0].v2 == "1"
+    }
+
+    class GroupClass {
+        String v1
+        String v2
+
+        GroupClass(String v1, String v2) {
+            this.v1 = v1
+            this.v2 = v2
+        }
     }
 }
