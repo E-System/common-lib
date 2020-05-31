@@ -51,18 +51,17 @@ public final class Images {
         return scaledBI;
     }
 
-    private static String getImageType(final String contentType) throws IOException {
-        if (contentType.contains("jpg") || contentType.contains("jpeg")) {
-            return "jpg";
-        } else if (contentType.contains("png")) {
-            return "png";
-        } else if (contentType.contains("gif")) {
-            return "gif";
+    public static byte[] resize(InputStream inputStream, final String contentType, final int maxWidth) throws IOException {
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            resize(inputStream, contentType, maxWidth, output);
+            byte[] bytes = output.toByteArray();
+            log.trace("Result file size after resize: {}", bytes.length);
+            return bytes;
         }
-        throw new IOException("Accepted file format is gif, png, jpg");
     }
 
-    public static void resizeToStream(InputStream inputStream, final String contentType, OutputStream outputStream, final int maxWidth) throws IOException {
+
+    public static void resize(InputStream inputStream, final String contentType, final int maxWidth, OutputStream outputStream) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
@@ -73,13 +72,13 @@ public final class Images {
             log.debug("Output image size: {} - {}", maxWidth, saveHeight);
             success = ImageIO.write(
                 resize(bufferedImage, maxWidth, saveHeight),
-                getImageType(contentType),
+                getExtension(contentType),
                 outputStream
             );
         } else {
             success = ImageIO.write(
                 bufferedImage,
-                getImageType(contentType),
+                getExtension(contentType),
                 outputStream
             );
         }
@@ -89,13 +88,15 @@ public final class Images {
         outputStream.flush();
     }
 
-    public static byte[] resize(InputStream inputStream, final String contentType, final int maxWidth) throws IOException {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            resizeToStream(inputStream, contentType, baos, maxWidth);
-            byte[] bytes = baos.toByteArray();
-            log.debug("Result file size after resize: {}", bytes.length);
-            return bytes;
+    private static String getExtension(final String contentType) throws IOException {
+        if (contentType.contains("jpg") || contentType.contains("jpeg")) {
+            return "jpg";
+        } else if (contentType.contains("png")) {
+            return "png";
+        } else if (contentType.contains("gif")) {
+            return "gif";
         }
+        throw new IOException("Accepted file format is gif, png, jpg");
     }
 
     public static Dimension measureString(Graphics graphics, String text, int padding) {
@@ -105,15 +106,15 @@ public final class Images {
         return new Dimension(adv + padding, hgt + padding);
     }
 
-    public static void writeImage(int width, int height, OutputStream outputStream, Consumer<Graphics> drawer) throws IOException {
+    public static void write(int width, int height, OutputStream outputStream, Consumer<Graphics> drawer) throws IOException {
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = bufferedImage.getGraphics();
         drawer.accept(graphics);
         ImageIO.write(bufferedImage, "png", outputStream);
     }
 
-    public static void writeDefaultEmptyImage(int width, int height, String message, OutputStream outputStream) throws IOException {
-        writeImage(width, height, outputStream, graphics -> {
+    public static void write(int width, int height, OutputStream outputStream, String message) throws IOException {
+        write(width, height, outputStream, graphics -> {
             graphics.setColor(Color.white);
             graphics.fillRect(0, 0, width, height);
             graphics.setColor(Color.black);
