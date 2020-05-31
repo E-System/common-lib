@@ -17,7 +17,7 @@ package com.es.lib.common.validation;
 
 import org.apache.commons.lang3.StringUtils;
 
-final class RegexpValidator {
+public final class RegexpValidator {
 
     private RegexpValidator() { }
 

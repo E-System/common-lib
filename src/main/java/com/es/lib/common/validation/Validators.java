@@ -17,6 +17,8 @@ package com.es.lib.common.validation;
 
 public final class Validators {
 
+    private Validators() {}
+
     public static final BikValidator BIK = BikValidator.getInstance();
 
     public static final InnValidator INN = InnValidator.getInstance();

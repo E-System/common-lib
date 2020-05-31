@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-final class RangeValidator {
+public final class RangeValidator {
 
     private RangeValidator() { }
 

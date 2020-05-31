@@ -19,7 +19,7 @@ package com.es.lib.common.validation;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.07.16
  */
-final class OgrnValidator {
+public final class OgrnValidator {
 
     private OgrnValidator() { }
 

@@ -20,7 +20,7 @@ package com.es.lib.common.validation;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
-final class InnValidator {
+public final class InnValidator {
 
     private static final int[] N10_WEIGHTS = {2, 4, 10, 3, 5, 9, 4, 6, 8};
     private static final int[] N11_WEIGHTS = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8};

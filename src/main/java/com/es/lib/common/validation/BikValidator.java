@@ -15,7 +15,9 @@
  */
 package com.es.lib.common.validation;
 
-final class BikValidator {
+public final class BikValidator {
+
+    private BikValidator() { }
 
     public boolean isValid(String value) {
         if (value == null) {
