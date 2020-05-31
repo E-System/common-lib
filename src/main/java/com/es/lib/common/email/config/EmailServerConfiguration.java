@@ -16,7 +16,7 @@
 
 package com.es.lib.common.email.config;
 
-import com.es.lib.common.collection.CollectionUtil;
+import com.es.lib.common.collection.Cols;
 import com.es.lib.common.security.model.Credentials;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -78,7 +78,7 @@ public class EmailServerConfiguration implements Serializable {
     }
 
     private String formatParameters() {
-        if (CollectionUtil.isEmpty(parameters)) {
+        if (Cols.isEmpty(parameters)) {
             return "\n";
         }
         StringBuilder sb = new StringBuilder();

@@ -27,6 +27,6 @@ final class FileTypeFinder {
     private FileTypeFinder() { }
 
     static FileType get(String fileName) {
-        return EXTENSION_TYPES.getOrDefault(FileUtil.extension(fileName), FileType.OTHER);
+        return EXTENSION_TYPES.getOrDefault(IO.extension(fileName), FileType.OTHER);
     }
 }

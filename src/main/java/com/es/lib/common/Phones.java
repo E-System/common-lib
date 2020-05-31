@@ -16,7 +16,7 @@
 
 package com.es.lib.common;
 
-import com.es.lib.common.collection.CollectionUtil;
+import com.es.lib.common.collection.Cols;
 import com.es.lib.common.text.Texts;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -86,7 +86,7 @@ public final class Phones {
      * @return 1 element - simple numbers, 2 element - mobile numbers
      */
     public static Map.Entry<String, String> joinByType(Collection<Map.Entry<String, Boolean>> values, String delimiter) {
-        if (CollectionUtil.isEmpty(values)) {
+        if (Cols.isEmpty(values)) {
             return null;
         }
         return Pair.of(

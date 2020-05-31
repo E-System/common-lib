@@ -16,7 +16,7 @@
 
 package com.es.lib.common.email;
 
-import com.es.lib.common.collection.CollectionUtil;
+import com.es.lib.common.collection.Cols;
 import com.es.lib.common.email.common.BaseEmailProcessor;
 import com.es.lib.common.email.config.SMTPServerConfiguration;
 import com.es.lib.common.model.data.ByteData;
@@ -123,7 +123,7 @@ public class EmailSender extends BaseEmailProcessor {
                 message.setFileName(StringUtils.isNotEmpty(data.getFileName()) ? data.getFileName() : fds.getName());
                 message.setDisposition(ATTACHMENT);
             }
-        } else if (CollectionUtil.isEmpty(emailMessage.getAttachments())) {
+        } else if (Cols.isEmpty(emailMessage.getAttachments())) {
             message.setContent(emailMessage.getMessage(), "text/html; charset=UTF-8");
         } else if (StringUtils.isNotEmpty(emailMessage.getMessage())) {
             Multipart multipart = new MimeMultipart("related");
@@ -179,7 +179,7 @@ public class EmailSender extends BaseEmailProcessor {
     }
 
     private void processHeaders(EmailMessage emailMessage, SMTPMessage message) throws MessagingException {
-        if (CollectionUtil.isNotEmpty(emailMessage.getHeaders())) {
+        if (Cols.isNotEmpty(emailMessage.getHeaders())) {
             for (Map.Entry<String, String> entry : emailMessage.getHeaders().entrySet()) {
                 message.addHeader(entry.getKey(), entry.getValue());
             }
@@ -187,7 +187,7 @@ public class EmailSender extends BaseEmailProcessor {
     }
 
     private void processExtensions(EmailMessage emailMessage, SMTPMessage message) throws MessagingException, IOException {
-        if (CollectionUtil.isNotEmpty(emailMessage.getExtensions())) {
+        if (Cols.isNotEmpty(emailMessage.getExtensions())) {
             StringBuilder sb = new StringBuilder();
             for (Map.Entry<String, String> entry : emailMessage.getExtensions().entrySet()) {
                 String key = entry.getKey();

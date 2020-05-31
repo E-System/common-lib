@@ -80,6 +80,6 @@ final class Mime {
     Mime() {}
 
     public static String get(String fileName) {
-        return TYPES.getOrDefault(FileUtil.extension(fileName), DEFAULT_TYPE);
+        return TYPES.getOrDefault(IO.extension(fileName), DEFAULT_TYPE);
     }
 }

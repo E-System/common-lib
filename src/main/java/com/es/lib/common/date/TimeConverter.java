@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 E-System LLC
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package com.es.lib.common.date;
 
 import com.es.lib.common.Constant;
@@ -10,10 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 public final class TimeConverter {
 
     private TimeConverter() { }
-
-    public static TimeConverter getInstance() {
-        return InstanceWrapper.INSTANCE;
-    }
 
     public String toString(long value) {
         long hours = value / Constant.MILLIS_IN_HOUR;
@@ -58,9 +69,14 @@ public final class TimeConverter {
         }
         return Long.parseLong(value);
     }
+    
+    public static TimeConverter getInstance() {
+        return InstanceWrapper.INSTANCE;
+    }
 
     private static class InstanceWrapper {
 
         final static TimeConverter INSTANCE = new TimeConverter();
     }
+
 }

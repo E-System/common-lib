@@ -38,10 +38,10 @@ public class Instantiator<E1, E2, E3> implements Serializable {
     }
 
     public static Instantiator create(Type it, Class<?> defaultSecondClass, Class<?> defaultThirdClass) {
-        Type[] entityTypes = ReflectionUtil.extractTypes(it);
-        Class<?> entityClass = ReflectionUtil.extractClass(entityTypes[0]);
-        Class<?> secondEntityClass = ReflectionUtil.extractClass(entityTypes.length > 1 ? entityTypes[1] : defaultSecondClass);
-        Class<?> thirdEntityClass = ReflectionUtil.extractClass(entityTypes.length > 2 ? entityTypes[2] : defaultThirdClass);
+        Type[] entityTypes = Reflects.extractTypes(it);
+        Class<?> entityClass = Reflects.extractClass(entityTypes[0]);
+        Class<?> secondEntityClass = Reflects.extractClass(entityTypes.length > 1 ? entityTypes[1] : defaultSecondClass);
+        Class<?> thirdEntityClass = Reflects.extractClass(entityTypes.length > 2 ? entityTypes[2] : defaultThirdClass);
         return new Instantiator<>(entityClass, secondEntityClass, thirdEntityClass);
     }
 

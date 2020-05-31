@@ -1,6 +1,6 @@
 package com.es.lib.common.model;
 
-import com.es.lib.common.collection.CollectionUtil;
+import com.es.lib.common.collection.Cols;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,12 +19,12 @@ public class ClientInfo {
     private static final String PLATFORM_VERSION_KEY = "es-platform-version";
     private static final String APP_VERSION_KEY = "es-app-version";
 
-    private Platform platform;
-    private String platformVersion;
-    private String appVersion;
+    private final Platform platform;
+    private final String platformVersion;
+    private final String appVersion;
 
     public static ClientInfo create(Map<String, String> headers) {
-        if (CollectionUtil.isEmpty(headers)) {
+        if (Cols.isEmpty(headers)) {
             return new ClientInfo(Platform.undefined, "", "");
         }
         Platform platform = Platform.undefined;
