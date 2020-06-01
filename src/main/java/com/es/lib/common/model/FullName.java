@@ -1,6 +1,6 @@
 package com.es.lib.common.model;
 
-import com.es.lib.common.collection.Cols;
+import com.es.lib.common.collection.Items;
 import com.es.lib.common.text.Texts;
 import lombok.Getter;
 import lombok.ToString;
@@ -50,7 +50,7 @@ public class FullName {
 
     public String getPatronymicFull() {
         String result = StringUtils.defaultString(getPatronymic(), "");
-        if (Cols.isNotEmpty(others)) {
+        if (Items.isNotEmpty(others)) {
             result += (" " + String.join(" ", others));
         }
         return result.trim();
@@ -59,7 +59,7 @@ public class FullName {
     public String getNotSurname() {
         String result = (StringUtils.isNotBlank(name) ? name : "")
                         + (StringUtils.isNotBlank(patronymic) ? " " + patronymic : "");
-        if (Cols.isNotEmpty(others)) {
+        if (Items.isNotEmpty(others)) {
             result += (" " + String.join(" ", others));
         }
         return result.trim();
@@ -86,7 +86,7 @@ public class FullName {
         String result = (StringUtils.isNotBlank(surname) ? surname + " " : "")
                         + (StringUtils.isNotBlank(name) ? name : "")
                         + (StringUtils.isNotBlank(patronymic) ? " " + patronymic : "");
-        if (Cols.isNotEmpty(others)) {
+        if (Items.isNotEmpty(others)) {
             result += (" " + String.join(" ", others));
         }
         return result.trim();

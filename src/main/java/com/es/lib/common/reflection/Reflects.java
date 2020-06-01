@@ -16,7 +16,7 @@
 
 package com.es.lib.common.reflection;
 
-import com.es.lib.common.collection.Cols;
+import com.es.lib.common.collection.Items;
 import com.es.lib.common.exception.ESRuntimeException;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
@@ -47,7 +47,7 @@ public final class Reflects {
     public static Map<String, Object> toMap(final Object instance, Collection<String> exclude, boolean excludeStatic, Function<Object, Object> converter) {
         Map<String, Object> result = new HashMap<>();
         Map<String, Field> fields = getDeclaredFields(instance.getClass());
-        boolean checkExclude = Cols.isNotEmpty(exclude);
+        boolean checkExclude = Items.isNotEmpty(exclude);
         for (Map.Entry<String, Field> entry : fields.entrySet()) {
             Field field = entry.getValue();
             if (excludeStatic && Modifier.isStatic(field.getModifiers())) {

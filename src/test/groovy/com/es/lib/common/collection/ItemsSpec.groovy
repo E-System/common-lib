@@ -29,11 +29,11 @@ import java.util.function.Supplier
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 05.03.15
  */
-class ColsSpec extends Specification {
+class ItemsSpec extends Specification {
 
     def "Remove empty values"() {
         expect:
-        Cols.removeEmptyValues(map as Map) == result
+        Items.removeEmptyValues(map as Map) == result
         where:
         map                                 || result
         null                                || null
@@ -49,7 +49,7 @@ class ColsSpec extends Specification {
 
     def "Remove null values"() {
         expect:
-        Cols.removeNullValues(map as Map) == result
+        Items.removeNullValues(map as Map) == result
         where:
         map                                   || result
         null                                  || null
@@ -62,7 +62,7 @@ class ColsSpec extends Specification {
 
     def "Get first or null"() {
         expect:
-        Cols.getFirst(list) == result
+        Items.getFirst(list) == result
         where:
         list   | result
         null   | null
@@ -73,7 +73,7 @@ class ColsSpec extends Specification {
 
     def "Join not empty values"() {
         expect:
-        Cols.joinNotBlank(values, delimiter) == result
+        Items.joinNotBlank(values, delimiter) == result
         where:
         values                               | delimiter || result
         ["Hello", "", null]                  | ", "      || "Hello"
@@ -86,7 +86,7 @@ class ColsSpec extends Specification {
 
     def "Check pair value is null"() {
         expect:
-        Cols.isValueNull(entry) == result
+        Items.isValueNull(entry) == result
         where:
         entry                                     || result
         null                                      || true
@@ -97,7 +97,7 @@ class ColsSpec extends Specification {
 
     def "Check pair value is not null"() {
         expect:
-        Cols.isValueNonNull(entry) == result
+        Items.isValueNonNull(entry) == result
         where:
         entry                                     || result
         null                                      || false
@@ -108,7 +108,7 @@ class ColsSpec extends Specification {
 
     def "Check pair key is null"() {
         expect:
-        Cols.isKeyNull(entry) == result
+        Items.isKeyNull(entry) == result
         where:
         entry                                     || result
         null                                      || true
@@ -119,7 +119,7 @@ class ColsSpec extends Specification {
 
     def "Check pair key is not null"() {
         expect:
-        Cols.isKeyNonNull(entry) == result
+        Items.isKeyNonNull(entry) == result
         where:
         entry                                     || result
         null                                      || false
@@ -130,7 +130,7 @@ class ColsSpec extends Specification {
 
     def "Fill not available keys with string '1'"() {
         expect:
-        Cols.fillNotAvailableKeys(map, keys, value) == result
+        Items.fillNotAvailableKeys(map, keys, value) == result
         where:
         map        | keys       | value || result
         null       | null       | null  || null
@@ -143,7 +143,7 @@ class ColsSpec extends Specification {
 
     def "Partition"() {
         expect:
-        Cols.partition(list, count) == result
+        Items.partition(list, count) == result
         where:
         list      | count || result
         []        | 0     || []
@@ -162,7 +162,7 @@ class ColsSpec extends Specification {
 
     def "PartitionOn shuffle"() {
         expect:
-        Cols.partitionOn(list, count, true) == result
+        Items.partitionOn(list, count, true) == result
         where:
         list               | count || result
         []                 | 0     || []
@@ -183,7 +183,7 @@ class ColsSpec extends Specification {
 
     def "PartitionOn not shuffle"() {
         expect:
-        Cols.partitionOn(list, count, false) == result
+        Items.partitionOn(list, count, false) == result
         where:
         list               | count || result
         []                 | 0     || []
@@ -205,7 +205,7 @@ class ColsSpec extends Specification {
 
     def "extractByPrefix"() {
         expect:
-        Cols.extractByPrefix(map, prefix, removePrefix) == result
+        Items.extractByPrefix(map, prefix, removePrefix) == result
         where:
         map                                                                | prefix     | removePrefix || result
         null                                                               | '123'      | true         || null
@@ -224,7 +224,7 @@ class ColsSpec extends Specification {
 
     def "removeByPrefix"() {
         expect:
-        Cols.removeByPrefix(map, prefix) == result
+        Items.removeByPrefix(map, prefix) == result
         where:
         map                                                                | prefix      || result
         null                                                               | '123'       || null
@@ -241,7 +241,7 @@ class ColsSpec extends Specification {
 
     def "FindWithIndex"() {
         expect:
-        Cols.findWithIndex(input, new Predicate<Object>() {
+        Items.findWithIndex(input, new Predicate<Object>() {
             @Override
             boolean test(Object o) {
                 return o == 1
@@ -272,7 +272,7 @@ class ColsSpec extends Specification {
                 attributes = o
             }
         }
-        def newAttributes = Cols.updateValues(supplier, consumer, [Pair.of('K1', 'V1'), Pair.of('K2', 'V2'), Pair.of('K3', null), Pair.of('K4', '')])
+        def newAttributes = Items.updateValues(supplier, consumer, [Pair.of('K1', 'V1'), Pair.of('K2', 'V2'), Pair.of('K3', null), Pair.of('K4', '')])
         then:
         attributes == newAttributes
         newAttributes.containsKey('K1')
@@ -298,7 +298,7 @@ class ColsSpec extends Specification {
                 attributes = o
             }
         }
-        def newAttributes = Cols.updateValues(supplier, consumer, ['K1': 'V1', 'K2': 'V2', 'K3': null, 'K4': ''], ['K1', 'K2', 'K3', 'K4'])
+        def newAttributes = Items.updateValues(supplier, consumer, ['K1': 'V1', 'K2': 'V2', 'K3': null, 'K4': ''], ['K1', 'K2', 'K3', 'K4'])
         then:
         attributes == newAttributes
         newAttributes.containsKey('K1')
@@ -324,7 +324,7 @@ class ColsSpec extends Specification {
                 attributes = o
             }
         }
-        def newAttributes = Cols.updateValues(supplier, consumer, ['K1': 'V1', 'K2': 'V2', 'K3': null, 'K4': ''], ['K1', 'K3', 'K4'])
+        def newAttributes = Items.updateValues(supplier, consumer, ['K1': 'V1', 'K2': 'V2', 'K3': null, 'K4': ''], ['K1', 'K3', 'K4'])
         then:
         attributes == newAttributes
         newAttributes.containsKey('K1')
@@ -336,10 +336,10 @@ class ColsSpec extends Specification {
 
     def "coalesce not null"() {
         expect:
-        Cols.coalesce(null, null, 'Hello') == 'Hello'
-        Cols.coalesce(null, null, 'Hello', null, null) == 'Hello'
-        Cols.coalesce('Hello', null, null) == 'Hello'
-        Cols.coalesce('', null, null) == ''
+        Items.coalesce(null, null, 'Hello') == 'Hello'
+        Items.coalesce(null, null, 'Hello', null, null) == 'Hello'
+        Items.coalesce('Hello', null, null) == 'Hello'
+        Items.coalesce('', null, null) == ''
     }
 
     def "first not empty"() {
@@ -351,18 +351,18 @@ class ColsSpec extends Specification {
             }
         }
         expect:
-        Cols.firstBySelector(predicate, null, null, 'Hello') == 'Hello'
-        Cols.firstBySelector(predicate, null, null, 'Hello', null, null) == 'Hello'
-        Cols.firstBySelector(predicate, 'Hello', null, null) == 'Hello'
-        Cols.firstBySelector(predicate, '', 'Hello', null) == 'Hello'
-        Cols.firstBySelector(predicate, '', null, 'Hello', null) == 'Hello'
+        Items.firstBySelector(predicate, null, null, 'Hello') == 'Hello'
+        Items.firstBySelector(predicate, null, null, 'Hello', null, null) == 'Hello'
+        Items.firstBySelector(predicate, 'Hello', null, null) == 'Hello'
+        Items.firstBySelector(predicate, '', 'Hello', null) == 'Hello'
+        Items.firstBySelector(predicate, '', null, 'Hello', null) == 'Hello'
     }
 
     def "groupBy"() {
         when:
         def items = [new GroupClass("1", "1"), new GroupClass("1", "2"), new GroupClass("2", "1")]
         then:
-        def result = Cols.groupBy(items, new Function<GroupClass, String>() {
+        def result = Items.groupBy(items, new Function<GroupClass, String>() {
             @Override
             String apply(GroupClass t) {
                 return t.v1
@@ -378,7 +378,7 @@ class ColsSpec extends Specification {
 
     def "groupBy with null list"() {
         expect:
-        Cols.groupBy(null, null) == [:]
+        Items.groupBy(null, null) == [:]
     }
 
     class GroupClass {

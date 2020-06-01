@@ -16,7 +16,7 @@
 
 package com.es.lib.common.email;
 
-import com.es.lib.common.collection.Cols;
+import com.es.lib.common.collection.Items;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -47,7 +47,7 @@ public class EmailMessage {
     private final EmailRootAttachment rootAttachment;
 
     public boolean isAttachmentsAvailable() {
-        return Cols.isNotEmpty(getAttachments());
+        return Items.isNotEmpty(getAttachments());
     }
 
     public static Builder builder() {

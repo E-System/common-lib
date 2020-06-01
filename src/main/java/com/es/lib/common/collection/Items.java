@@ -27,16 +27,16 @@ import java.util.stream.Collectors;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
-public final class Cols {
+public final class Items {
 
-    private Cols() {}
+    private Items() {}
 
     /**
-     * Создать новый ассоциативный массив без пустых значений
+     * Create new map without empty values
      *
-     * @param map исходный ассоциативный массив
-     * @param <K> тип ключа
-     * @return новый ассоциативный массив без пустых значений
+     * @param map source map
+     * @param <K> map key type
+     * @return map without empty values
      */
     public static <K> Map<K, String> removeEmptyValues(Map<K, String> map) {
         if (isEmpty(map)) {
@@ -53,19 +53,19 @@ public final class Cols {
     }
 
     /**
-     * Создать новый ассоциативный массив без null значений
+     * Create new map without null values
      *
-     * @param map исходный ассоциативный массив
-     * @param <K> тип ключа
-     * @param <V> тип значения
-     * @return новый ассоциативный массив без null значений
+     * @param map source map
+     * @param <K> map key type
+     * @param <V> map value type
+     * @return map without null values
      */
     public static <K, V> Map<K, V> removeNullValues(Map<K, V> map) {
         if (isEmpty(map)) {
             return map;
         }
         return map.entrySet().stream().filter(
-            Cols::isValueNonNull
+            Items::isValueNonNull
         ).collect(
             Collectors.toMap(
                 Map.Entry::getKey,
@@ -75,40 +75,40 @@ public final class Cols {
     }
 
     /**
-     * Тест пары на значение == null
+     * Check pair value is null
      *
-     * @param entry пара
-     * @return true если значение == null, false если значение != null
+     * @param entry source pair
+     * @return true if pair value is null
      */
     public static boolean isValueNull(Map.Entry<?, ?> entry) {
         return entry == null || entry.getValue() == null;
     }
 
     /**
-     * Тест пары на значение != null
+     * Check pair value is not null
      *
-     * @param entry пара
-     * @return true если значение != null, false если значение == null
+     * @param entry source pair
+     * @return true if pair value is not null
      */
     public static boolean isValueNonNull(Map.Entry<?, ?> entry) {
         return entry != null && entry.getValue() != null;
     }
 
     /**
-     * Тест пары на ключ == null
+     * Check pair key is null
      *
-     * @param entry пара
-     * @return true если ключ == null, false если ключ != null
+     * @param entry source pair
+     * @return true if pair key is null
      */
     public static boolean isKeyNull(Map.Entry<?, ?> entry) {
         return entry == null || entry.getKey() == null;
     }
 
     /**
-     * Тест пары на ключ != null
+     * Check pair key is not null
      *
-     * @param entry пара
-     * @return true если ключ != null, false если ключ == null
+     * @param entry source pair
+     * @return true if pair key is not null
      */
     public static boolean isKeyNonNull(Map.Entry<?, ?> entry) {
         return entry != null && entry.getKey() != null;
