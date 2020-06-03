@@ -32,6 +32,7 @@ public final class InnValidator {
      * Validate INN
      *
      * @param value string with INN
+     * @return true if inn is valid or null
      */
     public boolean isValid(String value) {
         if (value == null) {

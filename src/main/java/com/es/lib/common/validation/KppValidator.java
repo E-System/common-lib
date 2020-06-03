@@ -27,6 +27,7 @@ public final class KppValidator {
      * Validate KPP
      *
      * @param value string with KPP
+     * @return true if kpp is valid or null
      */
     public boolean isValid(String value) {
         if (value == null) {

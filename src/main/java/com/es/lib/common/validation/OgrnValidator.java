@@ -27,6 +27,8 @@ public final class OgrnValidator {
      * General validate OGRN with 13 and 15 length
      *
      * @param value string with OGRN
+     * @param type  type of ogrn validation
+     * @return true if ogrn is valid or null
      */
     public boolean isValid(String value, OgrnType type) {
         if (value == null) {
@@ -52,6 +54,7 @@ public final class OgrnValidator {
      * Validate OGRN with length equal 13
      *
      * @param value string with OGRN
+     * @return true if ogrn is valid
      */
     private boolean isValid13(String value) {
         try {
@@ -70,6 +73,7 @@ public final class OgrnValidator {
      * Validate OGRN with length equal 15
      *
      * @param value string with OGRN
+     * @return true if ogrn is valid
      */
     private boolean isValid15(String value) {
         try {

@@ -97,7 +97,7 @@ public final class MoneyToStr {
         if (pennies == null) {
             throw new IllegalArgumentException("Pennies is null");
         }
-        if (currency == Currency.RUB){
+        if (currency == Currency.RUB) {
             currency = Currency.RUR;
         }
         this.pennies = pennies;
@@ -226,8 +226,10 @@ public final class MoneyToStr {
      * MoneyToStr("UAH"); String result = moneyToStr.convert(123D); Expected:
      * result = сто двадцять три гривні 00 копійок
      *
-     * @param theMoney   the amount of money major currency
-     * @param theKopeiki the amount of money minor currency
+     * @param theMoney    the amount of money major currency
+     * @param theKopeiki  the amount of money minor currency
+     * @param appendInt   append int part
+     * @param appendFract append fract part
      * @return the string description of money value
      */
     public String convert(Long theMoney, Long theKopeiki, boolean appendInt, boolean appendFract) {

@@ -30,14 +30,14 @@ buildscript {
 }
 
 wrapper {
-    gradleVersion = '6.4.1'
+    gradleVersion = '6.5'
 }
 
 apply from: "build-${profile}.gradle"
 apply plugin: 'idea'
 apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'groovy'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
@@ -98,7 +98,7 @@ javadoc {
     options.encoding = 'utf-8'
 }
 tasks.create(name: 'javadocJar', type: Jar, dependsOn: 'javadoc') {
-    classifier = 'javadoc'
+    archiveClassifier.set('javadoc')
     from javadoc.destinationDir
 }
 tasks.create(name: 'sourceJar', type: Jar) {
@@ -125,20 +125,20 @@ publishing {
     }
 }
 dependencies {
-    compile "org.apache.commons:commons-lang3:3.10"
-    compile "org.slf4j:slf4j-api:1.7.30"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.11.0"
-    compile "com.sun.mail:jakarta.mail:1.6.5"
-    compile "de.svenkubiak:jBCrypt:0.4.1"
-    compile "commons-io:commons-io:2.6"
-    compile "org.reflections:reflections:0.9.12"
+    api "org.apache.commons:commons-lang3:3.10"
+    api "org.slf4j:slf4j-api:1.7.30"
+    api "com.fasterxml.jackson.core:jackson-databind:2.11.0"
+    api "com.sun.mail:jakarta.mail:1.6.5"
+    api "de.svenkubiak:jBCrypt:0.4.1"
+    api "commons-io:commons-io:2.6"
+    api "org.reflections:reflections:0.9.12"
 
     compileOnly "org.projectlombok:lombok:1.18.12"
     annotationProcessor "org.projectlombok:lombok:1.18.12"
 
-    testCompile "org.spockframework:spock-core:1.3-groovy-2.5"
-    testCompile "cglib:cglib:3.3.0"
-    testCompile "org.objenesis:objenesis:3.1"
+    testImplementation "org.spockframework:spock-core:1.3-groovy-2.5"
+    testImplementation "cglib:cglib:3.3.0"
+    testImplementation "org.objenesis:objenesis:3.1"
 }
 
 def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null

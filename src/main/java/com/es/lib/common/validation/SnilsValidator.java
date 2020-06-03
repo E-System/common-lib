@@ -27,6 +27,7 @@ public final class SnilsValidator {
      * Validate SNILS
      *
      * @param value string with SNILS
+     * @return true if snils is valid or null
      */
     public boolean isValid(String value) {
         if (value == null) {
