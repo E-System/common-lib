@@ -16,21 +16,20 @@
 
 package com.es.lib.common.collection;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.LinkedList;
 
 /**
- * Коллекция, содержащая не более N элементов
+ * Collection with max N elements
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 18.10.15
  */
+@RequiredArgsConstructor
 public class LimitedQueue<E> extends LinkedList<E> {
 
-    private int limit;
-
-    public LimitedQueue(int limit) {
-        this.limit = limit;
-    }
+    private final int limit;
 
     @Override
     public boolean add(E o) {
