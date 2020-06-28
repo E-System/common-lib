@@ -149,6 +149,7 @@ if (emailTestEnabled) {
         systemProperty 'test_email_password', "${test_email_password}"
     }
 }
+
 test {
     finalizedBy jacocoTestReport
 }

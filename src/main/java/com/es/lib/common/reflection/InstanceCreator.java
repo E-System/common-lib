@@ -17,32 +17,28 @@
 package com.es.lib.common.reflection;
 
 import com.es.lib.common.exception.ESRuntimeException;
+import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
 /**
- * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
-public class Instantiator<E1, E2, E3> implements Serializable {
+@RequiredArgsConstructor
+public class InstanceCreator<E1, E2, E3> implements Serializable {
 
-    private Class<E1> entityClass;
-    private Class<E2> secondEntityClass;
-    private Class<E3> thirdEntityClass;
+    private final Class<E1> entityClass;
+    private final Class<E2> secondEntityClass;
+    private final Class<E3> thirdEntityClass;
 
-    public Instantiator(Class<E1> entityClass, Class<E2> secondEntityClass, Class<E3> thirdEntityClass) {
-        this.entityClass = entityClass;
-        this.secondEntityClass = secondEntityClass;
-        this.thirdEntityClass = thirdEntityClass;
-    }
-
-    public static Instantiator create(Type it, Class<?> defaultSecondClass, Class<?> defaultThirdClass) {
+    public static InstanceCreator<?, ?, ?> create(Type it, Class<?> defaultSecondClass, Class<?> defaultThirdClass) {
         Type[] entityTypes = Reflects.extractTypes(it);
         Class<?> entityClass = Reflects.extractClass(entityTypes[0]);
         Class<?> secondEntityClass = Reflects.extractClass(entityTypes.length > 1 ? entityTypes[1] : defaultSecondClass);
         Class<?> thirdEntityClass = Reflects.extractClass(entityTypes.length > 2 ? entityTypes[2] : defaultThirdClass);
-        return new Instantiator<>(entityClass, secondEntityClass, thirdEntityClass);
+        return new InstanceCreator<>(entityClass, secondEntityClass, thirdEntityClass);
     }
 
     public Class<E1> getEntityClass() {
@@ -58,24 +54,20 @@ public class Instantiator<E1, E2, E3> implements Serializable {
     }
 
     public E1 createInstance() {
-        try {
-            return getEntityClass().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new ESRuntimeException(e);
-        }
+        return newInstance(getEntityClass());
     }
 
     public E2 createSecondInstance() {
-        try {
-            return getSecondEntityClass().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new ESRuntimeException(e);
-        }
+        return newInstance(getSecondEntityClass());
     }
 
     public E3 createThirdInstance() {
+        return newInstance(getThirdEntityClass());
+    }
+
+    private <T> T newInstance(Class<T> instanceClass) {
         try {
-            return getThirdEntityClass().newInstance();
+            return instanceClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             throw new ESRuntimeException(e);
         }

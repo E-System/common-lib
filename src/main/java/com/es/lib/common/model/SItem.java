@@ -13,21 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 package com.es.lib.common.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
- * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class SItem {
+public class SItem implements Serializable {
 
     private final String id;
     private final String title;

@@ -27,9 +27,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Utils for phone numbers
+ * Phone numbers
  *
- * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 11.08.15
  */
 public final class Phones {
@@ -63,7 +63,7 @@ public final class Phones {
      */
     public static boolean isMobile(String value) {
         value = clean(value);
-        return value != null && value.matches("^(7|8)?9\\d{7,}$");
+        return value != null && value.matches("^([78])?9\\d{7,}$");
     }
 
     /**

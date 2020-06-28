@@ -20,7 +20,7 @@ import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
 
 /**
- * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 11.08.15
  */
 class PhonesSpec extends Specification {

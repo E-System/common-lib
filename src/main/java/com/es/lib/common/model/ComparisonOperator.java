@@ -13,13 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 package com.es.lib.common.model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
- * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public enum ComparisonOperator {
 
     EQ("="),
@@ -27,13 +32,6 @@ public enum ComparisonOperator {
     GE(">="),
     LT("<"),
     LE("<=");
-    private String value;
 
-    ComparisonOperator(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
+    private final String value;
 }

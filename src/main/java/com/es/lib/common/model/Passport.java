@@ -13,27 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 package com.es.lib.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 23.09.16
  */
 @Getter
 @ToString
 @AllArgsConstructor
-public class Passport {
+public class Passport implements Serializable {
 
-    private String serial;
-    private String number;
-    private String issued;
-    private Date issuedDate;
-    private String divisionCode;
+    private final String serial;
+    private final String number;
+    private final String issued;
+    private final Date issuedDate;
+    private final String divisionCode;
 }
