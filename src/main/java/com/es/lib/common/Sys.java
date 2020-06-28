@@ -48,6 +48,12 @@ public final class Sys {
         return result;
     }
 
+    public static void measure(String prefix, Runnable runnable) {
+        long start = System.currentTimeMillis();
+        runnable.run();
+        log.trace("{}: {} ms", prefix, System.currentTimeMillis() - start);
+    }
+
     /**
      * Sleep thread for timeout (Interrupt current thread if InterruptedException thrown in sleep)
      *
