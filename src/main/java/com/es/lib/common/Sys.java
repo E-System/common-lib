@@ -17,14 +17,17 @@
 package com.es.lib.common;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Paths;
+import java.util.function.Supplier;
 
 /**
  * @author Vitaliy Savchenko - savchenko.v@ext-system.com
  * @since 24.05.15
  */
+@Slf4j
 public final class Sys {
 
     private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
@@ -37,6 +40,13 @@ public final class Sys {
     }
 
     private Sys() { }
+
+    public static <T> T measure(String prefix, Supplier<T> supplier) {
+        long start = System.currentTimeMillis();
+        T result = supplier.get();
+        log.trace("{}: {} ms - [{}]", prefix, System.currentTimeMillis() - start, result);
+        return result;
+    }
 
     /**
      * Sleep thread for timeout (Interrupt current thread if InterruptedException thrown in sleep)
