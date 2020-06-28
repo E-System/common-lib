@@ -42,9 +42,17 @@ public final class Sys {
     private Sys() { }
 
     public static <T> T measure(String prefix, Supplier<T> supplier) {
+        return measure(prefix, false, supplier);
+    }
+
+    public static <T> T measure(String prefix, boolean skipLogResult, Supplier<T> supplier) {
         long start = System.currentTimeMillis();
         T result = supplier.get();
-        log.trace("{}: {} ms - [{}]", prefix, System.currentTimeMillis() - start, result);
+        if (skipLogResult) {
+            log.trace("{}: {} ms", prefix, System.currentTimeMillis() - start);
+        } else {
+            log.trace("{}: {} ms - [{}]", prefix, System.currentTimeMillis() - start, result);
+        }
         return result;
     }
 
