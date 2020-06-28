@@ -33,11 +33,11 @@ public class InstanceCreator<E1, E2, E3> implements Serializable {
     private final Class<E2> secondEntityClass;
     private final Class<E3> thirdEntityClass;
 
-    public static InstanceCreator<?, ?, ?> create(Type it, Class<?> defaultSecondClass, Class<?> defaultThirdClass) {
+    public static <T1, T2, T3> InstanceCreator<T1, T2, T3> create(Type it, Class<T2> defaultSecondClass, Class<T3> defaultThirdClass) {
         Type[] entityTypes = Reflects.extractTypes(it);
-        Class<?> entityClass = Reflects.extractClass(entityTypes[0]);
-        Class<?> secondEntityClass = Reflects.extractClass(entityTypes.length > 1 ? entityTypes[1] : defaultSecondClass);
-        Class<?> thirdEntityClass = Reflects.extractClass(entityTypes.length > 2 ? entityTypes[2] : defaultThirdClass);
+        Class<T1> entityClass = (Class<T1>) Reflects.extractClass(entityTypes[0]);
+        Class<T2> secondEntityClass = (Class<T2>) Reflects.extractClass(entityTypes.length > 1 ? entityTypes[1] : defaultSecondClass);
+        Class<T3> thirdEntityClass = (Class<T3>) Reflects.extractClass(entityTypes.length > 2 ? entityTypes[2] : defaultThirdClass);
         return new InstanceCreator<>(entityClass, secondEntityClass, thirdEntityClass);
     }
 
