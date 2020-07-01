@@ -78,5 +78,4 @@ public final class TimeConverter {
 
         final static TimeConverter INSTANCE = new TimeConverter();
     }
-
 }

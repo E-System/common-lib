@@ -17,9 +17,16 @@
 package com.es.lib.common.number;
 
 import com.es.lib.common.Constant;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -134,65 +141,26 @@ public final class Numbers {
         );
     }
 
+    @Getter
+    @ToString
+    @EqualsAndHashCode
+    @RequiredArgsConstructor
     public static class AAM {
 
-        private long addition;
-        private long total;
+        private final long addition;
+        private final long total;
 
         public AAM(Double addition, Double total) {
             this.addition = converter(addition).asScaledLong();
             this.total = converter(total).asScaledLong();
         }
 
-        public AAM(long addition, long total) {
-            this.addition = addition;
-            this.total = total;
-        }
-
-        public long getAddition() {
-            return addition;
-        }
-
         public BigDecimal getRealAddition() {
             return converter(addition).toBigDecimal();
         }
 
-        public long getTotal() {
-            return total;
-        }
-
         public BigDecimal getRealTotal() {
             return converter(total).toBigDecimal();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            AAM aam = (AAM) o;
-
-            return addition == aam.addition && total == aam.total;
-
-        }
-
-        @Override
-        public int hashCode() {
-            int result = (int) (addition ^ (addition >>> 32));
-            result = 31 * result + (int) (total ^ (total >>> 32));
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return "AAM [" +
-                   "addition=" + addition +
-                   ", total=" + total +
-                   ']';
         }
     }
 }
