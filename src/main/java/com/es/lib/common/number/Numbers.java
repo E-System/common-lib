@@ -21,12 +21,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -35,6 +36,73 @@ import java.util.Map;
 public final class Numbers {
 
     private Numbers() { }
+
+    /**
+     * Split sum on count part
+     *
+     * @param sum         Input sum (Need be positive)
+     * @param count       Split count
+     * @param adjustFirst Add overlap to first element, otherwise to last
+     * @return List of sum parts
+     */
+    public static List<Integer> splitSum(int sum, int count, boolean adjustFirst) {
+        if (sum < 0) {
+            throw new IllegalArgumentException("Sum must be positive");
+        }
+        if (count <= 0) {
+            throw new IllegalArgumentException("Count must be greater than zero");
+        }
+        if (sum == 0) {
+            return Collections.singletonList(0);
+        }
+        if (count == 1) {
+            return Collections.singletonList(sum);
+        }
+        List<Integer> result = new ArrayList<>(count);
+        int part = sum / count;
+        int over = sum;
+        int overlap = sum - (part * count);
+        while (over > 0) {
+            if (over >= part) {
+                result.add(Math.min(part, over));
+            }
+            over -= part;
+        }
+        if (overlap > 0) {
+            int index = adjustFirst ? 0 : result.size() - 1;
+            result.set(index, result.get(index) + overlap);
+        }
+        return result;
+    }
+
+    /**
+     * Split sum on percent parts
+     *
+     * @param sum         Input sum (Need be positive)
+     * @param percents    List of percents
+     * @param adjustFirst Add overlap to first element, otherwise to last
+     * @return List of sum parts
+     */
+    public static List<Integer> splitSum(int sum, Collection<Double> percents, boolean adjustFirst) {
+        if (sum < 0) {
+            throw new IllegalArgumentException("Sum must be positive");
+        }
+        if (percents == null) {
+            throw new IllegalArgumentException("Percents must not be null");
+        }
+        List<Integer> result = new ArrayList<>(percents.size());
+        int calculated = 0;
+        for (double percent : percents) {
+            int value = (int) Math.round(sum * percent / 100.0d);
+            result.add(value);
+            calculated += value;
+        }
+        if (calculated != sum) {
+            int index = adjustFirst ? 0 : result.size() - 1;
+            result.set(index, result.get(index) + (sum - calculated));
+        }
+        return result;
+    }
 
     public static NumberConverter converter(Number value) {
         return new NumberConverter(value);

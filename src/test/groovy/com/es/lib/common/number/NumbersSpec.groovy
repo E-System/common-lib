@@ -16,6 +16,7 @@
 
 package com.es.lib.common.number
 
+
 import spock.lang.Specification
 
 /**
@@ -23,7 +24,6 @@ import spock.lang.Specification
  * @since 07.10.14
  */
 class NumbersSpec extends Specification {
-
 
     def "Remain with scale"() {
         expect:
@@ -105,5 +105,116 @@ class NumbersSpec extends Specification {
         11.234d | 3.5d || new Numbers.AAM(2.766d, 14.0d)
         2.12d   | 0.1d || new Numbers.AAM(0.08d, 2.2d)
         10.11d  | 1.0d || new Numbers.AAM(0.89d, 11.0d)
+    }
+
+    def "Split sum with invalid values"() {
+        when:
+        Numbers.splitSum(-1, -1, true)
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
+        Numbers.splitSum(0, -1, true)
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def "Split sum with invalid values (percents)"() {
+        when:
+        Numbers.splitSum(-1, [], true)
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
+        Numbers.splitSum(0, null, true)
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def "Split to one element"() {
+        when:
+        def res = Numbers.splitSum(0, 20, true)
+        then:
+        res.size() == 1
+        res.contains(0)
+
+        when:
+        res = Numbers.splitSum(100, 1, true)
+        then:
+        res.size() == 1
+        res.contains(100)
+    }
+
+    def "Split with overlap"() {
+        when:
+        def res = Numbers.splitSum(100, 3, true)
+        then:
+        res.size() == 3
+        res[0] == 34
+        res[1] == 33
+        res[2] == 33
+
+        when:
+        res = Numbers.splitSum(100, 3, false)
+        then:
+        res.size() == 3
+        res[0] == 33
+        res[1] == 33
+        res[2] == 34
+
+        when:
+        res = Numbers.splitSum(133, 3, false)
+        then:
+        res.size() == 3
+        res[0] == 44
+        res[1] == 44
+        res[2] == 45
+
+        when:
+        res = Numbers.splitSum(133, 2, true)
+        then:
+        res.size() == 2
+        res[0] == 67
+        res[1] == 66
+
+        when:
+        res = Numbers.splitSum(100, 2, true)
+        then:
+        res.size() == 2
+        res[0] == 50
+        res[1] == 50
+    }
+
+    def "Split with overlap (percent)"() {
+        when:
+        def res = Numbers.splitSum(100, [50d, 50d], true)
+        then:
+        res.size() == 2
+        res[0] == 50
+        res[1] == 50
+
+        when:
+        res = Numbers.splitSum(100, [25d, 25d, 50d], true)
+        then:
+        res.size() == 3
+        res[0] == 25
+        res[1] == 25
+        res[2] == 50
+
+        when:
+        res = Numbers.splitSum(131, [25d, 25d, 50d], true)
+        then:
+        res.size() == 3
+        res[0] == 32
+        res[1] == 33
+        res[2] == 66
+
+        when:
+        res = Numbers.splitSum(100, [25d, 25d, 55d], true)
+        then:
+        res.size() == 3
+        res[0] == 20
+        res[1] == 25
+        res[2] == 55
     }
 }
