@@ -16,7 +16,14 @@
 
 package com.es.lib.common.number;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Calculate percent
@@ -120,5 +127,66 @@ public final class Percents {
      */
     public static long getTotal(long value, double percent) {
         return value + get(value, percent);
+    }
+
+    /**
+     * Split items sum by percent sum in fullSum
+     *
+     * @param sum        Sum part
+     * @param fullSum    Full sum
+     * @param items      Items
+     * @param sumFetcher Fetcher for sum from item
+     * @param <T>        Type of items
+     * @return List of items with calculated sum
+     */
+    public static <T> List<Map.Entry<T, Integer>> split(int sum, int fullSum, Collection<T> items, Function<T, Integer> sumFetcher) {
+        double percent = 100.d;
+        if (sum != fullSum) {
+            percent = Percents.value(sum, fullSum).doubleValue();
+        }
+        int totalSum = 0;
+        List<Map.Entry<T, Integer>> result = new ArrayList<>();
+        for (T contractItem : items) {
+            int sumPart = sumFetcher.apply(contractItem);
+            if (sum != fullSum) {
+                sumPart = Percents.get(sumPart, percent);
+            }
+            result.add(Pair.of(contractItem, sumPart));
+            totalSum += sumPart;
+        }
+        if (totalSum != sum) {
+            Map.Entry<T, Integer> entry = result.get(0);
+            entry.setValue(entry.getValue() + (sum - totalSum));
+        }
+        return result;
+    }
+
+    /**
+     * Split sum on percent parts
+     *
+     * @param sum         Input sum (Need be positive)
+     * @param percents    List of percents
+     * @param adjustFirst Add overlap to first element, otherwise to last
+     * @return List of sum parts
+     */
+    public static List<Integer> split(int sum, Collection<Double> percents, boolean adjustFirst) {
+        if (sum < 0) {
+            throw new IllegalArgumentException("Sum must be positive");
+        }
+        if (percents == null) {
+            throw new IllegalArgumentException("Percents must not be null");
+        }
+        List<Integer> result = new ArrayList<>(percents.size());
+        int calculated = 0;
+        for (double percent : percents) {
+            int value = (int) Math.round(sum * percent / 100.0d);
+            result.add(value);
+            calculated += value;
+        }
+        if (calculated != sum) {
+            int index = adjustFirst ? 0 : result.size() - 1;
+            result.set(index, result.get(index) + (sum - calculated));
+        }
+        return result;
     }
 }

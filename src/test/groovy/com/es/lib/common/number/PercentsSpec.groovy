@@ -18,6 +18,8 @@ package com.es.lib.common.number
 
 import spock.lang.Specification
 
+import java.util.function.Function
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 18.07.15
@@ -139,5 +141,61 @@ class PercentsSpec extends Specification {
         100   | 10       | 10
         100   | 50       | 50
         1     | 50       | 0.5
+    }
+
+    def "Split with overlap (percent)"() {
+        when:
+        def res = Percents.split(100, [50d, 50d], true)
+        then:
+        res.size() == 2
+        res[0] == 50
+        res[1] == 50
+
+        when:
+        res = Percents.split(100, [25d, 25d, 50d], true)
+        then:
+        res.size() == 3
+        res[0] == 25
+        res[1] == 25
+        res[2] == 50
+
+        when:
+        res = Percents.split(131, [25d, 25d, 50d], true)
+        then:
+        res.size() == 3
+        res[0] == 32
+        res[1] == 33
+        res[2] == 66
+
+        when:
+        res = Percents.split(100, [25d, 25d, 55d], true)
+        then:
+        res.size() == 3
+        res[0] == 20
+        res[1] == 25
+        res[2] == 55
+    }
+
+    def "Split by sum and fullSum"() {
+        when:
+        def items = [new Item(25000), new Item(25000), new Item(40000), new Item(10000)]
+        def res = Percents.split(12300, 100000, items, new Function<Item, Integer>() {
+            @Override
+            Integer apply(Item t) {
+                return t.getSum()
+            }
+        })
+        println res
+        then:
+        res.size() == 4
+        res.sum { it.value } == 12300
+    }
+
+    class Item {
+        int sum
+
+        Item(int sum) {
+            this.sum = sum
+        }
     }
 }

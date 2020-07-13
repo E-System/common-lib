@@ -184,37 +184,4 @@ class NumbersSpec extends Specification {
         res[0] == 50
         res[1] == 50
     }
-
-    def "Split with overlap (percent)"() {
-        when:
-        def res = Numbers.splitSum(100, [50d, 50d], true)
-        then:
-        res.size() == 2
-        res[0] == 50
-        res[1] == 50
-
-        when:
-        res = Numbers.splitSum(100, [25d, 25d, 50d], true)
-        then:
-        res.size() == 3
-        res[0] == 25
-        res[1] == 25
-        res[2] == 50
-
-        when:
-        res = Numbers.splitSum(131, [25d, 25d, 50d], true)
-        then:
-        res.size() == 3
-        res[0] == 32
-        res[1] == 33
-        res[2] == 66
-
-        when:
-        res = Numbers.splitSum(100, [25d, 25d, 55d], true)
-        then:
-        res.size() == 3
-        res[0] == 20
-        res[1] == 25
-        res[2] == 55
-    }
 }
