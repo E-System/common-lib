@@ -119,18 +119,6 @@ class NumbersSpec extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def "Split sum with invalid values (percents)"() {
-        when:
-        Numbers.splitSum(-1, [], true)
-        then:
-        thrown(IllegalArgumentException)
-
-        when:
-        Numbers.splitSum(0, null, true)
-        then:
-        thrown(IllegalArgumentException)
-    }
-
     def "Split to one element"() {
         when:
         def res = Numbers.splitSum(0, 20, true)

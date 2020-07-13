@@ -176,6 +176,18 @@ class PercentsSpec extends Specification {
         res[2] == 55
     }
 
+    def "Split sum with invalid values (percents)"() {
+        when:
+        Percents.split(-1, [], true)
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
+        Percents.split(0, null, true)
+        then:
+        thrown(IllegalArgumentException)
+    }
+
     def "Split by sum and fullSum"() {
         when:
         def items = [new Item(25000), new Item(25000), new Item(40000), new Item(10000)]
