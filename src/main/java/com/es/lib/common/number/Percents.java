@@ -16,6 +16,7 @@
 
 package com.es.lib.common.number;
 
+import com.es.lib.common.collection.Items;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.math.BigDecimal;
@@ -140,16 +141,19 @@ public final class Percents {
      * @return List of items with calculated sum
      */
     public static <T> List<Map.Entry<T, Integer>> split(int sum, int fullSum, Collection<T> items, Function<T, Integer> sumFetcher) {
+        if (Items.isEmpty(items)) {
+            return new ArrayList<>();
+        }
         double percent = 100.d;
         if (sum != fullSum) {
-            percent = Percents.value(sum, fullSum).doubleValue();
+            percent = value(sum, fullSum).doubleValue();
         }
         int totalSum = 0;
         List<Map.Entry<T, Integer>> result = new ArrayList<>();
         for (T contractItem : items) {
             int sumPart = sumFetcher.apply(contractItem);
             if (sum != fullSum) {
-                sumPart = Percents.get(sumPart, percent);
+                sumPart = get(sumPart, percent);
             }
             result.add(Pair.of(contractItem, sumPart));
             totalSum += sumPart;
@@ -179,7 +183,7 @@ public final class Percents {
         List<Integer> result = new ArrayList<>(percents.size());
         int calculated = 0;
         for (double percent : percents) {
-            int value = (int) Math.round(sum * percent / 100.0d);
+            int value = get(sum, percent);
             result.add(value);
             calculated += value;
         }
