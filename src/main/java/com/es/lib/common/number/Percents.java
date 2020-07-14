@@ -17,6 +17,7 @@
 package com.es.lib.common.number;
 
 import com.es.lib.common.collection.Items;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.math.BigDecimal;
@@ -155,7 +156,7 @@ public final class Percents {
             if (sum != fullSum) {
                 sumPart = get(sumPart, percent);
             }
-            result.add(Pair.of(contractItem, sumPart));
+            result.add(MutablePair.of(contractItem, sumPart));
             totalSum += sumPart;
         }
         if (totalSum != sum) {
