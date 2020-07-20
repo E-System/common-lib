@@ -32,9 +32,9 @@ public class Bytes {
     /**
      * Deserialize object
      *
-     * @param arr - исходный массив байт
-     * @param <T> type of deserialized object
-     * @return десериализованный объект
+     * @param arr Source bytes
+     * @param <T> Type of result object
+     * @return Deserialized object
      */
     public static <T> T deserialize(byte[] arr) {
         try {
