@@ -16,75 +16,34 @@
 
 package com.es.lib.common.email.pop;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
 import javax.mail.Address;
 import java.io.File;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 15.05.16
  */
+@Getter
+@ToString
+@RequiredArgsConstructor
 public class ReceivedMessage {
 
-    private Collection<Address> from;
-    private String subject;
-    private String message;
-    private Date sentDate;
-    private Map<String, String> headers;
-    private Map<String, File> attachments;
+    private final Collection<Address> from;
+    private final String subject;
+    private final String message;
+    private final Date sentDate;
+    private final Map<String, String> headers;
+    private final Map<String, File> attachments;
 
     public ReceivedMessage(Collection<Address> from, String subject, String message, Date sentDate, Map<String, String> headers) {
-        this.from = from;
-        this.subject = subject;
-        this.message = message;
-        this.sentDate = sentDate;
-        this.headers = headers;
-    }
-
-    public ReceivedMessage(Collection<Address> from, String subject, String message, Date sentDate, Map<String, String> headers, Map<String, File> attachments) {
-        this.from = from;
-        this.subject = subject;
-        this.message = message;
-        this.sentDate = sentDate;
-        this.headers = headers;
-        this.attachments = attachments;
-    }
-
-    public Collection<Address> getFrom() {
-        return from;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public Date getSentDate() {
-        return sentDate;
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public Map<String, File> getAttachments() {
-        return attachments;
-    }
-
-    @Override
-    public String toString() {
-        return "ReceivedMessage{" +
-               "from=" + from +
-               ", subject='" + subject + '\'' +
-               ", message='" + message + '\'' +
-               ", sentDate=" + sentDate +
-               ", headers=" + headers +
-               ", attachments=" + attachments +
-               '}';
+        this(from, subject, message, sentDate, headers, new HashMap<>());
     }
 }

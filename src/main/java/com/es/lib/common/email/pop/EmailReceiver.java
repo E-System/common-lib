@@ -106,9 +106,9 @@ public class EmailReceiver extends BaseEmailProcessor {
 
     private Map<String, String> getAllHeaders(Message message) throws MessagingException {
         Map<String, String> result = new HashMap<>(10);
-        Enumeration allHeaders = message.getAllHeaders();
+        Enumeration<Header> allHeaders = message.getAllHeaders();
         while (allHeaders.hasMoreElements()) {
-            Header header = (Header) allHeaders.nextElement();
+            Header header = allHeaders.nextElement();
             result.put(
                 header.getName(),
                 header.getValue()

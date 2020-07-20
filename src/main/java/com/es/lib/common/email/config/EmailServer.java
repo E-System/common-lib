@@ -16,12 +16,17 @@
 
 package com.es.lib.common.email.config;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Getter
+@ToString
 public class EmailServer implements Cloneable, Serializable {
 
     public enum Type {
@@ -64,42 +69,6 @@ public class EmailServer implements Cloneable, Serializable {
         this.timeout = timeout;
     }
 
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public boolean isSsl() {
-        return ssl;
-    }
-
-    public void setSsl(boolean ssl) {
-        this.ssl = ssl;
-    }
-
-    public boolean isTls() {
-        return tls;
-    }
-
-    public int getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
     @Override
     public Object clone() throws CloneNotSupportedException {
         EmailServer object = (EmailServer) super.clone();
@@ -109,16 +78,5 @@ public class EmailServer implements Cloneable, Serializable {
         object.tls = tls;
         object.timeout = timeout;
         return object;
-    }
-
-    @Override
-    public String toString() {
-        return "EmailServer{" +
-               "host='" + host + '\'' +
-               ", port=" + port +
-               ", ssl=" + ssl +
-               ", tls=" + tls +
-               ", timeout=" + timeout +
-               '}';
     }
 }

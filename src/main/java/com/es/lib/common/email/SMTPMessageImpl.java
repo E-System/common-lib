@@ -17,6 +17,7 @@
 package com.es.lib.common.email;
 
 import com.sun.mail.smtp.SMTPMessage;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.MessagingException;
@@ -32,6 +33,7 @@ import java.io.OutputStream;
  */
 public class SMTPMessageImpl extends SMTPMessage {
 
+    @Setter
     private String messageId;
 
     public SMTPMessageImpl(Session session) {
@@ -44,10 +46,6 @@ public class SMTPMessageImpl extends SMTPMessage {
 
     public SMTPMessageImpl(MimeMessage source) throws MessagingException {
         super(source);
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
     }
 
     @Override

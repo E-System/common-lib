@@ -17,8 +17,8 @@
 package com.es.lib.common.email;
 
 import com.es.lib.common.model.data.OutputData;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -27,10 +27,10 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmailBaseAttachment {
 
-    private OutputData data;
+    private final OutputData data;
 
     public boolean isSingle() {
         return this instanceof EmailRootAttachment;

@@ -28,13 +28,13 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class EmailAttachment extends EmailBaseAttachment {
 
-    private String cid;
+    private final String cid;
 
     public EmailAttachment(OutputData data) {
-        super(data);
+        this(data, null);
     }
 
-    public EmailAttachment(String cid, OutputData data) {
+    public EmailAttachment(OutputData data, String cid) {
         super(data);
         this.cid = cid;
     }
