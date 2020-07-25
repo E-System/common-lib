@@ -16,16 +16,21 @@
 
 package com.es.lib.common.file;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.function.Consumer;
 
 /**
@@ -36,6 +41,46 @@ import java.util.function.Consumer;
 public final class Images {
 
     private Images() { }
+
+    public static Data info(Path source) {
+        try (InputStream stream = Files.newInputStream(source)) {
+            return info(stream);
+        } catch (IOException e) {
+            log.info(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static Data info(byte[] source) {
+        try (InputStream stream = new ByteArrayInputStream(source)) {
+            return info(stream);
+        } catch (IOException e) {
+            log.info(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static Data info(InputStream source) throws IOException {
+        try (ImageInputStream in = ImageIO.createImageInputStream(source)) {
+            return info(in);
+        }
+    }
+
+    public static Data info(ImageInputStream source) throws IOException {
+        final Iterator<ImageReader> readers = ImageIO.getImageReaders(source);
+        if (readers.hasNext()) {
+            ImageReader reader = readers.next();
+            try {
+                reader.setInput(source);
+                final int width = reader.getWidth(0);
+                final int height = reader.getHeight(0);
+                return new Data(width, height);
+            } finally {
+                reader.dispose();
+            }
+        }
+        return null;
+    }
 
     private static RenderedImage resize(Image originalImage, int scaledWidth, int scaledHeight) {
         BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_RGB);
@@ -122,5 +167,18 @@ public final class Images {
             graphics.drawString(message, Math.round((width - dimension.width) * 0.5f), Math.round((height + dimension.height) * 0.5f));
             graphics.dispose();
         });
+    }
+
+    @Getter
+    @ToString
+    @RequiredArgsConstructor
+    public static class Data {
+
+        private final int width;
+        private final int height;
+
+        public boolean isVertical() {
+            return height > width;
+        }
     }
 }
