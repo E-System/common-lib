@@ -16,6 +16,7 @@
 
 package com.es.lib.common.file;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -42,7 +43,7 @@ public final class Images {
 
     private Images() { }
 
-    public static Data info(Path source) {
+    public static Info info(Path source) {
         try (InputStream stream = Files.newInputStream(source)) {
             return info(stream);
         } catch (IOException e) {
@@ -51,7 +52,7 @@ public final class Images {
         return null;
     }
 
-    public static Data info(byte[] source) {
+    public static Info info(byte[] source) {
         try (InputStream stream = new ByteArrayInputStream(source)) {
             return info(stream);
         } catch (IOException e) {
@@ -60,21 +61,19 @@ public final class Images {
         return null;
     }
 
-    public static Data info(InputStream source) throws IOException {
+    public static Info info(InputStream source) throws IOException {
         try (ImageInputStream in = ImageIO.createImageInputStream(source)) {
             return info(in);
         }
     }
 
-    public static Data info(ImageInputStream source) throws IOException {
+    public static Info info(ImageInputStream source) throws IOException {
         final Iterator<ImageReader> readers = ImageIO.getImageReaders(source);
         if (readers.hasNext()) {
             ImageReader reader = readers.next();
             try {
                 reader.setInput(source);
-                final int width = reader.getWidth(0);
-                final int height = reader.getHeight(0);
-                return new Data(width, height);
+                return Info.of(reader.getWidth(0), reader.getHeight(0));
             } finally {
                 reader.dispose();
             }
@@ -171,14 +170,18 @@ public final class Images {
 
     @Getter
     @ToString
-    @RequiredArgsConstructor
-    public static class Data {
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Info {
 
         private final int width;
         private final int height;
 
         public boolean isVertical() {
             return height > width;
+        }
+
+        public static Info of(int width, int height) {
+            return new Info(width, height);
         }
     }
 }
