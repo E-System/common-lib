@@ -11,6 +11,10 @@ public final class Texts {
 
     private Texts() { }
 
+    public static char nbsp() {
+        return Character.toChars(160)[0];
+    }
+
     public static String removeDelimiters(String value) {
         return replaceDelimiters(value, "");
     }

@@ -7,7 +7,7 @@ import java.util.function.Function
 
 class TextsSpec extends Specification {
 
-    static class SplitItem{
+    static class SplitItem {
         int v1
         int v2
 
@@ -364,5 +364,15 @@ class TextsSpec extends Specification {
         ['hello': 'hello']                   | ['hello': 'hello']
         'jndi/db-${com.es.profiles.active}'  | 'jndi/db-develop'
         'jndi/db-${com.es.profiles.active1}' | 'jndi/db-NOT_FOUND'
+    }
+
+    def "Nbsp"() {
+        when:
+        def text = "Hello" + Texts.nbsp() + "2"
+        def text2 = "Hello" + " " + "2"
+        then:
+        text.split(" ").size() == 1
+        text2.split(" ").size() == 2
+        println(text)
     }
 }
