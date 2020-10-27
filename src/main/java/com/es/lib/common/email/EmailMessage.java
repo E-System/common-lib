@@ -34,6 +34,7 @@ public class EmailMessage {
 
     private final String backAddress;
     private final String from;
+    private final String replyTo;
     private final String destinations;
     private final String subject;
     private final String message;

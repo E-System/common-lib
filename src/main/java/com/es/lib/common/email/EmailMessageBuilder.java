@@ -29,6 +29,7 @@ public class EmailMessageBuilder {
 
     private String backAddress;
     private String from;
+    private String replyTo;
     private String destinations;
     private String subject;
     private String message;
@@ -55,6 +56,11 @@ public class EmailMessageBuilder {
 
     public EmailMessageBuilder from(String from) {
         this.from = from;
+        return this;
+    }
+
+    public EmailMessageBuilder replyTo(String replyTo) {
+        this.replyTo = replyTo;
         return this;
     }
 
@@ -120,6 +126,7 @@ public class EmailMessageBuilder {
         return new EmailMessage(
             backAddress,
             from,
+            replyTo,
             destinations,
             subject,
             message,
