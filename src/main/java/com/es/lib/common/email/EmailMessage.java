@@ -35,8 +35,9 @@ import java.util.Map;
 @AllArgsConstructor
 public class EmailMessage {
 
-    private final String backAddress;
-    private final String from;
+    private final String fromAddress;
+    private final String fromName;
+    private final String replyTo;
     private final String destinations;
     private final String subject;
     private final String message;
@@ -67,8 +68,9 @@ public class EmailMessage {
 
     public static class Builder {
 
-        private String backAddress;
-        private String from;
+        private String fromAddress;
+        private String fromName;
+        private String replyTo;
         private String destinations;
         private String subject;
         private String message;
@@ -84,13 +86,18 @@ public class EmailMessage {
             this.extensions = new HashMap<>();
         }
 
-        public Builder backAddress(String backAddress) {
-            this.backAddress = backAddress;
+        public Builder fromAddress(String fromAddress) {
+            this.fromAddress = fromAddress;
             return this;
         }
 
-        public Builder from(String from) {
-            this.from = from;
+        public Builder fromName(String fromName) {
+            this.fromName = fromName;
+            return this;
+        }
+
+        public Builder replyTo(String replyTo) {
+            this.replyTo = replyTo;
             return this;
         }
 
@@ -154,8 +161,9 @@ public class EmailMessage {
 
         public EmailMessage build() {
             return new EmailMessage(
-                backAddress,
-                from,
+                fromAddress,
+                fromName,
+                replyTo,
                 destinations,
                 subject,
                 message,

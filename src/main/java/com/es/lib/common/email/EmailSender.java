@@ -31,7 +31,6 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
@@ -56,24 +55,29 @@ public class EmailSender extends BaseEmailProcessor {
     private Message createMessage(EmailMessage emailMessage) throws MessagingException, IOException {
         SMTPMessage smtpMessage = createSMTPMessage(emailMessage);
 
-        String from = StringUtils.isEmpty(emailMessage.getFrom()) ? getLogin() : emailMessage.getFrom();
-        String backAddress = StringUtils.isEmpty(emailMessage.getBackAddress()) ? getLogin() : emailMessage.getBackAddress();
-        log.trace("From: {}; Back Address: {}", from, backAddress);
-        smtpMessage.setFrom(new InternetAddress(backAddress, from));
-        if (StringUtils.isNotEmpty(emailMessage.getBackAddress())) {
-            smtpMessage.setReplyTo(
-                InternetAddress.parse(
-                    emailMessage.getBackAddress()
-                )
-            );
+        String fromAddress = StringUtils.isEmpty(emailMessage.getFromAddress()) ? null : emailMessage.getFromAddress();
+        String fromName = StringUtils.isEmpty(emailMessage.getFromName()) ? null : emailMessage.getFromName();
+        log.trace("From address: {}; From name: {}", fromAddress, fromName);
+        InternetAddress fromInetAddress;
+        if (fromAddress != null) {
+            if (fromName != null) {
+                fromInetAddress = new InternetAddress(fromAddress, fromName);
+            } else {
+                fromInetAddress = new InternetAddress(fromAddress);
+            }
+        } else {
+            if (fromName != null) {
+                fromInetAddress = new InternetAddress(getLogin(), fromName);
+            } else {
+                fromInetAddress = new InternetAddress(getLogin());
+            }
+        }
+        smtpMessage.setFrom(fromInetAddress);
+        if (StringUtils.isNotEmpty(emailMessage.getReplyTo())) {
+            smtpMessage.setReplyTo(InternetAddress.parse(emailMessage.getReplyTo()));
         }
 
-        InternetAddress sender;
-        try {
-            sender = new InternetAddress(from);
-        } catch (AddressException e) {
-            sender = new InternetAddress(getLogin());
-        }
+        InternetAddress sender = new InternetAddress(fromAddress != null ? fromAddress : getLogin());
         log.trace("Sender: {}", sender);
         smtpMessage.setEnvelopeFrom(sender.getAddress());
         smtpMessage.setSender(sender);
