@@ -24,22 +24,22 @@ import com.es.lib.common.model.data.FileData;
 import com.es.lib.common.model.data.StreamData;
 import com.es.lib.common.model.data.TypedData;
 import com.sun.mail.smtp.SMTPMessage;
+import jakarta.activation.DataHandler;
+import jakarta.activation.DataSource;
+import jakarta.activation.FileDataSource;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.util.ByteArrayDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import static javax.mail.Part.ATTACHMENT;
+import static jakarta.mail.Part.ATTACHMENT;
+
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com

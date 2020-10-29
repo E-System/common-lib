@@ -16,11 +16,11 @@
 
 package com.es.lib.common.email.pop;
 
+import jakarta.mail.Address;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import javax.mail.Address;
 import java.io.File;
 import java.util.Collection;
 import java.util.Date;

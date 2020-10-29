@@ -18,8 +18,8 @@ package com.es.lib.common.email.common;
 
 
 import com.es.lib.common.email.config.EmailServerConfiguration;
+import jakarta.mail.Session;
 
-import javax.mail.Session;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.Security;

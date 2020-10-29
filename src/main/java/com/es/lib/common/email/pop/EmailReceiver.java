@@ -19,10 +19,10 @@ package com.es.lib.common.email.pop;
 import com.es.lib.common.email.common.BaseEmailProcessor;
 import com.es.lib.common.email.config.POP3ServerConfiguration;
 import com.es.lib.common.security.Hash;
+import jakarta.mail.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.mail.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

@@ -17,12 +17,12 @@
 package com.es.lib.common.email;
 
 import com.sun.mail.smtp.SMTPMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeMessage;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

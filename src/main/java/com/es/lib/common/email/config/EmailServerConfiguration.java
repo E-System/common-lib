@@ -18,12 +18,12 @@ package com.es.lib.common.email.config;
 
 import com.es.lib.common.collection.Items;
 import com.es.lib.common.security.model.Credentials;
+import jakarta.mail.Authenticator;
+import jakarta.mail.PasswordAuthentication;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import javax.mail.Authenticator;
-import javax.mail.PasswordAuthentication;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
