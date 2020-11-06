@@ -87,8 +87,16 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
         );
     }
 
+    public SMTPServerConfiguration(String serverPreset, Credentials credentials) {
+        super(EmailServer.Type.SMTP, PRESETS.get(serverPreset), credentials);
+    }
+
     public SMTPServerConfiguration(EmailServer server, Credentials credentials) {
         super(EmailServer.Type.SMTP, server, credentials);
+    }
+
+    public SMTPServerConfiguration(String serverPreset, Credentials credentials, Map<String, Object> parameters, boolean debug) {
+        super(EmailServer.Type.SMTP, PRESETS.get(serverPreset), credentials, parameters, debug);
     }
 
     public SMTPServerConfiguration(EmailServer server, Credentials credentials, Map<String, Object> parameters, boolean debug) {
