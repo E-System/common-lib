@@ -381,6 +381,21 @@ class ItemsSpec extends Specification {
         Items.groupBy(null, null) == [:]
     }
 
+    def "toMap"() {
+        when:
+        def res = Items.toMap([Pair.of("1", "2"), Pair.of("2", "3")])
+        then:
+        res.size() == 2
+        res["1"] == "2"
+        res["2"] == "3"
+    }
+
+    def "toMap with empty and null"() {
+        expect:
+        Items.toMap([]) == [:]
+        Items.toMap(null) == [:]
+    }
+
     class GroupClass {
         String v1
         String v2

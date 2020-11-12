@@ -348,4 +348,14 @@ public final class Items {
         }
         return null;
     }
+
+    public static <K, V> Map<K, V> toMap(Collection<Map.Entry<K, V>> items) {
+        if (items == null) {
+            return new HashMap<>();
+        }
+        return items.stream().collect(Collectors.toMap(
+            Map.Entry::getKey,
+            Map.Entry::getValue
+        ));
+    }
 }
