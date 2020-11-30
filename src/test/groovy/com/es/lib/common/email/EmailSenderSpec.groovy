@@ -60,7 +60,7 @@ class EmailSenderSpec extends Specification {
         System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
     })
     @Timeout(20)
-    def "Email должен быть отправлен"() {
+    def "Send email"() {
         when:
         def sender = createSender()
         then:
@@ -71,7 +71,7 @@ class EmailSenderSpec extends Specification {
         System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
     })
     @Timeout(20)
-    def "Email должен быть отправлен (TLS)"() {
+    def "Send email (TLS)"() {
         when:
         def sender = createSmtpsSender()
         then:
@@ -82,7 +82,7 @@ class EmailSenderSpec extends Specification {
         System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
     })
     @Timeout(20)
-    def "Email должен быть отправлен с русским названием вложения"() {
+    def "Send email with russian attachment name"() {
         when:
         def sender = createSender()
         def file = Files.createTempFile("тестовый файл", "txt")
@@ -106,7 +106,7 @@ class EmailSenderSpec extends Specification {
         System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
     })
     @Timeout(20)
-    def "Email должен быть отправлен с русским названием вложения (из байт)"() {
+    def "Send email with russian attachment name (from bytes)"() {
         when:
         def sender = createSender()
         def fileContent = 'Пробное содержимое'

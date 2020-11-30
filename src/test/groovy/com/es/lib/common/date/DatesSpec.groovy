@@ -104,22 +104,22 @@ class DatesSpec extends Specification {
         LocalDateTime.now()                                                  | false
     }
 
-    def "Получение даты в начале месяца"() {
+    def "Get start month date"() {
         expect:
         Dates.generator().monthStart() == result
         where:
         result << Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
     }
 
-    def "Получение даты в начале месяца (в Москве)"() {
+    def "Get start month date (in Moscow time zone)"() {
         expect:
-        Dates.generator().monthStart() == result
+        Dates.generator(zone).monthStart() == result
         where:
         zone                       | result
-        ZoneId.of("Europe/Moscow") | Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
+        ZoneId.of("Europe/Moscow") | Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant())
     }
 
-    def "Количество дней между датами"() {
+    def "Days count between dates"() {
         expect:
         Dates.between(ChronoUnit.DAYS, start, end) == result
         where:
@@ -129,7 +129,7 @@ class DatesSpec extends Specification {
         sdf.parse("05.02.2015 00:00:00") | sdf.parse("04.02.2015 00:00:00") | -1
     }
 
-    def "Количество часов между датами"() {
+    def "Hours count between dates"() {
         expect:
         Dates.between(ChronoUnit.HOURS, start, end) == result
         where:
@@ -139,14 +139,14 @@ class DatesSpec extends Specification {
         sdf.parse("05.02.2015 00:00:00") | sdf.parse("04.02.2015 00:00:00") | -24
     }
 
-    def "Начало сегодня"() {
+    def "Today begin"() {
         expect:
         Dates.generator().today() == result
         where:
         result << Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant())
     }
 
-    def "Форматим название месяца"() {
+    def "Format months"() {
         expect:
         Dates.formatter().format(date, format) == result
         where:
@@ -155,7 +155,7 @@ class DatesSpec extends Specification {
         sdf.parse("02.05.2015 00:00:00") | "MMMM"             | "Май"
     }
 
-    def "Форматирование с таймзоной"() {
+    def "Format with time zone"() {
         expect:
         Dates.formatter(zoneId).format(date, format) == result
         where:
@@ -164,7 +164,7 @@ class DatesSpec extends Specification {
         ZoneId.of('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
     }
 
-    def "Получение дня недели"() {
+    def "Get week day"() {
         expect:
         Dates.getWeekDay(year, month, day) == result
         where:
@@ -178,7 +178,7 @@ class DatesSpec extends Specification {
         2015 | 8     | 16  || DayOfWeek.SUNDAY
     }
 
-    def "Получить номер недели в пределах года"() {
+    def "Get week number in year"() {
         expect:
         Dates.getWeekNumber(year, month, day) == result
         where:

@@ -28,7 +28,7 @@ class PrettySpec extends Specification {
                 case PrettyInterval.DurationType.SECOND:
                     return value + " s."
                 default:
-                    return "";
+                    return ""
             }
         }
     }

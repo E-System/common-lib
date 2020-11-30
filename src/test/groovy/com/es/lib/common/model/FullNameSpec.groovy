@@ -8,28 +8,28 @@ import spock.lang.Specification
  */
 class FullNameSpec extends Specification {
 
-    def "Если surname == null то в начале не должно быть пробела"() {
+    def "If surname == null then no spaces in begin"() {
         when:
         def entity = new FullName(null, 'name', null)
         then:
         entity.full == 'name'
     }
 
-    def "Если surname != null то в начале должен быть surname"() {
+    def "If surname != null then surname in begin"() {
         when:
         def entity = new FullName('surname', 'name', null)
         then:
         entity.full == "surname name"
     }
 
-    def "Если все поля заполнены то полное имя 'surname name patronymic'"() {
+    def "If all fields filled"() {
         when:
         def entity = new FullName('surname', 'name', 'patronymic')
         then:
         entity.full == "surname name patronymic"
     }
 
-    def "Если surname == null, но patronymic != null то полное имя 'name patronymic'"() {
+    def "If surname == null, but patronymic != null then full name is 'name patronymic'"() {
         when:
         def entity = new FullName(null, 'name', 'patronymic')
         then:
@@ -84,7 +84,7 @@ class FullNameSpec extends Specification {
         'a'     | null | null        | false
     }
 
-    def "Сокращения с правой стороны"() {
+    def "Initials from right"() {
         expect:
         new FullName(value).initialsRight == result
         where:
@@ -102,7 +102,7 @@ class FullNameSpec extends Specification {
         "Рахметов Иприс Алюб Углы"   | "Рахметов И. А."
     }
 
-    def "Сокращения с левой стороны"() {
+    def "Initials from left"() {
         expect:
         new FullName(value).initialsLeft == result
         where:
@@ -119,7 +119,7 @@ class FullNameSpec extends Specification {
         "aaa   bbb   ccc           " | "b. c. aaa"
     }
 
-    def "Рахметов Иприс Алюб Углы"() {
+    def "Long patronymic"() {
         expect:
         new FullName(value).full == result
         where:
@@ -128,7 +128,7 @@ class FullNameSpec extends Specification {
         "Рахметов Иприс Алюб Углы" | "Рахметов Иприс Алюб Углы"
     }
 
-    def "Рахметов Иприс Алюб Углы getNotSurname"() {
+    def "Long patronymic getNotSurname"() {
         expect:
         new FullName(value).notSurname == result
         where:
@@ -137,7 +137,7 @@ class FullNameSpec extends Specification {
         "Рахметов Иприс Алюб Углы" | "Иприс Алюб Углы"
     }
 
-    def "Right chop (статика)"() {
+    def "Right chop (static)"() {
         expect:
         FullName.initiator().get(value) == result
         where:
@@ -153,7 +153,7 @@ class FullNameSpec extends Specification {
         "aaa   bbb   ccc d.          " | "aaa b. c. d."
     }
 
-    def "Right chop2 (статика)"() {
+    def "Right chop2 (static)"() {
         expect:
         FullName.initiator().get(new FullName(s, n, p)) == result
         where:

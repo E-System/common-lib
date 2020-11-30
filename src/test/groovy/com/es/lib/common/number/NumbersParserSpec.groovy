@@ -24,7 +24,7 @@ import spock.lang.Specification
  */
 class NumbersParserSpec extends Specification {
 
-    def "Получение Double значение с указанием числа по умолчанию"() {
+    def "Get Double value with default"() {
         expect:
         Numbers.parser(value1).asDouble(value2 as double) == result as double
         where:
@@ -35,7 +35,7 @@ class NumbersParserSpec extends Specification {
         "10.0" | 11.0d  || 10.0d
     }
 
-    def "Получение Double значение без указанием числа по умолчанию (используется null)"() {
+    def "Get Double value without default (use null)"() {
         expect:
         Numbers.parser(value1).asDouble() == result as Double
         where:
@@ -46,7 +46,7 @@ class NumbersParserSpec extends Specification {
         "10.0" || 10.0d
     }
 
-    def "Получение Float значение с указанием числа по умолчанию"() {
+    def "Get Float value with default"() {
         expect:
         Numbers.parser(value1).asFloat(value2 as float) == result as float
         where:
@@ -57,7 +57,7 @@ class NumbersParserSpec extends Specification {
         "10.0" | 11.0f  || 10.0f
     }
 
-    def "Получение Float значение без указанием числа по умолчанию (используется null)"() {
+    def "Get Float value without default (use null)"() {
         expect:
         Numbers.parser(value1).asFloat() == result as Float
         where:
@@ -68,7 +68,7 @@ class NumbersParserSpec extends Specification {
         "10.0" || 10.0f
     }
 
-    def "Получение Long значение с указанием числа по умолчанию"() {
+    def "Get Long value with default"() {
         expect:
         Numbers.parser(value1).asLong(value2 as long) == result as long
         where:
@@ -79,7 +79,7 @@ class NumbersParserSpec extends Specification {
         "10"   | 11L    || 10L
     }
 
-    def "Получение Long значение без указанием числа по умолчанию (используется null)"() {
+    def "Get Long value without default (use null)"() {
         expect:
         Numbers.parser(value1).asLong() == result as Long
         where:
@@ -90,7 +90,7 @@ class NumbersParserSpec extends Specification {
         "10"   || 10L
     }
 
-    def "Получение Short значение с указанием числа по умолчанию"() {
+    def "Get Short value with default"() {
         expect:
         Numbers.parser(value1).asShort(value2 as short) == result as short
         where:
@@ -101,7 +101,7 @@ class NumbersParserSpec extends Specification {
         "10"   | 11     || 10
     }
 
-    def "Получение Short значение без указанием числа по умолчанию (используется null)"() {
+    def "Get Short value without default (use null)"() {
         expect:
         Numbers.parser(value1).asShort() == result as Short
         where:
@@ -112,7 +112,7 @@ class NumbersParserSpec extends Specification {
         "10"   || 10
     }
 
-    def "Получение Integer значение с указанием числа по умолчанию"() {
+    def "Get Integer value with default"() {
         expect:
         Numbers.parser(value1).asInt(value2 as int) == result as int
         where:
@@ -123,7 +123,7 @@ class NumbersParserSpec extends Specification {
         "10"   | 11     || 10
     }
 
-    def "Получение Integer значение без указанием числа по умолчанию (используется 0)"() {
+    def "Get Integer value without default (use null)"() {
         expect:
         Numbers.parser(value1).asInt() == result as Integer
         where:

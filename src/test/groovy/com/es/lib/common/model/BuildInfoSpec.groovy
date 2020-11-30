@@ -5,6 +5,7 @@ import spock.lang.Specification
 import java.util.function.Supplier
 
 class BuildInfoSpec extends Specification {
+
     def "ReadBuildInfo with supplier"() {
         when:
         def info = BuildInfo.create(new Supplier<InputStream>() {

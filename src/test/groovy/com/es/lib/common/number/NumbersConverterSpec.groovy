@@ -24,7 +24,7 @@ import spock.lang.Specification
  */
 class NumbersConverterSpec extends Specification {
 
-    def "Получение объекта Short"() {
+    def "Get Short"() {
         expect:
         Numbers.converter(value1).asShortObject() == result
         where:
@@ -33,7 +33,7 @@ class NumbersConverterSpec extends Specification {
         10 as short || 10 as short
     }
 
-    def "Получение объекта Integer"() {
+    def "Get Integer"() {
         expect:
         Numbers.converter(value1).asIntObject() == result
         where:
@@ -42,7 +42,7 @@ class NumbersConverterSpec extends Specification {
         10     || 10
     }
 
-    def "Получение объекта Long"() {
+    def "Get Long"() {
         expect:
         Numbers.converter(value1).asLongObject() == result
         where:
@@ -51,7 +51,7 @@ class NumbersConverterSpec extends Specification {
         10L    || 10L
     }
 
-    def "Получение объекта Float"() {
+    def "Get Float"() {
         expect:
         Numbers.converter(value1).asFloatObject() == result
         where:
@@ -60,7 +60,7 @@ class NumbersConverterSpec extends Specification {
         10f    || 10f
     }
 
-    def "Получение объекта Double"() {
+    def "Get Double"() {
         expect:
         Numbers.converter(value1).asDoubleObject() == result
         where:
@@ -69,7 +69,7 @@ class NumbersConverterSpec extends Specification {
         10d    || 10d
     }
 
-    def "Получение double значение с указанием числа по умолчанию"() {
+    def "Get double value with default"() {
         expect:
         Numbers.converter(value1).asDouble(value2 as double) == result as double
         where:
@@ -78,7 +78,7 @@ class NumbersConverterSpec extends Specification {
         10.0d  | 11.0d  || 10.0d
     }
 
-    def "Получение double значение без указанием числа по умолчанию (используется 0)"() {
+    def "Get double value without default (use 0)"() {
         expect:
         Numbers.converter(value1 as Double).asDouble() == result as double
         where:
@@ -87,7 +87,7 @@ class NumbersConverterSpec extends Specification {
         10.0d  || 10.0d
     }
 
-    def "Получение float значение с указанием числа по умолчанию"() {
+    def "Get float value with default"() {
         expect:
         Numbers.converter(value1).asFloat(value2 as float) == result as float
         where:
@@ -96,7 +96,7 @@ class NumbersConverterSpec extends Specification {
         10.0f  | 11.0f  || 10.0f
     }
 
-    def "Получение float значение без указанием числа по умолчанию (используется 0)"() {
+    def "Get float value without default (use 0)"() {
         expect:
         Numbers.converter(value1 as Float).asFloat() == result as float
         where:
@@ -105,7 +105,7 @@ class NumbersConverterSpec extends Specification {
         10.0f  || 10.0f
     }
 
-    def "Получение long значение с указанием числа по умолчанию"() {
+    def "Get long value with default"() {
         expect:
         Numbers.converter(value1).asLong(value2 as long) == result as long
         where:
@@ -114,7 +114,7 @@ class NumbersConverterSpec extends Specification {
         10L    | 11L    || 10L
     }
 
-    def "Получение long значение без указанием числа по умолчанию (используется 0)"() {
+    def "Get long value without default (use 0)"() {
         expect:
         Numbers.converter(value1 as Long).asLong() == result as long
         where:
@@ -124,7 +124,7 @@ class NumbersConverterSpec extends Specification {
     }
 
 
-    def "Получение short значение с указанием числа по умолчанию"() {
+    def "Get short value with default"() {
         expect:
         Numbers.converter(value1).asShort(value2 as short) == result as short
         where:
@@ -133,7 +133,7 @@ class NumbersConverterSpec extends Specification {
         10     | 11     || 10
     }
 
-    def "Получение short значение без указанием числа по умолчанию (используется 0)"() {
+    def "Get short value without default (use 0)"() {
         expect:
         Numbers.converter(value1 as Short).asShort() == result as short
         where:
@@ -142,7 +142,7 @@ class NumbersConverterSpec extends Specification {
         10     || 10
     }
 
-    def "Получение int значение с указанием числа по умолчанию"() {
+    def "Get int value with default"() {
         expect:
         Numbers.converter(value1).asInt(value2 as int) == result as int
         where:
@@ -151,7 +151,7 @@ class NumbersConverterSpec extends Specification {
         10     | 11     || 10
     }
 
-    def "Получение int значение без указанием числа по умолчанию (используется 0)"() {
+    def "Get int value without default (use 0)"() {
         expect:
         Numbers.converter(value1 as Integer).asInt() == result as int
         where:

@@ -24,7 +24,7 @@ import spock.lang.Specification
  */
 class HexSpec extends Specification {
 
-    def "get hex"() {
+    def "Get hex"() {
         expect:
         Hex.get("Hello".bytes) == '48656c6c6f'
         Hex.get(null) == null
