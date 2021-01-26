@@ -20,7 +20,11 @@ public final class LocaleUtil {
             return null;
         }
         try {
-            return LocaleUtils.toLocale(code);
+            Locale result = LocaleUtils.toLocale(code);
+            if ("th".equals(result.getLanguage()) && "TH".equals(result.getCountry())) {
+                result = new Locale.Builder().setLocale(result).setUnicodeLocaleKeyword("ca", "gregory").build();
+            }
+            return result;
         } catch (Exception e) {
             log.error("Invalid locale: {}", code);
         }
