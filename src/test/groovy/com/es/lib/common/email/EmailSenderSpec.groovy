@@ -83,7 +83,7 @@ class EmailSenderSpec extends Specification {
     def "Email должен быть отправлен с русским названием вложения"() {
         when:
         def sender = createSender()
-        def file = Files.createTempFile("тестовый файл", "txt").toFile();
+        def file = Files.createTempFile("тестовыйфайл", "txt").toFile();
         file.write('Пробное содержимое')
         def attachment = new EmailAttachment(
             new EmailFileContent(
