@@ -36,5 +36,11 @@ class LocalesSpec extends Specification {
     def "To locale with en code return Locale(en, US)"() {
         expect:
         Locales.from("en_US") == new Locale("en", "US")
+        Locales.from("en_US").getUnicodeLocaleType("ca") == null
+    }
+
+    def "ToLocale with en code return Locale(th, TH)"() {
+        expect:
+        Locales.from("th_TH").getUnicodeLocaleType("ca") == "gregory"
     }
 }
