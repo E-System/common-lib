@@ -85,7 +85,7 @@ class EmailSenderSpec extends Specification {
     def "Send email with russian attachment name"() {
         when:
         def sender = createSender()
-        def file = Files.createTempFile("тестовый файл", "txt")
+        def file = Files.createTempFile("test_mail_file", "txt")
         file.write('Пробное содержимое')
         def attachment = new EmailAttachment(
             OutputData.create(
