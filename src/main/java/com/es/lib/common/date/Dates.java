@@ -146,6 +146,14 @@ public final class Dates {
         return date.get(woy);
     }
 
+    public static DateDiff diff(ChronoUnit unit) {
+        return diff(unit, null);
+    }
+
+    public static DateDiff diff(ChronoUnit unit, ZoneId zoneId) {
+        return new DateDiff(unit, zoneId);
+    }
+
     public static PrettyInterval pretty() {
         return pretty(false);
     }

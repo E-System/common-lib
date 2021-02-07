@@ -20,7 +20,10 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 import java.text.SimpleDateFormat
-import java.time.*
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -237,5 +240,31 @@ class DatesSpec extends Specification {
         def date = Dates.parser().parse("27.09.1985 10:20:30", false)
         then:
         Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
+    }
+
+    def "Date diff"() {
+        when:
+        def now = LocalDateTime.now()
+        def start = now.minusDays(1)
+        then:
+        Dates.diff(ChronoUnit.SECONDS).get(start, now) == 86400
+    }
+
+    def "Date diff with timezone"() {
+        when:
+        def zoneId = ZoneId.of("Europe/Moscow")
+        def now = LocalDateTime.now(zoneId)
+        def start = now.minusDays(1)
+        then:
+        Dates.diff(ChronoUnit.SECONDS).get(start, now) == 86400
+    }
+
+    def "Date diff with timezone fow now"() {
+        when:
+        def zoneId = ZoneId.of("Europe/Moscow")
+        def now = LocalDateTime.now(zoneId)
+        def start = now.minusDays(1)
+        then:
+        Dates.diff(ChronoUnit.SECONDS, zoneId).get(start) == 86400
     }
 }
