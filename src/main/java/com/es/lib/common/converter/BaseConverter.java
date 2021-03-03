@@ -2,39 +2,49 @@ package com.es.lib.common.converter;
 
 import com.es.lib.common.collection.Items;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+/**
+ * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
+ * @since 09.02.2021
+ */
 public abstract class BaseConverter<R, T> {
 
     public Collection<R> convert(Collection<T> items) {
-        return convert(items, null);
+        return convert(items, null, new ConvertOption[]{});
     }
 
-    public Collection<R> convert(Collection<T> items, BiConsumer<T, R> enhancer) {
+    public Collection<R> convert(Collection<T> items, ConvertOption... options) {
+        return convert(items, null, options);
+    }
+
+    public Collection<R> convert(Collection<T> items, BiConsumer<T, R> enhancer, ConvertOption... options) {
         if (Items.isEmpty(items)) {
             return new ArrayList<>();
         }
-        return items.stream().filter(Objects::nonNull).map(v -> convert(v, enhancer)).collect(Collectors.toList());
+        return items.stream().filter(Objects::nonNull).map(v -> convert(v, enhancer, options)).collect(Collectors.toList());
     }
 
     public R convert(T item) {
-        return convert(item, null);
+        return convert(item, null, new ConvertOption[]{});
     }
 
-    public R convert(T item, BiConsumer<T, R> enhancer) {
+    public R convert(T item, ConvertOption... options) {
+        return convert(item, null, options);
+    }
+
+    public R convert(T item, BiConsumer<T, R> enhancer, ConvertOption... options) {
         if (item == null) {
             return null;
         }
-        R result = realConvert(item);
+        R result = realConvert(item, new HashSet<>(Arrays.asList(options)));
         if (enhancer != null) {
             enhancer.accept(item, result);
         }
         return result;
     }
 
-    protected abstract R realConvert(T item);
+    protected abstract R realConvert(T item, Set<ConvertOption> options);
 }
