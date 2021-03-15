@@ -1,5 +1,6 @@
 package com.es.lib.common.converter
 
+import com.es.lib.common.converter.option.LocaleConvertOption
 import spock.lang.Specification
 
 class BaseConverterSpec extends Specification {
@@ -26,6 +27,14 @@ class BaseConverterSpec extends Specification {
         FULL
     }
 
+    class TestOption implements ConvertOption {
+        String value
+
+        TestOption(String value) {
+            this.value = value
+        }
+    }
+
     class IOConverter extends BaseConverter<Output, Input> {
 
         @Override
@@ -34,6 +43,15 @@ class BaseConverterSpec extends Specification {
                 return new Output(item.value + "FULL")
             }
             return new Output(item.value)
+        }
+    }
+
+    class LocaleIOConverter extends BaseConverter<Output, Input> {
+
+        @Override
+        protected Output realConvert(Input item, Set<ConvertOption> options) {
+            def opt = getLocaleOption(options)
+            return new Output(item.value + '[' + opt + ']' + getOption(options, TestOption).orElse(new TestOption('')).value)
         }
     }
 
@@ -79,5 +97,32 @@ class BaseConverterSpec extends Specification {
         then:
         res != null
         res.size() == 0
+    }
+
+    def "LocaleConvertOption exist"() {
+        when:
+        def converter = new LocaleIOConverter()
+        def res = converter.convert(new Input("Hello"), new LocaleConvertOption("ru_RU"))
+        then:
+        res != null
+        res.value == 'Hello[ru_RU]'
+    }
+
+    def "LocaleConvertOption exist and TestOption"() {
+        when:
+        def converter = new LocaleIOConverter()
+        def res = converter.convert(new Input("Hello"), new LocaleConvertOption("ru_RU"), new TestOption("test"))
+        then:
+        res != null
+        res.value == 'Hello[ru_RU]test'
+    }
+
+    def "LocaleConvertOption not exist"() {
+        when:
+        def converter = new LocaleIOConverter()
+        def res = converter.convert(new Input("Hello"))
+        then:
+        res != null
+        res.value == 'Hello[null]'
     }
 }

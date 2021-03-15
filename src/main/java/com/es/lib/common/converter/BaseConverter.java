@@ -1,6 +1,7 @@
 package com.es.lib.common.converter;
 
 import com.es.lib.common.collection.Items;
+import com.es.lib.common.converter.option.LocaleConvertOption;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -47,4 +48,12 @@ public abstract class BaseConverter<R, T> {
     }
 
     protected abstract R realConvert(T item, Set<ConvertOption> options);
+
+    protected <A> Optional<A> getOption(Set<ConvertOption> options, Class<A> cls) {
+        return options.stream().filter(v -> v.getClass().isAssignableFrom(cls)).map(v -> (A) v).findFirst();
+    }
+
+    protected String getLocaleOption(Set<ConvertOption> options) {
+        return getOption(options, LocaleConvertOption.class).orElse(new LocaleConvertOption(null)).getLocale();
+    }
 }
