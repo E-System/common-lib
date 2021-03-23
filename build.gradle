@@ -48,7 +48,7 @@ group = ext.mainGroup
 version = ext.mainVersion + (ext.snapshot ? '-SNAPSHOT' : '')
 
 repositories {
-    jcenter()
+    mavenCentral()
     mavenLocal()
 }
 
@@ -125,16 +125,16 @@ publishing {
     }
 }
 dependencies {
-    api "org.apache.commons:commons-lang3:3.11"
+    api "org.apache.commons:commons-lang3:3.12.0"
     api "org.slf4j:slf4j-api:1.7.30"
-    api "com.fasterxml.jackson.core:jackson-databind:2.11.3"
+    api "com.fasterxml.jackson.core:jackson-databind:2.12.2"
     api "com.sun.mail:jakarta.mail:2.0.0"
-    api "de.svenkubiak:jBCrypt:0.4.1"
+    api "de.svenkubiak:jBCrypt:0.4.3"
     api "commons-io:commons-io:2.8.0"
     api "org.reflections:reflections:0.9.12"
 
-    compileOnly "org.projectlombok:lombok:1.18.16"
-    annotationProcessor "org.projectlombok:lombok:1.18.16"
+    compileOnly "org.projectlombok:lombok:1.18.18"
+    annotationProcessor "org.projectlombok:lombok:1.18.18"
 
     testImplementation "org.spockframework:spock-core:1.3-groovy-2.5"
 }
