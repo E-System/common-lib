@@ -23,9 +23,11 @@ import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalAdjusters
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -266,5 +268,66 @@ class DatesSpec extends Specification {
         def start = now.minusDays(1)
         then:
         Dates.diff(ChronoUnit.SECONDS, zoneId).get(start) == 86400
+    }
+
+    def "Calendar with current year"(){
+        when:
+        def startOfYear = LocalDate.now().with(TemporalAdjusters.firstDayOfYear())
+        def calendar = Dates.generator().calendar(startOfYear, 1)
+        then:
+        calendar.size() == 1
+        calendar[startOfYear.getYear()].size() == 12
+        with(calendar[startOfYear.getYear()]){
+            it[1].size() == YearMonth.of(startOfYear.getYear(), 1).lengthOfMonth()
+            it[2].size() == YearMonth.of(startOfYear.getYear(), 2).lengthOfMonth()
+            it[3].size() == YearMonth.of(startOfYear.getYear(), 3).lengthOfMonth()
+            it[4].size() == YearMonth.of(startOfYear.getYear(), 4).lengthOfMonth()
+            it[5].size() == YearMonth.of(startOfYear.getYear(), 5).lengthOfMonth()
+            it[6].size() == YearMonth.of(startOfYear.getYear(), 6).lengthOfMonth()
+            it[7].size() == YearMonth.of(startOfYear.getYear(), 7).lengthOfMonth()
+            it[8].size() == YearMonth.of(startOfYear.getYear(), 8).lengthOfMonth()
+            it[9].size() == YearMonth.of(startOfYear.getYear(), 9).lengthOfMonth()
+            it[10].size() == YearMonth.of(startOfYear.getYear(), 10).lengthOfMonth()
+            it[11].size() == YearMonth.of(startOfYear.getYear(), 11).lengthOfMonth()
+            it[12].size() == YearMonth.of(startOfYear.getYear(), 12).lengthOfMonth()
+        }
+    }
+
+    def "Calendar with two years"(){
+        when:
+        def startOfYear = LocalDate.now().with(TemporalAdjusters.firstDayOfYear())
+        def calendar = Dates.generator().calendar(startOfYear, 2)
+        then:
+        calendar.size() == 2
+        calendar[startOfYear.getYear()].size() == 12
+        calendar[startOfYear.getYear() + 1].size() == 12
+        with(calendar[startOfYear.getYear()]){
+            it[1].size() == YearMonth.of(startOfYear.getYear(), 1).lengthOfMonth()
+            it[2].size() == YearMonth.of(startOfYear.getYear(), 2).lengthOfMonth()
+            it[3].size() == YearMonth.of(startOfYear.getYear(), 3).lengthOfMonth()
+            it[4].size() == YearMonth.of(startOfYear.getYear(), 4).lengthOfMonth()
+            it[5].size() == YearMonth.of(startOfYear.getYear(), 5).lengthOfMonth()
+            it[6].size() == YearMonth.of(startOfYear.getYear(), 6).lengthOfMonth()
+            it[7].size() == YearMonth.of(startOfYear.getYear(), 7).lengthOfMonth()
+            it[8].size() == YearMonth.of(startOfYear.getYear(), 8).lengthOfMonth()
+            it[9].size() == YearMonth.of(startOfYear.getYear(), 9).lengthOfMonth()
+            it[10].size() == YearMonth.of(startOfYear.getYear(), 10).lengthOfMonth()
+            it[11].size() == YearMonth.of(startOfYear.getYear(), 11).lengthOfMonth()
+            it[12].size() == YearMonth.of(startOfYear.getYear(), 12).lengthOfMonth()
+        }
+        with(calendar[startOfYear.getYear() + 1]){
+            it[1].size() == YearMonth.of(startOfYear.getYear() + 1, 1).lengthOfMonth()
+            it[2].size() == YearMonth.of(startOfYear.getYear() + 1, 2).lengthOfMonth()
+            it[3].size() == YearMonth.of(startOfYear.getYear() + 1, 3).lengthOfMonth()
+            it[4].size() == YearMonth.of(startOfYear.getYear() + 1, 4).lengthOfMonth()
+            it[5].size() == YearMonth.of(startOfYear.getYear() + 1, 5).lengthOfMonth()
+            it[6].size() == YearMonth.of(startOfYear.getYear() + 1, 6).lengthOfMonth()
+            it[7].size() == YearMonth.of(startOfYear.getYear() + 1, 7).lengthOfMonth()
+            it[8].size() == YearMonth.of(startOfYear.getYear() + 1, 8).lengthOfMonth()
+            it[9].size() == YearMonth.of(startOfYear.getYear() + 1, 9).lengthOfMonth()
+            it[10].size() == YearMonth.of(startOfYear.getYear() + 1, 10).lengthOfMonth()
+            it[11].size() == YearMonth.of(startOfYear.getYear() + 1, 11).lengthOfMonth()
+            it[12].size() == YearMonth.of(startOfYear.getYear() + 1, 12).lengthOfMonth()
+        }
     }
 }

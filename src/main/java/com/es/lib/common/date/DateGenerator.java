@@ -3,11 +3,11 @@ package com.es.lib.common.date;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 public class DateGenerator {
@@ -61,5 +61,17 @@ public class DateGenerator {
 
     public Date nowOffset(int field, int amount) {
         return new DateBuilder(zoneId).add(field, amount).build();
+    }
+
+    public Map<Integer, Map<Integer, Collection<LocalDate>>> calendar(LocalDate startYear, int count) {
+        Map<Integer, Map<Integer, Collection<LocalDate>>> result = new LinkedHashMap<>();
+        long numOfDaysBetween = ChronoUnit.DAYS.between(startYear, startYear.plusYears(count));
+        IntStream.iterate(0, v -> v + 1)
+                 .limit(numOfDaysBetween)
+                 .mapToObj(startYear::plusDays)
+                 .forEach(v ->
+                     result.computeIfAbsent(v.getYear(), y -> new LinkedHashMap<>()).computeIfAbsent(v.getMonthValue(), m -> new ArrayList<>()).add(v)
+                 );
+        return result;
     }
 }
