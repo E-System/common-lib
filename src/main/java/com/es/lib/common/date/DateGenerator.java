@@ -7,6 +7,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
@@ -73,5 +75,14 @@ public class DateGenerator {
                      result.computeIfAbsent(v.getYear(), y -> new LinkedHashMap<>()).computeIfAbsent(v.getMonthValue(), m -> new ArrayList<>()).add(v)
                  );
         return result;
+    }
+
+    public Collection<LocalDate> days(LocalDate fromInclusive, LocalDate toExclusive, Predicate<LocalDate> filter) {
+        long numOfDaysBetween = ChronoUnit.DAYS.between(fromInclusive, toExclusive);
+        return IntStream.iterate(0, v -> v + 1)
+                        .limit(numOfDaysBetween)
+                        .mapToObj(fromInclusive::plusDays)
+                        .filter(v -> filter == null || filter.test(v))
+                        .collect(Collectors.toList());
     }
 }

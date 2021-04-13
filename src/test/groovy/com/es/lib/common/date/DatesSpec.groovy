@@ -330,4 +330,31 @@ class DatesSpec extends Specification {
             it[12].size() == YearMonth.of(startOfYear.getYear() + 1, 12).lengthOfMonth()
         }
     }
+
+    def "Days"(){
+        when:
+        def from = LocalDate.now()
+        def to = from.plusDays(7)
+        def result = Dates.generator().days(from, to, null)
+        then:
+        result.size() == 7
+        result[0] == from
+        result[1] == from.plusDays(1)
+        result[2] == from.plusDays(2)
+        result[3] == from.plusDays(3)
+        result[4] == from.plusDays(4)
+        result[5] == from.plusDays(5)
+        result[6] == from.plusDays(6)
+        result[6] == to.minusDays(1)
+    }
+
+    def "Days with filter"(){
+        when:
+        def from = LocalDate.of(2021, 4, 1)
+        def to = from.plusDays(7)
+        def result = Dates.generator().days(from, to, {it.getDayOfWeek() == DayOfWeek.MONDAY})
+        then:
+        result.size() == 1
+        result[0] == from.plusDays(4)
+    }
 }
