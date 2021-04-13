@@ -348,6 +348,17 @@ class DatesSpec extends Specification {
         result[6] == to.minusDays(1)
     }
 
+    def "Days for month"(){
+        when:
+        def from = LocalDate.of(2021, 4, 1)
+        def to = from.plusMonths(1)
+        def result = Dates.generator().days(from, to, null)
+        then:
+        result.size() == 30
+        result[0] == from
+        result[29] == to.minusDays(1)
+    }
+
     def "Days with filter"(){
         when:
         def from = LocalDate.of(2021, 4, 1)
