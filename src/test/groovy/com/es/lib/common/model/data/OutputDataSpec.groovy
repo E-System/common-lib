@@ -18,6 +18,7 @@ class OutputDataSpec extends Specification {
         then:
         !data.stream
         !data.bytes
+        data.file
         data.relativePath == RELATIVE_PATH
         data.fileName == FILE_NAME
         data.content == Paths.get(RELATIVE_PATH)
@@ -28,6 +29,7 @@ class OutputDataSpec extends Specification {
         def data = (ByteData) OutputData.create(FILE_NAME, CONTENT_TYPE, BYTE_DATA)
         then:
         !data.stream
+        !data.file
         data.bytes
         data.contentType == CONTENT_TYPE
         data.fileName == FILE_NAME
@@ -40,6 +42,7 @@ class OutputDataSpec extends Specification {
         then:
         data.stream
         !data.bytes
+        !data.file
         data.contentType == CONTENT_TYPE
         data.fileName == FILE_NAME
         data.content == STREAM_DATA

@@ -36,4 +36,9 @@ public class FileData extends OutputData {
         this.relativePath = relativePath;
         this.content = content;
     }
+
+    @Override
+    public boolean isFile() {
+        return true;
+    }
 }
