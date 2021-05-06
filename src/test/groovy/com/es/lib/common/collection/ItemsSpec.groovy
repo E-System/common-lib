@@ -405,4 +405,68 @@ class ItemsSpec extends Specification {
             this.v2 = v2
         }
     }
+
+    def "Cycle with empty items return null"() {
+        expect:
+        Items.cycle({ return null }, { return 0 }, {}) == null
+        Items.cycle({ return [] }, { return 0 }, {}) == null
+    }
+
+    def "Cycle with one element return same multiple times"() {
+        when:
+        def index = 0
+        def link1 = "link1"
+        def first = Items.cycle({ return [link1] }, { return index }, { index = it })
+        def second = Items.cycle({ return [link1] }, { return index }, { index = it })
+        def third = Items.cycle({ return [link1] }, { return index }, { index = it })
+        then:
+        first == link1
+        first == second
+        second == third
+    }
+
+    def "Cycle with two element"() {
+        when:
+        def index = 0
+        def link1 = "link1"
+        def link2 = "link2"
+        def first = Items.cycle({ return [link1, link2] }, { return index }, { index = it })
+        def second = Items.cycle({ return [link1, link2] }, { return index }, { index = it })
+        def third = Items.cycle({ return [link1, link2] }, { return index }, { index = it })
+        then:
+        first == link1
+        second == link2
+        third == link1
+    }
+
+    def "Cycle with two element and default overflow index set index to 0"() {
+        when:
+        def index = 2
+        def link1 = "link1"
+        def link2 = "link2"
+        def first = Items.cycle({ return [link1, link2] }, { return index }, { index = it })
+        def second = Items.cycle({ return [link1, link2] }, { return index }, { index = it })
+        def third = Items.cycle({ return [link1, link2] }, { return index }, { index = it })
+        then:
+        first == link1
+        second == link2
+        third == link1
+    }
+
+    def "Cycle with three element"() {
+        when:
+        def index = 0
+        def link1 = "link1"
+        def link2 = "link2"
+        def link3 = "link3"
+        def first = Items.cycle({ return [link1, link2, link3] }, { return index }, { index = it })
+        def second = Items.cycle({ return [link1, link2, link3] }, { return index }, { index = it })
+        def third = Items.cycle({ return [link1, link2, link3] }, { return index }, { index = it })
+        def fourth = Items.cycle({ return [link1, link2, link3] }, { return index }, { index = it })
+        then:
+        first == link1
+        second == link2
+        third == link3
+        fourth == link1
+    }
 }

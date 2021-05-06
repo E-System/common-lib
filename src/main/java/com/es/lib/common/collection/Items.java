@@ -358,4 +358,26 @@ public final class Items {
             Map.Entry::getValue
         ));
     }
+
+    public static <T> T cycle(Supplier<List<T>> itemsSource, Supplier<Integer> indexSource, Consumer<Integer> indexDestination) {
+        List<T> items = itemsSource.get();
+        if (Items.isEmpty(items)) {
+            return null;
+        }
+        if (items.size() == 1) {
+            return items.get(0);
+        }
+        Integer index = indexSource.get();
+        if (index == null || index >= items.size()) {
+            index = 0;
+        }
+        T result = items.get(index);
+        if (index + 1 < items.size()) {
+            ++index;
+        } else {
+            index = 0;
+        }
+        indexDestination.accept(index);
+        return result;
+    }
 }
