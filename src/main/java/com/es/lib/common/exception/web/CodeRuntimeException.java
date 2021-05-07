@@ -1,41 +1,20 @@
 package com.es.lib.common.exception.web;
 
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString(callSuper = true)
 public class CodeRuntimeException extends RuntimeException {
 
-    private String code;
+    private final String code;
 
-    public CodeRuntimeException(String message) {
-        super(message);
+    public CodeRuntimeException(String code, String message) {
+       this(code, message, null);
     }
 
-    public CodeRuntimeException(String message, String code) {
-        super(message);
-        this.code = code;
-    }
-
-    public CodeRuntimeException(String message, String code, Throwable cause) {
+    public CodeRuntimeException(String code, String message, Throwable cause) {
         super(message, cause);
         this.code = code;
-    }
-
-    public CodeRuntimeException(Throwable cause, String code) {
-        super(cause);
-        this.code = code;
-    }
-
-    public CodeRuntimeException(String message, String code, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-        this.code = code;
-    }
-
-    public String getCode() { return code; }
-
-    public void setCode(String code) { this.code = code; }
-
-    @Override
-    public String toString() {
-        return "CodeRuntimeException{" +
-               "code='" + code + '\'' +
-               "} " + super.toString();
     }
 }
