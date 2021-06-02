@@ -22,6 +22,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -353,18 +354,23 @@ public final class Items {
         return toMap(items, Map.Entry::getKey, Map.Entry::getValue);
     }
 
+    public static <K, V> Map<K, V> toMap(Collection<V> items, Function<? super V, ? extends K> keyMapper) {
+        return toMap(items, keyMapper, v -> v);
+    }
+
+    public static <K, V> Map<K, V> toMap(Stream<V> stream, Function<? super V, ? extends K> keyMapper) {
+        return stream.collect(Collectors.toMap(keyMapper, t -> t));
+    }
+
     public static <T, K, V> Map<K, V> toMap(Collection<T> items, Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
         if (items == null) {
             return new HashMap<>();
         }
-        return items.stream().collect(Collectors.toMap(keyMapper, valueMapper));
+        return toMap(items.stream(), keyMapper, valueMapper);
     }
 
-    public static <K, V> Map<K, V> toMap(Collection<V> items, Function<? super V, ? extends K> keyMapper) {
-        if (items == null) {
-            return new HashMap<>();
-        }
-        return items.stream().collect(Collectors.toMap(keyMapper, t -> t));
+    public static <T, K, V> Map<K, V> toMap(Stream<T> stream, Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
+        return stream.collect(Collectors.toMap(keyMapper, valueMapper));
     }
 
     public static <T> T cycle(Supplier<List<T>> itemsSource, Supplier<Integer> indexSource, Consumer<Integer> indexDestination) {
