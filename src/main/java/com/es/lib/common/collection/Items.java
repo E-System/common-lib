@@ -350,13 +350,21 @@ public final class Items {
     }
 
     public static <K, V> Map<K, V> toMap(Collection<Map.Entry<K, V>> items) {
+        return toMap(items, Map.Entry::getKey, Map.Entry::getValue);
+    }
+
+    public static <T, K, V> Map<K, V> toMap(Collection<T> items, Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
         if (items == null) {
             return new HashMap<>();
         }
-        return items.stream().collect(Collectors.toMap(
-            Map.Entry::getKey,
-            Map.Entry::getValue
-        ));
+        return items.stream().collect(Collectors.toMap(keyMapper, valueMapper));
+    }
+
+    public static <K, V> Map<K, V> toMap(Collection<V> items, Function<? super V, ? extends K> keyMapper) {
+        if (items == null) {
+            return new HashMap<>();
+        }
+        return items.stream().collect(Collectors.toMap(keyMapper, t -> t));
     }
 
     public static <T> T cycle(Supplier<List<T>> itemsSource, Supplier<Integer> indexSource, Consumer<Integer> indexDestination) {

@@ -381,13 +381,31 @@ class ItemsSpec extends Specification {
         Items.groupBy(null, null) == [:]
     }
 
-    def "toMap"() {
+    def "toMap with entry"() {
         when:
         def res = Items.toMap([Pair.of("1", "2"), Pair.of("2", "3")])
         then:
         res.size() == 2
         res["1"] == "2"
         res["2"] == "3"
+    }
+
+    def "toMap with value mapper"() {
+        when:
+        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")], {return it.v1}, {return it})
+        then:
+        res.size() == 2
+        res["1"].v2 == "2"
+        res["2"].v2 == "3"
+    }
+
+    def "toMap without value mapper"() {
+        when:
+        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")], {return it.v1})
+        then:
+        res.size() == 2
+        res["1"].v2 == "2"
+        res["2"].v2 == "3"
     }
 
     def "toMap with empty and null"() {
