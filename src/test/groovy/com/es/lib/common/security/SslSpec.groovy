@@ -37,7 +37,7 @@ class SslSpec extends Specification {
         then:
         manager.checkClientTrusted(null, null)
         manager.checkServerTrusted(null, null)
-        manager.getAcceptedIssuers() == null
+        manager.getAcceptedIssuers() != null
     }
 
     def "Host verifier"() {

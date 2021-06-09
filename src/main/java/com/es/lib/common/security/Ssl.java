@@ -59,7 +59,7 @@ public class Ssl {
     public static TrustManager trustManager() {
         return new X509TrustManager() {
             public X509Certificate[] getAcceptedIssuers() {
-                return null;
+                return new X509Certificate[0];
             }
 
             public void checkClientTrusted(X509Certificate[] certs, String authType) { }
