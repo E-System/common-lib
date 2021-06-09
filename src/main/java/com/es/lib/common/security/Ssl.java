@@ -6,7 +6,6 @@ import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.security.KeyStore;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -16,26 +15,44 @@ public class Ssl {
     private static final String SSL_TYPE_DEFAULT = "SSL";
 
     public static SSLContext context() throws NoSuchAlgorithmException, KeyManagementException {
-        return context(SSL_TYPE_DEFAULT);
+        return context(true);
+    }
+
+    public static SSLContext context(boolean allTrust) throws NoSuchAlgorithmException, KeyManagementException {
+        return context(SSL_TYPE_DEFAULT, allTrust);
     }
 
     public static SSLContext context(String sslType) throws NoSuchAlgorithmException, KeyManagementException {
-        return context(sslType, null, trustManager());
+        return context(sslType, true);
+    }
+
+    public static SSLContext context(String sslType, boolean allTrust) throws NoSuchAlgorithmException, KeyManagementException {
+        return context(sslType, null, allTrust ? trustManager() : null);
     }
 
     public static SSLContext context(com.es.lib.common.security.model.KeyStore keyStore)
         throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
-        return context(SSL_TYPE_DEFAULT, keyStore);
+        return context(keyStore, true);
+    }
+
+    public static SSLContext context(com.es.lib.common.security.model.KeyStore keyStore, boolean allTrust)
+        throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+        return context(SSL_TYPE_DEFAULT, keyStore, allTrust);
     }
 
     public static SSLContext context(String sslType, com.es.lib.common.security.model.KeyStore keyStore)
         throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
-        return context(sslType, keyManager(keyStore), trustManager());
+        return context(sslType, keyStore, true);
+    }
+
+    public static SSLContext context(String sslType, com.es.lib.common.security.model.KeyStore keyStore, boolean allTrust)
+        throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+        return context(sslType, keyManager(keyStore), allTrust ? trustManager() : null);
     }
 
     public static SSLContext context(String sslType, KeyManager[] keyManagers, TrustManager trustManager) throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext sslContext = SSLContext.getInstance(sslType);
-        sslContext.init(keyManagers, new TrustManager[]{trustManager}, new SecureRandom());
+        sslContext.init(keyManagers, trustManager != null ? new TrustManager[]{trustManager} : null, new SecureRandom());
         return sslContext;
     }
 

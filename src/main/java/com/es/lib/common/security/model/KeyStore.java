@@ -32,10 +32,10 @@ import java.nio.file.Path;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class KeyStore {
 
-    private Path path;
-    private String storePassword;
-    private String keyPassword;
-    private String type;
+    private final Path path;
+    private final String storePassword;
+    private final String keyPassword;
+    private final String type;
 
     public static KeyStore create(Path path, String storePassword, String keyPassword) {
         String extension = FilenameUtils.getExtension(path.toString());
@@ -52,7 +52,7 @@ public class KeyStore {
                 type = null;
         }
         if (type == null) {
-            throw new IllegalArgumentException("Unable to determine key type by file: " + path.toString());
+            throw new IllegalArgumentException("Unable to determine key type by file: " + path);
         }
         return create(path, storePassword, keyPassword, type);
     }

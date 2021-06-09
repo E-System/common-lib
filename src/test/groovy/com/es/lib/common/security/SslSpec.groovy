@@ -7,9 +7,17 @@ import java.security.NoSuchAlgorithmException
 
 class SslSpec extends Specification {
 
-    def "CreateSSLContext"() {
+    def "CreateSSLContext with allTrust"() {
         when:
         def context = Ssl.context()
+        then:
+        context != null
+        context.socketFactory != null
+    }
+
+    def "CreateSSLContext without allTrust"() {
+        when:
+        def context = Ssl.context(false)
         then:
         context != null
         context.socketFactory != null
