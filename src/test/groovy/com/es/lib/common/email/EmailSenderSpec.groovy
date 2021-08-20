@@ -86,7 +86,7 @@ class EmailSenderSpec extends Specification {
         when:
         def sender = createSender()
         def file = Files.createTempFile("test_mail_file", "txt")
-        file.write('Пробное содержимое')
+        Files.write(file, "Пробное содержимое".bytes)
         def attachment = new EmailAttachment(
             OutputData.create(
                 "Тестовое имя файла (из файла).txt",

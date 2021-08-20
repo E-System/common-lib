@@ -116,7 +116,7 @@ public final class Reflects {
         if (holder != null) {
             for (Field field : holder.getFields()) {
                 int mod = field.getModifiers();
-                if (Modifier.isStatic(mod) && Modifier.isFinal(mod)) {
+                if (Modifier.isStatic(mod) && Modifier.isFinal(mod) && !field.getName().startsWith("$")) {
                     result.add((T) field.get(holder));
                 }
             }

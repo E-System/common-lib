@@ -245,7 +245,7 @@ class ReflectsSpec extends Specification {
         Integer i
 
         SomeClass2(Integer i) {
-            this.i = i;
+            this.i = i
         }
     }
 
@@ -253,7 +253,7 @@ class ReflectsSpec extends Specification {
 
         @Override
         Class<? extends Annotation> annotationType() {
-            return TestAnnotation.class;
+            return TestAnnotation.class
         }
     }
 
@@ -289,25 +289,25 @@ class ReflectsSpec extends Specification {
 
     private static class Versions {
 
-        public static final class EMPTY {
+        static final class EMPTY {
 
-            public static final String v_1_0 = "1.0";
+            public static final String v_1_0 = "1.0"
         }
 
-        public static final class MOSQUITO {
+        static final class MOSQUITO {
 
-            public static final String v_1_0 = "1.0";
+            public static final String v_1_0 = "1.0"
         }
 
-        public static final class WINDOW {
+        static final class WINDOW {
 
-            public static final String v_1_0 = "1.0";
-            public static final String v_1_1 = "1.1";
-            public static final String v_1_2 = "1.2";
-            public static final String v_2_0 = "2.0";
+            public static final String v_1_0 = "1.0"
+            public static final String v_1_1 = "1.1"
+            public static final String v_1_2 = "1.2"
+            public static final String v_2_0 = "2.0"
         }
 
-        public static final class UNKNOWN {
+        static final class UNKNOWN {
 
         }
     }
