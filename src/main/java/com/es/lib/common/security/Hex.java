@@ -25,18 +25,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class Hex {
 
-    private static final String HEXES = "0123456789abcdef";
-
     private Hex() { }
 
     public static String get(final byte[] value) {
         if (value == null) {
             return null;
         }
-        final StringBuilder hex = new StringBuilder(0x2 * value.length);
+        final StringBuilder result = new StringBuilder(0x2 * value.length);
         for (final byte b : value) {
-            hex.append(HEXES.charAt((b & 240) >> 0x4)).append(HEXES.charAt(b & 15));
+            result.append(String.format("%02x", b));
         }
-        return hex.toString();
+        return result.toString();
     }
 }
