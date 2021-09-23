@@ -3,6 +3,10 @@ package com.es.lib.common
 import com.fasterxml.jackson.core.type.TypeReference
 import spock.lang.Specification
 
+import java.time.OffsetDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
 class JsonsSpec extends Specification {
 
     def "Class from json"() {
@@ -37,6 +41,18 @@ class JsonsSpec extends Specification {
         res == '{"key":{"field1":"value1","field2":"value2"}}'
     }
 
+    def "java 8 date/time"() {
+        when:
+        def zdt = ZonedDateTime.now()
+        def odt = OffsetDateTime.now()
+        def item = new DateClass(zdt, odt)
+        def res = Jsons.toJson(item)
+        def deserialized = Jsons.fromJson(res, DateClass)
+        then:
+        res == '{"field1":"' + DateTimeFormatter.ISO_ZONED_DATE_TIME.format(zdt) + '","field2":"' + DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(odt) + '"}'
+        item == deserialized
+    }
+
     static class TestClass {
         String field1
         String field2
@@ -46,6 +62,37 @@ class JsonsSpec extends Specification {
         TestClass(String field1, String field2) {
             this.field1 = field1
             this.field2 = field2
+        }
+    }
+
+    static class DateClass {
+        ZonedDateTime field1
+        OffsetDateTime field2
+
+        DateClass() {}
+
+        DateClass(ZonedDateTime field1, OffsetDateTime field2) {
+            this.field1 = field1
+            this.field2 = field2
+        }
+
+        boolean equals(o) {
+            if (this.is(o)) return true
+            if (getClass() != o.class) return false
+
+            DateClass dateClass = (DateClass) o
+
+            if (field1 != dateClass.field1) return false
+            if (field2 != dateClass.field2) return false
+
+            return true
+        }
+
+        int hashCode() {
+            int result
+            result = (field1 != null ? field1.hashCode() : 0)
+            result = 31 * result + (field2 != null ? field2.hashCode() : 0)
+            return result
         }
     }
 }

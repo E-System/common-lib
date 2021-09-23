@@ -124,19 +124,23 @@ publishing {
         }
     }
 }
+ext{
+    jacksonVersion = "2.12.5"
+}
 dependencies {
     api "org.apache.commons:commons-lang3:3.12.0"
     api "commons-io:commons-io:2.11.0"
     api "org.slf4j:slf4j-api:1.7.32"
-    api 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
-    api 'com.sun.mail:jakarta.mail:2.0.1'
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api "com.sun.mail:jakarta.mail:2.0.1"
     api "de.svenkubiak:jBCrypt:0.4.3"
     api "org.reflections:reflections:0.9.12"
 
     compileOnly "org.projectlombok:lombok:1.18.20"
     annotationProcessor "org.projectlombok:lombok:1.18.20"
 
-    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+    testImplementation "org.spockframework:spock-core:2.0-groovy-3.0"
+    testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 }
 
 def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null
