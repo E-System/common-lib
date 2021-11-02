@@ -227,6 +227,7 @@ class ReflectsSpec extends Specification {
     def "getResources"() {
         when:
         def res = Reflects.getResources("com.es", null)
+        println(res)
         then:
         res.size() > 0
         res.contains('com/es/lib/common/build.properties')

@@ -19,7 +19,6 @@ package com.es.lib.common.reflection;
 import com.es.lib.common.collection.Items;
 import com.es.lib.common.exception.ESRuntimeException;
 import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
 import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.annotation.Annotation;
@@ -28,13 +27,15 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static org.reflections.scanners.Scanners.*;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
 public final class Reflects {
 
-    private Reflects() { }
+    private Reflects() {}
 
     public static Map<String, Object> toMap(final Object instance, Function<Object, Object> converter) {
         return toMap(instance, null, converter);
@@ -148,14 +149,14 @@ public final class Reflects {
     public static Set<Class<?>> getTypesAnnotatedWith(Collection<String> packages, Class<? extends Annotation> annotation) {
         ConfigurationBuilder builder = new ConfigurationBuilder();
         packages.forEach(builder::forPackages);
-        return new Reflections(builder).getTypesAnnotatedWith(annotation);
+        return new Reflections(builder).get(SubTypes.of(TypesAnnotated.with(annotation)).asClass());
     }
 
     public static Set<String> getResources(String prefix, Predicate<String> namePredicate) {
         if (namePredicate == null) {
             namePredicate = v -> true;
         }
-        return new Reflections(prefix, new ResourcesScanner()).getResources(namePredicate);
+        return new Reflections(prefix, Resources).get(Resources.with(".*").filter(namePredicate));
     }
 
     public static <T> Collection<T> getInnerClassStaticObjectByName(Class<?> holder, String name) throws IllegalAccessException {

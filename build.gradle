@@ -125,7 +125,7 @@ publishing {
     }
 }
 ext{
-    jacksonVersion = "2.12.5"
+    jacksonVersion = "2.13.0"
 }
 dependencies {
     api "org.apache.commons:commons-lang3:3.12.0"
@@ -134,10 +134,10 @@ dependencies {
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     api "com.sun.mail:jakarta.mail:2.0.1"
     api "de.svenkubiak:jBCrypt:0.4.3"
-    api "org.reflections:reflections:0.9.12"
+    api "org.reflections:reflections:0.10.2"
 
-    compileOnly "org.projectlombok:lombok:1.18.20"
-    annotationProcessor "org.projectlombok:lombok:1.18.20"
+    compileOnly "org.projectlombok:lombok:1.18.22"
+    annotationProcessor "org.projectlombok:lombok:1.18.22"
 
     testImplementation "org.spockframework:spock-core:2.0-groovy-3.0"
     testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
