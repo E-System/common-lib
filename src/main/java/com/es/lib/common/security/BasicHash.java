@@ -16,9 +16,17 @@ public class BasicHash implements StrHash {
         if (value == null) {
             return null;
         }
+        return get(value.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Override
+    public String get(byte[] value) {
+        if (value == null) {
+            return null;
+        }
         try {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
-            digest.update(value.getBytes(StandardCharsets.UTF_8));
+            digest.update(value);
             return Hex.get(digest.digest());
         } catch (Exception ignore) {
             return null;

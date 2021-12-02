@@ -15,6 +15,11 @@ public class BCryptHash implements StrHash {
     }
 
     @Override
+    public String get(byte[] value) {
+        return BCrypt.hashpw(String.valueOf(value), BCrypt.gensalt(level));
+    }
+
+    @Override
     public boolean valid(String value, String hash) {
         try {
             return value != null && BCrypt.checkpw(value, hash);
