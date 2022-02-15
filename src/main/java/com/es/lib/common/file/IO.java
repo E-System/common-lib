@@ -39,7 +39,7 @@ import java.util.zip.CheckedInputStream;
  */
 public final class IO {
 
-    private IO() { }
+    private IO() {}
 
     public static FileType fileType(String fileName) {
         return FileTypeFinder.get(fileName);
@@ -93,13 +93,32 @@ public final class IO {
     public static void delete(Path file) {
         try {
             Files.deleteIfExists(file);
-        } catch (Exception ignore) { }
+        } catch (Exception ignore) {}
     }
 
     public static void deleteRecursively(Path path) throws IOException {
         try (Stream<Path> paths = Files.walk(path)) {
             paths.sorted(Comparator.reverseOrder()).forEach(IO::delete);
         }
+    }
+
+    public static String humanReadableSize(long size, boolean is1024unit, int fraction) {
+        long unit = is1024unit ? 1024 : 1000;
+        if (size < unit) {
+            return size + (size > 1 ? " Bytes" : " Byte");
+        }
+        long exp = (long) (Math.log(size) / Math.log(unit));
+        double value = size / Math.pow(unit, exp);
+        return String.format("%." + fraction + "f %s%s", value,
+            "KMGTPEZY".charAt((int) exp - 1), is1024unit ? "iB" : "B");
+    }
+
+    public static String humanReadableSize(long size, boolean is1024unit) {
+        return humanReadableSize(size, is1024unit, 3);
+    }
+
+    public static String humanReadableSize(long size) {
+        return humanReadableSize(size, true, 3);
     }
 
     static String extension(String fileName) {
