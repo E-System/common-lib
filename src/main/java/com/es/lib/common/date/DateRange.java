@@ -16,6 +16,7 @@
 
 package com.es.lib.common.date;
 
+import com.es.lib.common.Constant;
 import com.es.lib.common.model.SItem;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,8 +38,12 @@ public class DateRange {
     private final Date dend;
 
     public String getIntervalString() {
+        return getIntervalString(Constant.DEFAULT_DATE_PATTERN);
+    }
+
+    public String getIntervalString(String pattern) {
         DateFormatter formatter = Dates.formatter();
-        return formatter.format(getDbegin(), false) + "|" + formatter.format(getDend(), false);
+        return formatter.format(getDbegin(), pattern) + "|" + formatter.format(getDend(), pattern);
     }
 
     public enum Interval {
@@ -152,8 +157,16 @@ public class DateRange {
             return getItem(zoneId, true);
         }
 
+        public SItem getItem(ZoneId zoneId, String pattern) {
+            return getItem(zoneId, pattern, true);
+        }
+
         public SItem getItem(ZoneId zoneId, boolean lastNextDay) {
-            return new SItem(this.getRange(zoneId, lastNextDay).getIntervalString(), this.toString());
+            return getItem(zoneId, Constant.DEFAULT_DATE_PATTERN, lastNextDay);
+        }
+
+        public SItem getItem(ZoneId zoneId, String pattern, boolean lastNextDay) {
+            return new SItem(this.getRange(zoneId, lastNextDay).getIntervalString(pattern), this.toString());
         }
     }
 }
