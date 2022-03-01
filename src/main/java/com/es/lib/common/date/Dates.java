@@ -170,6 +170,11 @@ public final class Dates {
         return new PrettyInterval(useBraces, localization);
     }
 
+    public static Collection<SItem> ranges(ZoneId zoneId, String pattern, boolean lastNextDay) {
+        return Stream.of(DateRange.Interval.values())
+                     .map(v -> v.getItem(zoneId, pattern, lastNextDay))
+                     .collect(Collectors.toList());
+    }
 
     public static Collection<SItem> ranges(ZoneId zoneId, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
