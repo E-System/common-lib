@@ -57,30 +57,36 @@ public final class PrettyInterval {
     }
 
     private static Collection<Map.Entry<DurationType, Long>> getDiff(LocalDateTime date, LocalDateTime dateNext) {
+        Map.Entry<long[], Boolean> t = getTime(date, dateNext);
+        long[] time = t.getKey();
+        boolean shift = t.getValue();
         Period period = Period.between(date.toLocalDate(), dateNext.toLocalDate());
-        long[] time = getTime(date, dateNext);
         return Arrays.asList(
             Pair.of(DurationType.YEAR, (long) period.getYears()),
             Pair.of(DurationType.MONTH, (long) period.getMonths()),
-            Pair.of(DurationType.DAY, (long) period.getDays()),
+            Pair.of(DurationType.DAY, (long) period.getDays() - (shift ? 1 : 0)),
             Pair.of(DurationType.HOUR, time[0]),
             Pair.of(DurationType.MINUTE, time[1]),
             Pair.of(DurationType.SECOND, time[2])
         );
     }
 
-    private static long[] getTime(LocalDateTime date, LocalDateTime dateNext) {
+    private static Map.Entry<long[], Boolean> getTime(LocalDateTime date, LocalDateTime dateNext) {
         LocalDateTime original = LocalDateTime.of(dateNext.getYear(),
             dateNext.getMonthValue(), dateNext.getDayOfMonth(), date.getHour(), date.getMinute(), date.getSecond());
         Duration duration = Duration.between(original, dateNext);
-
+        boolean shift = false;
         long seconds = duration.getSeconds();
+        if (seconds < 0) {
+            seconds += 24 * Constant.SECONDS_IN_HOUR;
+            shift = true;
+        }
 
         long hours = seconds / Constant.SECONDS_IN_HOUR;
         long minutes = ((seconds % Constant.SECONDS_IN_HOUR) / Constant.SECONDS_IN_MINUTE);
         long secs = (seconds % Constant.SECONDS_IN_MINUTE);
 
-        return new long[]{hours, minutes, secs};
+        return Pair.of(new long[]{hours, minutes, secs}, shift);
     }
 
     public enum DurationType {
