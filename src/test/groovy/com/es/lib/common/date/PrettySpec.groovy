@@ -69,6 +69,15 @@ class PrettySpec extends Specification {
         result == '1 год 1 дн. 2 ч.'
     }
 
+    def "One year and one day and two hours before"() {
+        when:
+        def date = LocalDateTime.of(2022, 3, 24, 20, 1, 2)
+        def nextDate = date.plusYears(1).plusDays(1).plusHours(2)
+        def result = Dates.pretty(false).get(date, nextDate)
+        then:
+        result == '1 год 1 дн. 2 ч.'
+    }
+
     def "Two hours"() {
         when:
         def date = LocalDateTime.now()
