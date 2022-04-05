@@ -15,6 +15,7 @@
  */
 package com.es.lib.common.model;
 
+import com.es.lib.common.reflection.Reflects;
 import com.es.lib.common.security.Hash;
 import lombok.Getter;
 import lombok.ToString;
@@ -22,10 +23,12 @@ import lombok.ToString;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -58,6 +61,11 @@ public class BuildInfo implements Serializable {
 
     public static final String UNDEFINED = "UNDEFINED";
     public static final String UNDEFINED_VERSION = "UNDEFINED_VERSION";
+
+    public static Collection<BuildInfo> list(String prefix) {
+        return Reflects.getResources(prefix, s -> s.endsWith("build.properties")).stream()
+                       .map(v -> (v.startsWith("/") ? "" : "/") + v).map(BuildInfo::create).collect(Collectors.toList());
+    }
 
     public static BuildInfo create() {
         return create("/com/es/build.properties");
