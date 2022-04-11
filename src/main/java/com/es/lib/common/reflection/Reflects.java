@@ -24,6 +24,7 @@ import org.reflections.util.ConfigurationBuilder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -74,13 +75,32 @@ public final class Reflects {
     }
 
     public static Map<String, Field> getDeclaredFields(Class<?> cls) {
+        return getDeclaredFields(cls, null);
+    }
+
+    public static Map<String, Field> getDeclaredFields(Class<?> cls, Class<? extends Annotation> annotationClass) {
         Map<String, Field> result = new LinkedHashMap<>();
         Class<?> superclass = cls.getSuperclass();
         if (superclass != null) {
-            result.putAll(getDeclaredFields(superclass));
+            result.putAll(getDeclaredFields(superclass, annotationClass));
         }
         for (Field field : cls.getDeclaredFields()) {
+            if (annotationClass != null && !field.isAnnotationPresent(annotationClass)) {
+                continue;
+            }
             result.put(field.getName(), field);
+        }
+        return result;
+    }
+
+    public static <T extends Annotation> Collection<String> getDeclaredFieldNames(Class<?> cls, Class<T> annotationClass, BiFunction<Field, T, String> converter) {
+        Map<String, Field> declaredFields = getDeclaredFields(cls, annotationClass);
+        if (converter == null) {
+            return declaredFields.keySet();
+        }
+        Collection<String> result = new HashSet<>();
+        for (Map.Entry<String, Field> entry : declaredFields.entrySet()) {
+            result.add(converter.apply(entry.getValue(), entry.getValue().getAnnotation(annotationClass)));
         }
         return result;
     }
