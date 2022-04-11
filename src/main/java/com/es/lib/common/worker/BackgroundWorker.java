@@ -34,9 +34,13 @@ public abstract class BackgroundWorker implements Runnable {
 
     protected abstract void doWork();
 
-    protected void doOnError(Throwable throwable) { }
+    protected void doOnError(Throwable throwable) {}
 
     protected abstract Info getInfo();
+
+    protected Info nameInfo(String name) {
+        return new Info(name);
+    }
 
     @Getter
     @ToString
