@@ -31,6 +31,13 @@ import java.util.function.Supplier
  */
 class ItemsSpec extends Specification {
 
+    def "map"() {
+        expect:
+        Items.map(null) != null
+        Items.map([:]) != null
+        !Items.map([key: 'value']).isEmpty()
+    }
+
     def "Remove empty values"() {
         expect:
         Items.removeEmptyValues(map as Map) == result
@@ -392,7 +399,7 @@ class ItemsSpec extends Specification {
 
     def "toMap with value mapper"() {
         when:
-        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")], {return it.v1}, {return it})
+        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")], { return it.v1 }, { return it })
         then:
         res.size() == 2
         res["1"].v2 == "2"
@@ -401,7 +408,7 @@ class ItemsSpec extends Specification {
 
     def "toMap with value mapper from stream"() {
         when:
-        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")].stream(), {return it.v1}, {return it})
+        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")].stream(), { return it.v1 }, { return it })
         then:
         res.size() == 2
         res["1"].v2 == "2"
@@ -410,7 +417,7 @@ class ItemsSpec extends Specification {
 
     def "toMap without value mapper"() {
         when:
-        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")], {return it.v1})
+        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")], { return it.v1 })
         then:
         res.size() == 2
         res["1"].v2 == "2"
@@ -419,7 +426,7 @@ class ItemsSpec extends Specification {
 
     def "toMap without value mapper from stream"() {
         when:
-        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")].stream(), {return it.v1})
+        def res = Items.toMap([new GroupClass("1", "2"), new GroupClass("2", "3")].stream(), { return it.v1 })
         then:
         res.size() == 2
         res["1"].v2 == "2"

@@ -131,6 +131,10 @@ public final class Items {
         return collection.size() == size;
     }
 
+    public static <K, V> Map<K, V> map(Map<K, V> map) {
+        return map == null ? new HashMap<>() : map;
+    }
+
     public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }
