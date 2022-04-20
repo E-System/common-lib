@@ -43,6 +43,13 @@ class ReflectsSpec extends Specification {
         res3.containsKey('ref')
     }
 
+    def "getMethods"(){
+        when:
+        def res = Reflects.getDeclaredMethods(ParentEntityClass)
+        then:
+        res.containsKey('getId')
+    }
+
     def "toMap"() {
         when:
         def res = Reflects.toMap(new EntityClass2(1, "1", new EntityClass(2, "2")), new Function<Object, Object>() {

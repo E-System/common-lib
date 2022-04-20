@@ -74,6 +74,25 @@ public final class Reflects {
         return result;
     }
 
+    public static Map<String, Method> getDeclaredMethods(Class<?> cls) {
+        return getDeclaredMethods(cls, null);
+    }
+
+    public static Map<String, Method> getDeclaredMethods(Class<?> cls, Predicate<Method> methodFilter) {
+        Map<String, Method> result = new LinkedHashMap<>();
+        Class<?> superclass = cls.getSuperclass();
+        if (superclass != null) {
+            result.putAll(getDeclaredMethods(superclass, methodFilter));
+        }
+        for (Method method : cls.getDeclaredMethods()) {
+            if (methodFilter != null && !methodFilter.test(method)) {
+                continue;
+            }
+            result.put(method.getName(), method);
+        }
+        return result;
+    }
+
     public static Map<String, Field> getDeclaredFields(Class<?> cls) {
         return getDeclaredFields(cls, null);
     }
