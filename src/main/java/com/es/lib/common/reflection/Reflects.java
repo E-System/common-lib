@@ -18,6 +18,8 @@ package com.es.lib.common.reflection;
 
 import com.es.lib.common.collection.Items;
 import com.es.lib.common.exception.ESRuntimeException;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
 
@@ -120,6 +122,21 @@ public final class Reflects {
         Collection<String> result = new HashSet<>();
         for (Map.Entry<String, Field> entry : declaredFields.entrySet()) {
             result.add(converter.apply(entry.getValue(), entry.getValue().getAnnotation(annotationClass)));
+        }
+        return result;
+    }
+
+    public static <T> Map<String, String> getPropertyNameBySetter(Class<T> tClass) {
+        Map<String, Method> methods = Reflects.getDeclaredMethods(tClass, method -> method.getName().startsWith("set"));
+        Map<String, Field> fields = Reflects.getDeclaredFields(tClass, JsonProperty.class);
+        Map<String, String> result = new HashMap<>();
+        for (String methodName : methods.keySet()) {
+            String fieldName = StringUtils.uncapitalize(methodName.replace("set", ""));
+            Field field = fields.get(fieldName);
+            if (field == null) {
+                continue;
+            }
+            result.put(methodName, field.getAnnotation(JsonProperty.class).value());
         }
         return result;
     }
