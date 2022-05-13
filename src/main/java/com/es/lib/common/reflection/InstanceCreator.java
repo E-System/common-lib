@@ -16,7 +16,7 @@
 
 package com.es.lib.common.reflection;
 
-import com.es.lib.common.exception.ESRuntimeException;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Getter
 @RequiredArgsConstructor
 public class InstanceCreator<E1, E2, E3> implements Serializable {
 
@@ -41,35 +42,15 @@ public class InstanceCreator<E1, E2, E3> implements Serializable {
         return new InstanceCreator<>(entityClass, secondEntityClass, thirdEntityClass);
     }
 
-    public Class<E1> getEntityClass() {
-        return entityClass;
-    }
-
-    public Class<E2> getSecondEntityClass() {
-        return secondEntityClass;
-    }
-
-    public Class<E3> getThirdEntityClass() {
-        return thirdEntityClass;
-    }
-
     public E1 createInstance() {
-        return newInstance(getEntityClass());
+        return Reflects.newInstance(getEntityClass());
     }
 
     public E2 createSecondInstance() {
-        return newInstance(getSecondEntityClass());
+        return Reflects.newInstance(getSecondEntityClass());
     }
 
     public E3 createThirdInstance() {
-        return newInstance(getThirdEntityClass());
-    }
-
-    private <T> T newInstance(Class<T> instanceClass) {
-        try {
-            return instanceClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new ESRuntimeException(e);
-        }
+        return Reflects.newInstance(getThirdEntityClass());
     }
 }

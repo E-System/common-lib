@@ -252,4 +252,12 @@ public final class Reflects {
         }
         return result;
     }
+
+    public static <T> T newInstance(Class<T> instanceClass) {
+        try {
+            return instanceClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new ESRuntimeException(e);
+        }
+    }
 }
