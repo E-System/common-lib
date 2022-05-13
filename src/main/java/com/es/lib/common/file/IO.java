@@ -16,12 +16,14 @@
 
 package com.es.lib.common.file;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -119,6 +121,17 @@ public final class IO {
 
     public static String humanReadableSize(long size) {
         return humanReadableSize(size, true, 3);
+    }
+
+    public static Pair<Path, FileName> download(String url) {
+        try {
+            URL source = new URL(url);
+            Path result = Files.createTempFile("download", "");
+            FileUtils.copyURLToFile(source, result.toFile());
+            return Pair.of(result, FileName.create(source.getPath()));
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     static String extension(String fileName) {

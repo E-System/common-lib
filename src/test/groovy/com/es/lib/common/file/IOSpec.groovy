@@ -240,4 +240,14 @@ class IOSpec extends Specification {
         IO.fileNameDisposition(true, "Тест.txt") == "attachment; filename=\"Тест.txt\"; filename*=UTF-8''%D0%A2%D0%B5%D1%81%D1%82.txt"
         IO.fileNameDisposition(false, "Тест.txt") == "inline; filename=\"Тест.txt\"; filename*=UTF-8''%D0%A2%D0%B5%D1%81%D1%82.txt"
     }
+
+    def "Download file"() {
+        when:
+        def file = IO.download("https://cdn.shopify.com/s/files/1/0277/7631/9588/products/Right_Stopper_WheelAble_SolutionBased.jpg?v=1594327034")
+        println file
+        then:
+        file != null
+        file.value.name == 'Right_Stopper_WheelAble_SolutionBased'
+        file.value.ext == 'jpg'
+    }
 }
