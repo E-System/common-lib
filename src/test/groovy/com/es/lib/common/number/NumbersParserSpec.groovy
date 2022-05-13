@@ -133,4 +133,30 @@ class NumbersParserSpec extends Specification {
         ""     || null
         "10"   || 10
     }
+
+    def "Get sum value with default"() {
+        expect:
+        Numbers.parser(value1).asSum(value2 as long) == result as long
+        where:
+        value1  | value2 || result
+        null    | 100    || 100
+        "asd"   | 100    || 100
+        ""      | 100    || 100
+        "10"    | 11     || 1000
+        "10.20" | 11     || 1020
+        "10,20" | 11     || 1020
+    }
+
+    def "Get sum value without default (use null)"() {
+        expect:
+        Numbers.parser(value1).asSum() == result as Long
+        where:
+        value1  || result
+        null    || null
+        "asd"   || null
+        ""      || null
+        "100"   || 10000
+        "10.20" || 1020
+        "10,20" || 1020
+    }
 }

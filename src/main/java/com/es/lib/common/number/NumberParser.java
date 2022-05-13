@@ -50,6 +50,18 @@ public class NumberParser {
         return asDouble(null);
     }
 
+    public Long asSum(Long defValue) {
+        try {
+            return Math.round(Double.parseDouble(value.replace(",", ".")) * 100.0);
+        } catch (Exception e) {
+            return defValue;
+        }
+    }
+
+    public Long asSum() {
+        return asSum(null);
+    }
+
     private <T> T parse(T defaultValue, Function<String, T> parser) {
         try {
             return parser.apply(value);
