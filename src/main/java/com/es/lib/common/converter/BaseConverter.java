@@ -21,7 +21,15 @@ public abstract class BaseConverter<R, T> {
         return convert(items, null, options);
     }
 
+    public Collection<R> convert(Collection<T> items, ConvertOption.Set options) {
+        return convert(items, null, options);
+    }
+
     public Collection<R> convert(Collection<T> items, BiConsumer<T, R> enhancer, ConvertOption... options) {
+        return convert(items, enhancer, new ConvertOption.Set(options));
+    }
+
+    public Collection<R> convert(Collection<T> items, BiConsumer<T, R> enhancer, ConvertOption.Set options) {
         if (Items.isEmpty(items)) {
             return new ArrayList<>();
         }
@@ -36,11 +44,19 @@ public abstract class BaseConverter<R, T> {
         return convert(item, null, options);
     }
 
+    public R convert(T item, ConvertOption.Set options) {
+        return convert(item, null, options);
+    }
+
     public R convert(T item, BiConsumer<T, R> enhancer, ConvertOption... options) {
+        return convert(item, enhancer, new ConvertOption.Set(options));
+    }
+
+    public R convert(T item, BiConsumer<T, R> enhancer, ConvertOption.Set options) {
         if (item == null) {
             return null;
         }
-        R result = realConvert(item, new HashSet<>(Arrays.asList(options)));
+        R result = realConvert(item, options);
         if (enhancer != null) {
             enhancer.accept(item, result);
         }
@@ -50,7 +66,7 @@ public abstract class BaseConverter<R, T> {
     protected abstract R realConvert(T item, Set<ConvertOption> options);
 
     protected <A> Optional<A> getOption(Set<ConvertOption> options, Class<A> cls) {
-        return options.stream().filter(v -> v.getClass().isAssignableFrom(cls)).map(v -> (A) v).findFirst();
+        return ConvertOption.get(options, cls);
     }
 
     protected String getLocaleOption(Set<ConvertOption> options) {

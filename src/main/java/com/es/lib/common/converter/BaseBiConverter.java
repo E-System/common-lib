@@ -2,7 +2,10 @@ package com.es.lib.common.converter;
 
 import com.es.lib.common.collection.Items;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -20,7 +23,15 @@ public abstract class BaseBiConverter<R, T> extends BaseConverter<R, T> {
         return reverseConvert(items, null, options);
     }
 
+    public Collection<T> reverseConvert(Collection<R> items, ConvertOption.Set options) {
+        return reverseConvert(items, null, options);
+    }
+
     public Collection<T> reverseConvert(Collection<R> items, BiConsumer<R, T> enhancer, ConvertOption... options) {
+        return reverseConvert(items, enhancer, new ConvertOption.Set(options));
+    }
+
+    public Collection<T> reverseConvert(Collection<R> items, BiConsumer<R, T> enhancer, ConvertOption.Set options) {
         if (Items.isEmpty(items)) {
             return new ArrayList<>();
         }
@@ -35,11 +46,19 @@ public abstract class BaseBiConverter<R, T> extends BaseConverter<R, T> {
         return reverseConvert(item, null, options);
     }
 
+    public T reverseConvert(R item, ConvertOption.Set options) {
+        return reverseConvert(item, null, options);
+    }
+
     public T reverseConvert(R item, BiConsumer<R, T> enhancer, ConvertOption... options) {
+        return reverseConvert(item, enhancer, new ConvertOption.Set(options));
+    }
+
+    public T reverseConvert(R item, BiConsumer<R, T> enhancer, ConvertOption.Set options) {
         if (item == null) {
             return null;
         }
-        T result = realReverseConvert(item, new HashSet<>(Arrays.asList(options)));
+        T result = realReverseConvert(item, options);
         if (enhancer != null) {
             enhancer.accept(item, result);
         }
