@@ -139,6 +139,10 @@ public final class Items {
         return map == null ? new HashMap<>() : (immutable ? new HashMap<>(map) : map);
     }
 
+    public static <K, V> Map<K, V> immutableMap(Map<K, V> map) {
+        return map == null ? null : new HashMap<>(map);
+    }
+
     public static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }

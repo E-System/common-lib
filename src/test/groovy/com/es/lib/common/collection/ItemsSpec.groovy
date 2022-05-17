@@ -31,7 +31,7 @@ import java.util.function.Supplier
  */
 class ItemsSpec extends Specification {
 
-    def "map mutable"() {
+    def "not null map mutable"() {
         when:
         def map = [key: 'value']
         def map2 = Items.map(map)
@@ -47,7 +47,7 @@ class ItemsSpec extends Specification {
         map.containsKey('key3')
     }
 
-    def "map immutable"() {
+    def "not null map immutable param"() {
         when:
         def map = [key: 'value']
         def map2 = Items.map(map, true)
@@ -57,6 +57,22 @@ class ItemsSpec extends Specification {
         Items.map(null, true) != null
         Items.map([:], true) != null
         !Items.map([key: 'value'], true).isEmpty()
+        !map2.containsKey('key2')
+        map2.containsKey('key3')
+        map.containsKey('key2')
+        !map.containsKey('key3')
+    }
+
+    def "immutableMap"() {
+        when:
+        def map = [key: 'value']
+        def map2 = Items.immutableMap(map)
+        map['key2'] = 'value2'
+        map2['key3'] = 'value3'
+        then:
+        Items.immutableMap(null) == null
+        Items.immutableMap([:]) != null
+        !Items.immutableMap([key: 'value']).isEmpty()
         !map2.containsKey('key2')
         map2.containsKey('key3')
         map.containsKey('key2')
