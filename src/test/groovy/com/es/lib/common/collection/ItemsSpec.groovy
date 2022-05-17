@@ -31,11 +31,36 @@ import java.util.function.Supplier
  */
 class ItemsSpec extends Specification {
 
-    def "map"() {
-        expect:
+    def "map mutable"() {
+        when:
+        def map = [key: 'value']
+        def map2 = Items.map(map)
+        map['key2'] = 'value2'
+        map2['key3'] = 'value3'
+        then:
         Items.map(null) != null
         Items.map([:]) != null
         !Items.map([key: 'value']).isEmpty()
+        map2.containsKey('key2')
+        map2.containsKey('key3')
+        map.containsKey('key2')
+        map.containsKey('key3')
+    }
+
+    def "map immutable"() {
+        when:
+        def map = [key: 'value']
+        def map2 = Items.map(map, true)
+        map['key2'] = 'value2'
+        map2['key3'] = 'value3'
+        then:
+        Items.map(null, true) != null
+        Items.map([:], true) != null
+        !Items.map([key: 'value'], true).isEmpty()
+        !map2.containsKey('key2')
+        map2.containsKey('key3')
+        map.containsKey('key2')
+        !map.containsKey('key3')
     }
 
     def "Remove empty values"() {

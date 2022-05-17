@@ -132,7 +132,11 @@ public final class Items {
     }
 
     public static <K, V> Map<K, V> map(Map<K, V> map) {
-        return map == null ? new HashMap<>() : map;
+        return map(map, false);
+    }
+
+    public static <K, V> Map<K, V> map(Map<K, V> map, boolean immutable) {
+        return map == null ? new HashMap<>() : (immutable ? new HashMap<>(map) : map);
     }
 
     public static boolean isEmpty(Collection<?> collection) {
