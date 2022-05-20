@@ -38,6 +38,36 @@ class IOSpec extends Specification {
         IO.delete(file)
     }
 
+    def "Copy with file info (without crc)"() {
+        when:
+        def file = Paths.get('/tmp/cwcr/copy_with_crc_test.txt')
+        def res = IO.copy(new ByteArrayInputStream('Hello'.bytes), file, false)
+        then:
+        Files.exists(file)
+        new String(Files.readAllBytes(file)) == 'Hello'
+        res.path == file
+        res.fileName.fullName == 'copy_with_crc_test.txt'
+        res.size == 5
+        res.crc32 == 0
+        res.mime == 'text/plain'
+        IO.delete(file)
+    }
+
+    def "Copy with file info (with crc)"() {
+        when:
+        def file = Paths.get('/tmp/cwcr/copy_with_crc_test.txt')
+        def res = IO.copy(new ByteArrayInputStream('Hello'.bytes), file, true)
+        then:
+        Files.exists(file)
+        new String(Files.readAllBytes(file)) == 'Hello'
+        res.path == file
+        res.fileName.fullName == 'copy_with_crc_test.txt'
+        res.size == 5
+        res.crc32 == 4157704578
+        res.mime == 'text/plain'
+        IO.delete(file)
+    }
+
     def "Read with crc32"() {
         when:
         def file = Files.createTempFile("defined_file_from_spock_test", ".txt")

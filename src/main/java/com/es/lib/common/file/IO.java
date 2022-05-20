@@ -84,6 +84,20 @@ public final class IO {
         return checkedInputStream.getChecksum().getValue();
     }
 
+    public static FileInfo copy(InputStream from, Path to, boolean withCrc) throws IOException {
+        InputStream source = from;
+        if (withCrc) {
+            source = new CheckedInputStream(from, new CRC32());
+        }
+        Files.createDirectories(to.getParent());
+        long size = Files.copy(source, to);
+        long crc32 = 0;
+        if (withCrc) {
+            crc32 = ((CheckedInputStream) source).getChecksum().getValue();
+        }
+        return new FileInfo(to, FileName.create(to), size, crc32, mime(to));
+    }
+
     public static String toString(InputStream inputStream) throws IOException {
         return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
