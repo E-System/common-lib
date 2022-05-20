@@ -45,4 +45,12 @@ class FileNameSpec extends Specification {
         res.name == 'fileName'
         res.ext == 'txt'
     }
+
+    def "Name and ext"(){
+        when:
+        def res = FileName.create('fileName', 'txt')
+        then:
+        res.name == 'fileName'
+        res.ext == 'txt'
+    }
 }

@@ -30,8 +30,12 @@ public class FileName {
     private final String name;
     private final String ext;
 
+    public static FileName create(String name, String ext) {
+        return new FileName(name, ext);
+    }
+
     public static FileName create(String fileName) {
-        return new FileName(
+        return create(
             FilenameUtils.getBaseName(fileName),
             FilenameUtils.getExtension(fileName).toLowerCase()
         );
