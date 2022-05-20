@@ -46,11 +46,22 @@ class FileNameSpec extends Specification {
         res.ext == 'txt'
     }
 
-    def "Name and ext"(){
+    def "Name and ext"() {
         when:
         def res = FileName.create('fileName', 'txt')
         then:
         res.name == 'fileName'
         res.ext == 'txt'
+    }
+
+    def "FullName"() {
+        expect:
+        FileName.full('name', 'ext') == 'name.ext'
+    }
+
+    def "AbbreviatedFileName"() {
+        expect:
+        FileName.abbreviated('name', 'ext', 10) == 'name.ext'
+        FileName.abbreviated('name-name-name-name', 'ext', 10) == 'na..me.ext'
     }
 }

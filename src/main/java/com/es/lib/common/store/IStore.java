@@ -15,6 +15,7 @@
  */
 package com.es.lib.common.store;
 
+import com.es.lib.common.file.FileName;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -50,16 +51,11 @@ public interface IStore extends Serializable {
     }
 
     static String fullName(IStore item) {
-        return item.getFileName() + "." + item.getFileExt();
+        return FileName.full(item.getFileName(), item.getFileExt());
     }
 
     static String abbreviatedFileName(IStore item, int maxWidth) {
-        int extSize = item.getFileExt().length();
-        int nameSize = item.getFileName().length();
-        if ((nameSize + extSize + 1) < maxWidth) {
-            return item.getFullName();
-        }
-        return StringUtils.abbreviateMiddle(item.getFileName(), "..", maxWidth - extSize - 1) + "." + item.getFileExt();
+        return FileName.abbreviated(item.getFileName(), item.getFileExt(), maxWidth);
     }
 
     static boolean isImage(IStore store) {
