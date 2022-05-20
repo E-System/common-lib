@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.es.lib.common.model;
+package com.es.lib.common.store;
 
 import org.apache.commons.lang3.StringUtils;
 
