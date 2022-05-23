@@ -20,4 +20,8 @@ public class FileInfo {
     public FileInfo(FileName fileName, long size, long crc32, String mime) {
         this(null, fileName, size, crc32, mime);
     }
+
+    public FileInfo(String name, String ext, long size, long crc32, String mime) {
+        this(null, FileName.create(name, ext), size, crc32, mime);
+    }
 }
