@@ -60,4 +60,21 @@ class IStoreSpec extends Specification {
         new Store('name', 'ext', 'image/png').image
         !new Store('name', 'ext', 'text/plain').image
     }
+
+    def "IsMime"() {
+        expect:
+        IStore.isMime(mime, part) == result
+        where:
+        mime                | part    || result
+        null                | null     | false
+        ""                  | ""       | true
+        "application/image" | "image"  | true
+        "application/image" | "image2" | false
+    }
+
+    def "IsImage static"() {
+        expect:
+        IStore.isImage("image/png")
+        !IStore.isImage("octet/stream")
+    }
 }
