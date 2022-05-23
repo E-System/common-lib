@@ -16,4 +16,8 @@ public class FileInfo {
     private final long size;
     private final long crc32;
     private final String mime;
+
+    public FileInfo(FileName fileName, long size, long crc32, String mime) {
+        this(null, fileName, size, crc32, mime);
+    }
 }
