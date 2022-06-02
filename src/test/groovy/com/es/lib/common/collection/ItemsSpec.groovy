@@ -79,6 +79,22 @@ class ItemsSpec extends Specification {
         !map.containsKey('key3')
     }
 
+    def "immutableSet"() {
+        when:
+        def set = new HashSet<String>(Arrays.asList('value'))
+        def set2 = Items.immutableSet(set)
+        set.add('value2')
+        set2.add('value3')
+        then:
+        Items.immutableSet(null) == null
+        Items.immutableSet(new HashSet()) != null
+        !Items.immutableSet(new HashSet(Arrays.asList('value'))).isEmpty()
+        !set2.contains('value2')
+        set2.contains('value3')
+        set.contains('value2')
+        !set.contains('value3')
+    }
+
     def "Remove empty values"() {
         expect:
         Items.removeEmptyValues(map as Map) == result

@@ -139,8 +139,20 @@ public final class Items {
         return map == null ? new HashMap<>() : (immutable ? new HashMap<>(map) : map);
     }
 
-    public static <K, V> Map<K, V> immutableMap(Map<K, V> map) {
-        return map == null ? null : new HashMap<>(map);
+    public static <K, V> Map<K, V> immutableMap(Map<K, V> collection) {
+        return immutableMap(collection, false);
+    }
+
+    public static <K, V> Map<K, V> immutableMap(Map<K, V> collection, boolean linked) {
+        return collection == null ? null : (linked ? new LinkedHashMap<>(collection) : new HashMap<>(collection));
+    }
+
+    public static <T> Set<T> immutableSet(Set<T> collection) {
+        return immutableSet(collection, false);
+    }
+
+    public static <T> Set<T> immutableSet(Set<T> collection, boolean linked) {
+        return collection == null ? null : (linked ? new LinkedHashSet<>(collection) : new HashSet<>(collection));
     }
 
     public static boolean isEmpty(Collection<?> collection) {
