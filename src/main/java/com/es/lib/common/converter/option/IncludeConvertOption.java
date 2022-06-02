@@ -26,7 +26,7 @@ public class IncludeConvertOption implements ConvertOption {
         return out;
     }
 
-    interface IncludeConsumer<T, R> {
+    public interface IncludeConsumer<T, R> {
 
         void accept(String field, T in, R out);
     }
