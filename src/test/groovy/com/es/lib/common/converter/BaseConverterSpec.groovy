@@ -1,5 +1,6 @@
 package com.es.lib.common.converter
 
+import com.es.lib.common.converter.option.IncludeConvertOption
 import com.es.lib.common.converter.option.LocaleConvertOption
 import spock.lang.Specification
 
@@ -52,6 +53,18 @@ class BaseConverterSpec extends Specification {
         protected Output realConvert(Input item, Set<ConvertOption> options) {
             def opt = getLocaleOption(options)
             return new Output(item.value + '[' + opt + ']' + getOption(options, TestOption).orElse(new TestOption('')).value)
+        }
+    }
+
+    class IncludeIOConverter extends BaseConverter<Output, Input> {
+        @Override
+        protected Output realConvert(Input item, Set<ConvertOption> options) {
+            def opt = getIncludeOption(options)
+            def result = new Output(item.value)
+            opt.process(item, result) { field, from, to ->
+                to.value += ('[' + field + ']')
+            }
+            return result
         }
     }
 
@@ -124,5 +137,14 @@ class BaseConverterSpec extends Specification {
         then:
         res != null
         res.value == 'Hello[null]'
+    }
+
+    def "IncludeConvertOption exist"() {
+        when:
+        def converter = new IncludeIOConverter()
+        def res = converter.convert(new Input("Hello"), new IncludeConvertOption("value, value2"))
+        then:
+        res != null
+        res.value == 'Hello[value][value2]'
     }
 }

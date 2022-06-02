@@ -1,6 +1,7 @@
 package com.es.lib.common.converter;
 
 import com.es.lib.common.collection.Items;
+import com.es.lib.common.converter.option.IncludeConvertOption;
 import com.es.lib.common.converter.option.LocaleConvertOption;
 
 import java.util.*;
@@ -71,5 +72,9 @@ public abstract class BaseConverter<R, T> {
 
     protected String getLocaleOption(Set<ConvertOption> options) {
         return getOption(options, LocaleConvertOption.class).orElse(new LocaleConvertOption(null)).getLocale();
+    }
+
+    protected IncludeConvertOption getIncludeOption(Set<ConvertOption> options) {
+        return getOption(options, IncludeConvertOption.class).orElse(new IncludeConvertOption(Collections.emptySet()));
     }
 }
