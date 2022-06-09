@@ -1,6 +1,7 @@
 package com.es.lib.common.converter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -12,12 +13,13 @@ public interface ConvertOption {
 
         public Set(Collection<? extends ConvertOption> c, ConvertOption... options) {
             super(c);
-            addAll(new LinkedHashSet<>(Arrays.asList(options)));
+
+            addAll(new LinkedHashSet<>(Arrays.stream(options).filter(Objects::nonNull).collect(Collectors.toList())));
         }
 
         public Set(ConvertOption... options) {
             super();
-            addAll(new HashSet<>(Arrays.asList(options)));
+            addAll(new HashSet<>(Arrays.stream(options).filter(Objects::nonNull).collect(Collectors.toList())));
         }
     }
 

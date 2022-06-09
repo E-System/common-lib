@@ -57,7 +57,6 @@ public abstract class BaseConverter<R, T> {
         if (item == null) {
             return null;
         }
-        options.removeIf(Objects::isNull);
         R result = realConvert(item, options);
         if (enhancer != null) {
             enhancer.accept(item, result);
