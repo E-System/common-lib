@@ -34,6 +34,7 @@ public abstract class BaseConverter<R, T> {
         if (Items.isEmpty(items)) {
             return new ArrayList<>();
         }
+        options.removeIf(Objects::isNull);
         return items.stream().filter(Objects::nonNull).map(v -> convert(v, enhancer, options)).collect(Collectors.toList());
     }
 
