@@ -34,7 +34,6 @@ public abstract class BaseConverter<R, T> {
         if (Items.isEmpty(items)) {
             return new ArrayList<>();
         }
-        options.removeIf(Objects::isNull);
         return items.stream().filter(Objects::nonNull).map(v -> convert(v, enhancer, options)).collect(Collectors.toList());
     }
 
@@ -58,6 +57,7 @@ public abstract class BaseConverter<R, T> {
         if (item == null) {
             return null;
         }
+        options.removeIf(Objects::isNull);
         R result = realConvert(item, options);
         if (enhancer != null) {
             enhancer.accept(item, result);
