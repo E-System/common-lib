@@ -569,4 +569,14 @@ class ItemsSpec extends Specification {
         third == link3
         fourth == link1
     }
+
+    def "Remove"() {
+        expect:
+        Items.remove(null, null) == null
+        Items.remove([:], null) == [:]
+        Items.remove([:], ['a']) == [:]
+        Items.remove(['b': 'b'], ['a']) == ['b': 'b']
+        Items.remove(['b': 'b'], ['b']) == [:]
+        Items.remove(['a': 'a', 'b': 'b'], ['a']) == ['b': 'b']
+    }
 }

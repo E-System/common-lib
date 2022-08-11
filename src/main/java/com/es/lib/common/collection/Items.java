@@ -271,6 +271,14 @@ public final class Items {
         return map;
     }
 
+    public static <K, V> Map<K, V> remove(Map<K, V> items, Collection<K> keys) {
+        if (isEmpty(items) || isEmpty(keys)) {
+            return items;
+        }
+        keys.forEach(items::remove);
+        return items;
+    }
+
     public static <V> Map<String, V> removeByPrefix(Map<String, V> map, String prefix) {
         if (map == null || StringUtils.isBlank(prefix)) {
             return map;
