@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -22,14 +23,14 @@ public abstract class BackgroundWorker implements Runnable {
 
     protected void process() {
         Info info = getInfo();
-        log.trace("Start worker [{}]", info);
+        getLogger().trace("Start worker [{}]", info);
         try {
             doWork();
         } catch (Throwable t) {
-            log.error("Worker error [{}]", info, t);
+            getLogger().error("Worker error [{}]", info, t);
             doOnError(t);
         }
-        log.trace("End worker [{}]", info);
+        getLogger().trace("End worker [{}]", info);
     }
 
     protected abstract void doWork();
@@ -40,6 +41,10 @@ public abstract class BackgroundWorker implements Runnable {
 
     protected Info nameInfo(String name) {
         return new Info(name);
+    }
+
+    protected Logger getLogger(){
+        return log;
     }
 
     @Getter
