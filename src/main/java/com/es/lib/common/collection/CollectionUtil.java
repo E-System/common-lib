@@ -77,6 +77,18 @@ public final class CollectionUtil {
         );
     }
 
+    public static <K, V> Map<K, V> remove(Map<K, V> values, Collection<K> keys) {
+        if (isEmpty(values)) {
+            return values;
+        }
+        keys.forEach(values::remove);
+        return values;
+    }
+
+    public static <K, V> Map<K, V> remove(Map<K, V> values, K... keys) {
+        return remove(values, Arrays.asList(keys));
+    }
+
     /**
      * Тест пары на значение == null
      *

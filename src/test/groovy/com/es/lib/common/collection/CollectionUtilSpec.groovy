@@ -339,4 +339,16 @@ class CollectionUtilSpec extends Specification {
         CollectionUtil.firstBySelector(predicate, '', 'Hello', null) == 'Hello'
         CollectionUtil.firstBySelector(predicate, '', null, 'Hello', null) == 'Hello'
     }
+
+    def "Remove"() {
+        expect:
+        CollectionUtil.remove(null, null) == null
+        CollectionUtil.remove([:], null) == [:]
+        CollectionUtil.remove([:], ['a']) == [:]
+        CollectionUtil.remove(['b': 'b'], ['a']) == ['b': 'b']
+        CollectionUtil.remove(['b': 'b'], ['b']) == [:]
+        CollectionUtil.remove(['b': 'b'], 'b') == [:]
+        CollectionUtil.remove(['a': 'a', 'b': 'b'], ['a']) == ['b': 'b']
+        CollectionUtil.remove(['a': 'a', 'b': 'b'], 'a') == ['b': 'b']
+    }
 }
