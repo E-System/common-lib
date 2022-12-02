@@ -24,17 +24,17 @@ class IStoreSpec extends Specification {
 
         @Override
         String getFullName() {
-            return fullName(this)
+            return IStore.fullName(this)
         }
 
         @Override
         String getAbbreviatedFileName(int maxWidth) {
-            return abbreviatedFileName(this, maxWidth)
+            return IStore.abbreviatedFileName(this, maxWidth)
         }
 
         @Override
         boolean isImage() {
-            return isImage(this)
+            return IStore.isImage(this)
         }
     }
 
