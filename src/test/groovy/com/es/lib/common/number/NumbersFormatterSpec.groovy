@@ -177,4 +177,15 @@ class NumbersFormatterSpec extends Specification {
         100            || "1"
         1000000.00001f || "10" + dfs + "000"
     }
+
+    def "Format with string point delimiter with grouping size 3 and chop zeroes and 3 decimals money and different min max"() {
+        expect:
+        Numbers.formatter(0,3, true, ".", 3, ",").money(a) == b
+        where:
+        a              || b
+        1              || "0.01"
+        10             || "0.1"
+        100            || "1"
+        1000000.00001f || "10,000"
+    }
 }

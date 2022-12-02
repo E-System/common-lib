@@ -25,7 +25,6 @@ import lombok.ToString;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +34,8 @@ import java.util.List;
  */
 public final class Numbers {
 
-    private Numbers() { }
+    private Numbers() {
+    }
 
     /**
      * Split sum on count part
@@ -112,7 +112,11 @@ public final class Numbers {
     }
 
     public static NumberFormatter formatter(int minDecimalCount, int maxDecimalCount, boolean chopZeroes, String decimalSymbol, int groupingSize) {
-        return new NumberFormatter(minDecimalCount, maxDecimalCount, chopZeroes, decimalSymbol, groupingSize);
+        return formatter(minDecimalCount, maxDecimalCount, chopZeroes, decimalSymbol, groupingSize, null);
+    }
+
+    public static NumberFormatter formatter(int minDecimalCount, int maxDecimalCount, boolean chopZeroes, String decimalSymbol, int groupingSize, String groupingSymbol) {
+        return new NumberFormatter(minDecimalCount, maxDecimalCount, chopZeroes, decimalSymbol, groupingSize, groupingSymbol);
     }
 
     public static double remain(double value, double mult, boolean scale) {

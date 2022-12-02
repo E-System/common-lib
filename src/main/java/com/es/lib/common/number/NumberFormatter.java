@@ -16,6 +16,7 @@ public class NumberFormatter {
     private final boolean chopZeroes;
     private final String decimalSymbol;
     private final Integer groupingSize;
+    private final String groupingSymbol;
 
     public String format(short value) {
         return format(value * 1.0d);
@@ -94,9 +95,16 @@ public class NumberFormatter {
         result.setGroupingSize(groupingUsed ? groupingSize : Constant.DEFAULT_GROUPING_SIZE);
         result.setMinimumFractionDigits(minDecimalCount);
         result.setMaximumFractionDigits(maxDecimalCount);
-        if (StringUtils.isNotBlank(decimalSymbol)) {
+        boolean decimalSymbolOverload = StringUtils.isNotEmpty(decimalSymbol);
+        boolean groupingSymbolOverload = StringUtils.isNotEmpty(groupingSymbol);
+        if (decimalSymbolOverload || groupingSymbolOverload) {
             DecimalFormatSymbols dfs = result.getDecimalFormatSymbols();
-            dfs.setDecimalSeparator(decimalSymbol.charAt(0));
+            if (decimalSymbolOverload) {
+                dfs.setDecimalSeparator(decimalSymbol.charAt(0));
+            }
+            if (groupingSymbolOverload) {
+                dfs.setGroupingSeparator(groupingSymbol.charAt(0));
+            }
             result.setDecimalFormatSymbols(dfs);
         }
         return result;

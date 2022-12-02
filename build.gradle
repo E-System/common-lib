@@ -30,7 +30,7 @@ buildscript {
 }
 
 wrapper {
-    gradleVersion = '7.5.1'
+    gradleVersion = '7.6'
 }
 
 apply from: "build-${profile}.gradle"
@@ -125,7 +125,7 @@ publishing {
     }
 }
 ext{
-    jacksonVersion = "2.13.3"
+    jacksonVersion = "2.14.1"
 }
 dependencies {
     api "org.apache.commons:commons-lang3:3.12.0"
@@ -139,7 +139,7 @@ dependencies {
     compileOnly "org.projectlombok:lombok:1.18.22"
     annotationProcessor "org.projectlombok:lombok:1.18.22"
 
-    testImplementation "org.spockframework:spock-core:2.1-groovy-3.0"
+    testImplementation "org.spockframework:spock-core:2.3-groovy-4.0"
     testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 }
 
