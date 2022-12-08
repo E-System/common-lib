@@ -10,6 +10,10 @@ import java.util.Map;
 public class LinkedConvertOption<T, R> implements ConvertOption {
     private final Map<T, R> items;
 
+    public LinkedConvertOption() {
+        this(new HashMap<>());
+    }
+
     public LinkedConvertOption(T id, R data) {
         this(new HashMap<>());
         items.put(id, data);

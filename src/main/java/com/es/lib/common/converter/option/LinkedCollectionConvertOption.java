@@ -1,10 +1,12 @@
 package com.es.lib.common.converter.option;
 
 import com.es.lib.common.collection.Items;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.Collections;
 
+@NoArgsConstructor
 public class LinkedCollectionConvertOption<T, R> extends LinkedConvertOption<T, Collection<R>> {
 
     public LinkedCollectionConvertOption(T id, Collection<R> data) {
