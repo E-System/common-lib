@@ -32,7 +32,8 @@ public final class Jsons {
 
     private static final ObjectMapper OBJECT_MAPPER = mapper();
 
-    private Jsons() {}
+    private Jsons() {
+    }
 
     public static ObjectMapper mapper() {
         return new ObjectMapper()
@@ -77,6 +78,14 @@ public final class Jsons {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <T> T clone(T source, Class<T> classOfT) {
+        return fromJson(toJson(source), classOfT);
+    }
+
+    public static <T> T clone(T source, TypeReference<T> typeReference) {
+        return fromJson(toJson(source), typeReference);
     }
 
     public static class UnixTimeDeserializer extends JsonDeserializer<Date> {

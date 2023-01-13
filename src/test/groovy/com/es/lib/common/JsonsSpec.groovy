@@ -53,6 +53,16 @@ class JsonsSpec extends Specification {
         item == deserialized
     }
 
+    def "Clone"(){
+        when:
+        def zdt = ZonedDateTime.now()
+        def odt = OffsetDateTime.now()
+        def item = new DateClass(zdt, odt)
+        def deserialized = Jsons.clone(item, DateClass)
+        then:
+        item == deserialized
+    }
+
     static class TestClass {
         String field1
         String field2
