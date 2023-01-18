@@ -30,7 +30,8 @@ import java.util.stream.Stream;
  */
 public final class Items {
 
-    private Items() {}
+    private Items() {
+    }
 
     /**
      * Create new map without empty values
@@ -425,5 +426,19 @@ public final class Items {
         }
         indexDestination.accept(index);
         return result;
+    }
+
+    public static <T, R> Collection<R> convert(Collection<T> items, Function<T, R> converter) {
+        return convert(items, true, converter);
+    }
+
+    public static <T, R> Collection<R> convert(Collection<T> items, boolean returnNull, Function<T, R> converter) {
+        if (items == null) {
+            return returnNull ? null : new ArrayList<>();
+        }
+        if (items.isEmpty()) {
+            return returnNull ? null : new ArrayList<>();
+        }
+        return items.stream().map(converter).collect(Collectors.toList());
     }
 }

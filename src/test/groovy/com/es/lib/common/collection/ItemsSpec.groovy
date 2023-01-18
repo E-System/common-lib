@@ -579,4 +579,13 @@ class ItemsSpec extends Specification {
         Items.remove(['b': 'b'], ['b']) == [:]
         Items.remove(['a': 'a', 'b': 'b'], ['a']) == ['b': 'b']
     }
+
+    def "Convert"() {
+        expect:
+        Items.convert(null, { String.valueOf(it) }) == null
+        Items.convert([], { String.valueOf(it) }) == null
+        Items.convert(null, false, { String.valueOf(it) }) == []
+        Items.convert([], false, { String.valueOf(it) }) == []
+        Items.convert([1, 2], { String.valueOf(it) }) == ["1", "2"]
+    }
 }
