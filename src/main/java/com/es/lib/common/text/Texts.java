@@ -9,7 +9,8 @@ import java.util.function.Function;
  */
 public final class Texts {
 
-    private Texts() { }
+    private Texts() {
+    }
 
     public static char nbsp() {
         return Character.toChars(160)[0];
@@ -107,5 +108,19 @@ public final class Texts {
 
     public static String transliterate(String value, Function<String, String> caseConverter, Function<String, String> whitespaceConverter) {
         return Translit.convert(value, caseConverter, whitespaceConverter);
+    }
+
+    public static boolean contains(String value, String term) {
+        return contains(value, term, true);
+    }
+    public static boolean contains(String value, String term, boolean ignoreCase) {
+        if (value == null || term == null) {
+            return false;
+        }
+        if (ignoreCase) {
+            value = value.toLowerCase();
+            term = term.toLowerCase();
+        }
+        return value.contains(term);
     }
 }

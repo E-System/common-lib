@@ -375,4 +375,18 @@ class TextsSpec extends Specification {
         text2.split(" ").size() == 2
         println(text)
     }
+
+    def "Contains"() {
+        expect:
+        !Texts.contains(null, null)
+        !Texts.contains("", null)
+        !Texts.contains(null, "")
+        Texts.contains("", "")
+        Texts.contains("asd", "as")
+        Texts.contains("Asd", "as")
+        !Texts.contains("Asd", "as", false)
+        Texts.contains("Asd", "aS")
+        !Texts.contains("Asd", "aS", false)
+        !Texts.contains("asd", "asb")
+    }
 }
