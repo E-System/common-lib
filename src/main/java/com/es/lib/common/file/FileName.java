@@ -57,9 +57,14 @@ public class FileName {
     }
 
     public static FileName create(String fileName) {
+        return create(fileName, true);
+    }
+
+    public static FileName create(String fileName, boolean lowerExt) {
+        String ext = FilenameUtils.getExtension(fileName);
         return create(
             FilenameUtils.getBaseName(fileName),
-            FilenameUtils.getExtension(fileName).toLowerCase()
+            lowerExt ? ext.toLowerCase() : ext
         );
     }
 

@@ -30,6 +30,15 @@ class FileNameSpec extends Specification {
         res.ext == 'txt'
     }
 
+    def "Name and extension"() {
+        expect:
+        FileName.create('fileName.txt').ext == 'txt'
+        FileName.create('fileName.Txt').ext == 'txt'
+        FileName.create('fileName.TXT').ext == 'txt'
+        FileName.create('fileName.Txt', false).ext == 'Txt'
+        FileName.create('fileName.TXT', false).ext == 'TXT'
+    }
+
     def "Name and extension with path"() {
         when:
         def res = FileName.create('/tmp/fileName.txt')

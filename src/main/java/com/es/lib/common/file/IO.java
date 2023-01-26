@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
@@ -41,7 +42,8 @@ import java.util.zip.CheckedInputStream;
  */
 public final class IO {
 
-    private IO() {}
+    private IO() {
+    }
 
     public static FileType fileType(String fileName) {
         return FileTypeFinder.get(fileName);
@@ -109,7 +111,8 @@ public final class IO {
     public static void delete(Path file) {
         try {
             Files.deleteIfExists(file);
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
     }
 
     public static void deleteRecursively(Path path) throws IOException {
@@ -138,11 +141,18 @@ public final class IO {
     }
 
     public static Pair<Path, FileName> download(String url) {
+        return download(url, null);
+    }
+
+    public static Pair<Path, FileName> download(String url, Function<String, FileName> fileNameCreator) {
         try {
+            if (fileNameCreator == null) {
+                fileNameCreator = FileName::create;
+            }
             URL source = new URL(url);
             Path result = Files.createTempFile("download", "");
             FileUtils.copyURLToFile(source, result.toFile());
-            return Pair.of(result, FileName.create(source.getPath()));
+            return Pair.of(result, fileNameCreator.apply(source.getPath()));
         } catch (IOException e) {
             return null;
         }
