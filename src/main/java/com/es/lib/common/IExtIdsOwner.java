@@ -17,4 +17,8 @@ public interface IExtIdsOwner {
         }
         items.put(name, value);
     }
+
+    default void setExtId(Enum<?> name, String value) {
+        setExtId(name.name(), value);
+    }
 }
