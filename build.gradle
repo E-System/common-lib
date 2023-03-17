@@ -25,7 +25,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929"
     }
 }
 
@@ -34,7 +34,7 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '7.6'
+    gradleVersion = '8.0.2'
 }
 
 apply from: "build-${profile}.gradle"
@@ -101,30 +101,14 @@ javadoc {
     failOnError = false
     options.encoding = 'utf-8'
 }
-tasks.create(name: 'javadocJar', type: Jar, dependsOn: 'javadoc') {
-    archiveClassifier.set('javadoc')
-    from javadoc.destinationDir
+java{
+    withSourcesJar()
+    withJavadocJar()
 }
-tasks.create(name: 'sourceJar', type: Jar) {
-    from sourceSets.main.allJava
-}
-
-artifacts {
-    archives javadocJar
-    archives sourceJar
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-
-            artifact javadocJar {
-                classifier 'javadoc'
-            }
-            artifact sourceJar {
-                classifier 'sources'
-            }
         }
     }
 }
@@ -148,11 +132,19 @@ dependencies {
 }
 
 def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null
-if (emailTestEnabled) {
+def emailTestEnabledEs = properties['test_email_server_es'] != null && properties['test_email_login_es'] != null && properties['test_email_password_es'] != null
+if (emailTestEnabled || emailTestEnabledEs) {
     test {
-        systemProperty 'test_email_server', "${test_email_server}"
-        systemProperty 'test_email_login', "${test_email_login}"
-        systemProperty 'test_email_password', "${test_email_password}"
+        if (emailTestEnabled) {
+            systemProperty 'test_email_server', "${test_email_server}"
+            systemProperty 'test_email_login', "${test_email_login}"
+            systemProperty 'test_email_password', "${test_email_password}"
+        }
+        if (emailTestEnabledEs) {
+            systemProperty 'test_email_server_es', "${test_email_server_es}"
+            systemProperty 'test_email_login_es', "${test_email_login_es}"
+            systemProperty 'test_email_password_es', "${test_email_password_es}"
+        }
     }
 }
 
@@ -164,7 +156,7 @@ test {
 def sonarAvailable = properties['sonar_url'] != null && properties['sonar_user'] != null && properties['sonar_password'] != null
 if (sonarAvailable) {
     apply plugin: 'org.sonarqube'
-    sonarqube {
+    sonar {
         properties {
             property "sonar.host.url", "${sonar_url}"
             property "sonar.login", "${sonar_user}"
