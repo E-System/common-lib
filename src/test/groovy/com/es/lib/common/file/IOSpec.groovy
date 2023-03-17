@@ -273,11 +273,11 @@ class IOSpec extends Specification {
 
     def "Download file"() {
         when:
-        def file = IO.download("https://cdn.shopify.com/s/files/1/0277/7631/9588/products/Right_Stopper_WheelAble_SolutionBased.jpg?v=1594327034")
+        def file = IO.download("https://ext-system.com/pictures/thanks/cib-sm.jpg")
         println file
         then:
         file != null
-        file.value.name == 'Right_Stopper_WheelAble_SolutionBased'
+        file.value.name == 'cib-sm'
         file.value.ext == 'jpg'
     }
 }
