@@ -132,6 +132,14 @@ public final class Items {
         return collection.size() == size;
     }
 
+    public static <T> Collection<T> collection(Collection<T> collection) {
+        return collection(collection, false);
+    }
+
+    public static <T> Collection<T> collection(Collection<T> collection, boolean immutable) {
+        return collection == null ? new ArrayList<>() : (immutable ? new ArrayList<>(collection) : collection);
+    }
+
     public static <K, V> Map<K, V> map(Map<K, V> map) {
         return map(map, false);
     }
