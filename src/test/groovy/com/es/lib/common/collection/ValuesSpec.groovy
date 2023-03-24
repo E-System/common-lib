@@ -25,4 +25,20 @@ class ValuesSpec extends Specification {
         then:
         thrown(ArrayIndexOutOfBoundsException)
     }
+
+    def "Get boolean"() {
+        expect:
+        Values.of(null).get(0, Boolean::parseBoolean) == null
+        Values.of("true").get(0, Boolean::parseBoolean)
+        !Values.of("false").get(0, Boolean::parseBoolean)
+        Values.of(null).get(0, Boolean::parseBoolean, true)
+    }
+
+    def "Get integer"() {
+        expect:
+        Values.of(null).get(0, Integer::parseInt) == null
+        Values.of("1").get(0, Integer::parseInt) == 1
+        Values.of("2").get(0, Integer::parseInt) == 2
+        Values.of(null).get(0, Integer::parseInt, 10) == 10
+    }
 }
