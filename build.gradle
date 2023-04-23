@@ -34,7 +34,7 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '8.0.2'
+    gradleVersion = '8.1.1'
 }
 
 apply from: "build-${profile}.gradle"
@@ -45,7 +45,7 @@ apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 group = ext.mainGroup
@@ -58,8 +58,8 @@ repositories {
 
 idea {
     project {
-        jdkName = '1.8'
-        languageLevel = JavaVersion.VERSION_1_8
+        jdkName = '17.0'
+        languageLevel = JavaVersion.VERSION_17
     }
     module {
         downloadJavadoc = false
@@ -71,7 +71,7 @@ idea {
 }
 
 def propName = rootProject.name
-def fullPath = '/com/es/lib/common'
+def fullPath = '/com/eslibs/common'
 if (!fullPath.startsWith('/src/main/resources')) {
     fullPath = '/src/main/resources' + fullPath
 }
@@ -92,8 +92,8 @@ project.ant.propertyfile(file: "${filePath}build.properties") {
 jar {
     manifest {
         attributes(
-            'Implementation-Version': project.version,
-            'Implementation-Vendor': 'E-SYSTEM'
+                'Implementation-Version': project.version,
+                'Implementation-Vendor': 'E-SYSTEM'
         )
     }
 }
@@ -101,7 +101,10 @@ javadoc {
     failOnError = false
     options.encoding = 'utf-8'
 }
-java{
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
     withSourcesJar()
     withJavadocJar()
 }
@@ -112,15 +115,16 @@ publishing {
         }
     }
 }
-ext{
-    jacksonVersion = "2.14.1"
+ext {
+    jacksonVersion = "2.14.2"
 }
 dependencies {
     api "org.apache.commons:commons-lang3:3.12.0"
     api "commons-io:commons-io:2.11.0"
-    api 'org.slf4j:slf4j-api:1.7.36'
+    api 'org.slf4j:slf4j-api:2.0.7'
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-    api "com.sun.mail:jakarta.mail:2.0.1"
+    api 'org.eclipse.angus:angus-mail:2.0.1'
+
     api "de.svenkubiak:jBCrypt:0.4.3"
     api "org.reflections:reflections:0.10.2"
 
