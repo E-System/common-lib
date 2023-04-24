@@ -30,8 +30,7 @@ buildscript {
 }
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.44.0"
-    id("org.gradle.toolchains.foojay-resolver") version "0.4.0"
+    id "com.github.ben-manes.versions" version "0.44.0"
 }
 
 wrapper {
@@ -45,16 +44,6 @@ apply plugin: 'java-library'
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
-
-toolchainManagement {
-    jvm {
-        javaRepositories {
-            repository("foojay") {
-                resolverClass.set(org.gradle.toolchains.foojay.FoojayToolchainResolver::class.java)
-            }
-        }
-    }
-}
 
 sourceCompatibility = JavaVersion.VERSION_17
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -115,6 +104,7 @@ javadoc {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
+        vendor = JvmVendorSpec.ADOPTIUM
     }
     withSourcesJar()
     withJavadocJar()
