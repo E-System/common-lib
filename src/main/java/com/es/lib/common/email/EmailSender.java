@@ -34,6 +34,7 @@ import jakarta.mail.internet.MimeMultipart;
 import jakarta.mail.util.ByteArrayDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -83,6 +84,12 @@ public class EmailSender extends BaseEmailProcessor {
         smtpMessage.setSender(sender);
 
         smtpMessage.setRecipients(Message.RecipientType.TO, emailMessage.getDestinations());
+        if (StringUtils.isNotBlank(emailMessage.getCarbonCopy())) {
+            smtpMessage.setRecipients(Message.RecipientType.CC, emailMessage.getCarbonCopy());
+        }
+        if (StringUtils.isNotBlank(emailMessage.getBlindCarbonCopy())) {
+            smtpMessage.setRecipients(Message.RecipientType.BCC, emailMessage.getBlindCarbonCopy());
+        }
         smtpMessage.setSubject(emailMessage.getSubject());
 
         processHeaders(emailMessage, smtpMessage);
