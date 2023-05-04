@@ -58,7 +58,5 @@ public class ProxyFactory {
         public <T> T create(Map<String, Object> values) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
             return (T) factory.create(new Class<?>[0], new Object[0], new CollectHandler(values, fields));
         }
-
-
     }
 }

@@ -26,6 +26,7 @@ import org.reflections.util.ConfigurationBuilder;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -145,8 +146,7 @@ public final class Reflects {
         Type[] result = null;
         if (type instanceof ParameterizedType) {
             result = ((ParameterizedType) type).getActualTypeArguments();
-        } else if (type instanceof Class) {
-            Class<?> injectionPointClass = (Class<?>) type;
+        } else if (type instanceof Class<?> injectionPointClass) {
             result = ((ParameterizedType) injectionPointClass.getGenericSuperclass()).getActualTypeArguments();
         }
         if (result == null) {
@@ -260,4 +260,32 @@ public final class Reflects {
             throw new ESRuntimeException(e);
         }
     }
+
+    public static FieldMeta fieldMeta(Class<?> aClass, String capitalizedField) throws RuntimeException {
+        String key = aClass.getCanonicalName() + "." + capitalizedField;
+        return GETTER_HASH_MAP.computeIfAbsent(key, v -> {
+            Method getter = null;
+            Method setter = null;
+            try {
+                getter = aClass.getMethod("get" + capitalizedField);
+            } catch (NoSuchMethodException e) {
+                try {
+                    getter = aClass.getMethod("is" + capitalizedField);
+                } catch (NoSuchMethodException ignore) {}
+            }
+            if (getter == null) {
+                throw new RuntimeException("Getter not found for field: " + capitalizedField);
+            }
+            try {
+                setter = aClass.getMethod("set" + capitalizedField, getter.getReturnType());
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException("Setter not found for field: " + capitalizedField);
+            }
+            return new FieldMeta(getter, setter);
+        });
+    }
+
+    public record FieldMeta(Method getter, Method setter) {}
+
+    private static final Map<String, FieldMeta> GETTER_HASH_MAP = new ConcurrentHashMap<>();
 }
