@@ -84,6 +84,12 @@ public class EmailSender extends BaseEmailProcessor {
         smtpMessage.setSender(sender);
 
         smtpMessage.setRecipients(Message.RecipientType.TO, emailMessage.getDestinations());
+        if (StringUtils.isNotBlank(emailMessage.getCarbonCopy())) {
+            smtpMessage.setRecipients(Message.RecipientType.CC, emailMessage.getCarbonCopy());
+        }
+        if (StringUtils.isNotBlank(emailMessage.getBlindCarbonCopy())) {
+            smtpMessage.setRecipients(Message.RecipientType.BCC, emailMessage.getBlindCarbonCopy());
+        }
         smtpMessage.setSubject(emailMessage.getSubject());
 
         processHeaders(emailMessage, smtpMessage);

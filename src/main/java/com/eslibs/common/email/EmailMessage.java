@@ -39,6 +39,8 @@ public class EmailMessage {
     private final String fromName;
     private final String replyTo;
     private final String destinations;
+    private final String carbonCopy;
+    private final String blindCarbonCopy;
     private final String subject;
     private final String message;
     private final Map<String, String> headers;
@@ -72,6 +74,8 @@ public class EmailMessage {
         private String fromName;
         private String replyTo;
         private String destinations;
+        private String carbonCopy;
+        private String blindCarbonCopy;
         private String subject;
         private String message;
         private Map<String, String> headers;
@@ -103,6 +107,16 @@ public class EmailMessage {
 
         public Builder destinations(String destinations) {
             this.destinations = destinations;
+            return this;
+        }
+
+        public Builder carbonCopy(String carbonCopy) {
+            this.carbonCopy = carbonCopy;
+            return this;
+        }
+
+        public Builder blindCarbonCopy(String blindCarbonCopy) {
+            this.blindCarbonCopy = blindCarbonCopy;
             return this;
         }
 
@@ -165,6 +179,8 @@ public class EmailMessage {
                 fromName,
                 replyTo,
                 destinations,
+                carbonCopy,
+                blindCarbonCopy,
                 subject,
                 message,
                 headers,
