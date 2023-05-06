@@ -98,22 +98,12 @@ public final class PrettyInterval {
         SECOND
     }
 
-    public static BiFunction<DurationType, Long, String> DEFAULT_LOCALIZATION = (type, value) -> {
-        switch (type) {
-            case YEAR:
-                return value + " " + Texts.pluralize(value, "год", "года", "лет");
-            case MONTH:
-                return value + " мес.";
-            case DAY:
-                return value + " дн.";
-            case HOUR:
-                return value + " ч.";
-            case MINUTE:
-                return value + " м.";
-            case SECOND:
-                return value + " c.";
-            default:
-                return "";
-        }
+    public static BiFunction<DurationType, Long, String> DEFAULT_LOCALIZATION = (type, value) -> switch (type) {
+        case YEAR -> value + " " + Texts.pluralize(value, "год", "года", "лет");
+        case MONTH -> value + " мес.";
+        case DAY -> value + " дн.";
+        case HOUR -> value + " ч.";
+        case MINUTE -> value + " м.";
+        case SECOND -> value + " c.";
     };
 }

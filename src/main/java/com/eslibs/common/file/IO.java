@@ -22,7 +22,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -63,7 +66,7 @@ public final class IO {
     }
 
     public static Map.Entry<String, Long> readCrc32(String fileName) throws IOException {
-        return readCrc32(new FileInputStream(new File(fileName)));
+        return readCrc32(new FileInputStream(fileName));
     }
 
     public static Map.Entry<String, Long> readCrc32(Path file) throws IOException {
@@ -105,14 +108,13 @@ public final class IO {
     }
 
     public static byte[] toBytes(InputStream inputStream) throws IOException {
-        return IOUtils.toByteArray(inputStream);
+        return inputStream.readAllBytes();
     }
 
     public static void delete(Path file) {
         try {
             Files.deleteIfExists(file);
-        } catch (Exception ignore) {
-        }
+        } catch (Exception ignore) {}
     }
 
     public static void deleteRecursively(Path path) throws IOException {
