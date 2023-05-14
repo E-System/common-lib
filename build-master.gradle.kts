@@ -14,16 +14,4 @@
  *    limitations under the License.
  */
 
-plugins{
-    id "org.gradle.toolchains.foojay-resolver" version "0.4.0"
-}
-toolchainManagement {
-    jvm {
-        javaRepositories {
-            repository("foojay") {
-                resolverClass = org.gradle.toolchains.foojay.FoojayToolchainResolver
-            }
-        }
-    }
-}
-rootProject.name = 'common-lib'
+val snapshot by extra(false)

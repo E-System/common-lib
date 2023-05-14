@@ -14,6 +14,4 @@
  *    limitations under the License.
  */
 
-ext {
-    snapshot = false
-}
+val snapshot by extra(true)
