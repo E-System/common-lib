@@ -132,6 +132,28 @@ public final class Percents {
     }
 
     /**
+     * Calculate int value with percent discount
+     *
+     * @param value   Value
+     * @param percent Percent
+     * @return Value - value percent
+     */
+    public static int withDiscount(int value, double percent) {
+        return value - get(value, percent);
+    }
+
+    /**
+     * Calculate long value with percent discount
+     *
+     * @param value   Value
+     * @param percent Percent
+     * @return Value - value percent
+     */
+    public static long withDiscount(long value, double percent) {
+        return value - get(value, percent);
+    }
+
+    /**
      * Split items sum by percent sum in fullSum
      *
      * @param sum        Sum part

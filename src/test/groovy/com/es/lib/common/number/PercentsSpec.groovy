@@ -130,6 +130,38 @@ class PercentsSpec extends Specification {
         20L    | 10.0d  || 22L
     }
 
+    def "Get int value - value percent"() {
+        expect:
+        Percents.withDiscount(value1 as int, value2 as double) == result as int
+        where:
+        value1 | value2 || result
+        0      | 0.0d   || 0
+        0      | 1.0d   || 0
+        1      | 10.0d  || 1
+        4      | 10.0d  || 4
+        5      | 10.0d  || 4
+        10     | 10.0d  || 9
+        14     | 10.0d  || 13
+        15     | 10.0d  || 13
+        20     | 10.0d  || 18
+    }
+
+    def "Get long value - value percent"() {
+        expect:
+        Percents.withDiscount(value1 as long, value2 as double) == result as long
+        where:
+        value1 | value2 || result
+        0L     | 0.0d   || 0L
+        0L     | 1.0d   || 0L
+        1L     | 10.0d  || 1L
+        4L     | 10.0d  || 4L
+        5L     | 10.0d  || 4L
+        10L    | 10.0d  || 9L
+        14L    | 10.0d  || 13L
+        15L    | 10.0d  || 13L
+        20L    | 10.0d  || 18L
+    }
+
     def "Get double percent from value"() {
         expect:
         Percents.getDecimal(value, percent) == result
@@ -192,6 +224,7 @@ class PercentsSpec extends Specification {
         when:
         def items = [new Item(25000), new Item(25000), new Item(40000), new Item(10000)]
         def res = Percents.split(12300, 100000, items, new Function<Item, Integer>() {
+
             @Override
             Integer apply(Item t) {
                 return t.getSum()
@@ -204,6 +237,7 @@ class PercentsSpec extends Specification {
     }
 
     class Item {
+
         int sum
 
         Item(int sum) {
