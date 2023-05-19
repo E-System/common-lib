@@ -56,6 +56,14 @@ public class POP3ServerConfiguration extends EmailServerConfiguration {
                 true
             )
         );
+        PRESETS.put(
+            "e-system",
+            new EmailServer(
+                "pop.ext-system.com",
+                DEFAULT_SSL_PORT,
+                true
+            )
+        );
     }
 
     public POP3ServerConfiguration(EmailServer parameter, Credentials credentials) {
