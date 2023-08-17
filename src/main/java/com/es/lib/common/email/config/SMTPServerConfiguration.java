@@ -91,6 +91,16 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
                 true
             )
         );
+
+        PRESETS.put(
+            "e-system_tls",
+            new EmailServer(
+                "smtp.ext-system.com",
+                DEFAULT_SSL_PORT,
+                false,
+                true
+            )
+        );
     }
 
     public SMTPServerConfiguration(EmailServer server, EmailAuth auth) {
