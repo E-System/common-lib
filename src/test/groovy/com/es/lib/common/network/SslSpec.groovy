@@ -42,12 +42,26 @@ class SslSpec extends Specification {
         verifier.verify("any", null)
     }
 
-    def "p12"(){
+    def "pkcs.p12"(){
         when:
-        def file = Files.createTempFile("asd", ".p12")
-        Files.write(file, IOUtils.toByteArray(Ssl.getResourceAsStream("/com/es/cert/pkcs.p12")))
+        def name = 'pkcs'
+        def file = Files.createTempFile(name, ".p12")
+        Files.write(file, IOUtils.toByteArray(Ssl.getResourceAsStream("/com/es/cert/${name}.p12")))
         println file
         def  keyStore = KeyStore.create(file, "1234567890", "1234567890")
+        def context = Ssl.context(keyStore)
+        then:
+        context != null
+        context.socketFactory != null
+    }
+
+    def "pos.p12"(){
+        when:
+        def name = 'pos'
+        def file = Files.createTempFile(name, ".p12")
+        Files.write(file, IOUtils.toByteArray(Ssl.getResourceAsStream("/com/es/cert/${name}.p12")))
+        println file
+        def  keyStore = KeyStore.create(file, "jykfqyrfccf", 'jykfqyrfccf')
         def context = Ssl.context(keyStore)
         then:
         context != null
