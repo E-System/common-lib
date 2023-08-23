@@ -86,7 +86,7 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
         PRESETS.put(
             "e-system",
             new EmailServer(
-                "smtp.ext-system.com",
+                "mail.ext-system.com",
                 DEFAULT_SSL_PORT,
                 true
             )
@@ -95,8 +95,8 @@ public class SMTPServerConfiguration extends EmailServerConfiguration {
         PRESETS.put(
             "e-system_tls",
             new EmailServer(
-                "smtp.ext-system.com",
-                DEFAULT_SSL_PORT,
+                "mail.ext-system.com",
+                DEFAULT_TLS_PORT,
                 false,
                 true
             )

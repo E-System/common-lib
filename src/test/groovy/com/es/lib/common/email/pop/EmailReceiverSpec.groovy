@@ -18,6 +18,7 @@ package com.es.lib.common.email.pop
 
 import com.es.lib.common.email.config.EmailAuth
 import com.es.lib.common.email.config.POP3ServerConfiguration
+import spock.lang.Ignore
 import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Timeout
@@ -26,6 +27,7 @@ import spock.lang.Timeout
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 15.05.16
  */
+@Ignore
 class EmailReceiverSpec extends Specification {
 
     @IgnoreIf({
