@@ -13,13 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.eslibs.common.security.model;
+package com.eslibs.common.configuration;
 
+import com.eslibs.common.configuration.connection.SimpleConnection;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
-import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -27,14 +30,17 @@ import java.io.Serializable;
  */
 @Getter
 @ToString
-@RequiredArgsConstructor
-public class Credentials implements Serializable, Cloneable {
+@SuperBuilder
+@Jacksonized
+public class Proxy extends SimpleConfiguration {
 
-    private final String login;
-    private final String password;
+    @Builder.Default
+    protected final java.net.Proxy.Type type = java.net.Proxy.Type.HTTP;
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return new Credentials(login, password);
+    public java.net.Proxy proxy() {
+        if (Objects.requireNonNull(connection) instanceof SimpleConnection c) {
+            return new java.net.Proxy(type, c.inetSocketAddress());
+        }
+        throw new IllegalArgumentException("Unprocessable server connection type: " + connection.getClass());
     }
 }

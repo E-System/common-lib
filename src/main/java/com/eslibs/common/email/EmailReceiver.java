@@ -14,73 +14,80 @@
  *    limitations under the License.
  */
 
-package com.eslibs.common.email.pop;
+package com.eslibs.common.email;
 
-import com.eslibs.common.email.common.BaseEmailProcessor;
-import com.eslibs.common.email.config.POP3ServerConfiguration;
+import com.eslibs.common.configuration.IConfiguration;
+import com.eslibs.common.exception.ESRuntimeException;
+import com.eslibs.common.model.data.OutputData;
 import com.eslibs.common.security.Hash;
 import jakarta.mail.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 15.05.16
  */
 @Slf4j
-public class EmailReceiver extends BaseEmailProcessor {
+public class EmailReceiver extends EmailProcessor {
 
-    public EmailReceiver(POP3ServerConfiguration configuration) throws IOException {
-        super(configuration);
+    EmailReceiver(IConfiguration configuration) {
+        super(Type.POP3, configuration);
     }
 
-    public Collection<ReceivedMessage> getAll(String pathPrefix, boolean deleteCollected) throws MessagingException, IOException {
+    @Override
+    public Collection<com.eslibs.common.email.Message> fetch(Path pathToSave, boolean delete, Logger log) throws IOException, MessagingException {
+        if (log == null) {
+            log = EmailReceiver.log;
+        }
         Store store = null;
         Folder inbox = null;
         try {
             store = session.getStore("pop3");
             store.connect();
             inbox = store.getFolder("Inbox");
-            inbox.open(deleteCollected ? Folder.READ_WRITE : Folder.READ_ONLY);
+            inbox.open(delete ? Folder.READ_WRITE : Folder.READ_ONLY);
 
             // get the list of inbox messages
-            Message[] messages = inbox.getMessages();
+            jakarta.mail.Message[] messages = inbox.getMessages();
 
             if (messages.length == 0) {
                 return Collections.emptyList();
             }
 
-            Collection<ReceivedMessage> result = new ArrayList<>(messages.length);
-            for (Message message : messages) {
+            Collection<com.eslibs.common.email.Message> result = new ArrayList<>(messages.length);
+            for (jakarta.mail.Message message : messages) {
                 Map<String, String> headers = getAllHeaders(message);
 
-                String realPathPrefix = pathPrefix;
+                Path realPathPrefix = pathToSave;
                 String messageId = headers.get("Message-ID");
                 if (StringUtils.isNotEmpty(messageId)) {
-                    realPathPrefix += "/" + Hash.md5().get(messageId);
+                    realPathPrefix = pathToSave.resolve(Hash.md5().get(messageId));
                 }
-                Map<String, File> attachments = new HashMap<>(processAttachments(realPathPrefix, message));
+                Collection<com.eslibs.common.email.Message.Attachment> attachments = new ArrayList<>(processAttachments(realPathPrefix, message));
                 log.trace("Attachments: {}", attachments);
 
                 result.add(
-                    new ReceivedMessage(
-                        Arrays.asList(message.getFrom()),
-                        message.getSubject(),
-                        fetchText(message),
-                        message.getSentDate(),
-                        headers,
-                        attachments
-                    )
+                    com.eslibs.common.email.Message.builder()
+                        .recipients(Stream.of(message.getFrom()).map(Address::toString).collect(Collectors.joining(";")))
+                        .subject(message.getSubject())
+                        .content(fetchText(message))
+                        .sentDate(message.getSentDate())
+                        .receivedDate(message.getReceivedDate())
+                        .headers(headers)
+                        .attachments(attachments)
+                        .build()
                 );
-                if (deleteCollected) {
+                if (delete) {
                     message.setFlag(Flags.Flag.DELETED, true);
                 }
             }
@@ -88,7 +95,7 @@ public class EmailReceiver extends BaseEmailProcessor {
         } finally {
             if (inbox != null) {
                 try {
-                    inbox.close(true);
+                    inbox.close();
                 } catch (MessagingException e) {
                     log.warn(e.getMessage());
                 }
@@ -104,7 +111,7 @@ public class EmailReceiver extends BaseEmailProcessor {
         }
     }
 
-    private Map<String, String> getAllHeaders(Message message) throws MessagingException {
+    private Map<String, String> getAllHeaders(jakarta.mail.Message message) throws MessagingException {
         Map<String, String> result = new HashMap<>(10);
         Enumeration<Header> allHeaders = message.getAllHeaders();
         while (allHeaders.hasMoreElements()) {
@@ -117,22 +124,22 @@ public class EmailReceiver extends BaseEmailProcessor {
         return result;
     }
 
-    private Map<String, File> processAttachments(String pathPrefix, Part part) throws IOException, MessagingException {
+    private Collection<com.eslibs.common.email.Message.Attachment> processAttachments(Path pathToSave, Part part) throws IOException, MessagingException {
         if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
-            Map<String, File> result = new HashMap<>(1);
-            result.put(
-                part.getFileName(),
-                saveFile(pathPrefix, part)
+            return List.of(
+                new com.eslibs.common.email.Message.Attachment(OutputData.create(
+                    part.getFileName(),
+                    pathToSave.toString(),
+                    saveFile(pathToSave, part)
+                ))
             );
-            return result;
         }
-        if (part.isMimeType("text/*") || !(part.getContent() instanceof Multipart)) {
-            return Collections.emptyMap();
+        if (part.isMimeType("text/*") || !(part.getContent() instanceof Multipart multiPart)) {
+            return Collections.emptyList();
         }
-        Multipart multiPart = (Multipart) part.getContent();
-        Map<String, File> result = new HashMap<>(multiPart.getCount());
+        Collection<com.eslibs.common.email.Message.Attachment> result = new ArrayList<>(multiPart.getCount());
         for (int i = 0; i < multiPart.getCount(); ++i) {
-            result.putAll(processAttachments(pathPrefix, multiPart.getBodyPart(i)));
+            result.addAll(processAttachments(pathToSave, multiPart.getBodyPart(i)));
         }
         return result;
     }
@@ -175,9 +182,14 @@ public class EmailReceiver extends BaseEmailProcessor {
         return null;
     }
 
-    private File saveFile(String pathPrefix, Part part) throws IOException, MessagingException {
-        Path destinationFile = Files.createDirectories(Paths.get(pathPrefix)).resolve(part.getFileName());
-        Files.copy(part.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
-        return destinationFile.toFile();
+    private Path saveFile(Path pathToSave, Part part) throws IOException, MessagingException {
+        Path result = Files.createDirectories(pathToSave).resolve(part.getFileName());
+        Files.copy(part.getInputStream(), result, StandardCopyOption.REPLACE_EXISTING);
+        return result;
+    }
+
+    @Override
+    public void send(com.eslibs.common.email.Message message, Logger log) throws IOException, MessagingException {
+        throw new ESRuntimeException("Receiver not allow to send emails");
     }
 }

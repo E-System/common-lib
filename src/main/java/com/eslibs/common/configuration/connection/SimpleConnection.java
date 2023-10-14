@@ -14,36 +14,30 @@
  *    limitations under the License.
  */
 
-package com.eslibs.common.email.pop;
+package com.eslibs.common.configuration.connection;
 
-import jakarta.mail.Address;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.InetSocketAddress;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
- * @since 15.05.16
+ * @since 15.10.2023
+ * Simple connection with host and port
  */
 @Getter
 @ToString
-@RequiredArgsConstructor
-public class ReceivedMessage {
+@SuperBuilder
+@Jacksonized
+public class SimpleConnection implements IConnection {
 
-    private final Collection<Address> from;
-    private final String subject;
-    private final String message;
-    private final Date sentDate;
-    private final Map<String, String> headers;
-    private final Map<String, File> attachments;
+    protected final String host;
+    protected final int port;
 
-    public ReceivedMessage(Collection<Address> from, String subject, String message, Date sentDate, Map<String, String> headers) {
-        this(from, subject, message, sentDate, headers, new HashMap<>());
+    public InetSocketAddress inetSocketAddress() {
+        return new InetSocketAddress(host, port);
     }
 }

@@ -1,18 +1,13 @@
 .DS_Store
-*.iml
-
-## Directory-based project format:
 .idea/
+.idea_modules/
 .gradle/
 build/
 classes/
+out/
 build.properties
+*.iml
 *.ipr
 *.iws
-
-out/
-
-# mpeltonen/sbt-idea plugin
-.idea_modules/
 
 

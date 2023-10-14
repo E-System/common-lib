@@ -46,7 +46,7 @@ class HashSpec extends Specification {
 
     def "hmacSha256"() {
         expect:
-        Hash.hmacSha256("secret_key").get("Test message") == "ABpes7dX951jzumPtmtNFeo4MS9ycL+sN1O1UnKUJeY="
+        Hash.hmacSha256("secret_key").get("Test content") == "ABpes7dX951jzumPtmtNFeo4MS9ycL+sN1O1UnKUJeY="
     }
 
     def "crc16ccitt required not null value"() {

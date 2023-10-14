@@ -14,14 +14,14 @@
  *    limitations under the License.
  */
 
-package com.eslibs.common.email.pop
+package com.eslibs.common.email
 
-
-import com.eslibs.common.email.config.POP3ServerConfiguration
-import com.eslibs.common.security.model.Credentials
+import com.eslibs.common.configuration.credentials.Credentials
 import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Timeout
+
+import java.nio.file.Files
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -29,23 +29,26 @@ import spock.lang.Timeout
  */
 class EmailReceiverSpec extends Specification {
 
+    def createReceiver() {
+        return Emails.receiver(
+                System.getProperty("test_email_server"),
+                Credentials.builder()
+                        .login(System.getProperty("test_email_login"))
+                        .password(System.getProperty("test_email_password"))
+                        .build()
+        )
+    }
+
     @IgnoreIf({
         System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
     })
     @Timeout(20)
-    def "GetAll"() {
+    def "Fetch all"() {
         when:
-        def receiver = new EmailReceiver(
-            new POP3ServerConfiguration(
-                POP3ServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
-                new Credentials(
-                    System.getProperty("test_email_login"),
-                    System.getProperty("test_email_password")
-                )
-            )
-        )
+        def receiver = createReceiver()
         then:
-        def messages = receiver.getAll("/tmp", false)
+        def messages = receiver.fetch(Files.createTempDirectory("email"), false)
+        println(messages)
         expect:
         messages.size() >= 0
     }

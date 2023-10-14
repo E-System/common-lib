@@ -17,8 +17,8 @@
 package com.eslibs.common.email;
 
 import com.eslibs.common.collection.Items;
-import com.eslibs.common.email.common.BaseEmailProcessor;
-import com.eslibs.common.email.config.SMTPServerConfiguration;
+import com.eslibs.common.configuration.IConfiguration;
+import com.eslibs.common.exception.ESRuntimeException;
 import com.eslibs.common.model.data.ByteData;
 import com.eslibs.common.model.data.FileData;
 import com.eslibs.common.model.data.StreamData;
@@ -27,6 +27,7 @@ import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
 import jakarta.activation.FileDataSource;
 import jakarta.mail.*;
+import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMultipart;
@@ -34,9 +35,13 @@ import jakarta.mail.util.ByteArrayDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.angus.mail.smtp.SMTPMessage;
+import org.slf4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Map;
 
 import static jakarta.mail.Part.ATTACHMENT;
@@ -47,35 +52,30 @@ import static jakarta.mail.Part.ATTACHMENT;
  * @since 10.04.15
  */
 @Slf4j
-public class EmailSender extends BaseEmailProcessor {
+public class EmailSender extends EmailProcessor {
 
-    public EmailSender(SMTPServerConfiguration configuration) throws IOException {
-        super(configuration);
+    EmailSender(IConfiguration configuration) {
+        super(Type.SMTP, configuration);
     }
 
-    private Message createMessage(EmailMessage emailMessage) throws MessagingException, IOException {
-        SMTPMessage smtpMessage = createSMTPMessage(emailMessage);
-
-        String fromAddress = StringUtils.isEmpty(emailMessage.getFromAddress()) ? null : emailMessage.getFromAddress();
-        String fromName = StringUtils.isEmpty(emailMessage.getFromName()) ? null : emailMessage.getFromName();
-        log.trace("From address: {}; From name: {}", fromAddress, fromName);
-        InternetAddress fromInetAddress;
-        if (fromAddress != null) {
-            if (fromName != null) {
-                fromInetAddress = new InternetAddress(fromAddress, fromName);
-            } else {
-                fromInetAddress = new InternetAddress(fromAddress);
-            }
-        } else {
-            if (fromName != null) {
-                fromInetAddress = new InternetAddress(getLogin(), fromName);
-            } else {
-                fromInetAddress = new InternetAddress(getLogin());
-            }
+    @Override
+    public void send(com.eslibs.common.email.Message message, Logger log) throws IOException, MessagingException {
+        if (log == null) {
+            log = EmailSender.log;
         }
+        Transport.send(createMessage(message, log));
+    }
+
+    private jakarta.mail.Message createMessage(com.eslibs.common.email.Message emailMessage, Logger log) throws MessagingException, IOException {
+        SMTPMessage smtpMessage = new SMTPMessageImpl(session, emailMessage.id());
+
+        String fromAddress = StringUtils.isEmpty(emailMessage.fromAddress()) ? null : emailMessage.fromAddress();
+        String fromName = StringUtils.isEmpty(emailMessage.fromName()) ? null : emailMessage.fromName();
+        log.trace("From address: {}; From name: {}", fromAddress, fromName);
+        InternetAddress fromInetAddress = getInternetAddress(fromAddress, fromName);
         smtpMessage.setFrom(fromInetAddress);
-        if (StringUtils.isNotEmpty(emailMessage.getReplyTo())) {
-            smtpMessage.setReplyTo(InternetAddress.parse(emailMessage.getReplyTo()));
+        if (StringUtils.isNotEmpty(emailMessage.replyTo())) {
+            smtpMessage.setReplyTo(InternetAddress.parse(emailMessage.replyTo()));
         }
 
         InternetAddress sender = new InternetAddress(fromAddress != null ? fromAddress : getLogin());
@@ -83,60 +83,64 @@ public class EmailSender extends BaseEmailProcessor {
         smtpMessage.setEnvelopeFrom(sender.getAddress());
         smtpMessage.setSender(sender);
 
-        smtpMessage.setRecipients(Message.RecipientType.TO, emailMessage.getDestinations());
-        if (StringUtils.isNotBlank(emailMessage.getCarbonCopy())) {
-            smtpMessage.setRecipients(Message.RecipientType.CC, emailMessage.getCarbonCopy());
+        smtpMessage.setRecipients(jakarta.mail.Message.RecipientType.TO, emailMessage.recipients());
+        if (StringUtils.isNotBlank(emailMessage.carbonCopy())) {
+            smtpMessage.setRecipients(jakarta.mail.Message.RecipientType.CC, emailMessage.carbonCopy());
         }
-        if (StringUtils.isNotBlank(emailMessage.getBlindCarbonCopy())) {
-            smtpMessage.setRecipients(Message.RecipientType.BCC, emailMessage.getBlindCarbonCopy());
+        if (StringUtils.isNotBlank(emailMessage.blindCarbonCopy())) {
+            smtpMessage.setRecipients(jakarta.mail.Message.RecipientType.BCC, emailMessage.blindCarbonCopy());
         }
-        smtpMessage.setSubject(emailMessage.getSubject());
+        smtpMessage.setSubject(emailMessage.subject());
 
         processHeaders(emailMessage, smtpMessage);
 
         generateBody(emailMessage, smtpMessage);
 
-        processExtensions(emailMessage, smtpMessage);
+        processExtensions(emailMessage, smtpMessage, log);
 
         return smtpMessage;
     }
 
-    private SMTPMessage createSMTPMessage(EmailMessage emailMessage) {
-        if (StringUtils.isBlank(emailMessage.getId()) && emailMessage.getRootAttachment() == null) {
-            return new SMTPMessage(session);
+    private InternetAddress getInternetAddress(String fromAddress, String fromName) throws UnsupportedEncodingException, AddressException {
+        if (fromAddress != null) {
+            if (fromName != null) {
+                return new InternetAddress(fromAddress, fromName);
+            }
+            return new InternetAddress(fromAddress);
         }
-        SMTPMessageImpl result = new SMTPMessageImpl(session);
-        result.setMessageId(emailMessage.getId());
-        return result;
+        if (fromName != null) {
+            return new InternetAddress(getLogin(), fromName);
+        }
+        return new InternetAddress(getLogin());
     }
 
-    private void generateBody(EmailMessage emailMessage, SMTPMessage message) throws MessagingException, IOException {
-        if (emailMessage.getRootAttachment() != null) {
-            EmailRootAttachment attachment = emailMessage.getRootAttachment();
-            if (attachment.getData().isBytes() || attachment.getData().isStream()) {
-                ByteArrayDataSource byteArrayDataSource;
-                if (attachment.getData().isBytes()) {
-                    ByteData data = (ByteData) attachment.getData();
-                    byteArrayDataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
+    private void generateBody(com.eslibs.common.email.Message emailMessage, SMTPMessage message) throws MessagingException, IOException {
+        com.eslibs.common.email.Message.Attachment rootAttachment = emailMessage.rootAttachment();
+        if (rootAttachment != null) {
+            ByteArrayDataSource dataSource;
+            if (rootAttachment.data().isBytes() || rootAttachment.data().isStream()) {
+                if (rootAttachment.data().isBytes()) {
+                    ByteData data = (ByteData) rootAttachment.data();
+                    dataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
                 } else {
-                    StreamData data = (StreamData) attachment.getData();
-                    byteArrayDataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
+                    StreamData data = (StreamData) rootAttachment.data();
+                    dataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
                 }
-                if (StringUtils.isNotEmpty(attachment.getData().getFileName())) {
-                    byteArrayDataSource.setName(attachment.getData().getFileName());
+                if (StringUtils.isNotEmpty(rootAttachment.data().getFileName())) {
+                    dataSource.setName(rootAttachment.data().getFileName());
                 }
-                message.setContent(byteArrayDataSource, ((TypedData) attachment.getData()).getContentType());
+                message.setContent(dataSource, ((TypedData) rootAttachment.data()).getContentType());
             } else {
-                FileData data = (FileData) attachment.getData();
+                FileData data = (FileData) rootAttachment.data();
 
                 FileDataSource fds = new FileDataSource(data.getContent().toFile());
                 message.setDataHandler(new DataHandler(fds));
                 message.setFileName(StringUtils.isNotEmpty(data.getFileName()) ? data.getFileName() : fds.getName());
                 message.setDisposition(ATTACHMENT);
             }
-        } else if (Items.isEmpty(emailMessage.getAttachments())) {
-            message.setContent(emailMessage.getMessage(), "text/html; charset=UTF-8");
-        } else if (StringUtils.isNotEmpty(emailMessage.getMessage())) {
+        } else if (Items.isEmpty(emailMessage.attachments())) {
+            message.setContent(emailMessage.content(), "text/html; charset=UTF-8");
+        } else if (StringUtils.isNotEmpty(emailMessage.content())) {
             Multipart multipart = new MimeMultipart("related");
 
             multipart.addBodyPart(createMessageBodyPart(emailMessage));
@@ -147,60 +151,54 @@ public class EmailSender extends BaseEmailProcessor {
         }
     }
 
-    private void processAttachments(EmailMessage emailMessage, Multipart multipart) throws MessagingException, IOException {
-        for (EmailAttachment attachment : emailMessage.getAttachments()) {
+    private void processAttachments(com.eslibs.common.email.Message emailMessage, Multipart multipart) throws MessagingException, IOException {
+        for (com.eslibs.common.email.Message.Attachment attachment : emailMessage.attachments()) {
             BodyPart mimeBodyPart = new MimeBodyPart();
 
             DataSource dataSource;
-            if (attachment.getData().isBytes() || attachment.getData().isStream()) {
-                if (attachment.getData().isBytes()) {
-                    ByteData data = (ByteData) attachment.getData();
+            if (attachment.data().isBytes() || attachment.data().isStream()) {
+                if (attachment.data().isBytes()) {
+                    ByteData data = (ByteData) attachment.data();
                     dataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
                 } else {
-                    StreamData data = (StreamData) attachment.getData();
+                    StreamData data = (StreamData) attachment.data();
                     dataSource = new ByteArrayDataSource(data.getContent(), data.getContentType());
                 }
-
-                mimeBodyPart.setDataHandler(new DataHandler(dataSource));
-                //  mimeBodyPart.addHeader("Content-Transfer-Encoding", "base64");
-                // mimeBodyPart.addHeader("Content-Type", ((TypedData) attachment.getData()).getContentType() + "; charset=utf-8");
-                if (StringUtils.isNotBlank(attachment.getData().getFileName())) {
-                    mimeBodyPart.setFileName(attachment.getData().getFileName());
-                }
             } else {
-                FileData content = (FileData) attachment.getData();
+                FileData content = (FileData) attachment.data();
                 dataSource = new FileDataSource(content.getContent().toFile());
-                mimeBodyPart.setDataHandler(new DataHandler(dataSource));
-                mimeBodyPart.setFileName(content.getFileName());
+            }
+            mimeBodyPart.setDataHandler(new DataHandler(dataSource));
+            if (StringUtils.isNotBlank(attachment.data().getFileName())) {
+                mimeBodyPart.setFileName(attachment.data().getFileName());
             }
 
-
-            if (attachment.getCid() != null) {
-                mimeBodyPart.setHeader("Content-ID", "<" + attachment.getCid() + ">");
+            if (attachment.id() != null) {
+                mimeBodyPart.setHeader("Content-ID", "<" + attachment.id() + ">");
             }
 
             multipart.addBodyPart(mimeBodyPart);
         }
     }
 
-    private BodyPart createMessageBodyPart(EmailMessage emailMessage) throws MessagingException {
+    private BodyPart createMessageBodyPart(com.eslibs.common.email.Message emailMessage) throws MessagingException {
         BodyPart bodyPart = new MimeBodyPart();
-        bodyPart.setContent(emailMessage.getMessage(), "text/html; charset=UTF-8");
+        bodyPart.setContent(emailMessage.content(), "text/html; charset=UTF-8");
         return bodyPart;
     }
 
-    private void processHeaders(EmailMessage emailMessage, SMTPMessage message) throws MessagingException {
-        if (Items.isNotEmpty(emailMessage.getHeaders())) {
-            for (Map.Entry<String, String> entry : emailMessage.getHeaders().entrySet()) {
+    private void processHeaders(com.eslibs.common.email.Message emailMessage, SMTPMessage message) throws MessagingException {
+        if (Items.isNotEmpty(emailMessage.headers())) {
+            for (Map.Entry<String, String> entry : emailMessage.headers().entrySet()) {
                 message.addHeader(entry.getKey(), entry.getValue());
             }
         }
     }
 
-    private void processExtensions(EmailMessage emailMessage, SMTPMessage message) throws MessagingException, IOException {
-        if (Items.isNotEmpty(emailMessage.getExtensions())) {
+    private void processExtensions(com.eslibs.common.email.Message emailMessage, SMTPMessage message, Logger log) throws MessagingException, IOException {
+        if (Items.isNotEmpty(emailMessage.extensions())) {
             StringBuilder sb = new StringBuilder();
-            for (Map.Entry<String, String> entry : emailMessage.getExtensions().entrySet()) {
+            for (Map.Entry<String, String> entry : emailMessage.extensions().entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
                 if (key.equals("SIZE")) {
@@ -222,7 +220,28 @@ public class EmailSender extends BaseEmailProcessor {
         }
     }
 
-    public void send(EmailMessage message) throws IOException, MessagingException {
-        Transport.send(createMessage(message));
+    @Override
+    public Collection<com.eslibs.common.email.Message> fetch(Path pathToSave, boolean delete, Logger log) throws IOException, MessagingException {
+        throw new ESRuntimeException("Sender not allow to fetch emails");
+    }
+
+    private static class SMTPMessageImpl extends SMTPMessage {
+
+        private final String id;
+
+        public SMTPMessageImpl(Session session, String id) {
+            super(session);
+            this.id = id;
+        }
+
+
+        @Override
+        protected void updateMessageID() throws MessagingException {
+            if (StringUtils.isEmpty(id)) {
+                super.updateMessageID();
+            } else {
+                setHeader("Message-ID", "<" + id + ">");
+            }
+        }
     }
 }

@@ -39,21 +39,11 @@ public class KeyStore {
 
     public static KeyStore create(Path path, String storePassword, String keyPassword) {
         String extension = FilenameUtils.getExtension(path.toString());
-        String type;
-        switch (extension.toLowerCase()) {
-            case "jks":
-                type = "JKS";
-                break;
-            case "p12":
-            case "pfx":
-                type = "PKCS12";
-                break;
-            default:
-                type = null;
-        }
-        if (type == null) {
-            throw new IllegalArgumentException("Unable to determine key type by file: " + path);
-        }
+        String type = switch (extension.toLowerCase()) {
+            case "jks" -> "JKS";
+            case "p12", "pfx" -> "PKCS12";
+            default -> throw new IllegalArgumentException("Unable to determine key type by file: " + path);
+        };
         return create(path, storePassword, keyPassword, type);
     }
 

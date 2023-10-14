@@ -18,8 +18,9 @@ package com.eslibs.common;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Base constants
@@ -28,6 +29,10 @@ import java.util.Collection;
  * @since 10.04.15
  */
 public interface Constant {
+
+    long DEFAULT_CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(20);
+
+    long DEFAULT_RW_TIMEOUT = TimeUnit.SECONDS.toMillis(60);
 
     /**
      * Default grouping size (Example 1 000 000.12)
@@ -95,7 +100,7 @@ public interface Constant {
     long MILLIS_IN_MINUTE = SECONDS_IN_MINUTE * MILLIS_IN_SECOND;
     long MILLIS_IN_HOUR = MINUTES_IN_HOUR * MILLIS_IN_MINUTE;
 
-    Collection<String> WEEK_FULL = Arrays.asList("1", "2", "3", "4", "5", "6", "7");
-    Collection<String> WEEK_WORK = Arrays.asList("1", "2", "3", "4", "5");
-    Collection<String> WEEK_ENDS = Arrays.asList("6", "7");
+    Collection<String> WEEK_FULL = List.of("1", "2", "3", "4", "5", "6", "7");
+    Collection<String> WEEK_WORK = List.of("1", "2", "3", "4", "5");
+    Collection<String> WEEK_ENDS = List.of("6", "7");
 }

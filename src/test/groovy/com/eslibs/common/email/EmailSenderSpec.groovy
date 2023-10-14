@@ -16,9 +16,7 @@
 
 package com.eslibs.common.email
 
-
-import com.eslibs.common.email.config.SMTPServerConfiguration
-import com.eslibs.common.security.model.Credentials
+import com.eslibs.common.configuration.credentials.Credentials
 import com.eslibs.common.model.data.OutputData
 import spock.lang.IgnoreIf
 import spock.lang.Specification
@@ -33,49 +31,12 @@ import java.nio.file.Files
 class EmailSenderSpec extends Specification {
 
     def createSender() {
-        return new EmailSender(
-            new SMTPServerConfiguration(
-                SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
-                new Credentials(
-                    System.getProperty("test_email_login"),
-                    System.getProperty("test_email_password")
-                )
-            )
-        )
-    }
-
-    def createSenderTls() {
-        return new EmailSender(
-            new SMTPServerConfiguration(
-                SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server") + "_tls"),
-                new Credentials(
-                    System.getProperty("test_email_login"),
-                    System.getProperty("test_email_password")
-                )
-            )
-        )
-    }
-
-    def createESystemSender(){
-        return new EmailSender(
-            new SMTPServerConfiguration(
-                SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server_es")),
-                new Credentials(
-                    System.getProperty("test_email_login_es"),
-                    System.getProperty("test_email_password_es")
-                )
-            )
-        )
-    }
-    def createESystemSenderTls(){
-        return new EmailSender(
-            new SMTPServerConfiguration(
-                SMTPServerConfiguration.PRESETS.get(System.getProperty("test_email_server_es")+ "_tls"),
-                new Credentials(
-                    System.getProperty("test_email_login_es"),
-                    System.getProperty("test_email_password_es")
-                )
-            )
+        return Emails.sender(
+                System.getProperty("test_email_server"),
+                Credentials.builder()
+                        .login(System.getProperty("test_email_login"))
+                        .password(System.getProperty("test_email_password"))
+                        .build()
         )
     }
 
@@ -87,18 +48,12 @@ class EmailSenderSpec extends Specification {
         when:
         def sender = createSender()
         then:
-        sender.send(EmailMessage.builder("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body " + new Date()).build())
-    }
-
-    @IgnoreIf({
-        System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
-    })
-    @Timeout(20)
-    def "Send email (TLS)"() {
-        when:
-        def sender = createSenderTls()
-        then:
-        sender.send(EmailMessage.builder("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body (TLS) " + new Date()).build())
+        sender.send(Message.builder()
+                .recipients("memphisprogramming@gmail.com")
+                .subject("Spock Unit Test")
+                .content("Spock Unit Test Body " + new Date())
+                .build()
+        )
     }
 
     @IgnoreIf({
@@ -110,17 +65,19 @@ class EmailSenderSpec extends Specification {
         def sender = createSender()
         def file = Files.createTempFile("test_mail_file", "txt")
         Files.write(file, "Пробное содержимое".bytes)
-        def attachment = new EmailAttachment(
-            OutputData.create(
-                "Тестовое имя файла (из файла).txt",
-                file.toString(),
-                file
-            )
-        )
-        def message = EmailMessage
-            .builder("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
-            .attachment(attachment)
-            .build()
+        def message = Message.builder()
+                .recipients("memphisprogramming@gmail.com")
+                .subject("Тайтл на русском")
+                .content("Тестовка на русском " + new Date())
+                .attachments([
+                        Message.Attachment.builder()
+                                .data(OutputData.create(
+                                        "Тестовое имя файла (из файла).txt",
+                                        file.toString(),
+                                        file
+                                )).build()
+                ])
+                .build()
         then:
         sender.send(message)
     }
@@ -133,40 +90,20 @@ class EmailSenderSpec extends Specification {
         when:
         def sender = createSender()
         def fileContent = 'Пробное содержимое'
-        def attachment = new EmailAttachment(
-            OutputData.create(
-                'Тестовое имя файла (из байт).txt',
-                'text/plain',
-                fileContent.getBytes(),
-            )
-        )
-        def message = EmailMessage
-            .builder("memphisprogramming@gmail.com", "Тайтл на русском", "Тестовка на русском " + new Date())
-            .attachment(attachment)
-            .build()
+        def message = Message.builder()
+                .recipients("memphisprogramming@gmail.com")
+                .subject("Тайтл на русском")
+                .content("Тестовка на русском " + new Date())
+                .attachments([
+                        Message.Attachment.builder()
+                                .data(OutputData.create(
+                                        'Тестовое имя файла (из байт).txt',
+                                        'text/plain',
+                                        fileContent.getBytes(),
+                                )).build()
+                ])
+                .build()
         then:
         sender.send(message)
-    }
-
-    @IgnoreIf({
-        System.getProperty("test_email_server_es") == null || System.getProperty("test_email_login_es") == null || System.getProperty("test_email_password_es") == null
-    })
-    @Timeout(20)
-    def "Send email ES"() {
-        when:
-        def sender = createESystemSender()
-        then:
-        sender.send(EmailMessage.builder("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body " + new Date()).build())
-    }
-
-    @IgnoreIf({
-        System.getProperty("test_email_server_es") == null || System.getProperty("test_email_login_es") == null || System.getProperty("test_email_password_es") == null
-    })
-    @Timeout(20)
-    def "Send email ES (TLS)"() {
-        when:
-        def sender = createESystemSenderTls()
-        then:
-        sender.send(EmailMessage.builder("memphisprogramming@gmail.com", "Spock Unit Test", "Spock Unit Test Body (TLS) " + new Date()).build())
     }
 }

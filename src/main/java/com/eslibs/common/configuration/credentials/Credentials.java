@@ -13,32 +13,32 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.eslibs.common.security.model;
+package com.eslibs.common.configuration.credentials;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
-import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
- * @since 15.02.2020
+ * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
+ * @since 15.10.2023
+ * Credentials
  */
 @Getter
 @ToString
-@RequiredArgsConstructor
-public class Proxy {
+@SuperBuilder
+@Jacksonized
+public class Credentials implements ICredentials {
 
-    private final java.net.Proxy.Type type;
-    private final String host;
-    private final int port;
+    public static final String ATTR_URI = "URI";
 
-    public Proxy(String host, int port) {
-        this(java.net.Proxy.Type.HTTP, host, port);
-    }
-
-    public java.net.Proxy toNative() {
-        return new java.net.Proxy(getType(), new InetSocketAddress(getHost(), getPort()));
-    }
+    protected final String login;
+    protected final String password;
+    @Builder.Default
+    protected final Map<String, String> attrs = new HashMap<>();
 }
