@@ -25,10 +25,10 @@ class SslSpec extends Specification {
 
     def "CreateSSLContext with undefined sslType"() {
         when:
-        Ssl.context("ABC")
+        Ssl.context(null as Ssl.Mode)
         then:
-        def ex = thrown(NoSuchAlgorithmException)
-        ex.message == 'ABC SSLContext not available'
+        def ex = thrown(NullPointerException)
+        ex.message == 'null protocol name'
     }
 
     def "Trust manager"() {

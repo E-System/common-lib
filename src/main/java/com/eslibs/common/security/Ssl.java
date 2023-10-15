@@ -25,12 +25,12 @@ public class Ssl {
         return context(Mode.SSL, allTrust);
     }
 
-    public static SSLContext context(Mode sslType) throws NoSuchAlgorithmException, KeyManagementException {
-        return context(sslType, true);
+    public static SSLContext context(Mode mode) throws NoSuchAlgorithmException, KeyManagementException {
+        return context(mode, true);
     }
 
-    public static SSLContext context(Mode sslType, boolean allTrust) throws NoSuchAlgorithmException, KeyManagementException {
-        return context(sslType, null, allTrust ? trustManager() : null);
+    public static SSLContext context(Mode mode, boolean allTrust) throws NoSuchAlgorithmException, KeyManagementException {
+        return context(mode, null, allTrust ? trustManager() : null);
     }
 
     public static SSLContext context(com.eslibs.common.security.model.KeyStore keyStore)
@@ -43,20 +43,24 @@ public class Ssl {
         return context(Mode.SSL, keyStore, allTrust);
     }
 
-    public static SSLContext context(Mode sslType, com.eslibs.common.security.model.KeyStore keyStore)
+    public static SSLContext context(Mode mode, com.eslibs.common.security.model.KeyStore keyStore)
         throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
-        return context(sslType, keyStore, true);
+        return context(mode, keyStore, true);
     }
 
-    public static SSLContext context(Mode sslType, com.eslibs.common.security.model.KeyStore keyStore, boolean allTrust)
+    public static SSLContext context(Mode mode, com.eslibs.common.security.model.KeyStore keyStore, boolean allTrust)
         throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
-        return context(sslType, keyManager(keyStore), allTrust ? trustManager() : null);
+        return context(mode, keyManager(keyStore), allTrust ? trustManager() : null);
     }
 
-    public static SSLContext context(Mode sslType, KeyManager[] keyManagers, TrustManager trustManager) throws NoSuchAlgorithmException, KeyManagementException {
-        SSLContext sslContext = SSLContext.getInstance(sslType.name());
+    public static SSLContext context(Mode mode, KeyManager[] keyManagers, TrustManager trustManager) throws NoSuchAlgorithmException, KeyManagementException {
+        SSLContext sslContext = SSLContext.getInstance(protocol(mode));
         sslContext.init(keyManagers, trustManager != null ? new TrustManager[]{trustManager} : null, new SecureRandom());
         return sslContext;
+    }
+
+    private static String protocol(Mode mode) {
+        return mode != null ? mode.name() : null;
     }
 
     public static TrustManager trustManager() {

@@ -29,8 +29,8 @@ public class HmacHash implements StrHash {
         try {
             String alg = "Hmac" + algorithm;
             Mac mac = Mac.getInstance(alg);
-            SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), alg);
-            mac.init(secret_key);
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), alg);
+            mac.init(secretKeySpec);
             ByteEncoder encoder = new ByteEncoder(mac.doFinal(value));
             return hexEncode ? encoder.hexEncode() : encoder.encode();
         } catch (Exception ignore) {

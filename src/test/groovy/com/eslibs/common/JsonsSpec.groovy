@@ -1,6 +1,6 @@
 package com.eslibs.common
 
-import com.eslibs.common.Jsons
+
 import com.fasterxml.jackson.core.type.TypeReference
 import spock.lang.Specification
 
@@ -54,7 +54,7 @@ class JsonsSpec extends Specification {
         item == deserialized
     }
 
-    def "Clone"(){
+    def "Clone"() {
         when:
         def zdt = ZonedDateTime.now()
         def odt = OffsetDateTime.now()
@@ -65,6 +65,7 @@ class JsonsSpec extends Specification {
     }
 
     static class TestClass {
+
         String field1
         String field2
 
@@ -77,6 +78,7 @@ class JsonsSpec extends Specification {
     }
 
     static class DateClass {
+
         ZonedDateTime field1
         OffsetDateTime field2
 

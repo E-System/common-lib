@@ -18,13 +18,6 @@ import java.util.*
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-/*buildscript {
-    repositories {
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
-        }
-    }
-}*/
 plugins {
     java
     groovy
@@ -32,11 +25,11 @@ plugins {
     `java-library`
     `maven-publish`
     id("com.github.ben-manes.versions") version "0.44.0"
-    id("org.sonarqube") version "4.0.0.2929"
+    id("org.sonarqube") version "4.4.1.3373"
 }
 
 tasks.wrapper {
-    gradleVersion = "8.3"
+    gradleVersion = "8.4"
 }
 
 apply("build-${properties["profile"]}.gradle.kts")
@@ -75,8 +68,8 @@ tasks {
 }
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-        vendor.set(JvmVendorSpec.ADOPTIUM)
+        languageVersion = JavaLanguageVersion.of(17)
+        vendor = JvmVendorSpec.ADOPTIUM
     }
     withSourcesJar()
     withJavadocJar()
@@ -88,37 +81,33 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.14.2"
+val jacksonVersion = "2.15.3"
 dependencies {
-    api("org.apache.commons:commons-lang3:3.12.0")
-    api("commons-io:commons-io:2.11.0")
-    api("org.slf4j:slf4j-api:2.0.7")
+    api("org.apache.commons:commons-lang3:3.13.0")
+    api("commons-io:commons-io:2.14.0")
+    api("org.slf4j:slf4j-api:2.0.9")
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("org.eclipse.angus:angus-mail:2.0.1")
 
     api("de.svenkubiak:jBCrypt:0.4.3")
     api("org.reflections:reflections:0.10.2")
 
-    compileOnly("org.projectlombok:lombok:1.18.22")
-    annotationProcessor("org.projectlombok:lombok:1.18.22")
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 
 val emailTestEnabled = properties["test_email_server"] != null && properties["test_email_login"] != null && properties["test_email_password"] != null
-val emailTestEnabledEs = properties["test_email_server_es"] != null && properties["test_email_login_es"] != null && properties["test_email_password_es"] != null
-if (emailTestEnabled || emailTestEnabledEs) {
+if (emailTestEnabled) {
     tasks.test {
         if (emailTestEnabled) {
-            systemProperty("test_email_server", properties["test_email_server"] as String)
-            systemProperty("test_email_login", properties["test_email_login"] as String)
-            systemProperty("test_email_password", properties["test_email_password"] as String)
-        }
-        if (emailTestEnabledEs) {
-            systemProperty("test_email_server_es", properties["test_email_server_es"] as String)
-            systemProperty("test_email_login_es", properties["test_email_login_es"] as String)
-            systemProperty("test_email_password_es", properties["test_email_password_es"] as String)
+            systemProperties(mapOf(
+                    "test_email_server" to properties["test_email_server"],
+                    "test_email_login" to properties["test_email_login"],
+                    "test_email_password" to properties["test_email_password"]
+            ))
         }
     }
 }
@@ -135,9 +124,11 @@ if (sonarAvailable) {
     val pass = properties["sonar_password"] as String
     sonar {
         properties {
-            property("sonar.host.url", url)
-            property("sonar.login", user)
-            property("sonar.password", pass)
+            properties(mapOf(
+                    "sonar.host.url" to url,
+                    "sonar.login" to user,
+                    "sonar.password" to pass
+            ))
         }
     }
 }

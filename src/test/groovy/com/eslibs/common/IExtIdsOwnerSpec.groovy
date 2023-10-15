@@ -1,9 +1,9 @@
 package com.eslibs.common
 
-import com.eslibs.common.IExtIdsOwner
 import spock.lang.Specification
 
 class IExtIdsOwnerSpec extends Specification {
+
     static class TestClass implements IExtIdsOwner {
 
         Map<String, String> extIds
