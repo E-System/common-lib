@@ -16,6 +16,7 @@
 
 package com.eslibs.common.file;
 
+import com.eslibs.common.Constant;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -77,8 +78,10 @@ public final class IO {
 
     public static Map.Entry<String, Long> readCrc32(InputStream inputStream) throws IOException {
         try (CheckedInputStream cis = new CheckedInputStream(inputStream, new CRC32())) {
-            String value = IOUtils.toString(cis, StandardCharsets.UTF_8);
-            return Pair.of(value, cis.getChecksum().getValue());
+            return Pair.of(
+                toString(cis),
+                cis.getChecksum().getValue()
+            );
         }
     }
 
@@ -104,7 +107,7 @@ public final class IO {
     }
 
     public static String toString(InputStream inputStream) throws IOException {
-        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        return IOUtils.toString(inputStream, Constant.DEFAULT_ENCODING);
     }
 
     public static byte[] toBytes(InputStream inputStream) throws IOException {
@@ -131,7 +134,7 @@ public final class IO {
         long exp = (long) (Math.log(size) / Math.log(unit));
         double value = size / Math.pow(unit, exp);
         return String.format("%." + fraction + "f %s%s", value,
-            "KMGTPEZY".charAt((int) exp - 1), is1024unit ? "iB" : "B");
+                             "KMGTPEZY".charAt((int) exp - 1), is1024unit ? "iB" : "B");
     }
 
     public static String humanReadableSize(long size, boolean is1024unit) {

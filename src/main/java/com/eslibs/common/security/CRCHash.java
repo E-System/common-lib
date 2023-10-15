@@ -1,11 +1,11 @@
 package com.eslibs.common.security;
 
-import java.nio.charset.StandardCharsets;
+import com.eslibs.common.Constant;
 
 public interface CRCHash {
 
     default long get(String value) {
-        return get(value.getBytes(StandardCharsets.UTF_8));
+        return get(Constant.bytes(value));
     }
 
     long get(byte[] value);

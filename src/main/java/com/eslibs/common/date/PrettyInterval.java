@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -21,9 +22,9 @@ import java.util.stream.Collectors;
 public final class PrettyInterval {
 
     private final boolean useBraces;
-    private final BiFunction<DurationType, Long, String> localization;
+    private final BiFunction<ChronoUnit, Long, String> localization;
 
-    PrettyInterval(boolean useBraces, BiFunction<DurationType, Long, String> localization) {
+    PrettyInterval(boolean useBraces, BiFunction<ChronoUnit, Long, String> localization) {
         this.useBraces = useBraces;
         this.localization = localization != null ? localization : DEFAULT_LOCALIZATION;
     }
@@ -56,24 +57,24 @@ public final class PrettyInterval {
         return result;
     }
 
-    private static Collection<Map.Entry<DurationType, Long>> getDiff(LocalDateTime date, LocalDateTime dateNext) {
+    private static Collection<Map.Entry<ChronoUnit, Long>> getDiff(LocalDateTime date, LocalDateTime dateNext) {
         Map.Entry<long[], Boolean> t = getTime(date, dateNext);
         long[] time = t.getKey();
         boolean shift = t.getValue();
         Period period = Period.between(date.toLocalDate(), dateNext.toLocalDate());
         return Arrays.asList(
-            Pair.of(DurationType.YEAR, (long) period.getYears()),
-            Pair.of(DurationType.MONTH, (long) period.getMonths()),
-            Pair.of(DurationType.DAY, (long) period.getDays() - (shift ? 1 : 0)),
-            Pair.of(DurationType.HOUR, time[0]),
-            Pair.of(DurationType.MINUTE, time[1]),
-            Pair.of(DurationType.SECOND, time[2])
+            Pair.of(ChronoUnit.YEARS, (long) period.getYears()),
+            Pair.of(ChronoUnit.MONTHS, (long) period.getMonths()),
+            Pair.of(ChronoUnit.DAYS, (long) period.getDays() - (shift ? 1 : 0)),
+            Pair.of(ChronoUnit.HOURS, time[0]),
+            Pair.of(ChronoUnit.MINUTES, time[1]),
+            Pair.of(ChronoUnit.SECONDS, time[2])
         );
     }
 
     private static Map.Entry<long[], Boolean> getTime(LocalDateTime date, LocalDateTime dateNext) {
         LocalDateTime original = LocalDateTime.of(dateNext.getYear(),
-            dateNext.getMonthValue(), dateNext.getDayOfMonth(), date.getHour(), date.getMinute(), date.getSecond());
+                                                  dateNext.getMonthValue(), dateNext.getDayOfMonth(), date.getHour(), date.getMinute(), date.getSecond());
         Duration duration = Duration.between(original, dateNext);
         boolean shift = false;
         long seconds = duration.getSeconds();
@@ -89,21 +90,13 @@ public final class PrettyInterval {
         return Pair.of(new long[]{hours, minutes, secs}, shift);
     }
 
-    public enum DurationType {
-        YEAR,
-        MONTH,
-        DAY,
-        HOUR,
-        MINUTE,
-        SECOND
-    }
-
-    public static BiFunction<DurationType, Long, String> DEFAULT_LOCALIZATION = (type, value) -> switch (type) {
-        case YEAR -> value + " " + Texts.pluralize(value, "год", "года", "лет");
-        case MONTH -> value + " мес.";
-        case DAY -> value + " дн.";
-        case HOUR -> value + " ч.";
-        case MINUTE -> value + " м.";
-        case SECOND -> value + " c.";
+    public static BiFunction<ChronoUnit, Long, String> DEFAULT_LOCALIZATION = (type, value) -> switch (type) {
+        case YEARS -> value + " " + Texts.pluralize(value, "год", "года", "лет");
+        case MONTHS -> value + " мес.";
+        case DAYS -> value + " дн.";
+        case HOURS -> value + " ч.";
+        case MINUTES -> value + " м.";
+        case SECONDS -> value + " c.";
+        default -> throw new IllegalStateException("Unexpected value: " + type);
     };
 }

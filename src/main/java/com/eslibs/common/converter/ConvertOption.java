@@ -13,7 +13,6 @@ public interface ConvertOption {
 
         public Set(Collection<? extends ConvertOption> c, ConvertOption... options) {
             super(c);
-
             addAll(new LinkedHashSet<>(Arrays.stream(options).filter(Objects::nonNull).collect(Collectors.toList())));
         }
 

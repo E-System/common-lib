@@ -20,6 +20,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -72,6 +73,12 @@ public interface Constant {
      * Default encoding
      */
     Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
+
+    static byte[] bytes(String value) {
+        return Objects.requireNonNull(value, "value must not be null")
+            .getBytes(DEFAULT_ENCODING);
+    }
+
     /**
      * Default autocomplete size
      */

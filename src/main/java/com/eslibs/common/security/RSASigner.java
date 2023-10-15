@@ -17,16 +17,18 @@
 package com.eslibs.common.security;
 
 
+import com.eslibs.common.Constant;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -37,7 +39,7 @@ public final class RSASigner {
 
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
-    private final String algoritm;
+    private final String algorithm;
     private final Charset charset;
 
     public RSASigner(PrivateKey privateKey, PublicKey publicKey) {
@@ -45,42 +47,26 @@ public final class RSASigner {
     }
 
     public RSASigner(PrivateKey privateKey, PublicKey publicKey, String algorithm) {
-        this(privateKey, publicKey, algorithm, StandardCharsets.UTF_8);
+        this(privateKey, publicKey, algorithm, Constant.DEFAULT_ENCODING);
     }
 
     /**
-     * Подписывает строку
+     * Create sign
      *
-     * @param message - Строка для подписи
-     * @return подпись в Base64
-     * @throws SignatureException - ошибка формирования подписи
+     * @param value   Data for create signature
+     * @param reverse Reverse signed bytes
+     * @return Sign in Base64
+     * @throws SignatureException Create signature exception
      */
-    public String sign(String message) throws SignatureException {
+    public String sign(String value, boolean reverse) throws SignatureException {
         try {
-            Signature sign = Signature.getInstance(algoritm);
+            Signature sign = Signature.getInstance(algorithm);
             sign.initSign(privateKey);
-            sign.update(message.getBytes(charset));
-
-            return new String(Base64.getEncoder().encode(sign.sign()), charset);
-        } catch (Exception ex) {
-            throw new SignatureException(ex);
-        }
-    }
-
-    /**
-     * Подписывает строку переставляя байты
-     *
-     * @param message - Строка для подписи
-     * @return подпись в Base64
-     * @throws SignatureException - ошибка формирования подписи
-     */
-    public String signReverse(String message) throws SignatureException {
-        try {
-            Signature sign = Signature.getInstance(algoritm);
-            sign.initSign(privateKey);
-            sign.update(message.getBytes(charset));
+            sign.update(value.getBytes(charset));
             byte[] res = sign.sign();
-            ArrayUtils.reverse(res);
+            if (reverse) {
+                ArrayUtils.reverse(res);
+            }
             return new String(Base64.getEncoder().encode(res), charset);
         } catch (Exception ex) {
             throw new SignatureException(ex);
@@ -90,16 +76,16 @@ public final class RSASigner {
     /**
      * Проверяет подпись
      *
-     * @param message   строка для проверки
-     * @param signature подись в Base64
-     * @return true если подпись верна
-     * @throws SignatureException - ошибка верификации подписи
+     * @param value     Data for verify signature
+     * @param signature Signature in Base64
+     * @return true if signature valid
+     * @throws SignatureException Signature verify exception
      */
-    public boolean verify(String message, String signature) throws SignatureException {
+    public boolean verify(String value, String signature) throws SignatureException {
         try {
-            Signature sign = Signature.getInstance(algoritm);
+            Signature sign = Signature.getInstance(algorithm);
             sign.initVerify(publicKey);
-            sign.update(message.getBytes(charset));
+            sign.update(value.getBytes(charset));
             return sign.verify(Base64.getDecoder().decode(signature.getBytes(charset)));
         } catch (Exception ex) {
             throw new SignatureException(ex);

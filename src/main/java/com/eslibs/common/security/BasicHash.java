@@ -1,9 +1,9 @@
 package com.eslibs.common.security;
 
+import com.eslibs.common.Constant;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
@@ -16,7 +16,7 @@ public class BasicHash implements StrHash {
         if (value == null) {
             return null;
         }
-        return get(value.getBytes(StandardCharsets.UTF_8));
+        return get(Constant.bytes(value));
     }
 
     @Override

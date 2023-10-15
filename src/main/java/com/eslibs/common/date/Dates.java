@@ -50,10 +50,10 @@ public final class Dates {
 
     public static Collection<ZoneId> availableZones() {
         return ZoneId.getAvailableZoneIds().stream()
-                     .filter(v -> v.matches(Constant.DEFAULT_ZONES_PREFIXES))
-                     .map(ZoneId::of)
-                     .sorted(Comparator.comparing(ZoneId::getId))
-                     .collect(Collectors.toList());
+            .filter(v -> v.matches(Constant.DEFAULT_ZONES_PREFIXES))
+            .map(ZoneId::of)
+            .sorted(Comparator.comparing(ZoneId::getId))
+            .collect(Collectors.toList());
     }
 
     public static boolean contains(Date startDate, Date endDate, Date date, ZoneId zoneId) {
@@ -158,7 +158,7 @@ public final class Dates {
         return pretty(false);
     }
 
-    public static PrettyInterval pretty(BiFunction<PrettyInterval.DurationType, Long, String> localization) {
+    public static PrettyInterval pretty(BiFunction<ChronoUnit, Long, String> localization) {
         return pretty(false, localization);
     }
 
@@ -166,20 +166,20 @@ public final class Dates {
         return pretty(useBraces, null);
     }
 
-    public static PrettyInterval pretty(boolean useBraces, BiFunction<PrettyInterval.DurationType, Long, String> localization) {
+    public static PrettyInterval pretty(boolean useBraces, BiFunction<ChronoUnit, Long, String> localization) {
         return new PrettyInterval(useBraces, localization);
     }
 
     public static Collection<SItem> ranges(ZoneId zoneId, String pattern, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
-                     .map(v -> v.getItem(zoneId, pattern, lastNextDay))
-                     .collect(Collectors.toList());
+            .map(v -> v.getItem(zoneId, pattern, lastNextDay))
+            .collect(Collectors.toList());
     }
 
     public static Collection<SItem> ranges(ZoneId zoneId, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
-                     .map(v -> v.getItem(zoneId, lastNextDay))
-                     .collect(Collectors.toList());
+            .map(v -> v.getItem(zoneId, lastNextDay))
+            .collect(Collectors.toList());
     }
 
     public static Collection<SItem> ranges(ZoneId zoneId) {

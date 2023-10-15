@@ -6,26 +6,28 @@ import spock.lang.Specification
 
 import java.time.LocalDateTime
 import java.time.Month
+import java.time.temporal.ChronoUnit
 import java.util.function.BiFunction
 
 class PrettySpec extends Specification {
 
     @Shared
-    def LOCALIZATION = new BiFunction<PrettyInterval.DurationType, Long, String>() {
+    def LOCALIZATION = new BiFunction<ChronoUnit, Long, String>() {
+
         @Override
-        String apply(PrettyInterval.DurationType type, Long value) {
+        String apply(ChronoUnit type, Long value) {
             switch (type) {
-                case PrettyInterval.DurationType.YEAR:
+                case ChronoUnit.YEARS:
                     return value + " " + Texts.pluralize(value, "year", "years", "years")
-                case PrettyInterval.DurationType.MONTH:
+                case ChronoUnit.MONTHS:
                     return value + " mon."
-                case PrettyInterval.DurationType.DAY:
+                case ChronoUnit.DAYS:
                     return value + " d."
-                case PrettyInterval.DurationType.HOUR:
+                case ChronoUnit.HOURS:
                     return value + " h."
-                case PrettyInterval.DurationType.MINUTE:
+                case ChronoUnit.MINUTES:
                     return value + " m."
-                case PrettyInterval.DurationType.SECOND:
+                case ChronoUnit.SECONDS:
                     return value + " s."
                 default:
                     return ""

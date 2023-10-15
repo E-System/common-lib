@@ -58,7 +58,7 @@ public class Bytes {
         }
     }
 
-    public static int xor(byte[] data) { return xor(data, 0, 0); }
+    public static int xor(byte[] data) {return xor(data, 0, 0);}
 
     public static int xor(byte[] data, int skipIndex, int skipLen) {
         return xor(data, skipIndex, skipLen, data.length);
@@ -94,8 +94,8 @@ public class Bytes {
     public static String toHex(byte... b) {
         Objects.requireNonNull(b);
         return IntStream.range(0, b.length)
-                        .mapToObj(i -> String.format("%02X", b[i] & 0xFF))
-                        .collect(Collectors.joining(" "));
+            .mapToObj(i -> toHex(b[i]))
+            .collect(Collectors.joining(" "));
     }
 
     /**

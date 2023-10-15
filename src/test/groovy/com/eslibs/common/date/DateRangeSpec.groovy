@@ -29,10 +29,10 @@ class DateRangeSpec extends Specification {
     def "Interval generate with next day"() {
         expect:
         def range = interval.getRange(zoneId)
-        range.dbegin == dbegin
-        range.dend == dend
+        range.dbegin == Dates.converter().get(dbegin)
+        range.dend == Dates.converter().get(dend)
         where:
-        interval                         | zoneId                 | dbegin                                                                                  | dend
+        interval                         | zoneId                 | dbegin                                                                               | dend
         DateRange.Interval.TODAY         | ZoneId.systemDefault() | Dates.builder().clearTime().build()                                                  | Dates.builder().clearTime().addDayOfMonth(1).build()
         DateRange.Interval.YESTERDAY     | ZoneId.systemDefault() | Dates.builder().clearTime().addDayOfMonth(-1).build()                                | Dates.builder().clearTime().build()
         DateRange.Interval.LAST_7_DAYS   | ZoneId.systemDefault() | Dates.builder().clearTime().addDayOfMonth(-7).build()                                | Dates.builder().clearTime().addDayOfMonth(1).build()
@@ -49,10 +49,10 @@ class DateRangeSpec extends Specification {
     def "Interval generate with current day"() {
         expect:
         def range = interval.getRange(zoneId, false)
-        range.dbegin == dbegin
-        range.dend == dend
+        range.dbegin == Dates.converter().get(dbegin)
+        range.dend == Dates.converter().get(dend)
         where:
-        interval                         | zoneId                 | dbegin                                                                                  | dend
+        interval                         | zoneId                 | dbegin                                                                               | dend
         DateRange.Interval.TODAY         | ZoneId.systemDefault() | Dates.builder().clearTime().build()                                                  | Dates.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
         DateRange.Interval.YESTERDAY     | ZoneId.systemDefault() | Dates.builder().clearTime().addDayOfMonth(-1).build()                                | Dates.builder().clearTime().addDayOfMonth(-1).build()
         DateRange.Interval.LAST_7_DAYS   | ZoneId.systemDefault() | Dates.builder().clearTime().addDayOfMonth(-7).build()                                | Dates.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
@@ -71,16 +71,16 @@ class DateRangeSpec extends Specification {
         def ranges = Dates.ranges(ZoneId.systemDefault())
         then:
         ranges.size() == DateRange.Interval.values().length
-        ranges[0].title == DateRange.Interval.TODAY.toString()
-        ranges[1].title == DateRange.Interval.YESTERDAY.toString()
-        ranges[2].title == DateRange.Interval.LAST_7_DAYS.toString()
-        ranges[3].title == DateRange.Interval.CURRENT_WEEK.toString()
-        ranges[4].title == DateRange.Interval.LAST_WEEK.toString()
-        ranges[5].title == DateRange.Interval.CURRENT_MONTH.toString()
-        ranges[6].title == DateRange.Interval.LAST_MONTH.toString()
-        ranges[7].title == DateRange.Interval.CURRENT_TRIAD.toString()
-        ranges[8].title == DateRange.Interval.LAST_TRIAD.toString()
-        ranges[9].title == DateRange.Interval.CURRENT_YEAR.toString()
-        ranges[10].title == DateRange.Interval.LAST_YEAR.toString()
+        ranges[0].title() == DateRange.Interval.TODAY.toString()
+        ranges[1].title() == DateRange.Interval.YESTERDAY.toString()
+        ranges[2].title() == DateRange.Interval.LAST_7_DAYS.toString()
+        ranges[3].title() == DateRange.Interval.CURRENT_WEEK.toString()
+        ranges[4].title() == DateRange.Interval.LAST_WEEK.toString()
+        ranges[5].title() == DateRange.Interval.CURRENT_MONTH.toString()
+        ranges[6].title() == DateRange.Interval.LAST_MONTH.toString()
+        ranges[7].title() == DateRange.Interval.CURRENT_TRIAD.toString()
+        ranges[8].title() == DateRange.Interval.LAST_TRIAD.toString()
+        ranges[9].title() == DateRange.Interval.CURRENT_YEAR.toString()
+        ranges[10].title() == DateRange.Interval.LAST_YEAR.toString()
     }
 }
