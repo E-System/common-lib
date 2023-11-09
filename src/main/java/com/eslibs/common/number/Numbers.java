@@ -184,6 +184,44 @@ public final class Numbers {
         );
     }
 
+    public enum Round {
+        CEIL,
+        FLOOR,
+        MATH,
+        BANK;
+
+        public long get(long val, long vr) {
+            return get(val, vr, this);
+        }
+
+        long get(long val, long vr, Round mode) {
+            if (vr == 0) {
+                return val;
+            }
+            long up = val % vr;
+            if (up == 0) {
+                return val;
+            }
+            long div = val / vr;
+            switch (mode) {
+                case MATH:
+                case BANK: {
+                    if (up >= vr / 2) {
+                        return val + (vr - up);
+                    } else {
+                        return div * vr;
+                    }
+                }
+                case CEIL:
+                    return val + (vr - up);
+                case FLOOR:
+                    return div * vr;
+                default:
+                    return val;
+            }
+        }
+    }
+
     @Getter
     @ToString
     @EqualsAndHashCode

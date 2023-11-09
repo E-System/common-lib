@@ -379,6 +379,11 @@ public final class Items {
     }
 
     @SafeVarargs
+    public static <T> T coalesceSupplier(Supplier<T>... items) {
+        return firstBySelectorSupplier(Objects::nonNull, items);
+    }
+
+    @SafeVarargs
     public static <T> T firstBySelector(Predicate<T> selector, T... items) {
         if (items == null) {
             return null;
@@ -386,6 +391,22 @@ public final class Items {
         for (T item : items) {
             if (selector.test(item)) {
                 return item;
+            }
+        }
+        return null;
+    }
+
+    @SafeVarargs
+    public static <T> T firstBySelectorSupplier(Predicate<T> selector, Supplier<T>... items) {
+        if (items == null) {
+            return null;
+        }
+        for (Supplier<T> item : items) {
+            if (item != null) {
+                T value = item.get();
+                if (selector.test(value)) {
+                    return value;
+                }
             }
         }
         return null;

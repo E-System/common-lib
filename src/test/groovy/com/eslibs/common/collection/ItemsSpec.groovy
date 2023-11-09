@@ -306,6 +306,7 @@ class ItemsSpec extends Specification {
     def "FindWithIndex"() {
         expect:
         Items.findWithIndex(input, new Predicate<Object>() {
+
             @Override
             boolean test(Object o) {
                 return o == 1
@@ -325,12 +326,14 @@ class ItemsSpec extends Specification {
         when:
         def attributes = null
         def supplier = new Supplier<Map<String, String>>() {
+
             @Override
             Map<String, String> get() {
                 return attributes
             }
         }
         def consumer = new Consumer<Map<String, String>>() {
+
             @Override
             void accept(Map<String, String> o) {
                 attributes = o
@@ -351,12 +354,14 @@ class ItemsSpec extends Specification {
         when:
         def attributes = null
         def supplier = new Supplier<Map<String, String>>() {
+
             @Override
             Map<String, String> get() {
                 return attributes
             }
         }
         def consumer = new Consumer<Map<String, String>>() {
+
             @Override
             void accept(Map<String, String> o) {
                 attributes = o
@@ -377,12 +382,14 @@ class ItemsSpec extends Specification {
         when:
         def attributes = null
         def supplier = new Supplier<Map<String, String>>() {
+
             @Override
             Map<String, String> get() {
                 return attributes
             }
         }
         def consumer = new Consumer<Map<String, String>>() {
+
             @Override
             void accept(Map<String, String> o) {
                 attributes = o
@@ -406,9 +413,26 @@ class ItemsSpec extends Specification {
         Items.coalesce('', null, null) == ''
     }
 
+    def "coalesce not null (supplier)"() {
+        expect:
+        Items.coalesceSupplier(null, null, {
+            return 'Hello'
+        }) == 'Hello'
+        Items.coalesceSupplier(null, null, {
+            return 'Hello'
+        }, null, null) == 'Hello'
+        Items.coalesceSupplier({
+            return 'Hello'
+        }, null, null) == 'Hello'
+        Items.coalesceSupplier({
+            return ''
+        }, null, null) == ''
+    }
+
     def "first not empty"() {
         setup:
         def predicate = new Predicate<String>() {
+
             @Override
             boolean test(String t) {
                 return StringUtils.isNotBlank(t)
@@ -422,11 +446,43 @@ class ItemsSpec extends Specification {
         Items.firstBySelector(predicate, '', null, 'Hello', null) == 'Hello'
     }
 
+    def "first not empty (supplier)"() {
+        setup:
+        def predicate = new Predicate<String>() {
+
+            @Override
+            boolean test(String t) {
+                return StringUtils.isNotBlank(t)
+            }
+        }
+        expect:
+        Items.firstBySelectorSupplier(predicate, null, null, {
+            return 'Hello'
+        }) == 'Hello'
+        Items.firstBySelectorSupplier(predicate, null, null, {
+            return 'Hello'
+        }, null, null) == 'Hello'
+        Items.firstBySelectorSupplier(predicate, {
+            return 'Hello'
+        }, null, null) == 'Hello'
+        Items.firstBySelectorSupplier(predicate, {
+            return ''
+        }, {
+            return 'Hello'
+        }, null) == 'Hello'
+        Items.firstBySelectorSupplier(predicate, {
+            return ''
+        }, null, {
+            return 'Hello'
+        }, null) == 'Hello'
+    }
+
     def "groupBy"() {
         when:
         def items = [new GroupClass("1", "1"), new GroupClass("1", "2"), new GroupClass("2", "1")]
         then:
         def result = Items.groupBy(items, new Function<GroupClass, String>() {
+
             @Override
             String apply(GroupClass t) {
                 return t.v1
@@ -497,6 +553,7 @@ class ItemsSpec extends Specification {
     }
 
     class GroupClass {
+
         String v1
         String v2
 
