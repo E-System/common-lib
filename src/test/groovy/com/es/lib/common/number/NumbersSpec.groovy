@@ -172,4 +172,40 @@ class NumbersSpec extends Specification {
         res[0] == 50
         res[1] == 50
     }
+
+    def "Round"() {
+        expect:
+        Numbers.Round.MATH.get(10000, 100) == 10000
+        Numbers.Round.MATH.get(10001, 100) == 10000
+        Numbers.Round.MATH.get(10054, 100) == 10100
+        Numbers.Round.MATH.get(10050, 100) == 10100
+        Numbers.Round.MATH.get(10049, 100) == 10000
+        Numbers.Round.MATH.get(10003, 10) == 10000
+        Numbers.Round.MATH.get(10006, 10) == 10010
+        Numbers.Round.MATH.get(12654, 100) == 12700
+        Numbers.Round.MATH.get(12650, 100) == 12700
+        Numbers.Round.MATH.get(12649, 100) == 12600
+
+        Numbers.Round.CEIL.get(10000, 100) == 10000
+        Numbers.Round.CEIL.get(10001, 100) == 10100
+        Numbers.Round.CEIL.get(10054, 100) == 10100
+        Numbers.Round.CEIL.get(10050, 100) == 10100
+        Numbers.Round.CEIL.get(10049, 100) == 10100
+        Numbers.Round.CEIL.get(10003, 10) == 10010
+        Numbers.Round.CEIL.get(10006, 10) == 10010
+        Numbers.Round.CEIL.get(12654, 100) == 12700
+        Numbers.Round.CEIL.get(12650, 100) == 12700
+        Numbers.Round.CEIL.get(12649, 100) == 12700
+
+        Numbers.Round.FLOOR.get(10000, 100) == 10000
+        Numbers.Round.FLOOR.get(10001, 100) == 10000
+        Numbers.Round.FLOOR.get(10054, 100) == 10000
+        Numbers.Round.FLOOR.get(10050, 100) == 10000
+        Numbers.Round.FLOOR.get(10049, 100) == 10000
+        Numbers.Round.FLOOR.get(10003, 10) == 10000
+        Numbers.Round.FLOOR.get(10006, 10) == 10000
+        Numbers.Round.FLOOR.get(12654, 100) == 12600
+        Numbers.Round.FLOOR.get(12650, 100) == 12600
+        Numbers.Round.FLOOR.get(12649, 100) == 12600
+    }
 }
