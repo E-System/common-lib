@@ -27,3 +27,4 @@ toolchainManagement {
     }
 }
 rootProject.name = "common-lib"
+System.setProperty("sonar.gradle.skipCompile", "true")

@@ -127,7 +127,8 @@ if (sonarAvailable) {
             properties(mapOf(
                     "sonar.host.url" to url,
                     "sonar.login" to user,
-                    "sonar.password" to pass
+                    "sonar.password" to pass,
+                    "sonar.gradle.skipCompile" to true
             ))
         }
     }
