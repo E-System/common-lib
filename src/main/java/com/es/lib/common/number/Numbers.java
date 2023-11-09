@@ -190,19 +190,19 @@ public final class Numbers {
         MATH,
         BANK;
 
-        public int get(int val, int vr) {
+        public long get(long val, long vr) {
             return get(val, vr, this);
         }
 
-        int get(int val, int vr, Round mode) {
+        long get(long val, long vr, Round mode) {
             if (vr == 0) {
                 return val;
             }
-            int up = val % vr;
+            long up = val % vr;
             if (up == 0) {
                 return val;
             }
-            int div = val / vr;
+            long div = val / vr;
             switch (mode) {
                 case MATH:
                 case BANK: {
