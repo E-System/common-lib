@@ -16,6 +16,8 @@
 
 package com.es.lib.common.security;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -23,9 +25,8 @@ import lombok.extern.slf4j.Slf4j;
  * @since 10.04.15
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Hex {
-
-    private Hex() { }
 
     public static String get(final byte[] value) {
         if (value == null) {

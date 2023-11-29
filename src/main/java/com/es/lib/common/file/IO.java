@@ -16,19 +16,22 @@
 
 package com.es.lib.common.file;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
@@ -40,10 +43,8 @@ import java.util.zip.CheckedInputStream;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class IO {
-
-    private IO() {
-    }
 
     public static FileType fileType(String fileName) {
         return FileTypeFinder.get(fileName);
@@ -57,13 +58,16 @@ public final class IO {
         return mime(file.toString());
     }
 
-    public static String fileNameDisposition(boolean attachment, String fileName) throws UnsupportedEncodingException {
-        String encoded = URLEncoder.encode(fileName, Charset.defaultCharset().name()).replace("+", "%20");
-        return (attachment ? "attachment" : "inline") + "; filename=\"" + fileName + "\"; filename*=UTF-8''" + encoded;
+    public static String fileNameDisposition(boolean attachment, String fileName) {
+        return fileNameDisposition(attachment, fileName, StandardCharsets.UTF_8);
+    }
+
+    public static String fileNameDisposition(boolean attachment, String fileName, Charset charset) {
+        return ContentDisposition.encode(attachment, fileName, charset);
     }
 
     public static Map.Entry<String, Long> readCrc32(String fileName) throws IOException {
-        return readCrc32(new FileInputStream(new File(fileName)));
+        return readCrc32(Paths.get(fileName));
     }
 
     public static Map.Entry<String, Long> readCrc32(Path file) throws IOException {
@@ -129,7 +133,7 @@ public final class IO {
         long exp = (long) (Math.log(size) / Math.log(unit));
         double value = size / Math.pow(unit, exp);
         return String.format("%." + fraction + "f %s%s", value,
-            "KMGTPEZY".charAt((int) exp - 1), is1024unit ? "iB" : "B");
+                             "KMGTPEZY".charAt((int) exp - 1), is1024unit ? "iB" : "B");
     }
 
     public static String humanReadableSize(long size, boolean is1024unit) {

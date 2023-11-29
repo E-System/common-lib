@@ -265,10 +265,10 @@ class IOSpec extends Specification {
 
     def "Content file name disposition"() {
         expect:
-        IO.fileNameDisposition(true, "Hello.txt") == "attachment; filename=\"Hello.txt\"; filename*=UTF-8''Hello.txt"
-        IO.fileNameDisposition(false, "Hello.txt") == "inline; filename=\"Hello.txt\"; filename*=UTF-8''Hello.txt"
-        IO.fileNameDisposition(true, "Тест.txt") == "attachment; filename=\"Тест.txt\"; filename*=UTF-8''%D0%A2%D0%B5%D1%81%D1%82.txt"
-        IO.fileNameDisposition(false, "Тест.txt") == "inline; filename=\"Тест.txt\"; filename*=UTF-8''%D0%A2%D0%B5%D1%81%D1%82.txt"
+        IO.fileNameDisposition(true, "Hello.txt") == "attachment; filename=\"=?UTF-8?Q?Hello.txt?=\"; filename*=UTF-8''Hello.txt"
+        IO.fileNameDisposition(false, "Hello.txt") == "inline; filename=\"=?UTF-8?Q?Hello.txt?=\"; filename*=UTF-8''Hello.txt"
+        IO.fileNameDisposition(true, "Тест.txt") == "attachment; filename=\"=?UTF-8?Q?=D0=A2=D0=B5=D1=81=D1=82.txt?=\"; filename*=UTF-8''%D0%A2%D0%B5%D1%81%D1%82.txt"
+        IO.fileNameDisposition(false, "Тест.txt") == "inline; filename=\"=?UTF-8?Q?=D0=A2=D0=B5=D1=81=D1=82.txt?=\"; filename*=UTF-8''%D0%A2%D0%B5%D1%81%D1%82.txt"
     }
 
     def "Download file"() {
