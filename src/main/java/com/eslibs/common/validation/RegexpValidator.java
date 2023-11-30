@@ -15,11 +15,12 @@
  */
 package com.eslibs.common.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RegexpValidator {
-
-    private RegexpValidator() { }
 
     public boolean isValid(String value, String pattern) {
         if (value == null || StringUtils.isBlank(pattern)) {

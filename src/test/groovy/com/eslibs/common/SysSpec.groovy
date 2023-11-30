@@ -16,7 +16,7 @@
 
 package com.eslibs.common
 
-import com.eslibs.common.Sys
+
 import spock.lang.Specification
 
 /**

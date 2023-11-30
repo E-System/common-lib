@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -66,7 +67,7 @@ public class FullName {
     }
 
     public String getPatronymicFull() {
-        String result = StringUtils.defaultString(getPatronymic(), "");
+        String result = Objects.toString(getPatronymic(), "");
         if (Items.isNotEmpty(others)) {
             result += (" " + String.join(" ", others));
         }

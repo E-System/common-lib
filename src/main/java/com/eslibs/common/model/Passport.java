@@ -15,10 +15,6 @@
  */
 package com.eslibs.common.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,14 +22,10 @@ import java.util.Date;
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 23.09.16
  */
-@Getter
-@ToString
-@AllArgsConstructor
-public class Passport implements Serializable {
-
-    private final String serial;
-    private final String number;
-    private final String issued;
-    private final Date issuedDate;
-    private final String divisionCode;
-}
+public record Passport(
+    String serial,
+    String number,
+    String issued,
+    Date issuedDate,
+    String divisionCode
+) implements Serializable {}

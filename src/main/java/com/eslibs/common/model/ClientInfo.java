@@ -16,9 +16,6 @@
 package com.eslibs.common.model;
 
 import com.eslibs.common.collection.Items;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -27,27 +24,25 @@ import java.util.Map;
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 29.06.17
  */
-@Getter
-@ToString
-@AllArgsConstructor
-public class ClientInfo {
+
+public record ClientInfo(
+    Platform platform,
+    String platformVersion,
+    String appVersion
+) {
 
     private static final String APP_PLATFORM_KEY = "es-app-platform";
     private static final String APP_PLATFORM_VERSION_KEY = "es-app-platform-version";
     private static final String APP_VERSION_KEY = "es-app-version";
 
-    private final Platform platform;
-    private final String platformVersion;
-    private final String appVersion;
-
-    public static ClientInfo create(Map<String, String> headers) {
+    public static ClientInfo from(Map<String, String> headers) {
         if (Items.isEmpty(headers)) {
             return new ClientInfo(Platform.undefined, "", "");
         }
         Platform platform = Platform.undefined;
         try {
             platform = Platform.valueOf(headers.get(APP_PLATFORM_KEY).toLowerCase());
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {}
         return new ClientInfo(
             platform,
             StringUtils.defaultIfBlank(headers.get(APP_PLATFORM_VERSION_KEY), ""),

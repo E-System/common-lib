@@ -22,6 +22,26 @@ import java.nio.file.Path;
 
 public record FileName(String name, String ext) {
 
+    public static FileName of(String name, String ext) {
+        return new FileName(name, ext);
+    }
+
+    public static FileName of(String fileName) {
+        return of(fileName, true);
+    }
+
+    public static FileName of(String fileName, boolean lowerExt) {
+        String ext = FilenameUtils.getExtension(fileName);
+        return of(
+            FilenameUtils.getBaseName(fileName),
+            lowerExt ? ext.toLowerCase() : ext
+        );
+    }
+
+    public static FileName of(Path file) {
+        return of(file.toString());
+    }
+
     public String getFullName() {
         return full(name, ext);
     }
@@ -41,25 +61,5 @@ public record FileName(String name, String ext) {
             return full(name, ext);
         }
         return full(StringUtils.abbreviateMiddle(name, "..", maxWidth - extSize - 1), ext);
-    }
-
-    public static FileName create(String name, String ext) {
-        return new FileName(name, ext);
-    }
-
-    public static FileName create(String fileName) {
-        return create(fileName, true);
-    }
-
-    public static FileName create(String fileName, boolean lowerExt) {
-        String ext = FilenameUtils.getExtension(fileName);
-        return create(
-            FilenameUtils.getBaseName(fileName),
-            lowerExt ? ext.toLowerCase() : ext
-        );
-    }
-
-    public static FileName create(Path file) {
-        return create(file.toString());
     }
 }

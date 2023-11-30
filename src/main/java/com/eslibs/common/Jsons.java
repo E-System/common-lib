@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.util.Date;
@@ -28,12 +30,10 @@ import java.util.Date;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Jsons {
 
     private static final ObjectMapper OBJECT_MAPPER = mapper();
-
-    private Jsons() {
-    }
 
     public static ObjectMapper mapper() {
         return new ObjectMapper()

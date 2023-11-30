@@ -29,7 +29,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "8.4"
+    gradleVersion = "8.5"
 }
 
 apply("build-${properties["profile"]}.gradle.kts")
@@ -42,22 +42,22 @@ repositories {
     mavenLocal()
 }
 
-var filePath = "${project.projectDir}/src/main/resources/com/eslibs/common/"
-File(filePath).mkdirs()
-filePath = "$filePath/build.properties"
+var filePath = Paths.get(project.projectDir.toString(), "src/main/resources/com/eslibs/common/")
+Files.createDirectories(filePath)
+filePath = filePath.resolve("build.properties")
 println("Create file for property: $filePath")
 val props = Properties()
 props["name"] = rootProject.name
 props["version"] = project.version
 props["date"] = LocalDateTime.now().toString()
-props.store(Files.newOutputStream(Paths.get(filePath)), null)
+props.store(Files.newOutputStream(filePath), null)
 
 tasks {
     jar {
         manifest {
             attributes(
-                    "Implementation-Version" to project.version,
-                    "Implementation-Vendor" to "E-SYSTEM"
+                "Implementation-Version" to project.version,
+                "Implementation-Vendor" to "E-SYSTEM"
             )
         }
     }
@@ -68,7 +68,7 @@ tasks {
 }
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
         vendor = JvmVendorSpec.ADOPTIUM
     }
     withSourcesJar()
@@ -81,7 +81,7 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.15.3"
+val jacksonVersion = "2.16.0"
 dependencies {
     api("org.apache.commons:commons-lang3:3.13.0")
     api("commons-io:commons-io:2.14.0")
@@ -96,40 +96,48 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
+    testImplementation("org.apache.groovy:groovy:4.0.15")
+    testImplementation("ch.qos.logback:logback-classic:1.4.11")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 
-val emailTestEnabled = properties["test_email_server"] != null && properties["test_email_login"] != null && properties["test_email_password"] != null
+val emailTestEnabled =
+    properties["test_email_server"] != null && properties["test_email_login"] != null && properties["test_email_password"] != null
 if (emailTestEnabled) {
     tasks.test {
         if (emailTestEnabled) {
-            systemProperties(mapOf(
+            systemProperties(
+                mapOf(
                     "test_email_server" to properties["test_email_server"],
                     "test_email_login" to properties["test_email_login"],
                     "test_email_password" to properties["test_email_password"]
-            ))
+                )
+            )
         }
     }
 }
 
-tasks.test {
+tasks.named<Test>("test") {
     useJUnitPlatform()
     finalizedBy("jacocoTestReport")
 }
 
-val sonarAvailable = properties["sonar_url"] != null && properties["sonar_user"] != null && properties["sonar_password"] != null
+val sonarAvailable =
+    properties["sonar_url"] != null && properties["sonar_user"] != null && properties["sonar_password"] != null
 if (sonarAvailable) {
     val url = properties["sonar_url"] as String
     val user = properties["sonar_user"] as String
     val pass = properties["sonar_password"] as String
     sonar {
         properties {
-            properties(mapOf(
+            properties(
+                mapOf(
                     "sonar.host.url" to url,
                     "sonar.login" to user,
                     "sonar.password" to pass,
                     "sonar.gradle.skipCompile" to true
-            ))
+                )
+            )
         }
     }
 }

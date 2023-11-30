@@ -17,10 +17,7 @@
 package com.eslibs.common.number;
 
 import com.eslibs.common.Constant;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,10 +29,8 @@ import java.util.List;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Numbers {
-
-    private Numbers() {
-    }
 
     /**
      * Split sum on count part
@@ -64,7 +59,7 @@ public final class Numbers {
         int overlap = sum - (part * count);
         while (over > 0) {
             if (over >= part) {
-                result.add(Math.min(part, over));
+                result.add(part);
             }
             over -= part;
         }

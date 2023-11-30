@@ -15,13 +15,15 @@
  */
 package com.eslibs.common.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.07.16
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OgrnValidator {
-
-    private OgrnValidator() { }
 
     /**
      * General validate OGRN with 13 and 15 length
@@ -58,7 +60,7 @@ public final class OgrnValidator {
      */
     private boolean isValid13(String value) {
         try {
-            long num12 = (long) Math.floor((Long.parseLong(value) / 10) % 11);
+            long num12 = (long) Math.floor(((double) Long.parseLong(value) / 10) % 11);
             long dgt13 = num12 == 10 ? 0 : num12;
             if (Validators.asInt(value, 12) != dgt13) {
                 return false;
@@ -77,7 +79,7 @@ public final class OgrnValidator {
      */
     private boolean isValid15(String value) {
         try {
-            long num14 = (long) Math.floor((Long.parseLong(value) / 10) % 13);
+            long num14 = (long) Math.floor(((double) Long.parseLong(value) / 10) % 13);
             long dgt15 = num14 % 10;
             if (Validators.asInt(value, 14) != dgt15) {
                 return false;

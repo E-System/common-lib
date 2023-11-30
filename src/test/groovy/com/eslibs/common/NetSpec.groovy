@@ -16,7 +16,7 @@
 
 package com.eslibs.common
 
-import com.eslibs.common.Net
+
 import spock.lang.Specification
 
 /**
@@ -177,7 +177,7 @@ class NetSpec extends Specification {
         !Net.isLocalNetwork("193.168.255.254")
     }
 
-    def "Matches"(){
+    def "Matches"() {
         expect:
         Net.matches("192.168.2.1", "192.168.2.1")
         !Net.matches("192.168.2.1", "192.168.2.0/32")

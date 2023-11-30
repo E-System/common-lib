@@ -15,14 +15,15 @@
  */
 package com.eslibs.common.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RangeValidator {
-
-    private RangeValidator() { }
 
     public boolean isValid(String value, String ranges) {
         if (value == null || StringUtils.isBlank(ranges)) {
@@ -52,14 +53,14 @@ public final class RangeValidator {
                         if ((leftInclude && numValue >= lVal) || numValue > lVal) {
                             return true;
                         }
-                    } catch (Exception ignore) { }
+                    } catch (Exception ignore) {}
                 } else if (rItem.isEmpty()) {
                     try {
                         double rVal = Double.parseDouble(rItem);
                         if ((rightInclude && numValue <= rVal) || numValue < rVal) {
                             return true;
                         }
-                    } catch (Exception ignore) { }
+                    } catch (Exception ignore) {}
                 } else {
                     try {
                         double lVal = Double.parseDouble(lItem);
@@ -67,10 +68,10 @@ public final class RangeValidator {
                         if (((leftInclude && numValue >= lVal) || numValue > lVal) && ((rightInclude && numValue <= rVal) || (!rightInclude && numValue < rVal))) {
                             return true;
                         }
-                    } catch (Exception ignore) { }
+                    } catch (Exception ignore) {}
                 }
             }
-        } catch (Exception ignore) { }
+        } catch (Exception ignore) {}
         return false;
     }
 

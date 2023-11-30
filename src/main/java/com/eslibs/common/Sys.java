@@ -17,10 +17,14 @@
 package com.eslibs.common;
 
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -28,6 +32,7 @@ import java.util.function.Supplier;
  * @since 24.05.15
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Sys {
 
     private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
@@ -38,8 +43,6 @@ public final class Sys {
         MACOS,
         SOLARIS
     }
-
-    private Sys() { }
 
     public static <T> T measure(String prefix, Supplier<T> supplier) {
         return measure(prefix, false, supplier);
@@ -97,8 +100,8 @@ public final class Sys {
      * @param configFileName Configuration file name
      * @return path to configuration file
      */
-    public static String getConfigFilePath(String vendorName, String appName, String configFileName) {
-        return Paths.get(getAppConfigPath(vendorName, appName), configFileName).toString();
+    public static Path getConfigFilePath(String vendorName, String appName, String configFileName) {
+        return getAppConfigPath(vendorName, appName).resolve(configFileName);
     }
 
     /**
@@ -108,16 +111,14 @@ public final class Sys {
      * @param appName    Application name
      * @return path to configuration folder
      */
-    public static String getAppConfigPath(String vendorName, String appName) {
-        switch (Sys.getOS()) {
-            case WINDOWS:
-                if (StringUtils.isBlank(System.getenv("LOCALAPPDATA"))) {
-                    return Paths.get(System.getenv("APPDATA"), vendorName, appName).toString();
-                }
-                return Paths.get(System.getenv("LOCALAPPDATA"), vendorName, appName).toString();
-            default:
-                return Paths.get(System.getenv("HOME"), ".config", vendorName, appName).toString();
+    public static Path getAppConfigPath(String vendorName, String appName) {
+        if (Objects.requireNonNull(Sys.getOS()) == OS.WINDOWS) {
+            if (StringUtils.isBlank(System.getenv("LOCALAPPDATA"))) {
+                return Paths.get(System.getenv("APPDATA"), vendorName, appName);
+            }
+            return Paths.get(System.getenv("LOCALAPPDATA"), vendorName, appName);
         }
+        return Paths.get(System.getenv("HOME"), ".config", vendorName, appName);
     }
 
     /**
@@ -125,8 +126,8 @@ public final class Sys {
      *
      * @return path to application folder
      */
-    public static String getAppPath() {
-        return Paths.get(".").toAbsolutePath().normalize().toString();
+    public static Path getAppPath() {
+        return Paths.get(".").toAbsolutePath().normalize();
     }
 
     public static OS getOS() {

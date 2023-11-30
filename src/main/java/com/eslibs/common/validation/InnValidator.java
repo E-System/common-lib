@@ -16,17 +16,19 @@
 
 package com.eslibs.common.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class InnValidator {
 
     private static final int[] N10_WEIGHTS = {2, 4, 10, 3, 5, 9, 4, 6, 8};
     private static final int[] N11_WEIGHTS = {7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
     private static final int[] N12_WEIGHTS = {3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8};
-
-    private InnValidator() { }
 
     /**
      * Validate INN

@@ -18,6 +18,8 @@ package com.eslibs.common;
 
 import com.eslibs.common.collection.Items;
 import com.eslibs.common.text.Texts;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -32,12 +34,11 @@ import java.util.stream.Collectors;
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 11.08.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Phones {
 
     private static final Function<String, Map.Entry<String, Boolean>> typeMapper = v -> Pair.of(v, isMobile(v));
     private static final Function<String, Map.Entry<String, Boolean>> cleanTypeMapper = v -> Pair.of(clean(v), isMobile(v));
-
-    private Phones() { }
 
     /**
      * Clean phone number (remove spaces, braces, dashes...)

@@ -21,6 +21,15 @@ import java.util.stream.Collectors;
  */
 public final class PrettyInterval {
 
+    public static BiFunction<ChronoUnit, Long, String> DEFAULT_LOCALIZATION = (type, value) -> switch (type) {
+        case YEARS -> value + " " + Texts.pluralize(value, "год", "года", "лет");
+        case MONTHS -> value + " мес.";
+        case DAYS -> value + " дн.";
+        case HOURS -> value + " ч.";
+        case MINUTES -> value + " м.";
+        case SECONDS -> value + " c.";
+        default -> throw new IllegalStateException("Unexpected value: " + type);
+    };
     private final boolean useBraces;
     private final BiFunction<ChronoUnit, Long, String> localization;
 
@@ -89,14 +98,4 @@ public final class PrettyInterval {
 
         return Pair.of(new long[]{hours, minutes, secs}, shift);
     }
-
-    public static BiFunction<ChronoUnit, Long, String> DEFAULT_LOCALIZATION = (type, value) -> switch (type) {
-        case YEARS -> value + " " + Texts.pluralize(value, "год", "года", "лет");
-        case MONTHS -> value + " мес.";
-        case DAYS -> value + " дн.";
-        case HOURS -> value + " ч.";
-        case MINUTES -> value + " м.";
-        case SECONDS -> value + " c.";
-        default -> throw new IllegalStateException("Unexpected value: " + type);
-    };
 }

@@ -17,6 +17,8 @@
 package com.eslibs.common.file;
 
 import com.eslibs.common.Constant;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -30,7 +32,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -44,22 +45,8 @@ import java.util.zip.CheckedInputStream;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class IO {
-
-    private IO() {
-    }
-
-    public static FileType fileType(String fileName) {
-        return FileTypeFinder.get(fileName);
-    }
-
-    public static String mime(String fileName) {
-        return Mime.get(fileName);
-    }
-
-    public static String mime(Path file) {
-        return mime(file.toString());
-    }
 
     public static String fileNameDisposition(boolean attachment, String fileName) throws UnsupportedEncodingException {
         String encoded = URLEncoder.encode(fileName, Charset.defaultCharset()).replace("+", "%20");
@@ -103,7 +90,7 @@ public final class IO {
         if (withCrc) {
             crc32 = ((CheckedInputStream) source).getChecksum().getValue();
         }
-        return new FileInfo(to, FileName.create(to), size, crc32, mime(to));
+        return new FileInfo(to, FileName.of(to), size, crc32, Mime.of(to));
     }
 
     public static String toString(InputStream inputStream) throws IOException {
@@ -152,7 +139,7 @@ public final class IO {
     public static Pair<Path, FileName> download(String url, Function<String, FileName> fileNameCreator) {
         try {
             if (fileNameCreator == null) {
-                fileNameCreator = FileName::create;
+                fileNameCreator = FileName::of;
             }
             URL source = new URL(url);
             Path result = Files.createTempFile("download", "");

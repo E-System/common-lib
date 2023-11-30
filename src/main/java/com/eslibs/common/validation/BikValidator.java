@@ -15,9 +15,11 @@
  */
 package com.eslibs.common.validation;
 
-public final class BikValidator {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    private BikValidator() { }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class BikValidator {
 
     public boolean isValid(String value) {
         if (value == null) {

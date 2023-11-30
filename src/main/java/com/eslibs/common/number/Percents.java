@@ -17,6 +17,8 @@
 package com.eslibs.common.number;
 
 import com.eslibs.common.collection.Items;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.math.BigDecimal;
@@ -32,9 +34,8 @@ import java.util.function.Function;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 07.11.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Percents {
-
-    private Percents() { }
 
     /**
      * Get percent of part in full

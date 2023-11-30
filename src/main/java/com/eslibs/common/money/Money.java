@@ -1,12 +1,14 @@
 package com.eslibs.common.money;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 04.04.2018
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Money {
-
-    private Money() {}
 
     public static MoneyToStr formatFullText() {
         return formatFullText("RUB");

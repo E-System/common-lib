@@ -15,6 +15,9 @@
  */
 package com.eslibs.common.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -25,9 +28,8 @@ import java.util.Date;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PassportDateValidator {
-
-    private PassportDateValidator() { }
 
     public boolean isValid(Date passportDate, Date birthDate) {
         return isValid(passportDate, birthDate, null);

@@ -1,8 +1,6 @@
 package com.eslibs.common.reflection;
 
 import javassist.util.proxy.MethodHandler;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,11 +33,10 @@ public class ProxyFactory {
         }
     }
 
-    @RequiredArgsConstructor
-    private static class CollectHandler implements MethodHandler {
-
-        private final Map<String, Object> values;
-        private final Map<String, String> fields;
+    private record CollectHandler(
+        Map<String, Object> values,
+        Map<String, String> fields
+    ) implements MethodHandler {
 
         @Override
         public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
@@ -48,12 +45,11 @@ public class ProxyFactory {
         }
     }
 
-    @Getter
-    @RequiredArgsConstructor
-    private static class Data {
 
-        private final javassist.util.proxy.ProxyFactory factory;
-        private final Map<String, String> fields;
+    private record Data(
+        javassist.util.proxy.ProxyFactory factory,
+        Map<String, String> fields
+    ) {
 
         public <T> T create(Map<String, Object> values) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
             return (T) factory.create(new Class<?>[0], new Object[0], new CollectHandler(values, fields));

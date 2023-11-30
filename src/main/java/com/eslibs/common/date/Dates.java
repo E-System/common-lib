@@ -41,8 +41,7 @@ public final class Dates {
 
     public static boolean isZoneValid(String id) {
         try {
-            ZoneId zoneId = ZoneId.of(id);
-            return zoneId != null && zoneId.getId().equals(id);
+            return ZoneId.of(id).getId().equals(id);
         } catch (Exception e) {
             return false;
         }

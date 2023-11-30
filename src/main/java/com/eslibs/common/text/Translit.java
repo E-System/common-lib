@@ -10,39 +10,39 @@ class Translit {
     private static final Map<Character, String> CHAR_MAP = new HashMap<>();
 
     static {
-        CHAR_MAP.put("А".charAt(0), "A");
-        CHAR_MAP.put("Б".charAt(0), "B");
-        CHAR_MAP.put("В".charAt(0), "V");
-        CHAR_MAP.put("Г".charAt(0), "G");
-        CHAR_MAP.put("Д".charAt(0), "D");
-        CHAR_MAP.put("Е".charAt(0), "E");
-        CHAR_MAP.put("Ё".charAt(0), "YO");
-        CHAR_MAP.put("Ж".charAt(0), "ZH");
-        CHAR_MAP.put("З".charAt(0), "Z");
-        CHAR_MAP.put("И".charAt(0), "I");
-        CHAR_MAP.put("Й".charAt(0), "Y");
-        CHAR_MAP.put("К".charAt(0), "K");
-        CHAR_MAP.put("Л".charAt(0), "L");
-        CHAR_MAP.put("М".charAt(0), "M");
-        CHAR_MAP.put("Н".charAt(0), "N");
-        CHAR_MAP.put("О".charAt(0), "O");
-        CHAR_MAP.put("П".charAt(0), "P");
-        CHAR_MAP.put("Р".charAt(0), "R");
-        CHAR_MAP.put("С".charAt(0), "S");
-        CHAR_MAP.put("Т".charAt(0), "T");
-        CHAR_MAP.put("У".charAt(0), "U");
-        CHAR_MAP.put("Ф".charAt(0), "F");
-        CHAR_MAP.put("Х".charAt(0), "H");
-        CHAR_MAP.put("Ц".charAt(0), "C");
-        CHAR_MAP.put("Ч".charAt(0), "CH");
-        CHAR_MAP.put("Ш".charAt(0), "SH");
-        CHAR_MAP.put("Щ".charAt(0), "SCH");
-        CHAR_MAP.put("Ъ".charAt(0), "");
-        CHAR_MAP.put("Ы".charAt(0), "Y");
-        CHAR_MAP.put("Ь".charAt(0), "");
-        CHAR_MAP.put("Э".charAt(0), "E");
-        CHAR_MAP.put("Ю".charAt(0), "YU");
-        CHAR_MAP.put("Я".charAt(0), "YA");
+        CHAR_MAP.put('А', "A");
+        CHAR_MAP.put('Б', "B");
+        CHAR_MAP.put('В', "V");
+        CHAR_MAP.put('Г', "G");
+        CHAR_MAP.put('Д', "D");
+        CHAR_MAP.put('Е', "E");
+        CHAR_MAP.put('Ё', "YO");
+        CHAR_MAP.put('Ж', "ZH");
+        CHAR_MAP.put('З', "Z");
+        CHAR_MAP.put('И', "I");
+        CHAR_MAP.put('Й', "Y");
+        CHAR_MAP.put('К', "K");
+        CHAR_MAP.put('Л', "L");
+        CHAR_MAP.put('М', "M");
+        CHAR_MAP.put('Н', "N");
+        CHAR_MAP.put('О', "O");
+        CHAR_MAP.put('П', "P");
+        CHAR_MAP.put('Р', "R");
+        CHAR_MAP.put('С', "S");
+        CHAR_MAP.put('Т', "T");
+        CHAR_MAP.put('У', "U");
+        CHAR_MAP.put('Ф', "F");
+        CHAR_MAP.put('Х', "H");
+        CHAR_MAP.put('Ц', "C");
+        CHAR_MAP.put('Ч', "CH");
+        CHAR_MAP.put('Ш', "SH");
+        CHAR_MAP.put('Щ', "SCH");
+        CHAR_MAP.put('Ъ', "");
+        CHAR_MAP.put('Ы', "Y");
+        CHAR_MAP.put('Ь', "");
+        CHAR_MAP.put('Э', "E");
+        CHAR_MAP.put('Ю', "YU");
+        CHAR_MAP.put('Я', "YA");
         Map<Character, String> lower = CHAR_MAP.entrySet().stream().collect(
             Collectors.toMap(
                 k -> k.getKey().toString().toLowerCase().toCharArray()[0],
@@ -77,10 +77,6 @@ class Translit {
     }
 
     private static String map(Integer v) {
-        final String result = CHAR_MAP.get(Character.toChars(v)[0]);
-        if (result == null) {
-            return String.valueOf(Character.toChars(v));
-        }
-        return result;
+        return CHAR_MAP.getOrDefault(Character.toChars(v)[0], String.valueOf(Character.toChars(v)));
     }
 }

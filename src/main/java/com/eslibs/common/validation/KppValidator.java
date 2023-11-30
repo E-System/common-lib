@@ -15,13 +15,15 @@
  */
 package com.eslibs.common.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 25.07.16
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class KppValidator {
-
-    private KppValidator() { }
 
     /**
      * Validate KPP

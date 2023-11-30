@@ -1,12 +1,14 @@
 package com.eslibs.common;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Lambda {
-
-    private Lambda() { }
 
     public static void run(Runnable executor) {
         run(executor, null);

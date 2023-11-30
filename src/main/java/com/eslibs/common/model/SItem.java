@@ -22,6 +22,4 @@ import java.io.Serializable;
  * @since 10.04.15
  */
 
-public record SItem(String id, String title) implements Serializable {
-
-}
+public record SItem(String id, String title) implements Serializable {}
