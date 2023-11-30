@@ -30,10 +30,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
@@ -48,13 +48,17 @@ import java.util.zip.CheckedInputStream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class IO {
 
-    public static String fileNameDisposition(boolean attachment, String fileName) throws UnsupportedEncodingException {
-        String encoded = URLEncoder.encode(fileName, Charset.defaultCharset()).replace("+", "%20");
-        return (attachment ? "attachment" : "inline") + "; filename=\"" + fileName + "\"; filename*=UTF-8''" + encoded;
+    public static String fileNameDisposition(boolean attachment, String fileName) {
+        return fileNameDisposition(attachment, fileName, StandardCharsets.UTF_8);
+    }
+
+    public static String fileNameDisposition(boolean attachment, String fileName, Charset charset) {
+        return ContentDisposition.encode(attachment, fileName, charset);
     }
 
     public static Map.Entry<String, Long> readCrc32(String fileName) throws IOException {
         return readCrc32(new FileInputStream(fileName));
+        return readCrc32(Paths.get(fileName));
     }
 
     public static Map.Entry<String, Long> readCrc32(Path file) throws IOException {
