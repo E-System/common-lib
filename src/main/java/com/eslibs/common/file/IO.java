@@ -25,12 +25,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -57,7 +58,6 @@ public final class IO {
     }
 
     public static Map.Entry<String, Long> readCrc32(String fileName) throws IOException {
-        return readCrc32(new FileInputStream(fileName));
         return readCrc32(Paths.get(fileName));
     }
 
@@ -145,11 +145,11 @@ public final class IO {
             if (fileNameCreator == null) {
                 fileNameCreator = FileName::of;
             }
-            URL source = new URL(url);
+            URL source = new URI(url).toURL();
             Path result = Files.createTempFile("download", "");
-            FileUtils.copyURLToFile(source, result.toFile());
+            FileUtils.copyURLToFile(source, result.toFile(), (int) Constant.DEFAULT_CONNECT_TIMEOUT, (int) Constant.DEFAULT_RW_TIMEOUT);
             return Pair.of(result, fileNameCreator.apply(source.getPath()));
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             return null;
         }
     }

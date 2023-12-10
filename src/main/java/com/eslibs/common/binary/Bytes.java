@@ -19,9 +19,8 @@ package com.eslibs.common.binary;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
+import java.util.HexFormat;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * @author Vitaliy Savchenko - savchenko.v@ext-system.com
@@ -82,7 +81,7 @@ public class Bytes {
      * @return строку hex значения
      */
     public static String toHex(byte b) {
-        return String.format("%02X", b & 0xFF);
+        return HexFormat.of().withUpperCase().toHexDigits(b);
     }
 
     /**
@@ -93,9 +92,7 @@ public class Bytes {
      */
     public static String toHex(byte... b) {
         Objects.requireNonNull(b);
-        return IntStream.range(0, b.length)
-            .mapToObj(i -> toHex(b[i]))
-            .collect(Collectors.joining(" "));
+        return HexFormat.of().withUpperCase().withDelimiter(" ").formatHex(b);
     }
 
     /**

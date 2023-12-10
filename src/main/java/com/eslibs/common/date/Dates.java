@@ -18,6 +18,8 @@ package com.eslibs.common.date;
 
 import com.eslibs.common.Constant;
 import com.eslibs.common.model.SItem;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -35,9 +37,8 @@ import java.util.stream.Stream;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Dates {
-
-    private Dates() {}
 
     public static boolean isZoneValid(String id) {
         try {

@@ -47,7 +47,7 @@ public class BuildInfo implements Serializable {
         this.name = name;
         this.version = version;
         this.date = date;
-        hash = Hash.md5().get(name + version + date);
+        hash = Hash.md5().of(name + version + date);
     }
 
     public Map<String, String> asMap() {

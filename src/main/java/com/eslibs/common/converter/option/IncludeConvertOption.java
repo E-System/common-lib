@@ -12,7 +12,6 @@ import java.util.LinkedHashSet;
 @NoArgsConstructor
 public class IncludeConvertOption extends LinkedHashSet<String> implements ConvertOption {
 
-
     public IncludeConvertOption(String items) {
         this(StringUtils.isBlank(items) ? Collections.emptySet() : new LinkedHashSet<>(Texts.splitBy(",").toList(items)));
     }

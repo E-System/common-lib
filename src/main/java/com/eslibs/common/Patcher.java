@@ -92,15 +92,8 @@ public class Patcher<T, R> {
         return new Result(result);
     }
 
-    @ToString
-    @Getter
-    @EqualsAndHashCode
-    @RequiredArgsConstructor
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Result {
-
-        private final Collection<UpdatedField> items;
-    }
+    public record Result(Collection<UpdatedField> items) {}
 
     @ToString
     @Getter

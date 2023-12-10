@@ -24,7 +24,7 @@ package com.eslibs.common.exception;
  */
 public class ESException extends Exception {
 
-    public ESException() { }
+    public ESException() {}
 
     public ESException(String message) {
         super(message);

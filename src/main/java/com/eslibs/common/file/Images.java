@@ -17,9 +17,7 @@
 package com.eslibs.common.file;
 
 import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
@@ -39,9 +37,8 @@ import java.util.function.Consumer;
  * @since 10.04.15
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Images {
-
-    private Images() { }
 
     public static Info info(Path source) {
         try (InputStream stream = Files.newInputStream(source)) {
@@ -73,7 +70,7 @@ public final class Images {
             ImageReader reader = readers.next();
             try {
                 reader.setInput(source);
-                return Info.of(reader.getWidth(0), reader.getHeight(0));
+                return Info.with(reader.getWidth(0), reader.getHeight(0));
             } finally {
                 reader.dispose();
             }
@@ -168,20 +165,17 @@ public final class Images {
         });
     }
 
-    @Getter
-    @ToString
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Info {
+    public record Info(
+        int width,
+        int height
+    ) {
 
-        private final int width;
-        private final int height;
+        public static Info with(int width, int height) {
+            return new Info(width, height);
+        }
 
         public boolean isVertical() {
             return height > width;
-        }
-
-        public static Info of(int width, int height) {
-            return new Info(width, height);
         }
     }
 }

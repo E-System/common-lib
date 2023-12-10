@@ -3,11 +3,10 @@ package com.eslibs.common.text;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VariableResolver {
@@ -15,12 +14,12 @@ public final class VariableResolver {
     private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile(".*(\\$\\{(.*)}).*");
 
     private static Map<String, String> extract(CharSequence sequence) {
-        Matcher matcher = PLACEHOLDER_PATTERN.matcher(sequence);
-        Map<String, String> result = new HashMap<>(2);
-        while (matcher.find()) {
-            result.put(matcher.group(1), matcher.group(2));
-        }
-        return result;
+        return PLACEHOLDER_PATTERN.matcher(sequence).results().collect(
+            Collectors.toMap(
+                k -> k.group(1),
+                v -> v.group(2)
+            )
+        );
     }
 
     static Object resolve(Object value, Function<String, Object> variableResolver) {

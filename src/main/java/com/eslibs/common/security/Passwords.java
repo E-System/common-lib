@@ -16,16 +16,17 @@
 
 package com.eslibs.common.security;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Passwords {
 
     public static final int DEFAULT_LENGTH = 6;
-
-    private Passwords() { }
 
     public static String numeric() {
         return numeric(DEFAULT_LENGTH);

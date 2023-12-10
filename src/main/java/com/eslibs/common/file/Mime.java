@@ -53,7 +53,7 @@ public final class Mime {
         private String extension = null;
         private String mime = null;
         @Getter
-        private Map<String, String> result = new HashMap<>();
+        private final Map<String, String> result = new HashMap<>();
 
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) {

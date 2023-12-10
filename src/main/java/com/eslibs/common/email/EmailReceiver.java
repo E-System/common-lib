@@ -71,7 +71,7 @@ public class EmailReceiver extends EmailProcessor {
                 Path realPathPrefix = pathToSave;
                 String messageId = headers.get("Message-ID");
                 if (StringUtils.isNotEmpty(messageId)) {
-                    realPathPrefix = pathToSave.resolve(Hash.md5().get(messageId));
+                    realPathPrefix = pathToSave.resolve(Hash.md5().of(messageId));
                 }
                 Collection<com.eslibs.common.email.Message.Attachment> attachments = new ArrayList<>(processAttachments(realPathPrefix, message));
                 log.trace("Attachments: {}", attachments);

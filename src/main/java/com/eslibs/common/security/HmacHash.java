@@ -16,16 +16,16 @@ public class HmacHash implements StrHash {
     private final boolean hexEncode;
 
     @Override
-    public String get(String value) {
+    public String of(String value) {
         try {
-            return get(Constant.bytes(value));
+            return of(Constant.bytes(value));
         } catch (Exception ignore) {
             return null;
         }
     }
 
     @Override
-    public String get(byte[] value) {
+    public String of(byte[] value) {
         try {
             String alg = "Hmac" + algorithm;
             Mac mac = Mac.getInstance(alg);

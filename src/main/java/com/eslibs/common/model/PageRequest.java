@@ -37,7 +37,6 @@ public class PageRequest implements Serializable {
             throw new IllegalArgumentException("limit must be greater than zero");
         }
         this.limit = limit;
-
         this.page = 1;
         this.offset = 0;
     }

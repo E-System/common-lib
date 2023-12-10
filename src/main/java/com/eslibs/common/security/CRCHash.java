@@ -4,17 +4,17 @@ import com.eslibs.common.Constant;
 
 public interface CRCHash {
 
-    default long get(String value) {
-        return get(Constant.bytes(value));
+    default long of(String value) {
+        return of(Constant.bytes(value));
     }
 
-    long get(byte[] value);
+    long of(byte[] value);
 
     default boolean valid(String value, long hash) {
-        return get(value) == hash;
+        return of(value) == hash;
     }
 
     default boolean valid(byte[] value, long hash) {
-        return get(value) == hash;
+        return of(value) == hash;
     }
 }

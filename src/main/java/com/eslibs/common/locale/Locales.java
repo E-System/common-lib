@@ -1,5 +1,7 @@
 package com.eslibs.common.locale;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,9 +13,8 @@ import java.util.Locale;
  * @since 25.01.2018
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Locales {
-
-    private Locales() { }
 
     public static Locale from(String code) {
         if (StringUtils.isBlank(code)) {

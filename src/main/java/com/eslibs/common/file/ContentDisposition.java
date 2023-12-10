@@ -1,4 +1,4 @@
-package com.es.lib.common.file;
+package com.eslibs.common.file;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

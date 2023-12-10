@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 public class CRC16Hash implements CRCHash {
 
     @Override
-    public long get(byte[] value) {
+    public long of(byte[] value) {
         int crc = 0xFFFF;
         for (byte v : value) {
             crc = ((crc >>> 8) | (crc << 8)) & 0xFFFF;

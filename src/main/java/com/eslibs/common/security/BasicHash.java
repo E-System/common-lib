@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import java.security.MessageDigest;
+import java.util.HexFormat;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class BasicHash implements StrHash {
@@ -12,22 +13,22 @@ public class BasicHash implements StrHash {
     private final String algorithm;
 
     @Override
-    public String get(String value) {
+    public String of(String value) {
         if (value == null) {
             return null;
         }
-        return get(Constant.bytes(value));
+        return of(Constant.bytes(value));
     }
 
     @Override
-    public String get(byte[] value) {
+    public String of(byte[] value) {
         if (value == null) {
             return null;
         }
         try {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
             digest.update(value);
-            return Hex.get(digest.digest());
+            return HexFormat.of().formatHex(digest.digest());
         } catch (Exception ignore) {
             return null;
         }

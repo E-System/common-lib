@@ -9,7 +9,7 @@ import java.util.zip.CRC32;
 public class CRC32Hash implements CRCHash {
 
     @Override
-    public long get(byte[] value) {
+    public long of(byte[] value) {
         CRC32 crc = new CRC32();
         crc.update(value);
         return crc.getValue();

@@ -10,12 +10,12 @@ public class BCryptHash implements StrHash {
     private final int level;
 
     @Override
-    public String get(String value) {
+    public String of(String value) {
         return BCrypt.hashpw(value, BCrypt.gensalt(level));
     }
 
     @Override
-    public String get(byte[] value) {
+    public String of(byte[] value) {
         return BCrypt.hashpw(String.valueOf(value), BCrypt.gensalt(level));
     }
 

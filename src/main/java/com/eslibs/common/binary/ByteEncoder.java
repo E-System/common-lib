@@ -1,8 +1,7 @@
 package com.eslibs.common.binary;
 
-import com.eslibs.common.security.Hex;
-
 import java.util.Base64;
+import java.util.HexFormat;
 
 public record ByteEncoder(byte[] bytes) {
 
@@ -30,11 +29,14 @@ public record ByteEncoder(byte[] bytes) {
     }
 
     public String hexEncode(boolean upperCase) {
-        String result = Hex.get(bytes);
-        if (result == null || !upperCase) {
-            return result;
+        if (bytes == null) {
+            return null;
         }
-        return result.toUpperCase();
+        HexFormat hexFormat = HexFormat.of();
+        if (upperCase) {
+            hexFormat = hexFormat.withUpperCase();
+        }
+        return hexFormat.formatHex(bytes);
     }
 
     public String string() {

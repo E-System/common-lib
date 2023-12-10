@@ -10,7 +10,7 @@ public class CRC16ccittHash implements CRCHash {
     private final int skipLen;
 
     @Override
-    public long get(byte[] value) {
+    public long of(byte[] value) {
         int crc = 0xFFFF;          // init
         int polynom = 0x1021;   // 0001 0000 0010 0001
         for (int i = 0; i < value.length; i++) {
