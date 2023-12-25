@@ -24,7 +24,7 @@ plugins {
     jacoco
     `java-library`
     `maven-publish`
-    id("com.github.ben-manes.versions") version "0.44.0"
+    id("com.github.ben-manes.versions") version "0.50.0"
     id("org.sonarqube") version "4.4.1.3373"
 }
 
@@ -81,10 +81,10 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.16.0"
+val jacksonVersion = "2.16.1"
 dependencies {
-    api("org.apache.commons:commons-lang3:3.13.0")
-    api("commons-io:commons-io:2.14.0")
+    api("org.apache.commons:commons-lang3:3.14.0")
+    api("commons-io:commons-io:2.15.1")
     api("org.slf4j:slf4j-api:2.0.9")
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("org.eclipse.angus:angus-mail:2.0.2")
@@ -97,7 +97,7 @@ dependencies {
 
     testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
     testImplementation("org.apache.groovy:groovy:4.0.15")
-    testImplementation("ch.qos.logback:logback-classic:1.4.11")
+    testImplementation("ch.qos.logback:logback-classic:1.4.12")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 
