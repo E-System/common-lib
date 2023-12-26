@@ -8,6 +8,7 @@ import java.util.function.Function
 class TextsSpec extends Specification {
 
     static class SplitItem {
+
         int v1
         int v2
 
@@ -151,12 +152,9 @@ class TextsSpec extends Specification {
 
     def "Split to object"() {
         expect:
-        splitter.toObject(value, new Function<String[], SplitItem>() {
-            @Override
-            SplitItem apply(String[] v) {
-                return new SplitItem(Integer.parseInt(v[0]), Integer.parseInt(v[1]))
-            }
-        }) == result
+        splitter.toObject(value) {
+            new SplitItem(Integer.parseInt(it[0]), Integer.parseInt(it[1]))
+        } == result
         where:
         value   | splitter                  || result
         ""      | Texts.splitBy(";")        || null
