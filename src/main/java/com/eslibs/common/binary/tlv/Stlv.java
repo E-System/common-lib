@@ -16,7 +16,7 @@ class Stlv extends AbstractTlv<Collection<? extends ITlv>> {
         }
         try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
             for (ITlv v : value) {
-                result.write(v.getData());
+                result.write(v.getBytes());
             }
             return result.toByteArray();
         }
