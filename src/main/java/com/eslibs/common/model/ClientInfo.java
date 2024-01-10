@@ -18,6 +18,7 @@ package com.eslibs.common.model;
 import com.eslibs.common.collection.Items;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -29,7 +30,7 @@ public record ClientInfo(
     Platform platform,
     String platformVersion,
     String appVersion
-) {
+) implements Serializable {
 
     private static final String APP_PLATFORM_KEY = "es-app-platform";
     private static final String APP_PLATFORM_VERSION_KEY = "es-app-platform-version";

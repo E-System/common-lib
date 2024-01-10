@@ -1,7 +1,6 @@
 package com.eslibs.common.date;
 
 import com.eslibs.common.Constant;
-import com.eslibs.common.text.Texts;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Duration;
@@ -21,21 +20,12 @@ import java.util.stream.Collectors;
  */
 public final class PrettyInterval {
 
-    public static BiFunction<ChronoUnit, Long, String> DEFAULT_LOCALIZATION = (type, value) -> switch (type) {
-        case YEARS -> value + " " + Texts.pluralize(value, "год", "года", "лет");
-        case MONTHS -> value + " мес.";
-        case DAYS -> value + " дн.";
-        case HOURS -> value + " ч.";
-        case MINUTES -> value + " м.";
-        case SECONDS -> value + " c.";
-        default -> throw new IllegalStateException("Unexpected value: " + type);
-    };
     private final boolean useBraces;
     private final BiFunction<ChronoUnit, Long, String> localization;
 
     PrettyInterval(boolean useBraces, BiFunction<ChronoUnit, Long, String> localization) {
         this.useBraces = useBraces;
-        this.localization = localization != null ? localization : DEFAULT_LOCALIZATION;
+        this.localization = localization != null ? localization : Constant.DEFAULT_LOCALIZATION;
     }
 
     public String get(Date date) {

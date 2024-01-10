@@ -12,7 +12,6 @@ public class ContentDisposition {
 
     private static final BitSet PRINTABLE = new BitSet(256);
 
-
     static {
         for (int i = 33; i <= 126; i++) {
             PRINTABLE.set(i);

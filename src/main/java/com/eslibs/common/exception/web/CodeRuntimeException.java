@@ -10,7 +10,7 @@ public class CodeRuntimeException extends RuntimeException {
     private final String code;
 
     public CodeRuntimeException(String code, String message) {
-       this(code, message, null);
+        this(code, message, null);
     }
 
     public CodeRuntimeException(String code, String message, Throwable cause) {

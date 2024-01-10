@@ -16,6 +16,8 @@
 
 package com.eslibs.common.collection;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -28,10 +30,8 @@ import java.util.stream.Stream;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Items {
-
-    private Items() {
-    }
 
     /**
      * Create new map without empty values
@@ -194,7 +194,7 @@ public final class Items {
      * @param list  input array
      * @param count max any output array size
      * @param <T>   type of array
-     * @return Array of N array
+     * @return List of N array
      */
     public static <T> List<List<T>> partition(List<T> list, int count) {
         List<List<T>> parts = new ArrayList<>();
@@ -441,7 +441,7 @@ public final class Items {
             return null;
         }
         if (items.size() == 1) {
-            return items.get(0);
+            return items.getFirst();
         }
         Integer index = indexSource.get();
         if (index == null || index >= items.size()) {

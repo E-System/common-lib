@@ -19,6 +19,8 @@ package com.eslibs.common.reflection;
 import com.eslibs.common.collection.Items;
 import com.eslibs.common.exception.ESRuntimeException;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
@@ -37,9 +39,8 @@ import static org.reflections.scanners.Scanners.*;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Reflects {
-
-    private Reflects() {}
 
     public static Map<String, Object> toMap(final Object instance, Function<Object, Object> converter) {
         return toMap(instance, null, converter);

@@ -1,5 +1,6 @@
 package com.eslibs.common.file;
 
+import java.io.Serializable;
 import java.nio.file.Path;
 
 public record FileInfo(
@@ -8,7 +9,7 @@ public record FileInfo(
     long size,
     long crc32,
     String mime
-) {
+) implements Serializable {
 
     public static FileInfo of(FileName fileName, long size, long crc32, String mime) {
         return new FileInfo(null, fileName, size, crc32, mime);

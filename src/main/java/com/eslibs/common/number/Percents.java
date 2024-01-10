@@ -182,7 +182,7 @@ public final class Percents {
             totalSum += sumPart;
         }
         if (totalSum != sum) {
-            Map.Entry<T, Integer> entry = result.get(0);
+            Map.Entry<T, Integer> entry = result.getFirst();
             entry.setValue(entry.getValue() + (sum - totalSum));
         }
         return result;

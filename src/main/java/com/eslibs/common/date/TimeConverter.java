@@ -16,15 +16,16 @@
 package com.eslibs.common.date;
 
 import com.eslibs.common.Constant;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 20.12.2017
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TimeConverter {
-
-    private TimeConverter() { }
 
     public String toString(long value) {
         long hours = value / Constant.MILLIS_IN_HOUR;
@@ -69,7 +70,7 @@ public final class TimeConverter {
         }
         return Long.parseLong(value);
     }
-    
+
     public static TimeConverter getInstance() {
         return InstanceWrapper.INSTANCE;
     }

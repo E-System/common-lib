@@ -17,7 +17,7 @@
 package com.eslibs.common.exception;
 
 /**
- * Базовое обрабатываемое исключение
+ * Base checked exception
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 05.06.15

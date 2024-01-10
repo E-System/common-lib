@@ -18,9 +18,10 @@ package com.eslibs.common.file;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.nio.file.Path;
 
-public record FileName(String name, String ext) {
+public record FileName(String name, String ext) implements Serializable {
 
     public static FileName of(String name, String ext) {
         return new FileName(name, ext);

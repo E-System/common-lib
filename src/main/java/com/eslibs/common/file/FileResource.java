@@ -3,7 +3,6 @@ package com.eslibs.common.file;
 import java.nio.file.Path;
 
 public record FileResource(
-
     Path path,
     boolean windows,
     boolean external

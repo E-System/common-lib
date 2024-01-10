@@ -168,9 +168,9 @@ public class FullName {
 
         private String processList(List<String> parts) {
             if (parts.size() == 1) {
-                return parts.get(0).trim();
+                return parts.getFirst().trim();
             }
-            String result = left ? "" : parts.get(0).trim() + " ";
+            String result = left ? "" : parts.getFirst().trim() + " ";
             StringJoiner joiner = new StringJoiner(" ");
             for (String p : parts.subList(1, parts.size())) {
                 if (StringUtils.isNotBlank(p)) {
@@ -179,7 +179,7 @@ public class FullName {
             }
             result += joiner.toString();
             if (left) {
-                result += (" " + parts.get(0));
+                result += (" " + parts.getFirst());
             }
             return result;
         }

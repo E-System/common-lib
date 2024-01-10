@@ -16,12 +16,16 @@
 
 package com.eslibs.common;
 
+import com.eslibs.common.text.Texts;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 
 /**
  * Base constants
@@ -30,6 +34,16 @@ import java.util.concurrent.TimeUnit;
  * @since 10.04.15
  */
 public interface Constant {
+
+    BiFunction<ChronoUnit, Long, String> DEFAULT_LOCALIZATION = (type, value) -> switch (type) {
+        case YEARS -> value + " " + Texts.pluralize(value, "год", "года", "лет");
+        case MONTHS -> value + " мес.";
+        case DAYS -> value + " дн.";
+        case HOURS -> value + " ч.";
+        case MINUTES -> value + " м.";
+        case SECONDS -> value + " c.";
+        default -> throw new IllegalStateException("Unexpected value: " + type);
+    };
 
     long DEFAULT_CONNECT_TIMEOUT = TimeUnit.SECONDS.toMillis(20);
 
