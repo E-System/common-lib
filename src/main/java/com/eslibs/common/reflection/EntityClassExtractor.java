@@ -16,10 +16,7 @@
 
 package com.eslibs.common.reflection;
 
-import com.eslibs.common.exception.ESRuntimeException;
-
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -44,11 +41,7 @@ public class EntityClassExtractor<T> implements Serializable {
     }
 
     protected <K> K create(Class<K> entityClass) {
-        try {
-            return entityClass.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            throw new ESRuntimeException(e);
-        }
+        return Reflects.newInstance(entityClass);
     }
 
     protected <K> Class<K> extractClass(int index) {

@@ -8,59 +8,59 @@ class FileNameSpec extends Specification {
 
     def "Only name"() {
         when:
-        def res = FileName.create('fileName')
+        def res = FileName.of('fileName')
         then:
-        res.name == 'fileName'
-        res.ext == ''
+        res.name() == 'fileName'
+        res.ext() == ''
     }
 
     def "Only name with path"() {
         when:
-        def res = FileName.create('/tmp/fileName')
+        def res = FileName.of('/tmp/fileName')
         then:
-        res.name == 'fileName'
-        res.ext == ''
+        res.name() == 'fileName'
+        res.ext() == ''
     }
 
     def "Name and extension"() {
         when:
-        def res = FileName.create('fileName.txt')
+        def res = FileName.of('fileName.txt')
         then:
-        res.name == 'fileName'
-        res.ext == 'txt'
+        res.name() == 'fileName'
+        res.ext() == 'txt'
     }
 
     def "Name and extension"() {
         expect:
-        FileName.create('fileName.txt').ext == 'txt'
-        FileName.create('fileName.Txt').ext == 'txt'
-        FileName.create('fileName.TXT').ext == 'txt'
-        FileName.create('fileName.Txt', false).ext == 'Txt'
-        FileName.create('fileName.TXT', false).ext == 'TXT'
+        FileName.of('fileName.txt').ext() == 'txt'
+        FileName.of('fileName.Txt').ext() == 'txt'
+        FileName.of('fileName.TXT').ext() == 'txt'
+        FileName.of('fileName.Txt', false).ext() == 'Txt'
+        FileName.of('fileName.TXT', false).ext() == 'TXT'
     }
 
     def "Name and extension with path"() {
         when:
-        def res = FileName.create('/tmp/fileName.txt')
+        def res = FileName.of('/tmp/fileName.txt')
         then:
-        res.name == 'fileName'
-        res.ext == 'txt'
+        res.name() == 'fileName'
+        res.ext() == 'txt'
     }
 
     def "Name and extension from path"() {
         when:
-        def res = FileName.create(Paths.get('/tmp/fileName.txt'))
+        def res = FileName.of(Paths.get('/tmp/fileName.txt'))
         then:
-        res.name == 'fileName'
-        res.ext == 'txt'
+        res.name() == 'fileName'
+        res.ext() == 'txt'
     }
 
     def "Name and ext"() {
         when:
-        def res = FileName.create('fileName', 'txt')
+        def res = FileName.of('fileName', 'txt')
         then:
-        res.name == 'fileName'
-        res.ext == 'txt'
+        res.name() == 'fileName'
+        res.ext() == 'txt'
     }
 
     def "FullName"() {

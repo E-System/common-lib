@@ -98,7 +98,7 @@ class IOSpec extends Specification {
 
     def "Get file type"() {
         expect:
-        IO.fileType(ext) == result
+        FileType.of(ext) == result
         where:
         ext                   | result
         null                  | FileType.OTHER
@@ -143,7 +143,7 @@ class IOSpec extends Specification {
 
     def "Get icon"() {
         expect:
-        IO.fileType(ext).icon == icon
+        FileType.of(ext).icon == icon
         where:
         ext    | icon
         null   | "file-o"
@@ -190,7 +190,7 @@ class IOSpec extends Specification {
 
     def "Get mime"() {
         expect:
-        IO.mime(fileName) == result
+        Mime.of(fileName) == result
         where:
         fileName        || result
         ""              || "application/octet-stream"
@@ -257,9 +257,9 @@ class IOSpec extends Specification {
 
     def "Get mime from path"() {
         expect:
-        IO.mime(Paths.get('/tmp/config.xml')) == 'application/xml'
-        IO.mime(Paths.get('config.xml')) == 'application/xml'
-        IO.mime(Paths.get('xml')) == 'application/xml'
+        Mime.of(Paths.get('/tmp/config.xml')) == 'application/xml'
+        Mime.of(Paths.get('config.xml')) == 'application/xml'
+        Mime.of(Paths.get('xml')) == 'application/xml'
     }
 
 

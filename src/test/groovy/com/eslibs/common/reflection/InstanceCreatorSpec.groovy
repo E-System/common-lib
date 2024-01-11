@@ -12,13 +12,17 @@ class InstanceCreatorSpec extends Specification {
         def o3 = cls.createThirdInstance()
         then:
         o1.class == EntityType1.class
+        (o1 as EntityType1).id == 1
         o2.class == EntityType2.class
+        (o2 as EntityType2).id == 2
         o3.class == EntityType3.class
+        (o3 as EntityType3).id == 3
     }
 
     class BaseClass<T1, T2, T3> {}
 
     class TestClass extends BaseClass<EntityType1, EntityType2, EntityType3> {
+
         InstanceCreator creator = InstanceCreator.create(getClass(), EntityType2.class, EntityType3.class)
 
         def createInstance() {
@@ -35,6 +39,7 @@ class InstanceCreatorSpec extends Specification {
     }
 
     static class EntityType1 {
+
         Integer id
 
         EntityType1() {
@@ -43,6 +48,7 @@ class InstanceCreatorSpec extends Specification {
     }
 
     static class EntityType2 {
+
         Integer id
 
         EntityType2() {
@@ -51,6 +57,7 @@ class InstanceCreatorSpec extends Specification {
     }
 
     static class EntityType3 {
+
         Integer id
 
         EntityType3() {

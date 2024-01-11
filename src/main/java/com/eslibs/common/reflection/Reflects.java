@@ -144,25 +144,19 @@ public final class Reflects {
     }
 
     public static Type[] extractTypes(Type type) {
-        Type[] result = null;
-        if (type instanceof ParameterizedType) {
-            result = ((ParameterizedType) type).getActualTypeArguments();
-        } else if (type instanceof Class<?> injectionPointClass) {
-            result = ((ParameterizedType) injectionPointClass.getGenericSuperclass()).getActualTypeArguments();
-        }
-        if (result == null) {
-            throw new ESRuntimeException("Entity type not found with " + type);
-        }
-        return result;
+        return switch (type) {
+            case ParameterizedType v -> v.getActualTypeArguments();
+            case Class<?> v -> ((ParameterizedType) v.getGenericSuperclass()).getActualTypeArguments();
+            default -> throw new ESRuntimeException("Entity type not found with " + type);
+        };
     }
 
     public static Class<?> extractClass(Type type) {
-        if (type instanceof Class) {
-            return (Class<?>) type;
-        } else if (type instanceof ParameterizedType) {
-            return (Class<?>) ((ParameterizedType) type).getOwnerType();
-        }
-        throw new ESRuntimeException("Unknown type: " + type);
+        return switch (type) {
+            case Class<?> v -> v;
+            case ParameterizedType v -> (Class<?>) v.getOwnerType();
+            default -> throw new ESRuntimeException("Unknown type: " + type);
+        };
     }
 
     public static <T extends Annotation> T getAnnotation(Class<?> cls, Class<T> annotationClass) {
@@ -256,8 +250,9 @@ public final class Reflects {
 
     public static <T> T newInstance(Class<T> instanceClass) {
         try {
-            return instanceClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return instanceClass.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException e) {
             throw new ESRuntimeException(e);
         }
     }
