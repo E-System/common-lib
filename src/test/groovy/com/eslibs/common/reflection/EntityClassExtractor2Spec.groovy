@@ -1,5 +1,7 @@
 package com.eslibs.common.reflection
 
+import com.eslibs.common.reflection.fixture.EntityType1
+import com.eslibs.common.reflection.fixture.EntityType2
 import spock.lang.Specification
 
 class EntityClassExtractor2Spec extends Specification {
@@ -15,20 +17,4 @@ class EntityClassExtractor2Spec extends Specification {
     }
 
     class TestClass extends EntityClassExtractor2<EntityType1, EntityType2> {}
-
-    static class EntityType1 {
-        Integer id
-
-        EntityType1() {
-            id = 1
-        }
-    }
-
-    static class EntityType2 {
-        Integer id
-
-        EntityType2() {
-            id = 2
-        }
-    }
 }

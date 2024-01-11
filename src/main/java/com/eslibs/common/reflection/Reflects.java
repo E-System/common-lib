@@ -144,11 +144,14 @@ public final class Reflects {
     }
 
     public static Type[] extractTypes(Type type) {
-        return switch (type) {
-            case ParameterizedType v -> v.getActualTypeArguments();
-            case Class<?> v -> ((ParameterizedType) v.getGenericSuperclass()).getActualTypeArguments();
-            default -> throw new ESRuntimeException("Entity type not found with " + type);
-        };
+        Type next = type;
+        while (next instanceof Class<?> cls) {
+            next = cls.getGenericSuperclass();
+        }
+        if (Objects.requireNonNull(next) instanceof ParameterizedType v) {
+            return v.getActualTypeArguments();
+        }
+        throw new ESRuntimeException("Entity type not found with " + type);
     }
 
     public static Class<?> extractClass(Type type) {
@@ -204,10 +207,17 @@ public final class Reflects {
     }
 
     public static Set<String> getResources(String prefix, Predicate<String> namePredicate) {
+        return getResources(Collections.singletonList(prefix), namePredicate);
+    }
+
+    public static Set<String> getResources(Collection<String> packages, Predicate<String> namePredicate) {
         if (namePredicate == null) {
             namePredicate = v -> true;
         }
-        return new Reflections(prefix, Resources).get(Resources.with(".*").filter(namePredicate));
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+        packages.forEach(builder::forPackages);
+        builder.addScanners(Resources);
+        return new Reflections(builder).get(Resources.with(".*").filter(namePredicate));
     }
 
     public static <T> Collection<T> getInnerClassStaticObjectByName(Class<?> holder, String name) throws IllegalAccessException {
@@ -261,7 +271,6 @@ public final class Reflects {
         String key = aClass.getCanonicalName() + "." + capitalizedField;
         return GETTER_HASH_MAP.computeIfAbsent(key, v -> {
             Method getter = null;
-            Method setter = null;
             try {
                 getter = aClass.getMethod("get" + capitalizedField);
             } catch (NoSuchMethodException e) {
@@ -272,6 +281,7 @@ public final class Reflects {
             if (getter == null) {
                 throw new RuntimeException("Getter not found for field: " + capitalizedField);
             }
+            Method setter;
             try {
                 setter = aClass.getMethod("set" + capitalizedField, getter.getReturnType());
             } catch (NoSuchMethodException e) {

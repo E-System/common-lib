@@ -1,59 +1,54 @@
 package com.eslibs.common.reflection
 
+import com.eslibs.common.reflection.fixture.EntityType1
+import com.eslibs.common.reflection.fixture.EntityType2
+import com.eslibs.common.reflection.fixture.EntityType3
 import spock.lang.Specification
 
 class EntityClassExtractorSpec extends Specification {
 
     def "Extract class"() {
-        when:
-        def item1 = new TestClass1()
-        def item2 = new TestClass2()
-        def item3 = new TestClass3()
-        then:
-        item1.getEntityClass() == EntityType1.class
-        item1.createInstance().id == 1
-        item2.getEntityClass() == EntityType1.class
-        item2.getSecondEntityClass() == EntityType2.class
-        item2.createInstance().id == 1
-        item2.createSecondInstance().id == 2
-        item3.getEntityClass() == EntityType1.class
-        item3.getSecondEntityClass() == EntityType2.class
-        item3.getThirdEntityClass() == EntityType3.class
-        item3.createInstance().id == 1
-        item3.createSecondInstance().id == 2
-        item3.createThirdInstance().id == 3
-    }
-
-    class TestClass1 extends EntityClassExtractor<EntityType1> {}
-
-    class TestClass2 extends EntityClassExtractor2<EntityType1, EntityType2> {}
-
-    class TestClass3 extends EntityClassExtractor3<EntityType1, EntityType2, EntityType3> {}
-
-    static class EntityType1 {
-
-        Integer id
-
-        EntityType1() {
-            id = 1
+        expect:
+        with(value1) {
+            getEntityClass() == EntityType1.class
+            createInstance().id == 1
         }
-    }
-
-    static class EntityType2 {
-
-        Integer id
-
-        EntityType2() {
-            id = 2
+        with(value2) {
+            getEntityClass() == EntityType1.class
+            getSecondEntityClass() == EntityType2.class
+            createInstance().id == 1
+            createSecondInstance().id == 2
         }
-    }
-
-    static class EntityType3 {
-
-        Integer id
-
-        EntityType3() {
-            id = 3
+        with(value3) {
+            getEntityClass() == EntityType1.class
+            getSecondEntityClass() == EntityType2.class
+            getThirdEntityClass() == EntityType3.class
+            createInstance().id == 1
+            createSecondInstance().id == 2
+            createThirdInstance().id == 3
         }
+        where:
+        value1 << [new TestClass1(), new TestClass12(), new TestClass13()]
+        value2 << [new TestClass2(), new TestClass22(), new TestClass23()]
+        value3 << [new TestClass3(), new TestClass32(), new TestClass33()]
     }
+
+    static class TestClass1 extends EntityClassExtractor<EntityType1> {}
+
+    static class TestClass2 extends EntityClassExtractor2<EntityType1, EntityType2> {}
+
+    static class TestClass3 extends EntityClassExtractor3<EntityType1, EntityType2, EntityType3> {}
+
+    static class TestClass12 extends TestClass1 {}
+
+    static class TestClass22 extends TestClass2 {}
+
+    static class TestClass32 extends TestClass3 {}
+
+    static class TestClass13 extends TestClass12 {}
+
+    static class TestClass23 extends TestClass22 {}
+
+    static class TestClass33 extends TestClass32 {}
+
 }

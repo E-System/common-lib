@@ -23,10 +23,7 @@ import lombok.ToString;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -63,6 +60,10 @@ public class BuildInfo implements Serializable {
     public static final String UNDEFINED_VERSION = "UNDEFINED_VERSION";
 
     public static Collection<BuildInfo> list(String prefix) {
+        return list(Collections.singletonList(prefix));
+    }
+
+    public static Collection<BuildInfo> list(Collection<String> prefix) {
         return Reflects.getResources(prefix, s -> s.endsWith("build.properties")).stream()
             .map(v -> (v.startsWith("/") ? "" : "/") + v).map(BuildInfo::create).collect(Collectors.toList());
     }

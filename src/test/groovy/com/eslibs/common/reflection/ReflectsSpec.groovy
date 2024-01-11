@@ -16,7 +16,7 @@
 
 package com.eslibs.common.reflection
 
-
+import com.eslibs.common.reflection.fixture.TestAnnotation
 import spock.lang.Specification
 
 import java.lang.annotation.Annotation
@@ -43,7 +43,7 @@ class ReflectsSpec extends Specification {
         res3.containsKey('ref')
     }
 
-    def "getMethods"(){
+    def "getMethods"() {
         when:
         def res = Reflects.getDeclaredMethods(ParentEntityClass)
         then:
@@ -53,6 +53,7 @@ class ReflectsSpec extends Specification {
     def "toMap"() {
         when:
         def res = Reflects.toMap(new EntityClass2(1, "1", new EntityClass(2, "2")), new Function<Object, Object>() {
+
             @Override
             Object apply(Object o) {
                 if (o instanceof ParentEntityClass) {
@@ -71,6 +72,7 @@ class ReflectsSpec extends Specification {
     def "toMap with exclude"() {
         when:
         def res = Reflects.toMap(new EntityClass2(1, "1", new EntityClass(2, "2")), ['id', 'name'], new Function<Object, Object>() {
+
             @Override
             Object apply(Object o) {
                 if (o instanceof ParentEntityClass) {
@@ -234,14 +236,19 @@ class ReflectsSpec extends Specification {
     def "getResources"() {
         when:
         def res = Reflects.getResources("com.eslibs", null)
+        def res2 = Reflects.getResources(["com.eslibs"], null)
         println(res)
         then:
         res.size() > 0
         res.contains('com/eslibs/common/build.properties')
         res.contains('com/eslibs/common/currlist.xml')
+        res2.size() > 0
+        res2.contains('com/eslibs/common/build.properties')
+        res2.contains('com/eslibs/common/currlist.xml')
     }
 
     private static class SomeClass {
+
         Integer i
 
         SomeClass(Integer i, boolean ok) {
@@ -250,6 +257,7 @@ class ReflectsSpec extends Specification {
     }
 
     private static class SomeClass2 {
+
         Integer i
 
         SomeClass2(Integer i) {
@@ -274,25 +282,15 @@ class ReflectsSpec extends Specification {
 
     }
 
-    private static class Inst<T> {
+    private static class Inst<T> {}
 
-    }
+    private static class Inst2<T, V> {}
 
-    private static class Inst2<T, V> {
+    private static class IntInst extends Inst<Integer> {}
 
-    }
+    private static class ShortInst extends Inst<Short> {}
 
-    private static class IntInst extends Inst<Integer> {
-
-    }
-
-    private static class ShortInst extends Inst<Short> {
-
-    }
-
-    private static class Mixin extends Inst2<Integer, Short> {
-
-    }
+    private static class Mixin extends Inst2<Integer, Short> {}
 
 
     private static class Versions {
@@ -321,6 +319,7 @@ class ReflectsSpec extends Specification {
     }
 
     private static class ParentEntityClass {
+
         private Integer id
 
         ParentEntityClass(Integer id) {
@@ -333,6 +332,7 @@ class ReflectsSpec extends Specification {
     }
 
     private static class EntityClass extends ParentEntityClass {
+
         private String name
 
         EntityClass(Integer id, String name) {
@@ -342,6 +342,7 @@ class ReflectsSpec extends Specification {
     }
 
     private static class EntityClass2 extends ParentEntityClass {
+
         private String name
         private EntityClass ref
 

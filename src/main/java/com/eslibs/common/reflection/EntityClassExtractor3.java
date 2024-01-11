@@ -22,16 +22,13 @@ package com.eslibs.common.reflection;
  */
 public class EntityClassExtractor3<T1, T2, T3> extends EntityClassExtractor2<T1, T2> {
 
-    private Class<T3> thirdEntityClass;
+    private final GenericDescriptor<T1, T2, T3> descriptor = GenericDescriptor.create(getClass(), getClass(), getClass());
 
     public Class<T3> getThirdEntityClass() {
-        if (thirdEntityClass == null) {
-            thirdEntityClass = extractClass(2);
-        }
-        return thirdEntityClass;
+        return descriptor.thirdEntityClass();
     }
 
     public T3 createThirdInstance() {
-        return create(getThirdEntityClass());
+        return descriptor.createThirdInstance();
     }
 }

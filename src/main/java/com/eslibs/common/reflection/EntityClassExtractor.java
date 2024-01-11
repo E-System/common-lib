@@ -17,9 +17,6 @@
 package com.eslibs.common.reflection;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -27,45 +24,13 @@ import java.lang.reflect.TypeVariable;
  */
 public class EntityClassExtractor<T> implements Serializable {
 
-    private Class<T> entityClass;
+    private final GenericDescriptor<T, T, T> descriptor = GenericDescriptor.create(getClass(), getClass(), getClass());
 
     public Class<T> getEntityClass() {
-        if (entityClass == null) {
-            entityClass = extractClass(0);
-        }
-        return entityClass;
+        return descriptor.entityClass();
     }
 
     public T createInstance() {
-        return create(getEntityClass());
-    }
-
-    protected <K> K create(Class<K> entityClass) {
-        return Reflects.newInstance(entityClass);
-    }
-
-    protected <K> Class<K> extractClass(int index) {
-        Type type = getClass().getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            return extractParametrized(type, index);
-        }
-        type = getClass().getSuperclass().getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            return extractParametrized(type, index);
-        }
-        throw new IllegalArgumentException("Generic type with index " + index + " not determined");
-    }
-
-    protected <K> Class<K> extractParametrized(Type type, int index) {
-        ParameterizedType paramType = (ParameterizedType) type;
-        if (paramType.getActualTypeArguments().length == 2) {
-            if (paramType.getActualTypeArguments()[index] instanceof TypeVariable) {
-                throw new IllegalArgumentException("Generic type with index " + index + " not determined on type " + type);
-            } else {
-                return (Class<K>) paramType.getActualTypeArguments()[index];
-            }
-        } else {
-            return (Class<K>) paramType.getActualTypeArguments()[index];
-        }
+        return descriptor.createInstance();
     }
 }

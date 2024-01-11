@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.eslibs.common.reflection
+package com.eslibs.common.reflection.fixture
 
 import java.lang.annotation.ElementType
 import java.lang.annotation.Retention
