@@ -129,7 +129,7 @@ public class EmailReceiver extends EmailProcessor {
             return List.of(
                 new com.eslibs.common.email.Message.Attachment(OutputData.create(
                     part.getFileName(),
-                    pathToSave.toString(),
+                    pathToSave,
                     saveFile(pathToSave, part)
                 ))
             );

@@ -16,7 +16,7 @@ import java.util.Locale;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Locales {
 
-    public static Locale from(String code) {
+    public static Locale of(String code) {
         if (StringUtils.isBlank(code)) {
             return null;
         }

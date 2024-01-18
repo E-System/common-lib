@@ -28,10 +28,10 @@ import java.nio.file.Path;
 @ToString(callSuper = true)
 public class FileData extends OutputData {
 
-    private final String relativePath;
+    private final Path relativePath;
     private final Path content;
 
-    FileData(String fileName, String relativePath, Path content) {
+    FileData(String fileName, Path relativePath, Path content) {
         super(fileName);
         this.relativePath = relativePath;
         this.content = content;

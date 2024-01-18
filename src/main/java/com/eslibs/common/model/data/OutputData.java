@@ -53,7 +53,7 @@ public abstract class OutputData {
      * @param content      Path to file
      * @return File specific data
      */
-    public static OutputData create(String fileName, String relativePath, Path content) {
+    public static OutputData create(String fileName, Path relativePath, Path content) {
         return new FileData(fileName, relativePath, content);
     }
 
