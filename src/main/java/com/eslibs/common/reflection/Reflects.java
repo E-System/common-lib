@@ -129,8 +129,8 @@ public final class Reflects {
     }
 
     public static <T> Map<String, String> getPropertyNameBySetter(Class<T> tClass) {
-        Map<String, Method> methods = Reflects.getDeclaredMethods(tClass, method -> method.getName().startsWith("set"));
-        Map<String, Field> fields = Reflects.getDeclaredFields(tClass, JsonProperty.class);
+        Map<String, Method> methods = getDeclaredMethods(tClass, method -> method.getName().startsWith("set"));
+        Map<String, Field> fields = getDeclaredFields(tClass, JsonProperty.class);
         Map<String, String> result = new HashMap<>();
         for (String methodName : methods.keySet()) {
             String fieldName = StringUtils.uncapitalize(methodName.replace("set", ""));
