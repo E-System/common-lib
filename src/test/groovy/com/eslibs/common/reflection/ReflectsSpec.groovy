@@ -90,7 +90,7 @@ class ReflectsSpec extends Specification {
 
     def "ExtractTypes"() {
         expect:
-        Reflects.extractTypes(type) == result
+        Reflects.genericArguments(type) == result
         where:
         type                  | result
         new IntInst().class   | [Integer.class]

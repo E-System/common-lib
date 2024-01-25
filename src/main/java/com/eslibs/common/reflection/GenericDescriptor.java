@@ -35,10 +35,10 @@ public record GenericDescriptor<E1, E2, E3>(
     @SuppressWarnings("unchecked")
     public static <T1, T2, T3> GenericDescriptor<T1, T2, T3> create(Type it, Class<?> defaultSecondClass, Class<?> defaultThirdClass) {
         return (GenericDescriptor<T1, T2, T3>) DESCRIPTOR_HASH.computeIfAbsent(it, v -> {
-            Type[] entityTypes = Reflects.extractTypes(v);
-            Class<T1> entityClass = (Class<T1>) Reflects.extractClass(entityTypes[0]);
-            Class<T2> secondEntityClass = (Class<T2>) Reflects.extractClass(entityTypes.length > 1 ? entityTypes[1] : defaultSecondClass);
-            Class<T3> thirdEntityClass = (Class<T3>) Reflects.extractClass(entityTypes.length > 2 ? entityTypes[2] : defaultThirdClass);
+            Type[] args = Reflects.genericArguments(v);
+            Class<T1> entityClass = (Class<T1>) Reflects.extractClass(args[0]);
+            Class<T2> secondEntityClass = (Class<T2>) Reflects.extractClass(args.length > 1 ? args[1] : defaultSecondClass);
+            Class<T3> thirdEntityClass = (Class<T3>) Reflects.extractClass(args.length > 2 ? args[2] : defaultThirdClass);
             return new GenericDescriptor<>(entityClass, secondEntityClass, thirdEntityClass);
         });
     }

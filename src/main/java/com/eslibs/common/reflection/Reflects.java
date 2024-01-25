@@ -143,7 +143,7 @@ public final class Reflects {
         return result;
     }
 
-    public static Type[] extractTypes(Type type) {
+    public static Type[] genericArguments(Type type) {
         Type next = type;
         while (next instanceof Class<?> cls) {
             next = cls.getGenericSuperclass();
@@ -168,24 +168,20 @@ public final class Reflects {
 
     public static <T> Collection<T> getStaticObjects(Class<?> holder) throws IllegalAccessException {
         Collection<T> result = new LinkedList<>();
-        if (holder != null) {
-            for (Field field : holder.getFields()) {
-                int mod = field.getModifiers();
-                if (Modifier.isStatic(mod) && Modifier.isFinal(mod) && !field.getName().startsWith("$")) {
-                    result.add((T) field.get(holder));
-                }
+        if (holder == null) {
+            return result;
+        }
+        for (Field field : holder.getFields()) {
+            int mod = field.getModifiers();
+            if (Modifier.isStatic(mod) && Modifier.isFinal(mod) && !field.getName().startsWith("$")) {
+                result.add((T) field.get(holder));
             }
         }
         return result;
     }
 
     public static Class<?> getInnerClassByName(Class<?> holder, String name) {
-        for (Class<?> aClass : holder.getClasses()) {
-            if (aClass.getSimpleName().equals(name)) {
-                return aClass;
-            }
-        }
-        return null;
+        return getInnerClassesGroupedByName(holder).get(name);
     }
 
     public static Map<String, Class<?>> getInnerClassesGroupedByName(Class<?> holder) {
@@ -194,6 +190,10 @@ public final class Reflects {
             result.put(aClass.getSimpleName(), aClass);
         }
         return result;
+    }
+
+    public static <T> Collection<T> getInnerClassStaticObjectByName(Class<?> holder, String name) throws IllegalAccessException {
+        return getStaticObjects(getInnerClassByName(holder, name));
     }
 
     public static Set<Class<?>> getTypesAnnotatedWith(String packageName, Class<? extends Annotation> annotation) {
@@ -218,10 +218,6 @@ public final class Reflects {
         packages.forEach(builder::forPackages);
         builder.addScanners(Resources);
         return new Reflections(builder).get(Resources.with(".*").filter(namePredicate));
-    }
-
-    public static <T> Collection<T> getInnerClassStaticObjectByName(Class<?> holder, String name) throws IllegalAccessException {
-        return getStaticObjects(getInnerClassByName(holder, name));
     }
 
     public static Object createDefaultInstance(Class<?> valueClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
