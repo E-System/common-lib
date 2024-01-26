@@ -10,8 +10,8 @@ class ImagesSpec extends Specification {
         def res = Images.info(Images.class.getResourceAsStream("/Squirrel.jpg"))
         then:
         res != null
-        res.width == 1024
-        res.height == 768
+        res.width() == 1024
+        res.height() == 768
         !res.vertical
     }
 }

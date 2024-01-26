@@ -45,11 +45,11 @@ class IOSpec extends Specification {
         then:
         Files.exists(file)
         new String(Files.readAllBytes(file)) == 'Hello'
-        res.path == file
-        res.fileName.fullName == 'copy_with_crc_test.txt'
-        res.size == 5
-        res.crc32 == 0
-        res.mime == 'text/plain'
+        res.path() == file
+        res.fileName().fullName == 'copy_with_crc_test.txt'
+        res.size() == 5
+        res.crc32() == 0
+        res.mime() == 'text/plain'
         IO.delete(file)
     }
 
@@ -60,11 +60,11 @@ class IOSpec extends Specification {
         then:
         Files.exists(file)
         new String(Files.readAllBytes(file)) == 'Hello'
-        res.path == file
-        res.fileName.fullName == 'copy_with_crc_test.txt'
-        res.size == 5
-        res.crc32 == 4157704578
-        res.mime == 'text/plain'
+        res.path() == file
+        res.fileName().fullName == 'copy_with_crc_test.txt'
+        res.size() == 5
+        res.crc32() == 4157704578
+        res.mime() == 'text/plain'
         IO.delete(file)
     }
 
@@ -277,7 +277,7 @@ class IOSpec extends Specification {
         println file
         then:
         file != null
-        file.value.name == 'cib-sm'
-        file.value.ext == 'jpg'
+        file.value.name() == 'cib-sm'
+        file.value.ext() == 'jpg'
     }
 }

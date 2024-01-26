@@ -3,17 +3,12 @@ package com.eslibs.common.model
 import com.eslibs.common.reflection.Reflects
 import spock.lang.Specification
 
-import java.util.function.Supplier
-
 class BuildInfoSpec extends Specification {
 
     def "ReadBuildInfo with supplier"() {
         when:
-        def info = BuildInfo.create(new Supplier<InputStream>() {
-            @Override
-            InputStream get() {
-                return BuildInfo.class.getResourceAsStream("/com/eslibs/test-build.properties")
-            }
+        def info = BuildInfo.create({
+            return BuildInfo.class.getResourceAsStream("/com/eslibs/test-build.properties")
         })
         then:
         info != null

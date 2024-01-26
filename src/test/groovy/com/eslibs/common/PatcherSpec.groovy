@@ -18,16 +18,17 @@ class PatcherSpec extends Specification {
         DTO dto = new DTO("NAME", "NAME2", new DTOInternal(1), EntityCode.CODE.name(), true)
         Entity entity = new Entity()
         Patcher.create(dto, entity, Arrays.asList("name", "name2", "role", "code", "valid"))
-            .rule("name", DTO::getName, Entity::setName)
-            .rule("name2", new BiConsumer<DTO, Entity>() {
-                @Override
-                void accept(DTO from, Entity to) {
-                    to.setName2(from.getName2())
-                }
-            })
-            .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
-            .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf)
-            .apply()
+                .rule("name", DTO::getName, Entity::setName)
+                .rule("name2", new BiConsumer<DTO, Entity>() {
+
+                    @Override
+                    void accept(DTO from, Entity to) {
+                        to.setName2(from.getName2())
+                    }
+                })
+                .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
+                .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf)
+                .apply()
         then:
         entity.name == dto.name
         entity.name2 == dto.name2
@@ -40,17 +41,18 @@ class PatcherSpec extends Specification {
         DTO dto = new DTO("NAME", "NAME2", new DTOInternal(1), EntityCode.CODE.name(), true)
         Entity entity = new Entity()
         Patcher.create(dto, entity)
-            .rule("name", DTO::getName, Entity::setName)
-            .rule("name2", new BiConsumer<DTO, Entity>() {
-                @Override
-                void accept(DTO from, Entity to) {
-                    to.setName2(from.getName2())
-                }
-            })
-            .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
-            .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf)
-            .rule("valid", DTO::isValid, Entity::setValid)
-            .apply()
+                .rule("name", DTO::getName, Entity::setName)
+                .rule("name2", new BiConsumer<DTO, Entity>() {
+
+                    @Override
+                    void accept(DTO from, Entity to) {
+                        to.setName2(from.getName2())
+                    }
+                })
+                .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
+                .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf)
+                .rule("valid", DTO::isValid, Entity::setValid)
+                .apply()
         then:
         entity.name == dto.name
         entity.name2 == dto.name2
@@ -63,16 +65,17 @@ class PatcherSpec extends Specification {
         DTO dto = new DTO("NAME", "NAME2", new DTOInternal(1), EntityCode.CODE.name(), true)
         Entity entity = new Entity()
         Patcher.create(dto, entity, Arrays.asList("name", "code"))
-            .rule("name", DTO::getName, Entity::setName)
-            .rule("name2", new BiConsumer<DTO, Entity>() {
-                @Override
-                void accept(DTO from, Entity to) {
-                    to.setName2(from.getName2())
-                }
-            })
-            .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
-            .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf)
-            .apply()
+                .rule("name", DTO::getName, Entity::setName)
+                .rule("name2", new BiConsumer<DTO, Entity>() {
+
+                    @Override
+                    void accept(DTO from, Entity to) {
+                        to.setName2(from.getName2())
+                    }
+                })
+                .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
+                .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf)
+                .apply()
         then:
         entity.name == dto.name
         entity.name2 == null
@@ -85,12 +88,12 @@ class PatcherSpec extends Specification {
         DTO dto = new DTO("NAME", "NAME2", new DTOInternal(1), EntityCode.CODE.name(), true)
         Entity entity = new Entity()
         Patcher.create(dto, entity, Arrays.asList("name", "name2", "role", "code", "valid"))
-            .rule("name")
-            .rule("name2")
-            .rule("valid")
-            .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
-            .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf)
-            .apply()
+                .rule("name")
+                .rule("name2")
+                .rule("valid")
+                .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
+                .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf)
+                .apply()
         then:
         entity.name == dto.name
         entity.name2 == dto.name2
@@ -104,12 +107,12 @@ class PatcherSpec extends Specification {
         DTO dto = new DTO("NAME", "NAME2", new DTOInternal(1), EntityCode.CODE.name(), true)
         Entity entity = new Entity()
         def items = Patcher.create(dto, entity, Arrays.asList("name", "name2", "role", "code", "valid"))
-            .rule("name", true)
-            .rule("name2", true)
-            .rule("valid", true)
-            .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
-            .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf, Entity::getCode, v -> v.toString())
-            .apply().items
+                .rule("name", true)
+                .rule("name2", true)
+                .rule("valid", true)
+                .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
+                .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf, Entity::getCode, v -> v.toString())
+                .apply().items()
         then:
         !items.empty
         items.size() == 4
@@ -131,6 +134,7 @@ class PatcherSpec extends Specification {
         when:
         List<Patcher.UpdatedField> callbackItems = []
         def consumer = new Consumer<Patcher.UpdatedField>() {
+
             @Override
             void accept(Patcher.UpdatedField updatedField) {
                 callbackItems.add(updatedField)
@@ -139,12 +143,12 @@ class PatcherSpec extends Specification {
         DTO dto = new DTO("NAME", "NAME2", new DTOInternal(1), EntityCode.CODE.name(), true)
         Entity entity = new Entity()
         def items = Patcher.create(dto, entity, Arrays.asList("name", "name2", "role", "code", "valid"))
-            .rule("name", true, consumer)
-            .rule("name2", true, consumer)
-            .rule("valid", true, consumer)
-            .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
-            .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf, Entity::getCode, v -> v.toString(), consumer)
-            .apply().items
+                .rule("name", true, consumer)
+                .rule("name2", true, consumer)
+                .rule("valid", true, consumer)
+                .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
+                .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf, Entity::getCode, v -> v.toString(), consumer)
+                .apply().items()
         then:
         !items.empty
         items.size() == 4
@@ -181,6 +185,7 @@ class PatcherSpec extends Specification {
         when:
         List<Patcher.UpdatedField> callbackItems = []
         def consumer = new Consumer<Patcher.UpdatedField>() {
+
             @Override
             void accept(Patcher.UpdatedField updatedField) {
                 callbackItems.add(updatedField)
@@ -189,12 +194,12 @@ class PatcherSpec extends Specification {
         DTO dto = new DTO("NAME", "NAME2", new DTOInternal(1), EntityCode.CODE.name(), true)
         Entity entity = new Entity()
         def items = Patcher.create(dto, entity, Arrays.asList("name", "name2", "role", "code", "valid"))
-            .rule("name", true, consumer)
-            .rule("name2", true, consumer)
-            .rule("valid", true, consumer)
-            .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
-            .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf, Entity::getCode, v -> v.toString(), consumer)
-            .apply([name: "Name", code: "Code"]).items
+                .rule("name", true, consumer)
+                .rule("name2", true, consumer)
+                .rule("valid", true, consumer)
+                .rule("role", DTO::getRole, Entity::setRole, v -> new EntityInternal(v.getId()))
+                .rule("code", DTO::getCode, Entity::setCode, EntityCode::valueOf, Entity::getCode, v -> v.toString(), consumer)
+                .apply([name: "Name", code: "Code"]).items()
         then:
         !items.empty
         items.size() == 4
@@ -227,7 +232,7 @@ class PatcherSpec extends Specification {
         callbackItems[3].became == 'CODE'
     }
 
-    def "Serialize and deserialize UpdatedField"(){
+    def "Serialize and deserialize UpdatedField"() {
         when:
         def item = new Patcher.UpdatedField('code', 'was', 'became')
         def json = mapper.writeValueAsString(item)
@@ -238,7 +243,7 @@ class PatcherSpec extends Specification {
         item.became == result.became
     }
 
-    def "Equals for UpdatedField"(){
+    def "Equals for UpdatedField"() {
         expect:
         new Patcher.UpdatedField('field', null, null) == new Patcher.UpdatedField('field', null, null)
         new Patcher.UpdatedField('field', 'was', null) == new Patcher.UpdatedField('field', 'was', null)
@@ -282,6 +287,7 @@ class PatcherSpec extends Specification {
     }
 
     enum EntityCode {
+
         CODE
     }
 
