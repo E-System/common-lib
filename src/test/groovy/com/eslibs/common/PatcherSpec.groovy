@@ -1,6 +1,7 @@
 package com.eslibs.common
 
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
@@ -117,26 +118,26 @@ class PatcherSpec extends Specification {
         !items.empty
         items.size() == 4
         items[0].field == 'name'
-        items[0].was == null
-        items[0].became == 'NAME'
+        (items[0] as Patcher.UpdatedField).was == null
+        (items[0] as Patcher.UpdatedField).became == 'NAME'
         items[1].field == 'name2'
-        items[1].was == null
-        items[1].became == 'NAME2'
+        (items[1] as Patcher.UpdatedField).was == null
+        (items[1] as Patcher.UpdatedField).became == 'NAME2'
         items[2].field == 'valid'
-        items[2].was == 'false'
-        items[2].became == 'true'
+        (items[2] as Patcher.UpdatedField).was == 'false'
+        (items[2] as Patcher.UpdatedField).became == 'true'
         items[3].field == 'code'
-        items[3].was == null
-        items[3].became == 'CODE'
+        (items[3] as Patcher.UpdatedField).was == null
+        (items[3] as Patcher.UpdatedField).became == 'CODE'
     }
 
     def "On change fields with callback"() {
         when:
-        List<Patcher.UpdatedField> callbackItems = []
-        def consumer = new Consumer<Patcher.UpdatedField>() {
+        List<Patcher.Updated> callbackItems = []
+        def consumer = new Consumer<Patcher.Updated>() {
 
             @Override
-            void accept(Patcher.UpdatedField updatedField) {
+            void accept(Patcher.Updated updatedField) {
                 callbackItems.add(updatedField)
             }
         }
@@ -153,41 +154,41 @@ class PatcherSpec extends Specification {
         !items.empty
         items.size() == 4
         items[0].field == 'name'
-        items[0].was == null
-        items[0].became == 'NAME'
+        (items[0] as Patcher.UpdatedField).was == null
+        (items[0] as Patcher.UpdatedField).became == 'NAME'
         items[1].field == 'name2'
-        items[1].was == null
-        items[1].became == 'NAME2'
+        (items[1] as Patcher.UpdatedField).was == null
+        (items[1] as Patcher.UpdatedField).became == 'NAME2'
         items[2].field == 'valid'
-        items[2].was == 'false'
-        items[2].became == 'true'
+        (items[2] as Patcher.UpdatedField).was == 'false'
+        (items[2] as Patcher.UpdatedField).became == 'true'
         items[3].field == 'code'
-        items[3].was == null
-        items[3].became == 'CODE'
+        (items[3] as Patcher.UpdatedField).was == null
+        (items[3] as Patcher.UpdatedField).became == 'CODE'
 
         !callbackItems.empty
         callbackItems.size() == 4
         callbackItems[0].field == 'name'
-        callbackItems[0].was == null
-        callbackItems[0].became == 'NAME'
+        (callbackItems[0] as Patcher.UpdatedField).was == null
+        (callbackItems[0] as Patcher.UpdatedField).became == 'NAME'
         callbackItems[1].field == 'name2'
-        callbackItems[1].was == null
-        callbackItems[1].became == 'NAME2'
+        (callbackItems[1] as Patcher.UpdatedField).was == null
+        (callbackItems[1] as Patcher.UpdatedField).became == 'NAME2'
         callbackItems[2].field == 'valid'
-        callbackItems[2].was == 'false'
-        callbackItems[2].became == 'true'
+        (callbackItems[2] as Patcher.UpdatedField).was == 'false'
+        (callbackItems[2] as Patcher.UpdatedField).became == 'true'
         callbackItems[3].field == 'code'
-        callbackItems[3].was == null
-        callbackItems[3].became == 'CODE'
+        (callbackItems[3] as Patcher.UpdatedField).was == null
+        (callbackItems[3] as Patcher.UpdatedField).became == 'CODE'
     }
 
     def "On change fields with callback and labels"() {
         when:
-        List<Patcher.UpdatedField> callbackItems = []
-        def consumer = new Consumer<Patcher.UpdatedField>() {
+        List<Patcher.Updated> callbackItems = []
+        def consumer = new Consumer<Patcher.Updated>() {
 
             @Override
-            void accept(Patcher.UpdatedField updatedField) {
+            void accept(Patcher.Updated updatedField) {
                 callbackItems.add(updatedField)
             }
         }
@@ -204,43 +205,79 @@ class PatcherSpec extends Specification {
         !items.empty
         items.size() == 4
         items[0].field == 'Name'
-        items[0].was == null
-        items[0].became == 'NAME'
+        (items[0] as Patcher.UpdatedField).was == null
+        (items[0] as Patcher.UpdatedField).became == 'NAME'
         items[1].field == 'name2'
-        items[1].was == null
-        items[1].became == 'NAME2'
+        (items[1] as Patcher.UpdatedField).was == null
+        (items[1] as Patcher.UpdatedField).became == 'NAME2'
         items[2].field == 'valid'
-        items[2].was == 'false'
-        items[2].became == 'true'
+        (items[2] as Patcher.UpdatedField).was == 'false'
+        (items[2] as Patcher.UpdatedField).became == 'true'
         items[3].field == 'Code'
-        items[3].was == null
-        items[3].became == 'CODE'
+        (items[3] as Patcher.UpdatedField).was == null
+        (items[3] as Patcher.UpdatedField).became == 'CODE'
 
         !callbackItems.empty
         callbackItems.size() == 4
         callbackItems[0].field == 'Name'
-        callbackItems[0].was == null
-        callbackItems[0].became == 'NAME'
+        (callbackItems[0] as Patcher.UpdatedField).was == null
+        (callbackItems[0] as Patcher.UpdatedField).became == 'NAME'
         callbackItems[1].field == 'name2'
-        callbackItems[1].was == null
-        callbackItems[1].became == 'NAME2'
+        (callbackItems[1] as Patcher.UpdatedField).was == null
+        (callbackItems[1] as Patcher.UpdatedField).became == 'NAME2'
         callbackItems[2].field == 'valid'
-        callbackItems[2].was == 'false'
-        callbackItems[2].became == 'true'
+        (callbackItems[2] as Patcher.UpdatedField).was == 'false'
+        (callbackItems[2] as Patcher.UpdatedField).became == 'true'
         callbackItems[3].field == 'Code'
-        callbackItems[3].was == null
-        callbackItems[3].became == 'CODE'
+        (callbackItems[3] as Patcher.UpdatedField).was == null
+        (callbackItems[3] as Patcher.UpdatedField).became == 'CODE'
     }
 
     def "Serialize and deserialize UpdatedField"() {
         when:
         def item = new Patcher.UpdatedField('code', 'was', 'became')
         def json = mapper.writeValueAsString(item)
+        println(json)
         def result = mapper.readValue(json, Patcher.UpdatedField.class)
+        def result2 = mapper.readValue('{"field":"code","was":"was","became":"became"}', Patcher.UpdatedField.class)
         then:
         item.field == result.field
         item.was == result.was
         item.became == result.became
+        item.type == Patcher.Updated.Type.FIELD
+        item.field == result2.field
+        item.was == (result2 as Patcher.UpdatedField).was
+        item.became == (result2 as Patcher.UpdatedField).became
+        item.type == Patcher.Updated.Type.FIELD
+    }
+
+    def "Serialize and deserialize Updated"() {
+        when:
+        def items = [
+                new Patcher.UpdatedField('field1', 'was', 'became'),
+                new Patcher.UpdatedGroup('group1', [
+                        new Patcher.UpdatedRow("row1", Patcher.UpdatedRow.Event.INSERT, [
+                                new Patcher.UpdatedField('field2', 'was', 'became'),
+                                new Patcher.UpdatedField('field3', 'was', 'became'),
+                                new Patcher.UpdatedGroup('group2', [
+                                        new Patcher.UpdatedRow('row2', Patcher.UpdatedRow.Event.UPDATE, [
+                                                new Patcher.UpdatedField('field4', 'was', 'became'),
+                                                new Patcher.UpdatedField('field5', 'was', 'became'),
+                                        ])
+                                ]),
+                        ])
+                ]),
+        ]
+        def json = mapper.writeValueAsString(items)
+        println(json)
+        def result = mapper.readValue(json, new TypeReference<Collection<Patcher.Updated>>() {})
+        then:
+        result[0].type == Patcher.Updated.Type.FIELD
+        result[1].type == Patcher.Updated.Type.GROUP
+        ((result[1] as Patcher.UpdatedGroup).items[0] as Patcher.UpdatedRow).event == Patcher.UpdatedRow.Event.INSERT
+        ((result[1] as Patcher.UpdatedGroup).items[0] as Patcher.UpdatedRow).items[0].field == 'field2'
+        ((result[1] as Patcher.UpdatedGroup).items[0] as Patcher.UpdatedRow).items[1].field == 'field3'
+        ((result[1] as Patcher.UpdatedGroup).items[0] as Patcher.UpdatedRow).items[2].field == 'group2'
     }
 
     def "Equals for UpdatedField"() {

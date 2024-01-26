@@ -1,15 +1,12 @@
 package com.eslibs.common;
 
-import com.eslibs.common.reflection.Reflects;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -18,7 +15,9 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class Patcher<T, R> {
 
+    @Getter
     private final T from;
+    @Getter
     private final R to;
     private final Set<String> fields;
     private final Collection<Rule<T, R, ?, ?>> rules = new ArrayList<>();
@@ -43,7 +42,7 @@ public class Patcher<T, R> {
         return rule(field, checkChange, null);
     }
 
-    public Patcher<T, R> rule(String field, boolean checkChange, Consumer<UpdatedField> updatedFieldConsumer) {
+    public Patcher<T, R> rule(String field, boolean checkChange, Consumer<Updated> updatedFieldConsumer) {
         if (checkChange) {
             return rule(new Rule<>(this, field, null, updatedFieldConsumer));
         } else {
@@ -71,7 +70,7 @@ public class Patcher<T, R> {
         return rule(field, fromGetter, toSetter, converter, callbackGetter, callbackConverter, null);
     }
 
-    public <R1, R2> Patcher<T, R> rule(String field, Function<T, R1> fromGetter, BiConsumer<R, R2> toSetter, Function<R1, R2> converter, Function<R, R2> callbackGetter, Function<R2, String> callbackConverter, Consumer<UpdatedField> updatedFieldConsumer) {
+    public <R1, R2> Patcher<T, R> rule(String field, Function<T, R1> fromGetter, BiConsumer<R, R2> toSetter, Function<R1, R2> converter, Function<R, R2> callbackGetter, Function<R2, String> callbackConverter, Consumer<Updated> updatedFieldConsumer) {
         return rule(new Rule<>(this, field, fromGetter, toSetter, converter, callbackGetter, callbackConverter, updatedFieldConsumer));
     }
 
@@ -85,7 +84,7 @@ public class Patcher<T, R> {
     }
 
     public Result apply(Map<String, String> labels) {
-        Collection<UpdatedField> result = new ArrayList<>();
+        Collection<Updated> result = new ArrayList<>();
         for (Rule<T, R, ?, ?> rule : rules) {
             rule.invoke(fields, result, labels);
         }
@@ -93,23 +92,115 @@ public class Patcher<T, R> {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public record Result(Collection<UpdatedField> items) {}
+    public record Result(Collection<Updated> items) {}
 
     @ToString
     @Getter
     @EqualsAndHashCode
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class UpdatedField {
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.EXISTING_PROPERTY,
+            defaultImpl = UpdatedField.class,
+            visible = true,
+            property = "type")
+    @JsonSubTypes({
+            @JsonSubTypes.Type(value = UpdatedField.class, name = "F"),
+            @JsonSubTypes.Type(value = UpdatedRow.class, name = "R"),
+            @JsonSubTypes.Type(value = UpdatedGroup.class, name = "G"),
+    })
+    public static class Updated {
 
+        private final Type type;
         private final String field;
+
+        public Updated(Type type, String field) {
+            this.type = type != null ? type : Type.FIELD;
+            this.field = field;
+        }
+
+        @Getter
+        @RequiredArgsConstructor
+        public enum Type {
+            GROUP("G"),
+            ROW("R"),
+            FIELD("F");
+            @JsonValue
+            private final String value;
+        }
+    }
+
+    @ToString
+    @Getter
+    @EqualsAndHashCode(callSuper = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class UpdatedField extends Updated {
+
         private final String was;
         private final String became;
 
+        public UpdatedField(String field, String was, String became) {
+            this(Type.FIELD, field, was, became);
+        }
+
         @JsonCreator
-        public UpdatedField(@JsonProperty("field") String field, @JsonProperty("was") String was, @JsonProperty("became") String became) {
-            this.field = field;
+        public UpdatedField(@JsonProperty("type") Type type, @JsonProperty("field") String field, @JsonProperty("was") String was, @JsonProperty("became") String became) {
+            super(type, field);
             this.was = was;
             this.became = became;
+        }
+    }
+
+    @ToString
+    @Getter
+    @EqualsAndHashCode(callSuper = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class UpdatedGroup extends Updated {
+
+        private final Collection<Updated> items;
+
+        public UpdatedGroup(String field, Collection<Updated> items) {
+            this(Type.GROUP, field, items);
+        }
+
+        @JsonCreator
+        public UpdatedGroup(@JsonProperty("type") Type type, @JsonProperty("field") String field, @JsonProperty("rows") Collection<Updated> items) {
+            super(type, field);
+            this.items = items;
+        }
+    }
+
+    @ToString
+    @Getter
+    @EqualsAndHashCode(callSuper = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class UpdatedRow extends UpdatedGroup {
+
+        private final Event event;
+
+        public UpdatedRow(String field, Event event) {
+            this(field, event, null);
+        }
+
+        public UpdatedRow(String field, Event event, Collection<Updated> items) {
+            this(Type.ROW, field, event, items);
+        }
+
+        @JsonCreator
+        public UpdatedRow(@JsonProperty("type") Type type, @JsonProperty("field") String field, @JsonProperty("event") Event event, @JsonProperty("items") Collection<Updated> items) {
+            super(type, field, items);
+            this.event = event;
+        }
+
+
+        @Getter
+        @RequiredArgsConstructor
+        public enum Event {
+            INSERT("I"),
+            UPDATE("U"),
+            DELETE("D");
+            @JsonValue
+            private final String value;
         }
     }
 
@@ -128,7 +219,7 @@ public class Patcher<T, R> {
 
         private final Function<R, R2> callbackGetter;
         private final Function<R2, String> callbackConverter;
-        private final Consumer<UpdatedField> updatedFieldCallback;
+        private final Consumer<Updated> updatedFieldCallback;
 
         public Rule(Patcher<T, R> owner, String field, Runnable runnable) {
             this(owner, field, runnable, null, null, null, null, null, null, null);
@@ -138,7 +229,7 @@ public class Patcher<T, R> {
             this(owner, field, callbackConverter, null);
         }
 
-        public Rule(Patcher<T, R> owner, String field, Function<R2, String> callbackConverter, Consumer<UpdatedField> updatedFieldConsumer) {
+        public Rule(Patcher<T, R> owner, String field, Function<R2, String> callbackConverter, Consumer<Updated> updatedFieldConsumer) {
             this(owner, field, null, null, null, null, null, null, callbackConverter, updatedFieldConsumer);
         }
 
@@ -146,11 +237,11 @@ public class Patcher<T, R> {
             this(owner, field, null, consumer, null, null, null, null, null, null);
         }
 
-        public Rule(Patcher<T, R> owner, String field, Function<T, R1> fromGetter, BiConsumer<R, R2> toSetter, Function<R1, R2> converter, Function<R, R2> callbackGetter, Function<R2, String> callbackConverter, Consumer<UpdatedField> updatedFieldConsumer) {
+        public Rule(Patcher<T, R> owner, String field, Function<T, R1> fromGetter, BiConsumer<R, R2> toSetter, Function<R1, R2> converter, Function<R, R2> callbackGetter, Function<R2, String> callbackConverter, Consumer<Updated> updatedFieldConsumer) {
             this(owner, field, null, null, fromGetter, toSetter, converter, callbackGetter, callbackConverter, updatedFieldConsumer);
         }
 
-        void invoke(Set<String> fields, Collection<UpdatedField> updatedFields, Map<String, String> labels) {
+        void invoke(Set<String> fields, Collection<Updated> updatedFields, Map<String, String> labels) {
             if (fields == null || fields.contains(field)) {
                 if (runnable != null) {
                     runnable.run();
@@ -172,9 +263,10 @@ public class Patcher<T, R> {
                     }
                     toSetter.accept(owner.to, newValue);
                 } else {
-                    reflective(owner.from, owner.to, field, (toMeta, newValue) -> {
+                    reflective(owner.from, owner.to, field, (newValue, capitalizedField) -> {
                         try {
-                            Object oldValue = toMeta.getter().invoke(owner.to);
+                            Method toGetter = findGetter(owner.to, capitalizedField);
+                            Object oldValue = toGetter.invoke(owner.to);
                             String newValueString = newValue == null ? null : newValue.toString();
                             String oldValueString = oldValue == null ? null : oldValue.toString();
                             if (!Objects.equals(newValueString, oldValueString)) {
@@ -200,18 +292,32 @@ public class Patcher<T, R> {
         }
     }
 
-    private static void reflective(Object from, Object to, String field, BiConsumer<Reflects.FieldMeta, Object> processor) {
+    private static void reflective(Object from, Object to, String field, BiConsumer<Object, String> processor) {
         try {
-            String capitalizedField = StringUtils.capitalize(field);
-            Reflects.FieldMeta fromMeta = Reflects.fieldMeta(from.getClass(), capitalizedField);
-            Reflects.FieldMeta toMeta = Reflects.fieldMeta(to.getClass(), capitalizedField);
-            Object newValue = fromMeta.getter().invoke(from);
+            String capitalizedField = capitalize(field);
+            Method fromGetter = findGetter(from, capitalizedField);
+            Object newValue = fromGetter.invoke(from);
             if (processor != null) {
-                processor.accept(toMeta, newValue);
+                processor.accept(newValue, capitalizedField);
             }
-            toMeta.setter().invoke(to, newValue);
+            Method toSetter = to.getClass().getMethod("set" + capitalizedField, fromGetter.getReturnType());
+            toSetter.invoke(to, newValue);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Method findGetter(Object from, String capitalizedField) throws NoSuchMethodException {
+        Class<?> aClass = from.getClass();
+        try {
+            return aClass.getMethod("get" + capitalizedField);
+        } catch (NoSuchMethodException e) {
+            return aClass.getMethod("is" + capitalizedField);
+        }
+    }
+
+    private static String capitalize(String value) {
+        if (value == null) return null;
+        return value.substring(0, 1).toUpperCase() + value.substring(1);
     }
 }
