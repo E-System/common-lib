@@ -68,14 +68,14 @@ public final class MoneyToStr {
     private final Map<String, String[]> messages = new java.util.LinkedHashMap<>();
     private final Pennies pennies;
     private final Currency currency;
-    private String rubOneUnit;
-    private String rubTwoUnit;
-    private String rubFiveUnit;
-    private String rubSex;
-    private String kopOneUnit;
-    private String kopTwoUnit;
-    private String kopFiveUnit;
-    private String kopSex;
+    private final String rubOneUnit;
+    private final String rubTwoUnit;
+    private final String rubFiveUnit;
+    private final String rubSex;
+    private final String kopOneUnit;
+    private final String kopTwoUnit;
+    private final String kopFiveUnit;
+    private final String kopSex;
 
     /**
      * Inits class with currency. Usage: MoneyToStr moneyToStr = new MoneyToStr(
@@ -148,7 +148,7 @@ public final class MoneyToStr {
             throw new IllegalArgumentException("Language is null");
         }
         Long intPart = amount.longValue();
-        Long fractPart = 0L;
+        long fractPart;
         String result;
         if (amount.floatValue() == amount.intValue()) {
             result = new MoneyToStr(Currency.PER10, lang, Pennies.TEXT).convert(amount.longValue(), 0L);
@@ -182,7 +182,7 @@ public final class MoneyToStr {
             return convertName(Math.abs(theMoney));
         }
         Long intPart = theMoney.longValue();
-        Long fractPart = Math.round((theMoney - intPart) * NUM100);
+        long fractPart = Math.round((theMoney - intPart) * NUM100);
         if (currency == Currency.PER1000) {
             fractPart = Math.round((theMoney - intPart) * NUM1000);
         }
@@ -203,7 +203,7 @@ public final class MoneyToStr {
             return "минус " + convert(Math.abs(theMoney));
         }
         Long intPart = theMoney.longValue();
-        Long fractPart = Math.round((theMoney - intPart) * NUM100);
+        long fractPart = Math.round((theMoney - intPart) * NUM100);
         if (currency == Currency.PER1000) {
             fractPart = Math.round((theMoney - intPart) * NUM1000);
         }
@@ -219,7 +219,7 @@ public final class MoneyToStr {
      * @param theKopeiki the amount of money minor currency
      * @return the string description of money value
      */
-    public String convert(Long theMoney, Long theKopeiki) { return convert(theMoney, theKopeiki, true, true); }
+    public String convert(Long theMoney, Long theKopeiki) {return convert(theMoney, theKopeiki, true, true);}
 
     /**
      * Converts number to currency. Usage: MoneyToStr moneyToStr = new
@@ -240,10 +240,10 @@ public final class MoneyToStr {
             throw new IllegalArgumentException("theKopeiki is null");
         }
         StringBuilder money2str = new StringBuilder();
-        Long triadNum = 0L;
-        Long theTriad;
+        long triadNum = 0L;
+        long theTriad;
 
-        Long intPart = theMoney;
+        long intPart = theMoney;
         if (intPart == 0 && appendInt) {
             money2str.append(messages.get("0")[0]).append(" ");
         }
@@ -253,12 +253,12 @@ public final class MoneyToStr {
                 money2str.insert(0, triad2Word(theTriad, triadNum, rubSex));
             }
             if (triadNum == 0) {
-                Long range10 = (theTriad % NUM100) / NUM10;
-                Long range = theTriad % NUM10;
+                long range10 = (theTriad % NUM100) / NUM10;
+                long range = theTriad % NUM10;
                 if (range10 == NUM1) {
                     money2str.append(rubFiveUnit);
                 } else {
-                    switch (range.byteValue()) {
+                    switch ((byte) range) {
                         case NUM1:
                             money2str.append(rubOneUnit);
                             break;
@@ -311,9 +311,9 @@ public final class MoneyToStr {
             return "";
         }
 
-        Long range = check1(triad, triadWord);
+        long range = check1(triad, triadWord);
 
-        Long range10 = range;
+        long range10 = range;
         range = triad % NUM10;
         check2(triadNum, sex, triadWord, triad, range10);
         switch (triadNum.byteValue()) {
@@ -326,7 +326,7 @@ public final class MoneyToStr {
                 if (range10 == NUM1) {
                     triadWord.append(messages.get("1000_10")[triadNum.byteValue() - 1]).append(" ");
                 } else {
-                    switch (range.byteValue()) {
+                    switch ((byte) range) {
                         case NUM1:
                             triadWord.append(messages.get("1000_1")[triadNum.byteValue() - 1]).append(" ");
                             break;
@@ -356,11 +356,11 @@ public final class MoneyToStr {
      * @param range10   the range 10
      */
     private void check2(Long triadNum, String sex, StringBuilder triadWord, Long triad, Long range10) {
-        Long range = triad % NUM10;
+        long range = triad % NUM10;
         if (range10 == 1) {
-            triadWord.append(messages.get("10_19")[range.byteValue()]).append(" ");
+            triadWord.append(messages.get("10_19")[(byte) range]).append(" ");
         } else {
-            switch (range.byteValue()) {
+            switch ((byte) range) {
                 case NUM1:
                     if (triadNum == NUM1) {
                         triadWord.append(messages.get("1")[INDEX_0]).append(" ");
@@ -390,7 +390,7 @@ public final class MoneyToStr {
                 case NUM7:
                 case NUM8:
                 case NUM9:
-                    triadWord.append(concat(new String[]{"", "", ""}, messages.get("3_9"))[range.byteValue()]).append(" ");
+                    triadWord.append(concat(new String[]{"", "", ""}, messages.get("3_9"))[(byte) range]).append(" ");
                     break;
                 default:
                     break;
@@ -404,11 +404,11 @@ public final class MoneyToStr {
      * @return the range
      */
     private Long check1(Long triad, StringBuilder triadWord) {
-        Long range = triad / NUM100;
-        triadWord.append(concat(new String[]{""}, messages.get("100_900"))[range.byteValue()]);
+        long range = triad / NUM100;
+        triadWord.append(concat(new String[]{""}, messages.get("100_900"))[(byte) range]);
 
         range = (triad % NUM100) / NUM10;
-        triadWord.append(concat(new String[]{"", ""}, messages.get("20_90"))[range.byteValue()]);
+        triadWord.append(concat(new String[]{"", ""}, messages.get("20_90"))[(byte) range]);
         return range;
     }
 

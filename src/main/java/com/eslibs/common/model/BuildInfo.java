@@ -35,6 +35,9 @@ import java.util.stream.Collectors;
 @ToString
 public class BuildInfo implements Serializable {
 
+    public static final String UNDEFINED = "UNDEFINED";
+    public static final String UNDEFINED_VERSION = "UNDEFINED_VERSION";
+
     private final String name;
     private final String version;
     private final String date;
@@ -55,9 +58,6 @@ public class BuildInfo implements Serializable {
             put("hash", hash);
         }};
     }
-
-    public static final String UNDEFINED = "UNDEFINED";
-    public static final String UNDEFINED_VERSION = "UNDEFINED_VERSION";
 
     public static Collection<BuildInfo> list(String prefix) {
         return list(Collections.singletonList(prefix));

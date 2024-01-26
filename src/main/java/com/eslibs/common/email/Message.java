@@ -60,7 +60,7 @@ public record Message(
     }
 
     @Builder
-    public static record Attachment(
+    public record Attachment(
         OutputData data,
         String id,
         boolean root
