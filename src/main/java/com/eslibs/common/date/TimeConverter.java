@@ -15,10 +15,11 @@
  */
 package com.eslibs.common.date;
 
-import com.eslibs.common.Constant;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+
+import java.time.Duration;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -28,13 +29,10 @@ import org.apache.commons.lang3.StringUtils;
 public final class TimeConverter {
 
     public String toString(long value) {
-        long hours = value / Constant.MILLIS_IN_HOUR;
-        value %= Constant.MILLIS_IN_HOUR;
-        long mins = value / Constant.MILLIS_IN_MINUTE;
-        value %= Constant.MILLIS_IN_MINUTE;
-        long secs = value / Constant.MILLIS_IN_SECOND;
-        return String.format("%02d", hours) + ":" +
-               String.format("%02d", mins) +
+        Duration duration = Duration.ofMillis(value);
+        int secs = duration.toSecondsPart();
+        return String.format("%02d", duration.toHoursPart()) + ":" +
+               String.format("%02d", duration.toMinutesPart()) +
                (secs == 0 ? "" : (":" + String.format("%02d", secs)));
     }
 
@@ -42,22 +40,18 @@ public final class TimeConverter {
         if (StringUtils.isBlank(value)) {
             return null;
         }
-        long result = 0;
         String[] values = value.split(":");
         if (values.length == 0) {
             return null;
         }
-        long hours = parse(values[0]);
-        result += hours * Constant.MILLIS_IN_HOUR;
+        Duration duration = Duration.ofHours(parse(values[0]));
         if (values.length > 1) {
-            long min = parse(values[1]);
-            result += min * Constant.MILLIS_IN_MINUTE;
+            duration = duration.plusMinutes(parse(values[1]));
         }
         if (values.length > 2) {
-            long sec = parse(values[2]);
-            result += sec * Constant.MILLIS_IN_SECOND;
+            duration = duration.plusSeconds(parse(values[2]));
         }
-        return result;
+        return duration.toMillis();
     }
 
     private long parse(String value) {

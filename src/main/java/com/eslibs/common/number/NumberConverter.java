@@ -1,6 +1,5 @@
 package com.eslibs.common.number;
 
-import com.eslibs.common.Constant;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -8,6 +7,14 @@ import java.math.BigDecimal;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class NumberConverter {
+
+    /**
+     * Default decimal count (Example 10.12)
+     */
+    public static final int DEFAULT_DECIMAL_COUNT = 2;
+    public static final int DEFAULT_SCALE = 6;
+    public static final int PRECISED_SCALE = 7;
+    public static final long SCALED_LONG_MULTIPLIER = 1000000;
 
     private final Number value;
 
@@ -72,11 +79,11 @@ public class NumberConverter {
     }
 
     public long asScaledLong() {
-        return value != null ? Math.round(value.doubleValue() * Constant.SCALED_LONG_MULTIPLIER) : 0;
+        return value != null ? Math.round(value.doubleValue() * SCALED_LONG_MULTIPLIER) : 0;
     }
 
     public BigDecimal toBigDecimal() {
         long longValue = asLong();
-        return longValue != 0 ? BigDecimal.valueOf(longValue, Constant.DEFAULT_SCALE) : null;
+        return longValue != 0 ? BigDecimal.valueOf(longValue, DEFAULT_SCALE) : null;
     }
 }

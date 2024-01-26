@@ -16,7 +16,6 @@
 
 package com.eslibs.common.date;
 
-import com.eslibs.common.Constant;
 import com.eslibs.common.model.SItem;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -40,6 +39,11 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Dates {
 
+    /**
+     * Default timezone prefixes
+     */
+    public static final String DEFAULT_ZONES_PREFIXES = "^(Africa|America|Asia|Atlantic|Australia|Europe|Indian|Pacific)/.*";
+
     public static boolean isZoneValid(String id) {
         try {
             return ZoneId.of(id).getId().equals(id);
@@ -50,7 +54,7 @@ public final class Dates {
 
     public static Collection<ZoneId> availableZones() {
         return ZoneId.getAvailableZoneIds().stream()
-            .filter(v -> v.matches(Constant.DEFAULT_ZONES_PREFIXES))
+            .filter(v -> v.matches(DEFAULT_ZONES_PREFIXES))
             .map(ZoneId::of)
             .sorted(Comparator.comparing(ZoneId::getId))
             .collect(Collectors.toList());

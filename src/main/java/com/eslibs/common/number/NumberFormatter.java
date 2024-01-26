@@ -1,6 +1,5 @@
 package com.eslibs.common.number;
 
-import com.eslibs.common.Constant;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +9,11 @@ import java.text.DecimalFormatSymbols;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class NumberFormatter {
+
+    /**
+     * Default grouping size (Example 1 000 000.12)
+     */
+    public static final int DEFAULT_GROUPING_SIZE = 3;
 
     private final int minDecimalCount;
     private final int maxDecimalCount;
@@ -92,7 +96,7 @@ public class NumberFormatter {
         DecimalFormat result = new DecimalFormat();
         boolean groupingUsed = groupingSize != null && groupingSize > 0;
         result.setGroupingUsed(groupingUsed);
-        result.setGroupingSize(groupingUsed ? groupingSize : Constant.DEFAULT_GROUPING_SIZE);
+        result.setGroupingSize(groupingUsed ? groupingSize : DEFAULT_GROUPING_SIZE);
         result.setMinimumFractionDigits(minDecimalCount);
         result.setMaximumFractionDigits(maxDecimalCount);
         boolean decimalSymbolOverload = StringUtils.isNotEmpty(decimalSymbol);

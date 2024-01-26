@@ -16,7 +16,6 @@
 
 package com.eslibs.common.number;
 
-import com.eslibs.common.Constant;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -124,7 +123,7 @@ public final class Numbers {
         if (!scale) {
             return res;
         }
-        return BigDecimal.valueOf(res).setScale(Constant.PRECISED_SCALE, RoundingMode.FLOOR).doubleValue();
+        return BigDecimal.valueOf(res).setScale(NumberConverter.PRECISED_SCALE, RoundingMode.FLOOR).doubleValue();
     }
 
     public static BigDecimal remain(BigDecimal value, BigDecimal mult) {
@@ -148,7 +147,7 @@ public final class Numbers {
             }
         }
         return BigDecimal.valueOf(res).
-            setScale(Constant.PRECISED_SCALE, RoundingMode.FLOOR).doubleValue();
+            setScale(NumberConverter.PRECISED_SCALE, RoundingMode.FLOOR).doubleValue();
     }
 
     public static long mult(long value, long mult) {

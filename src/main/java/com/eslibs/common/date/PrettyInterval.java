@@ -1,6 +1,6 @@
 package com.eslibs.common.date;
 
-import com.eslibs.common.Constant;
+import com.eslibs.common.text.Texts;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Duration;
@@ -20,12 +20,22 @@ import java.util.stream.Collectors;
  */
 public final class PrettyInterval {
 
+    BiFunction<ChronoUnit, Long, String> DEFAULT_LOCALIZATION = (type, value) -> switch (type) {
+        case YEARS -> value + " " + Texts.pluralize(value, "год", "года", "лет");
+        case MONTHS -> value + " мес.";
+        case DAYS -> value + " дн.";
+        case HOURS -> value + " ч.";
+        case MINUTES -> value + " м.";
+        case SECONDS -> value + " c.";
+        default -> throw new IllegalStateException("Unexpected value: " + type);
+    };
+
     private final boolean useBraces;
     private final BiFunction<ChronoUnit, Long, String> localization;
 
     PrettyInterval(boolean useBraces, BiFunction<ChronoUnit, Long, String> localization) {
         this.useBraces = useBraces;
-        this.localization = localization != null ? localization : Constant.DEFAULT_LOCALIZATION;
+        this.localization = localization != null ? localization : DEFAULT_LOCALIZATION;
     }
 
     public String get(Date date) {
@@ -57,35 +67,15 @@ public final class PrettyInterval {
     }
 
     private static Collection<Map.Entry<ChronoUnit, Long>> getDiff(LocalDateTime date, LocalDateTime dateNext) {
-        Map.Entry<long[], Boolean> t = getTime(date, dateNext);
-        long[] time = t.getKey();
-        boolean shift = t.getValue();
         Period period = Period.between(date.toLocalDate(), dateNext.toLocalDate());
+        Duration duration = Duration.between(date.toLocalTime(), dateNext.toLocalTime());
         return Arrays.asList(
             Pair.of(ChronoUnit.YEARS, (long) period.getYears()),
             Pair.of(ChronoUnit.MONTHS, (long) period.getMonths()),
-            Pair.of(ChronoUnit.DAYS, (long) period.getDays() - (shift ? 1 : 0)),
-            Pair.of(ChronoUnit.HOURS, time[0]),
-            Pair.of(ChronoUnit.MINUTES, time[1]),
-            Pair.of(ChronoUnit.SECONDS, time[2])
+            Pair.of(ChronoUnit.DAYS, (long) period.getDays()),
+            Pair.of(ChronoUnit.HOURS, (long) duration.toHoursPart()),
+            Pair.of(ChronoUnit.MINUTES, (long) duration.toMinutesPart()),
+            Pair.of(ChronoUnit.SECONDS, (long) duration.toSecondsPart())
         );
-    }
-
-    private static Map.Entry<long[], Boolean> getTime(LocalDateTime date, LocalDateTime dateNext) {
-        LocalDateTime original = LocalDateTime.of(dateNext.getYear(),
-                                                  dateNext.getMonthValue(), dateNext.getDayOfMonth(), date.getHour(), date.getMinute(), date.getSecond());
-        Duration duration = Duration.between(original, dateNext);
-        boolean shift = false;
-        long seconds = duration.getSeconds();
-        if (seconds < 0) {
-            seconds += 24 * Constant.SECONDS_IN_HOUR;
-            shift = true;
-        }
-
-        long hours = seconds / Constant.SECONDS_IN_HOUR;
-        long minutes = ((seconds % Constant.SECONDS_IN_HOUR) / Constant.SECONDS_IN_MINUTE);
-        long secs = (seconds % Constant.SECONDS_IN_MINUTE);
-
-        return Pair.of(new long[]{hours, minutes, secs}, shift);
     }
 }

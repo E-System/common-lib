@@ -22,10 +22,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -36,6 +33,15 @@ import java.util.function.Function;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Percents {
+
+    /**
+     * Min percent value
+     */
+    public static final double MIN = 0.0d;
+    /**
+     * Max percent value
+     */
+    public static final double MAX = 100.0d;
 
     /**
      * Get percent of part in full
@@ -167,18 +173,18 @@ public final class Percents {
         if (Items.isEmpty(items)) {
             return new ArrayList<>();
         }
-        double percent = 100.d;
+        double percent = MAX;
         if (sum != fullSum) {
             percent = value(sum, fullSum).doubleValue();
         }
         int totalSum = 0;
         List<Map.Entry<T, Integer>> result = new ArrayList<>();
-        for (T contractItem : items) {
-            int sumPart = sumFetcher.apply(contractItem);
+        for (T item : items) {
+            int sumPart = sumFetcher.apply(item);
             if (sum != fullSum) {
                 sumPart = get(sumPart, percent);
             }
-            result.add(MutablePair.of(contractItem, sumPart));
+            result.add(MutablePair.of(item, sumPart));
             totalSum += sumPart;
         }
         if (totalSum != sum) {

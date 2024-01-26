@@ -17,6 +17,7 @@
 package com.eslibs.common.file;
 
 import com.eslibs.common.Constant;
+import com.eslibs.common.configuration.connection.IConnection;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.io.FileUtils;
@@ -147,7 +148,7 @@ public final class IO {
             }
             URL source = new URI(url).toURL();
             Path result = Files.createTempFile("download", "");
-            FileUtils.copyURLToFile(source, result.toFile(), (int) Constant.DEFAULT_CONNECT_TIMEOUT, (int) Constant.DEFAULT_RW_TIMEOUT);
+            FileUtils.copyURLToFile(source, result.toFile(), (int) IConnection.DEFAULT_CONNECT_TIMEOUT, (int) IConnection.DEFAULT_RW_TIMEOUT);
             return Pair.of(result, fileNameCreator.apply(source.getPath()));
         } catch (IOException | URISyntaxException e) {
             return null;

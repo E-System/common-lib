@@ -16,7 +16,6 @@
 
 package com.eslibs.common.configuration.connection;
 
-import com.eslibs.common.Constant;
 import com.eslibs.common.configuration.Proxy;
 import com.eslibs.common.security.Ssl;
 import lombok.Builder;
@@ -42,9 +41,9 @@ public class ServerConnection extends SimpleConnection {
     @Builder.Default
     protected final Ssl.Mode ssl = null;
     @Builder.Default
-    private final long connectTimeout = Constant.DEFAULT_CONNECT_TIMEOUT;
+    private final long connectTimeout = DEFAULT_CONNECT_TIMEOUT;
     @Builder.Default
-    private final long rwTimeout = Constant.DEFAULT_RW_TIMEOUT;
+    private final long rwTimeout = DEFAULT_RW_TIMEOUT;
     @Builder.Default
     private final Proxy proxy = null;
     @Builder.Default
