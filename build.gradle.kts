@@ -29,7 +29,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "8.5"
+    gradleVersion = "8.6"
 }
 
 apply("build-${properties["profile"]}.gradle.kts")
@@ -56,8 +56,8 @@ tasks {
     jar {
         manifest {
             attributes(
-                "Implementation-Version" to project.version,
-                "Implementation-Vendor" to "E-SYSTEM"
+                    "Implementation-Version" to project.version,
+                    "Implementation-Vendor" to "E-SYSTEM"
             )
         }
     }
@@ -75,6 +75,18 @@ java {
     withJavadocJar()
 }
 publishing {
+    repositories {
+        maven {
+            url = uri("${properties["repos_url"]}${(if (extra["snapshot"] as Boolean) "snapshots" else "releases")}")
+            credentials(PasswordCredentials::class) {
+                username = "${properties["repos_user"]}"
+                password = "${properties["repos_password"]}"
+            }
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
     publications {
         create<MavenPublication>("library") {
             from(components["java"])
@@ -85,7 +97,7 @@ val jacksonVersion = "2.16.1"
 dependencies {
     api("org.apache.commons:commons-lang3:3.14.0")
     api("commons-io:commons-io:2.15.1")
-    api("org.slf4j:slf4j-api:2.0.9")
+    api("org.slf4j:slf4j-api:2.0.12")
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("org.eclipse.angus:angus-mail:2.0.2")
 
@@ -96,22 +108,22 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
-    testImplementation("org.apache.groovy:groovy:4.0.15")
-    testImplementation("ch.qos.logback:logback-classic:1.4.12")
+    testImplementation("org.apache.groovy:groovy:4.0.18")
+    testImplementation("ch.qos.logback:logback-classic:1.4.14")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 
 val emailTestEnabled =
-    properties["test_email_server"] != null && properties["test_email_login"] != null && properties["test_email_password"] != null
+        properties["test_email_server"] != null && properties["test_email_login"] != null && properties["test_email_password"] != null
 if (emailTestEnabled) {
     tasks.test {
         if (emailTestEnabled) {
             systemProperties(
-                mapOf(
-                    "test_email_server" to properties["test_email_server"],
-                    "test_email_login" to properties["test_email_login"],
-                    "test_email_password" to properties["test_email_password"]
-                )
+                    mapOf(
+                            "test_email_server" to properties["test_email_server"],
+                            "test_email_login" to properties["test_email_login"],
+                            "test_email_password" to properties["test_email_password"]
+                    )
             )
         }
     }
@@ -123,7 +135,7 @@ tasks.named<Test>("test") {
 }
 
 val sonarAvailable =
-    properties["sonar_url"] != null && properties["sonar_user"] != null && properties["sonar_password"] != null
+        properties["sonar_url"] != null && properties["sonar_user"] != null && properties["sonar_password"] != null
 if (sonarAvailable) {
     val url = properties["sonar_url"] as String
     val user = properties["sonar_user"] as String
@@ -131,12 +143,12 @@ if (sonarAvailable) {
     sonar {
         properties {
             properties(
-                mapOf(
-                    "sonar.host.url" to url,
-                    "sonar.login" to user,
-                    "sonar.password" to pass,
-                    "sonar.gradle.skipCompile" to true
-                )
+                    mapOf(
+                            "sonar.host.url" to url,
+                            "sonar.login" to user,
+                            "sonar.password" to pass,
+                            "sonar.gradle.skipCompile" to true
+                    )
             )
         }
     }

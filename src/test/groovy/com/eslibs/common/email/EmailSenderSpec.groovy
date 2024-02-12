@@ -74,7 +74,7 @@ class EmailSenderSpec extends Specification {
                         Message.Attachment.builder()
                                 .data(OutputData.create(
                                         "Тестовое имя файла (из файла).txt",
-                                        file.toString(),
+                                        file,
                                         file
                                 )).build()
                 ])
