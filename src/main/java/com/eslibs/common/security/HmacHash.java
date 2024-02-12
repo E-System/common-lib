@@ -32,7 +32,7 @@ public class HmacHash implements StrHash {
             SecretKeySpec secretKeySpec = new SecretKeySpec(Constant.bytes(secret), alg);
             mac.init(secretKeySpec);
             ByteEncoder encoder = new ByteEncoder(mac.doFinal(value));
-            return hexEncode ? encoder.hexEncode() : encoder.encode();
+            return hexEncode ? encoder.hex() : encoder.base64();
         } catch (Exception ignore) {
             return null;
         }
