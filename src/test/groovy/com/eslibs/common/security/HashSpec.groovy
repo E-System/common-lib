@@ -65,6 +65,7 @@ class HashSpec extends Specification {
         '1234567890'.bytes        || 0x3218
         'qwertyu'.bytes           || 0x4DBE
         '1234567890qwertyu'.bytes || 0x92D8
+        new byte[]{0x0}           || 0xE1F0
     }
 
     def "crc16ccitt with skip must be correct without IndexOutException "() {
@@ -78,6 +79,10 @@ class HashSpec extends Specification {
         '1234567890'.bytes        || 0       || 0       || '1234567890'.bytes
         '1234567890'.bytes        || 100     || 200     || '1234567890'.bytes
         '1234567890'.bytes        || -100    || -200    || '1234567890'.bytes
+    }
+
+    def "XOR"() {
+
     }
 }
 

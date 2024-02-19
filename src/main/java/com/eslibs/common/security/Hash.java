@@ -59,6 +59,20 @@ public final class Hash {
     }
 
     public static CRCHash crc16ccitt(int skipIndex, int skipLen) {
-        return new CRC16ccittHash(skipIndex, skipLen);
+        return crc16ccitt(skipIndex, skipLen, 0xFFFF);
+    }
+
+    public static CRCHash crc16ccitt(int skipIndex, int skipLen, int init) {
+        return new CRC16ccittHash(skipIndex, skipLen, init);
+    }
+
+    public static CRCHash xor() {return xor(0, 0);}
+
+    public static CRCHash xor(int skipIndex, int skipLen) {
+        return xor(skipIndex, skipLen, -1);
+    }
+
+    public static CRCHash xor(int skipIndex, int skipLen, int lastIdx) {
+        return new XorHash(skipIndex, skipLen, lastIdx);
     }
 }

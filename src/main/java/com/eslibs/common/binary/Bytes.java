@@ -57,23 +57,6 @@ public class Bytes {
         }
     }
 
-    public static int xor(byte[] data) {return xor(data, 0, 0);}
-
-    public static int xor(byte[] data, int skipIndex, int skipLen) {
-        return xor(data, skipIndex, skipLen, data.length);
-    }
-
-    public static int xor(byte[] data, int skipIndex, int skipLen, int lastIdx) {
-        byte res = 0x00;
-        for (int i = 0; i < lastIdx; i++) {
-            if (i >= skipIndex && i < skipIndex + skipLen) {
-                continue;
-            }
-            res ^= data[i];
-        }
-        return res;
-    }
-
     /**
      * Форматирует байт в hex значении
      *
@@ -283,7 +266,7 @@ public class Bytes {
      * @return long value
      */
     public static long getLongLE(byte[] b, int index) {
-        return (long) getIntLE(b, index) & 4294967295L | ((long) getIntLE(b, index + 4) & 4294967295L) << 32;
+        return (long) getIntLE(b, index) & 0xFFFFFFFFL | ((long) getIntLE(b, index + 4) & 0xFFFFFFFFL) << 32;
     }
 
     /**
