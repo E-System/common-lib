@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 class LongTlv extends AbstractTlv<Long> {
 
-    LongTlv(int tag, Long value, Predicate<Long> validator) {
+    LongTlv(int tag, long value, Predicate<Long> validator) {
         super(tag, value, validator);
     }
 

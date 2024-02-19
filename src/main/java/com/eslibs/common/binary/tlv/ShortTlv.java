@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 public class ShortTlv extends AbstractTlv<Short> {
 
-    ShortTlv(int tag, Short value, Predicate<Short> validator) {
+    ShortTlv(int tag, short value, Predicate<Short> validator) {
         super(tag, value, validator);
     }
 

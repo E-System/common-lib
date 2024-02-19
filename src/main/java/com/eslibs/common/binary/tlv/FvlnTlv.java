@@ -7,7 +7,7 @@ public class FvlnTlv extends VlnTlv {
 
     private final int decimalCount;
 
-    FvlnTlv(int tag, Long value, int decimalCount, Predicate<Long> validator) {
+    FvlnTlv(int tag, long value, int decimalCount, Predicate<Long> validator) {
         super(tag, value, validator);
         this.decimalCount = decimalCount;
     }

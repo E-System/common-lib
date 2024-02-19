@@ -5,9 +5,9 @@ import com.eslibs.common.binary.Bytes;
 import java.io.IOException;
 import java.util.function.Predicate;
 
-public class IntegerTlv extends AbstractTlv<Integer> {
+public class IntTlv extends AbstractTlv<Integer> {
 
-    IntegerTlv(int tag, Integer value, Predicate<Integer> validator) {
+    IntTlv(int tag, int value, Predicate<Integer> validator) {
         super(tag, value, validator);
     }
 

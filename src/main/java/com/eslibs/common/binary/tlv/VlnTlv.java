@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 public class VlnTlv extends LongTlv {
 
-    VlnTlv(int tag, Long value, Predicate<Long> validator) {
+    VlnTlv(int tag, long value, Predicate<Long> validator) {
         super(tag, value, validator);
     }
 
@@ -16,7 +16,7 @@ public class VlnTlv extends LongTlv {
         int index = full.length - 1;
         while (index >= 0) {
             if (full[index] != 0x0) {
-                return Arrays.copyOf(full, index);
+                return Arrays.copyOf(full, index + 1);
             }
             --index;
         }

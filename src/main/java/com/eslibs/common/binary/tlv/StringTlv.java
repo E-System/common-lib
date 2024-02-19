@@ -5,6 +5,8 @@ import java.util.function.Predicate;
 
 public class StringTlv extends AbstractTlv<String> {
 
+    public static final String DEFAULT_ENCODING = "cp866";
+
     private final String charsetName;
 
     StringTlv(int tag, String value, String charsetName, Predicate<String> validator) {

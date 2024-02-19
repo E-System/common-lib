@@ -1,5 +1,7 @@
 package com.eslibs.common.binary.tlv;
 
+import com.eslibs.common.collection.Items;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -11,7 +13,7 @@ class Stlv extends AbstractTlv<Collection<? extends ITlv>> {
 
     @Override
     public byte[] encodeValue() throws IOException {
-        if (value == null || value.isEmpty()) {
+        if (Items.isEmpty(value)) {
             return new byte[0];
         }
         try (ByteArrayOutputStream result = new ByteArrayOutputStream()) {
