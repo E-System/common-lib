@@ -13,13 +13,13 @@ public class VlnTlv extends LongTlv {
     @Override
     public byte[] encodeValue() throws IOException {
         byte[] full = super.encodeValue();
-        int index = 0;
-        do {
-            if (full[index] == 0x0) {
-                break;
+        int index = full.length - 1;
+        while (index >= 0) {
+            if (full[index] != 0x0) {
+                return Arrays.copyOf(full, index);
             }
-            ++index;
-        } while (index < full.length);
-        return Arrays.copyOf(full, index);
+            --index;
+        }
+        return new byte[]{0x0};
     }
 }
