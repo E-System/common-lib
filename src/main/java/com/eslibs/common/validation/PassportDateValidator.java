@@ -19,10 +19,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -31,19 +28,17 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PassportDateValidator {
 
-    public boolean isValid(Date passportDate, Date birthDate) {
+    public boolean isValid(LocalDate passportDate, LocalDate birthDate) {
         return isValid(passportDate, birthDate, null);
     }
 
-    public boolean isValid(Date passportDate, Date birthDate, LocalDate now) {
+    public boolean isValid(LocalDate passportDate, LocalDate birthDate, LocalDate now) {
         if (passportDate == null || birthDate == null) {
             return true;
         }
-        LocalDate ldBirth = LocalDateTime.ofInstant(birthDate.toInstant(), ZoneId.systemDefault()).toLocalDate();
-        long fullYears = ChronoUnit.YEARS.between(ldBirth, now != null ? now : LocalDate.now());
+        long fullYears = ChronoUnit.YEARS.between(birthDate, now != null ? now : LocalDate.now());
 
-        LocalDate ldPassport = LocalDateTime.ofInstant(passportDate.toInstant(), ZoneId.systemDefault()).toLocalDate();
-        long passportYears = ChronoUnit.YEARS.between(ldBirth, ldPassport);
+        long passportYears = ChronoUnit.YEARS.between(birthDate, passportDate);
 
         return isValidStep(fullYears, passportYears, 45)
                && isValidStep(fullYears, passportYears, 20)

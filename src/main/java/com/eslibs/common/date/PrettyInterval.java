@@ -9,7 +9,6 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -38,17 +37,8 @@ public final class PrettyInterval {
         this.localization = localization != null ? localization : DEFAULT_LOCALIZATION;
     }
 
-    public String get(Date date) {
-        return get(Dates.converter().get(date));
-    }
-
     public String get(LocalDateTime date) {
         return get(date, LocalDateTime.now());
-    }
-
-    public String get(Date date, Date dateNext) {
-        DateConverter converter = Dates.converter();
-        return get(converter.get(date), converter.get(dateNext));
     }
 
     public String get(LocalDateTime date, LocalDateTime dateNext) {

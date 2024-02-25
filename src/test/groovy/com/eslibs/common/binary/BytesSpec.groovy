@@ -24,33 +24,23 @@ import spock.lang.Specification
  */
 class BytesSpec extends Specification {
 
-    def "Serialize and deserialize"() {
-        when:
-        def map = ["k1": "v1"]
-        def serialized = Bytes.serialize(map)
-        def result = Bytes.deserialize(serialized)
-        then:
-        serialized != null
-        result['k1'] == 'v1'
-    }
-
     def "Correct format byte in hex (uppercase)"() {
         expect:
-        Bytes.toHex((byte) 0) == "00"
-        Bytes.toHex((byte) 1) == "01"
-        Bytes.toHex((byte) 15) == "0F"
-        Bytes.toHex((byte) 160) == "A0"
-        Bytes.toHex((byte) 255) == "FF"
+        Bytes.hex((byte) 0) == "00"
+        Bytes.hex((byte) 1) == "01"
+        Bytes.hex((byte) 15) == "0F"
+        Bytes.hex((byte) 160) == "A0"
+        Bytes.hex((byte) 255) == "FF"
     }
 
     def "Correct format bytes in hex (uppercase) with space split"() {
         expect:
-        Bytes.toHex([] as byte[]) == ""
-        Bytes.toHex([0, 0, 0, 0, 0] as byte[]) == "00 00 00 00 00"
-        Bytes.toHex([0, 1, 15, 160, 255] as byte[]) == "00 01 0F A0 FF"
+        Bytes.hex([] as byte[]) == ""
+        Bytes.hex([0, 0, 0, 0, 0] as byte[]) == "00 00 00 00 00"
+        Bytes.hex([0, 1, 15, 160, 255] as byte[]) == "00 01 0F A0 FF"
 
         when:
-        Bytes.toHex(null)
+        Bytes.hex(null)
         then:
         thrown(NullPointerException)
     }

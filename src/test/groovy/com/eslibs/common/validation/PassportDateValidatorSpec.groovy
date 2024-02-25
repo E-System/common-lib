@@ -18,8 +18,8 @@ package com.eslibs.common.validation
 import spock.lang.Shared
 import spock.lang.Specification
 
-import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatterBuilder
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -28,37 +28,37 @@ import java.time.LocalDate
 class PassportDateValidatorSpec extends Specification {
 
     @Shared
-    def sdf = new SimpleDateFormat("dd.MM.yyyy")
+    def sdf = new DateTimeFormatterBuilder().appendPattern("dd.MM.yyyy").toFormatter()
 
     def "True for null values"() {
         expect:
         Validators.PASSPORT_DATE.isValid(pd, bd)
         where:
-        pd         | bd
-        null       | null
-        null       | new Date()
-        new Date() | null
+        pd              | bd
+        null            | null
+        null            | LocalDate.now()
+        LocalDate.now() | null
     }
 
     def "False passport not changed in 14, 20, 45 years"() {
         expect:
         !Validators.PASSPORT_DATE.isValid(pd, bd)
         where:
-        pd                      | bd
-        sdf.parse("27.09.1990") | sdf.parse("27.09.1985")
-        sdf.parse("27.09.1999") | sdf.parse("27.09.1985")
-        sdf.parse("27.09.2000") | sdf.parse("27.09.1985")
-        sdf.parse("27.09.2005") | sdf.parse("27.09.1965")
-        sdf.parse("27.09.2009") | sdf.parse("27.09.1965")
+        pd                                       | bd
+        sdf.parse("27.09.1990", LocalDate::from) | sdf.parse("27.09.1985", LocalDate::from)
+        sdf.parse("27.09.1999", LocalDate::from) | sdf.parse("27.09.1985", LocalDate::from)
+        sdf.parse("27.09.2000", LocalDate::from) | sdf.parse("27.09.1985", LocalDate::from)
+        sdf.parse("27.09.2005", LocalDate::from) | sdf.parse("27.09.1965", LocalDate::from)
+        sdf.parse("27.09.2009", LocalDate::from) | sdf.parse("27.09.1965", LocalDate::from)
     }
 
     def "True if passport changed in 14, 20, 45 years"() {
         expect:
         Validators.PASSPORT_DATE.isValid(pd, bd, LocalDate.of(2015, 9, 26))
         where:
-        pd                      | bd
-        sdf.parse("27.09.2009") | sdf.parse("27.09.1995")
-        sdf.parse("27.09.2005") | sdf.parse("27.09.1985")
-        sdf.parse("27.09.2010") | sdf.parse("27.09.1965")
+        pd                                       | bd
+        sdf.parse("27.09.2009", LocalDate::from) | sdf.parse("27.09.1995", LocalDate::from)
+        sdf.parse("27.09.2005", LocalDate::from) | sdf.parse("27.09.1985", LocalDate::from)
+        sdf.parse("27.09.2010", LocalDate::from) | sdf.parse("27.09.1965", LocalDate::from)
     }
 }

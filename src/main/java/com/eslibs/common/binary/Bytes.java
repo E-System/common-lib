@@ -16,9 +16,6 @@
 
 package com.eslibs.common.binary;
 
-import org.apache.commons.lang3.SerializationUtils;
-
-import java.io.Serializable;
 import java.util.HexFormat;
 import java.util.Objects;
 
@@ -29,41 +26,12 @@ import java.util.Objects;
 public class Bytes {
 
     /**
-     * Deserialize object
-     *
-     * @param arr Source bytes
-     * @param <T> Type of result object
-     * @return Deserialized object
-     */
-    public static <T> T deserialize(byte[] arr) {
-        try {
-            return SerializationUtils.deserialize(arr);
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    /**
-     * Serialize object
-     *
-     * @param obj Object to serialize
-     * @return Byte array with serialized object
-     */
-    public static byte[] serialize(Serializable obj) {
-        try {
-            return SerializationUtils.serialize(obj);
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    /**
      * Форматирует байт в hex значении
      *
      * @param b - байт - значение
      * @return строку hex значения
      */
-    public static String toHex(byte b) {
+    public static String hex(byte b) {
         return HexFormat.of().withUpperCase().toHexDigits(b);
     }
 
@@ -73,7 +41,7 @@ public class Bytes {
      * @param b - мастив байтов
      * @return строку hex значений байтов объединенных пробелом
      */
-    public static String toHex(byte... b) {
+    public static String hex(byte... b) {
         Objects.requireNonNull(b);
         return HexFormat.of().withUpperCase().withDelimiter(" ").formatHex(b);
     }

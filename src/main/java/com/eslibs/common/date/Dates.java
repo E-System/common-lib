@@ -20,13 +20,14 @@ import com.eslibs.common.model.SItem;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -60,46 +61,10 @@ public final class Dates {
             .collect(Collectors.toList());
     }
 
-    public static boolean contains(Date startDate, Date endDate, Date date, ZoneId zoneId) {
-        return contains(
-            LocalDateTime.ofInstant(startDate.toInstant(), zoneId),
-            endDate != null ? LocalDateTime.ofInstant(endDate.toInstant(), zoneId) : null,
-            LocalDateTime.ofInstant(date.toInstant(), zoneId)
-        );
-    }
-
     public static boolean contains(LocalDateTime startDate, LocalDateTime endDate, LocalDateTime date) {
         return date.isAfter(startDate) && !(endDate != null && !date.isBefore(endDate));
     }
 
-    /**
-     * Получить количество юнитов между переданной датой и текущей
-     *
-     * @param chronoUnit тип юнитов (дни, часы....)
-     * @param start      начало интервала
-     * @return количество юнитов между переданной датой и текущей
-     */
-    public static long between(ChronoUnit chronoUnit, Date start) {
-        return chronoUnit.between(
-            start.toInstant(),
-            ZonedDateTime.now()
-        );
-    }
-
-    /**
-     * Получить количество юнитов между переданными датами
-     *
-     * @param chronoUnit тип юнитов (дни, часы....)
-     * @param start      начало интервала
-     * @param end        конец интервала
-     * @return количество юнитов между переданными датами
-     */
-    public static long between(ChronoUnit chronoUnit, Date start, Date end) {
-        return chronoUnit.between(
-            start.toInstant(),
-            end.toInstant()
-        );
-    }
 
     /**
      * Проверить что дата не принадлежит сегодня (меньше начала сегодняшнего дня)
@@ -112,31 +77,6 @@ public final class Dates {
     }
 
     /**
-     * Проверить что дата в будущем (более текущей даты)
-     *
-     * @param date   дата для проверки
-     * @param zoneId таймзона
-     * @return true - дата в будущем (более текущей даты)
-     */
-    public static boolean isAfterNow(Date date, ZoneId zoneId) {
-        LocalDateTime dt = LocalDateTime.ofInstant(date.toInstant(), zoneId);
-        LocalDateTime now = LocalDateTime.now(zoneId);
-        return dt.isAfter(now);
-    }
-
-    /**
-     * Get week day
-     *
-     * @param year       Year
-     * @param month      Month
-     * @param dayOfMonth Day of month
-     * @return Week day
-     */
-    public static DayOfWeek getWeekDay(int year, int month, int dayOfMonth) {
-        return LocalDate.of(year, month, dayOfMonth).getDayOfWeek();
-    }
-
-    /**
      * Get week number in year
      *
      * @param year       Year
@@ -145,9 +85,8 @@ public final class Dates {
      * @return Week number in year
      */
     public static int getWeekNumber(int year, int month, int dayOfMonth) {
-        LocalDate date = LocalDate.of(year, month, dayOfMonth);
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-        return date.get(woy);
+        return LocalDate.of(year, month, dayOfMonth).get(woy);
     }
 
     public static DateDiff diff(ChronoUnit unit) {

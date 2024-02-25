@@ -16,7 +16,7 @@
 package com.eslibs.common.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -26,6 +26,6 @@ public record Passport(
     String serial,
     String number,
     String issued,
-    Date issuedDate,
+    LocalDate issuedDate,
     String divisionCode
 ) implements Serializable {}

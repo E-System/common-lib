@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -81,8 +82,8 @@ public class EmailReceiver extends EmailProcessor {
                         .recipients(Stream.of(message.getFrom()).map(Address::toString).collect(Collectors.joining(";")))
                         .subject(message.getSubject())
                         .content(fetchText(message))
-                        .sentDate(message.getSentDate())
-                        .receivedDate(message.getReceivedDate())
+                        .sentDate(message.getSentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
+                        .receivedDate(message.getReceivedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
                         .headers(headers)
                         .attachments(attachments)
                         .build()
