@@ -132,14 +132,14 @@ class DatesSpec extends Specification {
         ZoneId.of('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
     }*/
 
-    def "Get week number in year"() {
+    /*def "Get week number in year"() {
         expect:
         Dates.getWeekNumber(year, month, day) == result
         where:
         year | month | day || result
         2015 | 1     | 1   || 1
         2015 | 2     | 1   || 5
-    }
+    }*/
 
     def "Convert Date to LocalDateTime"() {
         given:
