@@ -32,13 +32,11 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
-    - name: Build with Gradle
-      run: ./gradlew build
-
-    - name: Publish to Reposilite
-      run: ./gradlew publish
+    - name: Build and publish to Reposilite
+      run: ./gradlew build publish
       env:
         profile: develop
         repos_url: ${{ secrets.MAVEN_URL }}
         repos_user: ${{ secrets.MAVEN_NAME }}
         repos_password: ${{ secrets.MAVEN_SECRET }}
+     
