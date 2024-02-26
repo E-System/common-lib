@@ -38,5 +38,7 @@ jobs:
     - name: Publish to Reposilite
       run: ./gradlew publish
       env:
-        MAVEN_NAME: ${{ secrets.MAVEN_NAME }}
-        MAVEN_SECRET: ${{ secrets.MAVEN_SECRET }}
+        profile: develop
+        repos_url: ${{ secrets.MAVEN_URL }}
+        repos_user: ${{ secrets.MAVEN_NAME }}
+        repos_password: ${{ secrets.MAVEN_SECRET }}
