@@ -32,7 +32,7 @@ tasks.wrapper {
     gradleVersion = "8.6"
 }
 
-apply("build-${properties["profile"]}.gradle.kts")
+apply("build-${extra["profile"]}.gradle.kts")
 
 group = extra["mainGroup"] as String
 version = extra["mainVersion"] as String + (if (extra["snapshot"] as Boolean) "-SNAPSHOT" else "")
@@ -77,10 +77,10 @@ java {
 publishing {
     repositories {
         maven {
-            url = uri("${properties["repos_url"]}${(if (extra["snapshot"] as Boolean) "snapshots" else "releases")}")
+            url = uri("${extra["repos_url"]}${(if (extra["snapshot"] as Boolean) "snapshots" else "releases")}")
             credentials(PasswordCredentials::class) {
-                username = "${properties["repos_user"]}"
-                password = "${properties["repos_password"]}"
+                username = "${extra["repos_user"]}"
+                password = "${extra["repos_password"]}"
             }
             authentication {
                 create<BasicAuthentication>("basic")
@@ -114,15 +114,15 @@ dependencies {
 }
 
 val emailTestEnabled =
-        properties["test_email_server"] != null && properties["test_email_login"] != null && properties["test_email_password"] != null
+        extra["test_email_server"] != null && extra["test_email_login"] != null && extra["test_email_password"] != null
 if (emailTestEnabled) {
     tasks.test {
         if (emailTestEnabled) {
             systemProperties(
                     mapOf(
-                            "test_email_server" to properties["test_email_server"],
-                            "test_email_login" to properties["test_email_login"],
-                            "test_email_password" to properties["test_email_password"]
+                            "test_email_server" to extra["test_email_server"],
+                            "test_email_login" to extra["test_email_login"],
+                            "test_email_password" to extra["test_email_password"]
                     )
             )
         }
@@ -135,11 +135,11 @@ tasks.named<Test>("test") {
 }
 
 val sonarAvailable =
-        properties["sonar_url"] != null && properties["sonar_user"] != null && properties["sonar_password"] != null
+        extra["sonar_url"] != null && extra["sonar_user"] != null && extra["sonar_password"] != null
 if (sonarAvailable) {
-    val url = properties["sonar_url"] as String
-    val user = properties["sonar_user"] as String
-    val pass = properties["sonar_password"] as String
+    val url = extra["sonar_url"] as String
+    val user = extra["sonar_user"] as String
+    val pass = extra["sonar_password"] as String
     sonar {
         properties {
             properties(
