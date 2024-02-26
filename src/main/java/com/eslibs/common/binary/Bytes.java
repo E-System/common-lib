@@ -16,6 +16,8 @@
 
 package com.eslibs.common.binary;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
 import java.util.Objects;
 
@@ -24,6 +26,16 @@ import java.util.Objects;
  * @since 12.06.15
  */
 public class Bytes {
+
+    /**
+     * Default encoding
+     */
+    public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
+
+    public static byte[] of(String value) {
+        return Objects.requireNonNull(value, "value must not be null")
+            .getBytes(DEFAULT_ENCODING);
+    }
 
     /**
      * Форматирует байт в hex значении

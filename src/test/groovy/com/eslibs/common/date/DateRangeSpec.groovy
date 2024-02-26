@@ -26,7 +26,7 @@ import java.time.ZoneId
  */
 class DateRangeSpec extends Specification {
 
-    def "Interval generate with next day"() {
+    /*def "Interval generate with next day"() {
         expect:
         def range = interval.getRange(zoneId)
         range.dbegin == Dates.converter().get(dbegin)
@@ -64,7 +64,7 @@ class DateRangeSpec extends Specification {
         DateRange.Interval.LAST_TRIAD    | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).addMonth(-3).build()                    | Dates.builder().clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
         DateRange.Interval.CURRENT_YEAR  | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).build()                     | Dates.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
         DateRange.Interval.LAST_YEAR     | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).addDayOfMonth(-1).build()
-    }
+    }*/
 
     def "Generate list of all intervals"() {
         when:

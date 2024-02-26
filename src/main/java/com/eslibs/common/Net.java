@@ -111,7 +111,7 @@ public class Net {
      * @return числовое представление широковещательного адреса для подсети
      */
     public static long getBroadcast(long subnet, int mask) {
-        return subnet + (2 << 31 - mask) - 1;
+        return subnet + (2L << 31 - mask) - 1;
     }
 
     /**

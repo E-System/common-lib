@@ -16,7 +16,7 @@
 
 package com.eslibs.common.file;
 
-import com.eslibs.common.Constant;
+import com.eslibs.common.binary.Bytes;
 import com.eslibs.common.configuration.connection.IConnection;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -99,7 +99,7 @@ public final class IO {
     }
 
     public static String toString(InputStream inputStream) throws IOException {
-        return IOUtils.toString(inputStream, Constant.DEFAULT_ENCODING);
+        return IOUtils.toString(inputStream, Bytes.DEFAULT_ENCODING);
     }
 
     public static byte[] toBytes(InputStream inputStream) throws IOException {

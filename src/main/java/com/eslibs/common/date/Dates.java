@@ -17,20 +17,24 @@
 package com.eslibs.common.date;
 
 import com.eslibs.common.model.SItem;
+import com.eslibs.common.text.Texts;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -40,10 +44,31 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Dates {
 
-    /**
-     * Default timezone prefixes
-     */
-    public static final String DEFAULT_ZONES_PREFIXES = "^(Africa|America|Asia|Atlantic|Australia|Europe|Indian|Pacific)/.*";
+    @Getter
+    @RequiredArgsConstructor
+    public static class Environment {
+
+        private final ZoneId zoneId = ZoneId.systemDefault();
+        private final Locale locale = Locale.getDefault();
+        private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        private final DateTimeFormatter sortableDateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        private final DateTimeFormatter sortableDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        private final String zonePrefixes = "^(Africa|America|Asia|Atlantic|Australia|Europe|Indian|Pacific)/.*";
+        private final BiFunction<ChronoUnit, Long, String> intervalLocalization = (type, value) -> switch (type) {
+            case YEARS -> value + " " + Texts.pluralize(value, "год", "года", "лет");
+            case MONTHS -> value + " мес.";
+            case DAYS -> value + " дн.";
+            case HOURS -> value + " ч.";
+            case MINUTES -> value + " м.";
+            case SECONDS -> value + " c.";
+            default -> throw new IllegalStateException("Unexpected value: " + type);
+        };
+    }
+
+    public static Environment getEnvironment() {
+        return new Environment();
+    }
 
     public static boolean isZoneValid(String id) {
         try {
@@ -55,7 +80,7 @@ public final class Dates {
 
     public static Collection<ZoneId> availableZones() {
         return ZoneId.getAvailableZoneIds().stream()
-            .filter(v -> v.matches(DEFAULT_ZONES_PREFIXES))
+            .filter(v -> v.matches(Dates.getEnvironment().zonePrefixes))
             .map(ZoneId::of)
             .sorted(Comparator.comparing(ZoneId::getId))
             .collect(Collectors.toList());
@@ -89,14 +114,6 @@ public final class Dates {
         return LocalDate.of(year, month, dayOfMonth).get(woy);
     }
 
-    public static DateDiff diff(ChronoUnit unit) {
-        return diff(unit, null);
-    }
-
-    public static DateDiff diff(ChronoUnit unit, ZoneId zoneId) {
-        return new DateDiff(unit, zoneId);
-    }
-
     public static PrettyInterval pretty() {
         return pretty(false);
     }
@@ -110,12 +127,12 @@ public final class Dates {
     }
 
     public static PrettyInterval pretty(boolean useBraces, BiFunction<ChronoUnit, Long, String> localization) {
-        return new PrettyInterval(useBraces, localization);
+        return new PrettyInterval(useBraces, localization != null ? localization : Dates.getEnvironment().intervalLocalization);
     }
 
-    public static Collection<SItem> ranges(ZoneId zoneId, String pattern, boolean lastNextDay) {
+    public static Collection<SItem> ranges(ZoneId zoneId, DateTimeFormatter dateTimeFormatter, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
-            .map(v -> v.getItem(zoneId, pattern, lastNextDay))
+            .map(v -> v.getItem(zoneId, dateTimeFormatter, lastNextDay))
             .collect(Collectors.toList());
     }
 
@@ -137,41 +154,10 @@ public final class Dates {
         return DateRange.Interval.TODAY.getRange(zoneId, lastNextDay);
     }
 
-    public static DateBuilder builder() {
-        return builder(ZoneId.systemDefault());
-    }
-
-    public static DateBuilder builder(ZoneId zoneId) {
-        return new DateBuilder(zoneId);
-    }
-
     public static TimeConverter timeConverter() {
         return TimeConverter.getInstance();
     }
 
-    public static DateFormatter formatter() {
-        return formatter(null);
-    }
-
-    public static DateFormatter formatter(ZoneId zoneId) {
-        return formatter(zoneId, null);
-    }
-
-    public static DateFormatter formatter(ZoneId zoneId, Locale locale) {
-        return new DateFormatter(zoneId, locale);
-    }
-
-    public static DateParser parser() {
-        return parser(null);
-    }
-
-    public static DateParser parser(ZoneId zoneId) {
-        return parser(zoneId, null);
-    }
-
-    public static DateParser parser(ZoneId zoneId, Locale locale) {
-        return new DateParser(zoneId, locale);
-    }
 
     public static DateConverter converter() {
         return converter(ZoneId.systemDefault());
@@ -181,11 +167,24 @@ public final class Dates {
         return new DateConverter(zoneId);
     }
 
-    public static DateGenerator generator() {
-        return generator(ZoneId.systemDefault());
+    public static Map<Integer, Map<Integer, Collection<LocalDate>>> calendar(LocalDate startYear, int count) {
+        Map<Integer, Map<Integer, Collection<LocalDate>>> result = new LinkedHashMap<>();
+        long numOfDaysBetween = ChronoUnit.DAYS.between(startYear, startYear.plusYears(count));
+        IntStream.iterate(0, v -> v + 1)
+            .limit(numOfDaysBetween)
+            .mapToObj(startYear::plusDays)
+            .forEach(v ->
+                         result.computeIfAbsent(v.getYear(), y -> new LinkedHashMap<>()).computeIfAbsent(v.getMonthValue(), m -> new ArrayList<>()).add(v)
+            );
+        return result;
     }
 
-    public static DateGenerator generator(ZoneId zoneId) {
-        return new DateGenerator(zoneId);
+    public static Collection<LocalDate> days(LocalDate fromInclusive, LocalDate toExclusive, Predicate<LocalDate> filter) {
+        long numOfDaysBetween = ChronoUnit.DAYS.between(fromInclusive, toExclusive);
+        return IntStream.iterate(0, v -> v + 1)
+            .limit(numOfDaysBetween)
+            .mapToObj(fromInclusive::plusDays)
+            .filter(v -> filter == null || filter.test(v))
+            .collect(Collectors.toList());
     }
 }

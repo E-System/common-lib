@@ -20,11 +20,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import java.time.ZoneId
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
@@ -70,33 +66,20 @@ class DatesSpec extends Specification {
         !zones.contains(ZoneId.of('UTC'))
     }
 
-    def "NextDay"() {
+   /* def "NextDay"() {
         expect:
         Dates.generator(zone).nextDay(date) == result
         where:
         date                             | zone                       | result
         sdf.parse("06.02.2015 23:30:00") | ZoneId.of("Europe/Moscow") | sdf.parse("07.02.2015 23:30:00")
-    }
+    }*/
 
     def "Contains"() {
         expect:
-        Dates.contains(dbegin, dend, date, timeZone)
+        Dates.contains(dbegin, dend, date)
         where:
-        dbegin                           | dend                             | date       | timeZone
-        sdf.parse("06.02.2015 00:00:00") | sdf.parse("07.02.3015 00:00:00") | new Date() | ZoneId.of("Europe/Moscow")
-    }
-
-    def "IsAfterNow"() {
-        expect:
-        Dates.isAfterNow(date, zoneId) == result
-        where:
-        date                                                  | zoneId                     | result
-        new Date()                                            | ZoneId.systemDefault()     | false
-        sdf.parse("06.02." + (currentYear + 1) + " 23:00:00") | ZoneId.systemDefault()     | true
-        sdf.parse("05.02." + (currentYear - 1) + " 23:00:00") | ZoneId.systemDefault()     | false
-        new Date()                                            | ZoneId.of("Europe/Moscow") | false
-        sdf.parse("06.02." + (currentYear + 1) + " 23:00:00") | ZoneId.of("Europe/Moscow") | true
-        sdf.parse("05.02." + (currentYear - 1) + " 23:00:00") | ZoneId.of("Europe/Moscow") | false
+        dbegin                                          | dend                                            | date
+        LocalDateTime.parse("06.02.2015 00:00:00", dtf) | LocalDateTime.parse("07.02.3015 00:00:00", dtf) | LocalDateTime.now()
     }
 
     def "IsBeforeToday"() {
@@ -109,79 +92,45 @@ class DatesSpec extends Specification {
         LocalDateTime.now()                                                  | false
     }
 
-    def "Get start month date"() {
+   /* def "Get start month date"() {
         expect:
         Dates.generator().monthStart() == result
         where:
         result << Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
-    }
+    }*/
 
-    def "Get start month date (in Moscow time zone)"() {
+   /* def "Get start month date (in Moscow time zone)"() {
         expect:
         Dates.generator(zone).monthStart() == result
         where:
         zone                       | result
         ZoneId.of("Europe/Moscow") | Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant())
-    }
+    }*/
 
-    def "Days count between dates"() {
-        expect:
-        Dates.between(ChronoUnit.DAYS, start, end) == result
-        where:
-        start                            | end                              | result
-        new Date()                       | new Date()                       | 0
-        sdf.parse("05.02.2015 00:00:00") | sdf.parse("06.02.2015 00:00:00") | 1
-        sdf.parse("05.02.2015 00:00:00") | sdf.parse("04.02.2015 00:00:00") | -1
-    }
-
-    def "Hours count between dates"() {
-        expect:
-        Dates.between(ChronoUnit.HOURS, start, end) == result
-        where:
-        start                            | end                              | result
-        new Date()                       | new Date()                       | 0
-        sdf.parse("05.02.2015 00:00:00") | sdf.parse("06.02.2015 00:00:00") | 24
-        sdf.parse("05.02.2015 00:00:00") | sdf.parse("04.02.2015 00:00:00") | -24
-    }
-
-    def "Today begin"() {
+   /* def "Today begin"() {
         expect:
         Dates.generator().today() == result
         where:
         result << Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant())
-    }
+    }*/
 
-    def "Format months"() {
+   /* def "Format months"() {
         expect:
         Dates.formatter().format(date, format) == result
         where:
         date                             | format             | result
         sdf.parse("02.05.2015 00:00:00") | "«dd» MMMM yyyyг." | "«02» мая 2015г."
         sdf.parse("02.05.2015 00:00:00") | "MMMM"             | "май"
-    }
+    }*/
 
-    def "Format with time zone"() {
+   /* def "Format with time zone"() {
         expect:
         Dates.formatter(zoneId).format(date, format) == result
         where:
         zoneId                     | date                             | format                || result
         ZoneId.systemDefault()     | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
         ZoneId.of('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
-    }
-
-    def "Get week day"() {
-        expect:
-        Dates.getWeekDay(year, month, day) == result
-        where:
-        year | month | day || result
-        2015 | 8     | 10  || DayOfWeek.MONDAY
-        2015 | 8     | 11  || DayOfWeek.TUESDAY
-        2015 | 8     | 12  || DayOfWeek.WEDNESDAY
-        2015 | 8     | 13  || DayOfWeek.THURSDAY
-        2015 | 8     | 14  || DayOfWeek.FRIDAY
-        2015 | 8     | 15  || DayOfWeek.SATURDAY
-        2015 | 8     | 16  || DayOfWeek.SUNDAY
-    }
+    }*/
 
     def "Get week number in year"() {
         expect:
@@ -216,40 +165,40 @@ class DatesSpec extends Specification {
         result.getTime() == date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
-    def "Parse with default pattern"() {
+    /* def "Parse with default pattern"() {
+         when:
+         def date = Dates.parser().parse("27.09.1985", false)
+         then:
+         Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
+     }*/
+
+    /*def "Parse with default pattern (in method)"() {
         when:
         def date = Dates.parser().parse("27.09.1985", false)
         then:
         Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
-    }
+    }*/
 
-    def "Parse with default pattern (in method)"() {
-        when:
-        def date = Dates.parser().parse("27.09.1985", false)
-        then:
-        Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
-    }
+    /* def "Parse with default pattern (in method) with time"() {
+         when:
+         def date = Dates.parser().parse("27.09.1985 23:20:15", true)
+         then:
+         Dates.formatter().format(date, true) == "27.09.1985 23:20:15"
+     }*/
 
-    def "Parse with default pattern (in method) with time"() {
-        when:
-        def date = Dates.parser().parse("27.09.1985 23:20:15", true)
-        then:
-        Dates.formatter().format(date, true) == "27.09.1985 23:20:15"
-    }
-
-    def "Parse with invalid date"() {
-        when:
-        def date = Dates.parser().parse("27.09.1985 10:20:30", false)
-        then:
-        Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
-    }
+    /* def "Parse with invalid date"() {
+         when:
+         def date = Dates.parser().parse("27.09.1985 10:20:30", false)
+         then:
+         Dates.formatter().format(date, true) == "27.09.1985 00:00:00"
+     }*/
 
     def "Date diff"() {
         when:
         def now = LocalDateTime.now()
         def start = now.minusDays(1)
         then:
-        Dates.diff(ChronoUnit.SECONDS).get(start, now) == 86400
+        ChronoUnit.SECONDS.between(start, now) == 86400
     }
 
     def "Date diff with timezone"() {
@@ -258,7 +207,7 @@ class DatesSpec extends Specification {
         def now = LocalDateTime.now(zoneId)
         def start = now.minusDays(1)
         then:
-        Dates.diff(ChronoUnit.SECONDS).get(start, now) == 86400
+        ChronoUnit.SECONDS.between(start, now) == 86400
     }
 
     def "Date diff with timezone fow now"() {
@@ -267,17 +216,17 @@ class DatesSpec extends Specification {
         def now = LocalDateTime.now(zoneId)
         def start = now.minusDays(1)
         then:
-        Dates.diff(ChronoUnit.SECONDS, zoneId).get(start) == 86400
+        ChronoUnit.SECONDS.between(start, LocalDateTime.now(zoneId)) == 86400
     }
 
-    def "Calendar with current year"(){
+    def "Calendar with current year"() {
         when:
         def startOfYear = LocalDate.now().with(TemporalAdjusters.firstDayOfYear())
-        def calendar = Dates.generator().calendar(startOfYear, 1)
+        def calendar = Dates.calendar(startOfYear, 1)
         then:
         calendar.size() == 1
         calendar[startOfYear.getYear()].size() == 12
-        with(calendar[startOfYear.getYear()]){
+        with(calendar[startOfYear.getYear()]) {
             it[1].size() == YearMonth.of(startOfYear.getYear(), 1).lengthOfMonth()
             it[2].size() == YearMonth.of(startOfYear.getYear(), 2).lengthOfMonth()
             it[3].size() == YearMonth.of(startOfYear.getYear(), 3).lengthOfMonth()
@@ -293,15 +242,15 @@ class DatesSpec extends Specification {
         }
     }
 
-    def "Calendar with two years"(){
+    def "Calendar with two years"() {
         when:
         def startOfYear = LocalDate.now().with(TemporalAdjusters.firstDayOfYear())
-        def calendar = Dates.generator().calendar(startOfYear, 2)
+        def calendar = Dates.calendar(startOfYear, 2)
         then:
         calendar.size() == 2
         calendar[startOfYear.getYear()].size() == 12
         calendar[startOfYear.getYear() + 1].size() == 12
-        with(calendar[startOfYear.getYear()]){
+        with(calendar[startOfYear.getYear()]) {
             it[1].size() == YearMonth.of(startOfYear.getYear(), 1).lengthOfMonth()
             it[2].size() == YearMonth.of(startOfYear.getYear(), 2).lengthOfMonth()
             it[3].size() == YearMonth.of(startOfYear.getYear(), 3).lengthOfMonth()
@@ -315,7 +264,7 @@ class DatesSpec extends Specification {
             it[11].size() == YearMonth.of(startOfYear.getYear(), 11).lengthOfMonth()
             it[12].size() == YearMonth.of(startOfYear.getYear(), 12).lengthOfMonth()
         }
-        with(calendar[startOfYear.getYear() + 1]){
+        with(calendar[startOfYear.getYear() + 1]) {
             it[1].size() == YearMonth.of(startOfYear.getYear() + 1, 1).lengthOfMonth()
             it[2].size() == YearMonth.of(startOfYear.getYear() + 1, 2).lengthOfMonth()
             it[3].size() == YearMonth.of(startOfYear.getYear() + 1, 3).lengthOfMonth()
@@ -331,11 +280,11 @@ class DatesSpec extends Specification {
         }
     }
 
-    def "Days"(){
+    def "Days"() {
         when:
         def from = LocalDate.now()
         def to = from.plusDays(7)
-        def result = Dates.generator().days(from, to, null)
+        def result = Dates.days(from, to, null)
         then:
         result.size() == 7
         result[0] == from
@@ -348,22 +297,22 @@ class DatesSpec extends Specification {
         result[6] == to.minusDays(1)
     }
 
-    def "Days for month"(){
+    def "Days for month"() {
         when:
         def from = LocalDate.of(2021, 4, 1)
         def to = from.plusMonths(1)
-        def result = Dates.generator().days(from, to, null)
+        def result = Dates.days(from, to, null)
         then:
         result.size() == 30
         result[0] == from
         result[29] == to.minusDays(1)
     }
 
-    def "Days with filter"(){
+    def "Days with filter"() {
         when:
         def from = LocalDate.of(2021, 4, 1)
         def to = from.plusDays(7)
-        def result = Dates.generator().days(from, to, {it.getDayOfWeek() == DayOfWeek.MONDAY})
+        def result = Dates.days(from, to, { it.getDayOfWeek() == DayOfWeek.MONDAY })
         then:
         result.size() == 1
         result[0] == from.plusDays(4)

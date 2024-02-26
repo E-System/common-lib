@@ -1,7 +1,7 @@
 package com.eslibs.common.security;
 
-import com.eslibs.common.Constant;
 import com.eslibs.common.binary.ByteEncoder;
+import com.eslibs.common.binary.Bytes;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -18,7 +18,7 @@ public class HmacHash implements StrHash {
     @Override
     public String of(String value) {
         try {
-            return of(Constant.bytes(value));
+            return of(Bytes.of(value));
         } catch (Exception ignore) {
             return null;
         }
@@ -29,7 +29,7 @@ public class HmacHash implements StrHash {
         try {
             String alg = "Hmac" + algorithm;
             Mac mac = Mac.getInstance(alg);
-            SecretKeySpec secretKeySpec = new SecretKeySpec(Constant.bytes(secret), alg);
+            SecretKeySpec secretKeySpec = new SecretKeySpec(Bytes.of(secret), alg);
             mac.init(secretKeySpec);
             ByteEncoder encoder = new ByteEncoder(mac.doFinal(value));
             return hexEncode ? encoder.hex() : encoder.base64();

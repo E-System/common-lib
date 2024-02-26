@@ -16,7 +16,8 @@
 
 package com.eslibs.common.email
 
-import com.eslibs.common.Constant
+
+import com.eslibs.common.binary.Bytes
 import com.eslibs.common.configuration.credentials.Credentials
 import com.eslibs.common.model.data.OutputData
 import spock.lang.IgnoreIf
@@ -100,7 +101,7 @@ class EmailSenderSpec extends Specification {
                                 .data(OutputData.create(
                                         'Тестовое имя файла (из байт).txt',
                                         'text/plain',
-                                        Constant.bytes(fileContent),
+                                        Bytes.of(fileContent),
                                 )).build()
                 ])
                 .build()

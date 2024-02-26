@@ -17,7 +17,7 @@
 package com.eslibs.common.security;
 
 
-import com.eslibs.common.Constant;
+import com.eslibs.common.binary.Bytes;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -26,9 +26,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.Collections;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -47,7 +45,7 @@ public final class RSASigner {
     }
 
     public RSASigner(PrivateKey privateKey, PublicKey publicKey, String algorithm) {
-        this(privateKey, publicKey, algorithm, Constant.DEFAULT_ENCODING);
+        this(privateKey, publicKey, algorithm, Bytes.DEFAULT_ENCODING);
     }
 
     /**

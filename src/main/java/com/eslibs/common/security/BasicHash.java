@@ -1,6 +1,6 @@
 package com.eslibs.common.security;
 
-import com.eslibs.common.Constant;
+import com.eslibs.common.binary.Bytes;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ public class BasicHash implements StrHash {
         if (value == null) {
             return null;
         }
-        return of(Constant.bytes(value));
+        return of(Bytes.of(value));
     }
 
     @Override

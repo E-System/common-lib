@@ -8,7 +8,7 @@
 
 package com.eslibs.common.locale;
 
-import com.eslibs.common.Constant;
+import com.eslibs.common.binary.Bytes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,7 +45,7 @@ public class UTF8Control extends ResourceBundle.Control {
         }
         if (stream != null) {
             try {
-                bundle = new PropertyResourceBundle(new InputStreamReader(stream, Constant.DEFAULT_ENCODING));
+                bundle = new PropertyResourceBundle(new InputStreamReader(stream, Bytes.DEFAULT_ENCODING));
             } finally {
                 stream.close();
             }

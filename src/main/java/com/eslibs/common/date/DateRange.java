@@ -16,7 +16,6 @@
 
 package com.eslibs.common.date;
 
-import com.eslibs.common.Constant;
 import com.eslibs.common.model.SItem;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,11 +40,11 @@ public class DateRange {
     private final LocalDateTime dend;
 
     public String getIntervalString() {
-        return getIntervalString(Constant.DEFAULT_DATE_PATTERN);
+        return getIntervalString(null);
     }
 
-    public String getIntervalString(String pattern) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+    public String getIntervalString(DateTimeFormatter dateTimeFormatter) {
+        DateTimeFormatter formatter = dateTimeFormatter != null ? dateTimeFormatter : Dates.getEnvironment().getDateFormatter();
         return formatter.format(getDbegin()) + "|" + formatter.format(getDend());
     }
 
@@ -171,16 +170,16 @@ public class DateRange {
             return getItem(zoneId, true);
         }
 
-        public SItem getItem(ZoneId zoneId, String pattern) {
-            return getItem(zoneId, pattern, true);
+        public SItem getItem(ZoneId zoneId, DateTimeFormatter dateTimeFormatter) {
+            return getItem(zoneId, dateTimeFormatter, true);
         }
 
         public SItem getItem(ZoneId zoneId, boolean lastNextDay) {
-            return getItem(zoneId, Constant.DEFAULT_DATE_PATTERN, lastNextDay);
+            return getItem(zoneId, null, lastNextDay);
         }
 
-        public SItem getItem(ZoneId zoneId, String pattern, boolean lastNextDay) {
-            return new SItem(this.getRange(zoneId, lastNextDay).getIntervalString(pattern), this.toString());
+        public SItem getItem(ZoneId zoneId, DateTimeFormatter dateTimeFormatter, boolean lastNextDay) {
+            return new SItem(this.getRange(zoneId, lastNextDay).getIntervalString(dateTimeFormatter), this.toString());
         }
     }
 }

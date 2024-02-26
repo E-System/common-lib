@@ -1,11 +1,11 @@
 package com.eslibs.common.security;
 
-import com.eslibs.common.Constant;
+import com.eslibs.common.binary.Bytes;
 
 public interface CRCHash {
 
     default long of(String value) {
-        return of(Constant.bytes(value));
+        return of(Bytes.of(value));
     }
 
     long of(byte[] value);

@@ -19,7 +19,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.LocalDate
-import java.time.format.DateTimeFormatterBuilder
+import java.time.format.DateTimeFormatter
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatterBuilder
 class PassportDateValidatorSpec extends Specification {
 
     @Shared
-    def sdf = new DateTimeFormatterBuilder().appendPattern("dd.MM.yyyy").toFormatter()
+    def sdf = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
     def "True for null values"() {
         expect:

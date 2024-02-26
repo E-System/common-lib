@@ -32,7 +32,11 @@ tasks.wrapper {
     gradleVersion = "8.6"
 }
 
-apply("build-${System.getenv()["profile"]}.gradle.kts")
+fun resolve(name: String): String? {
+    return (System.getenv()[name] ?: properties[name]) as String?
+}
+
+apply("build-${resolve("profile")}.gradle.kts")
 
 group = extra["mainGroup"] as String
 version = extra["mainVersion"] as String + (if (extra["snapshot"] as Boolean) "-SNAPSHOT" else "")
@@ -77,10 +81,10 @@ java {
 publishing {
     repositories {
         maven {
-            url = uri("${System.getenv()["repos_url"]}${(if (extra["snapshot"] as Boolean) "snapshots" else "releases")}")
+            url = uri("${resolve("repos_url")}${(if (extra["snapshot"] as Boolean) "snapshots" else "releases")}")
             credentials(PasswordCredentials::class) {
-                username = "${System.getenv()["repos_user"]}"
-                password = "${System.getenv()["repos_password"]}"
+                username = resolve("repos_user")
+                password = resolve("repos_password")
             }
             authentication {
                 create<BasicAuthentication>("basic")
@@ -114,15 +118,15 @@ dependencies {
 }
 
 val emailTestEnabled =
-        System.getenv()["test_email_server"] != null && System.getenv()["test_email_login"] != null && System.getenv()["test_email_password"] != null
+        resolve("test_email_server") != null && resolve("test_email_login") != null && resolve("test_email_password") != null
 if (emailTestEnabled) {
     tasks.test {
         if (emailTestEnabled) {
             systemProperties(
                     mapOf(
-                            "test_email_server" to System.getenv()["test_email_server"],
-                            "test_email_login" to System.getenv()["test_email_login"],
-                            "test_email_password" to System.getenv()["test_email_password"]
+                            "test_email_server" to resolve("test_email_server"),
+                            "test_email_login" to resolve("test_email_login"),
+                            "test_email_password" to resolve("test_email_password")
                     )
             )
         }
@@ -135,11 +139,11 @@ tasks.named<Test>("test") {
 }
 
 val sonarAvailable =
-        System.getenv()["sonar_url"] != null && System.getenv()["sonar_user"] != null && System.getenv()["sonar_password"] != null
+        resolve("sonar_url") != null && resolve("sonar_user") != null && resolve("sonar_password") != null
 if (sonarAvailable) {
-    val url = System.getenv()["sonar_url"] as String
-    val user = System.getenv()["sonar_user"] as String
-    val pass = System.getenv()["sonar_password"] as String
+    val url = resolve("sonar_url")
+    val user = resolve("sonar_user")
+    val pass = resolve("sonar_password")
     sonar {
         properties {
             properties(
