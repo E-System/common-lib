@@ -103,7 +103,7 @@ dependencies {
     api("commons-io:commons-io:2.15.1")
     api("org.slf4j:slf4j-api:2.0.12")
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    api("org.eclipse.angus:angus-mail:2.0.2")
+    api("org.eclipse.angus:angus-mail:2.0.3")
 
     api("de.svenkubiak:jBCrypt:0.4.3")
     api("org.reflections:reflections:0.10.2")
