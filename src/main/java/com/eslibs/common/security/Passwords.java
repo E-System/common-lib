@@ -16,12 +16,14 @@
 
 package com.eslibs.common.security;
 
+import com.eslibs.common.collection.Items;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Passwords {
@@ -52,45 +54,60 @@ public final class Passwords {
         return new RandPass(alphabet).getPass(length);
     }
 
-    public static Collection<StrengthFeature> checkStrength(String password, int minLength, boolean checkBlank, boolean checkLetter, boolean checkDigit) {
-        Collection<StrengthFeature> result = new ArrayList<>(4);
-        if (password == null) {
-            password = "";
+    public static Set<StrengthFeature> strength(String password, StrengthFeature... features) {
+        Set<StrengthFeature> featureSet = new HashSet<>(Arrays.asList(features));
+        Set<StrengthFeature> result = new HashSet<>(4);
+        password = StringUtils.defaultString(password);
+
+        BlankFeature blankFeature = Items.firstByClass(featureSet, BlankFeature.class).orElse(null);
+        if (blankFeature != null && StringUtils.isBlank(password)) {
+            result.add(blankFeature);
         }
-        boolean blank = StringUtils.isBlank(password);
-        if (checkBlank && blank) {
-            result.add(StrengthFeature.Blank);
+        LengthFeature lengthFeature = Items.firstByClass(featureSet, LengthFeature.class).orElse(null);
+        if (lengthFeature != null && password.length() < lengthFeature.min()) {
+            result.add(lengthFeature);
         }
-        if (password.length() < minLength) {
-            result.add(StrengthFeature.Length);
+        LetterFeature letterFeature = Items.firstByClass(featureSet, LetterFeature.class).orElse(null);
+        DigitFeature digitFeature = Items.firstByClass(featureSet, DigitFeature.class).orElse(null);
+        if (letterFeature == null && digitFeature == null) {
+            return result;
         }
-        boolean hasLetter = false;
-        boolean hasDigit = false;
-        for (int i = 0; i < password.length(); i++) {
+        int letterCount = 0;
+        int digitCount = 0;
+        for (int i = 0; i < password.length(); ++i) {
             char x = password.charAt(i);
             if (Character.isLetter(x)) {
-                hasLetter = true;
+                ++letterCount;
             } else if (Character.isDigit(x)) {
-                hasDigit = true;
-            }
-            if (hasLetter && hasDigit) {
-                break;
+                ++digitCount;
             }
         }
-
-        if (checkLetter && !hasLetter) {
-            result.add(StrengthFeature.Letter);
+        if (letterFeature != null && letterCount < letterFeature.min()) {
+            result.add(letterFeature);
         }
-        if (checkDigit && !hasDigit) {
-            result.add(StrengthFeature.Digit);
+        if (digitFeature != null && digitCount < digitFeature.min()) {
+            result.add(digitFeature);
         }
         return result;
     }
 
-    public enum StrengthFeature {
-        Blank,
-        Length,
-        Letter,
-        Digit
+    public sealed interface StrengthFeature permits BlankFeature, DigitFeature, LengthFeature, LetterFeature {}
+
+    public record BlankFeature() implements StrengthFeature {}
+
+    public record LengthFeature(int min) implements StrengthFeature {}
+
+    public record LetterFeature(int min) implements StrengthFeature {
+
+        public LetterFeature() {
+            this(1);
+        }
+    }
+
+    public record DigitFeature(int min) implements StrengthFeature {
+
+        public DigitFeature() {
+            this(1);
+        }
     }
 }

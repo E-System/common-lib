@@ -21,8 +21,4 @@ public interface ConvertOption {
             addAll(new HashSet<>(Arrays.stream(options).filter(Objects::nonNull).collect(Collectors.toList())));
         }
     }
-
-    static <A> Optional<A> get(java.util.Set<ConvertOption> options, Class<A> cls) {
-        return options.stream().filter(v -> v.getClass().isAssignableFrom(cls)).map(v -> (A) v).findFirst();
-    }
 }

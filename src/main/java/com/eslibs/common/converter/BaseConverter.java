@@ -67,7 +67,7 @@ public abstract class BaseConverter<R, T> {
     protected abstract R realConvert(T item, Set<ConvertOption> options);
 
     protected <A> Optional<A> getOption(Set<ConvertOption> options, Class<A> cls) {
-        return ConvertOption.get(options, cls);
+        return Items.firstByClass(options, cls);
     }
 
     protected String getLocaleOption(Set<ConvertOption> options) {

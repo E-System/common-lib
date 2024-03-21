@@ -388,12 +388,11 @@ public final class Items {
         if (items == null) {
             return null;
         }
-        for (T item : items) {
-            if (selector.test(item)) {
-                return item;
-            }
-        }
-        return null;
+        return Arrays.stream(items).filter(selector).findFirst().orElse(null);
+    }
+
+    public static <T, A> Optional<A> firstByClass(java.util.Set<T> items, Class<A> cls) {
+        return items.stream().filter(v -> v.getClass().isAssignableFrom(cls)).map(v -> (A) v).findFirst();
     }
 
     @SafeVarargs

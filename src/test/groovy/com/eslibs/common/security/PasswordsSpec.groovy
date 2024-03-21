@@ -1,6 +1,6 @@
 package com.eslibs.common.security
 
-
+import com.eslibs.common.collection.Items
 import org.apache.commons.lang3.StringUtils
 import spock.lang.Specification
 
@@ -59,35 +59,35 @@ class PasswordsSpec extends Specification {
 
     def "CheckStrength all"() {
         when:
-        def res = Passwords.checkStrength("", 10, true, true, true)
+        def res = Passwords.strength("", new Passwords.LengthFeature(10), new Passwords.BlankFeature(), new Passwords.DigitFeature(), new Passwords.LetterFeature())
         then:
         res.size() == 4
-        res.contains(Passwords.StrengthFeature.Blank)
-        res.contains(Passwords.StrengthFeature.Length)
-        res.contains(Passwords.StrengthFeature.Digit)
-        res.contains(Passwords.StrengthFeature.Letter)
+        Items.firstByClass(res, Passwords.BlankFeature).isPresent()
+        Items.firstByClass(res, Passwords.LengthFeature).isPresent()
+        Items.firstByClass(res, Passwords.DigitFeature).isPresent()
+        Items.firstByClass(res, Passwords.LengthFeature).isPresent()
     }
 
     def "CheckStrength success"() {
         when:
-        def res = Passwords.checkStrength("asd123zxct", 10, true, true, true)
+        def res = Passwords.strength("asd123zxct", new Passwords.LengthFeature(10), new Passwords.BlankFeature(), new Passwords.DigitFeature(), new Passwords.LetterFeature())
         then:
         res.size() == 0
     }
 
     def "CheckStrength without digit"() {
         when:
-        def res = Passwords.checkStrength("qwerasdfzxcv", 10, true, true, true)
+        def res = Passwords.strength("qwerasdfzxcv", new Passwords.LengthFeature(10), new Passwords.BlankFeature(), new Passwords.DigitFeature(), new Passwords.LetterFeature())
         then:
         res.size() == 1
-        res.contains(Passwords.StrengthFeature.Digit)
+        Items.firstByClass(res, Passwords.DigitFeature).isPresent()
     }
 
     def "CheckStrength without letter"() {
         when:
-        def res = Passwords.checkStrength("1234567890", 10, true, true, true)
+        def res = Passwords.strength("1234567890", new Passwords.LengthFeature(10), new Passwords.BlankFeature(), new Passwords.DigitFeature(), new Passwords.LetterFeature())
         then:
         res.size() == 1
-        res.contains(Passwords.StrengthFeature.Letter)
+        Items.firstByClass(res, Passwords.LetterFeature).isPresent()
     }
 }
