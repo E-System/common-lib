@@ -26,15 +26,15 @@ public final class PrettyInterval {
         this.localization = localization;
     }
 
-    public String get(LocalDateTime date) {
-        return get(date, LocalDateTime.now());
+    public String get(LocalDateTime from) {
+        return get(from, LocalDateTime.now());
     }
 
-    public String get(LocalDateTime date, LocalDateTime dateNext) {
-        if (date == null || dateNext == null) {
+    public String get(LocalDateTime from, LocalDateTime to) {
+        if (from == null || to == null) {
             return null;
         }
-        String result = getDiff(date, dateNext)
+        String result = getDiff(from, to)
             .stream()
             .filter(v -> v.getValue() > 0)
             .map(v -> localization.apply(v.getKey(), v.getValue()))
@@ -45,13 +45,18 @@ public final class PrettyInterval {
         return result;
     }
 
-    private static Collection<Map.Entry<ChronoUnit, Long>> getDiff(LocalDateTime date, LocalDateTime dateNext) {
-        Period period = Period.between(date.toLocalDate(), dateNext.toLocalDate());
-        Duration duration = Duration.between(date.toLocalTime(), dateNext.toLocalTime());
+    private static Collection<Map.Entry<ChronoUnit, Long>> getDiff(LocalDateTime from, LocalDateTime to) {
+        Period period = Period.between(from.toLocalDate(), to.toLocalDate());
+        Duration duration = Duration.between(from.toLocalTime(), to.toLocalTime());
+        int days = period.getDays();
+        if (duration.isNegative()) {
+            duration = duration.plusDays(1);
+            days -= 1;
+        }
         return Arrays.asList(
             Pair.of(ChronoUnit.YEARS, (long) period.getYears()),
             Pair.of(ChronoUnit.MONTHS, (long) period.getMonths()),
-            Pair.of(ChronoUnit.DAYS, (long) period.getDays()),
+            Pair.of(ChronoUnit.DAYS, (long) days),
             Pair.of(ChronoUnit.HOURS, (long) duration.toHoursPart()),
             Pair.of(ChronoUnit.MINUTES, (long) duration.toMinutesPart()),
             Pair.of(ChronoUnit.SECONDS, (long) duration.toSecondsPart())
