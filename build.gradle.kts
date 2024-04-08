@@ -29,7 +29,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "8.6"
+    gradleVersion = "8.7"
 }
 
 fun resolve(name: String): String? {
@@ -72,7 +72,7 @@ tasks {
 }
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(22)
         vendor = JvmVendorSpec.ADOPTIUM
     }
     withSourcesJar()
@@ -97,10 +97,10 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.16.1"
+val jacksonVersion = "2.17.0"
 dependencies {
     api("org.apache.commons:commons-lang3:3.14.0")
-    api("commons-io:commons-io:2.15.1")
+    api("commons-io:commons-io:2.16.0")
     api("org.slf4j:slf4j-api:2.0.12")
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("org.eclipse.angus:angus-mail:2.0.3")
@@ -108,12 +108,12 @@ dependencies {
     api("de.svenkubiak:jBCrypt:0.4.3")
     api("org.reflections:reflections:0.10.2")
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
 
     testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
-    testImplementation("org.apache.groovy:groovy:4.0.18")
-    testImplementation("ch.qos.logback:logback-classic:1.4.14")
+    testImplementation("org.apache.groovy:groovy:4.0.20")
+    testImplementation("ch.qos.logback:logback-classic:1.5.3")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 
