@@ -26,6 +26,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -44,7 +45,7 @@ public class Emails {
     }
 
     public static IEmailProcessor receiver(String name, ICredentials credentials) {
-        return new EmailReceiver(POP3.get(name).credentials(credentials).build());
+        return receiver(POP3.get(name).get().credentials(credentials).build());
     }
 
     public static IEmailProcessor sender(IConfiguration configuration) {
@@ -52,32 +53,32 @@ public class Emails {
     }
 
     public static IEmailProcessor sender(String name, ICredentials credentials) {
-        return new EmailSender(SMTP.get(name).credentials(credentials).build());
+        return sender(SMTP.get(name).get().credentials(credentials).build());
     }
 
-    public static final Map<String, SimpleConfiguration.SimpleConfigurationBuilder<?, ?>> POP3 = Map.of(
-        "gmail", SimpleConfiguration.builder()
+    public static final Map<String, Supplier<SimpleConfiguration.SimpleConfigurationBuilder<?, ?>>> POP3 = Map.of(
+        "gmail", () -> SimpleConfiguration.builder()
             .connection(ServerConnection.builder()
                             .host("pop3.gmail.com")
                             .port(DEFAULT_SSL_POP3_PORT)
                             .ssl(Ssl.Mode.SSL)
                             .build()),
 
-        "mailru", SimpleConfiguration.builder()
+        "mailru", () -> SimpleConfiguration.builder()
             .connection(ServerConnection.builder()
                             .host("pop3.mail.ru")
                             .port(DEFAULT_SSL_POP3_PORT)
                             .ssl(Ssl.Mode.SSL)
                             .build()),
 
-        "yandex", SimpleConfiguration.builder()
+        "yandex", () -> SimpleConfiguration.builder()
             .connection(ServerConnection.builder()
                             .host("pop3.yandex.ru")
                             .port(DEFAULT_SSL_POP3_PORT)
                             .ssl(Ssl.Mode.SSL)
                             .build()),
 
-        "e-system", SimpleConfiguration.builder()
+        "e-system", () -> SimpleConfiguration.builder()
             .connection(ServerConnection.builder()
                             .host("pop.ext-system.com")
                             .port(DEFAULT_SSL_POP3_PORT)
@@ -85,29 +86,29 @@ public class Emails {
                             .build())
     );
 
-    public static final Map<String, SimpleConfiguration.SimpleConfigurationBuilder<?, ?>> SMTP = Map.of(
-        "gmail", SimpleConfiguration.builder()
+    public static final Map<String, Supplier<SimpleConfiguration.SimpleConfigurationBuilder<?, ?>>> SMTP = Map.of(
+        "gmail", () -> SimpleConfiguration.builder()
             .connection(ServerConnection.builder()
                             .host("smtp.gmail.com")
                             .port(DEFAULT_SSL_SMTP_PORT)
                             .ssl(Ssl.Mode.SSL)
                             .build()),
 
-        "mailru", SimpleConfiguration.builder()
+        "mailru", () -> SimpleConfiguration.builder()
             .connection(ServerConnection.builder()
                             .host("smtp.mail.ru")
                             .port(DEFAULT_SSL_SMTP_PORT)
                             .ssl(Ssl.Mode.SSL)
                             .build()),
 
-        "yandex", SimpleConfiguration.builder()
+        "yandex", () -> SimpleConfiguration.builder()
             .connection(ServerConnection.builder()
                             .host("smtp.yandex.ru")
                             .port(DEFAULT_SSL_SMTP_PORT)
                             .ssl(Ssl.Mode.SSL)
                             .build()),
 
-        "e-system", SimpleConfiguration.builder()
+        "e-system", () -> SimpleConfiguration.builder()
             .connection(ServerConnection.builder()
                             .host("smtp.ext-system.com")
                             .port(DEFAULT_SSL_SMTP_PORT)
