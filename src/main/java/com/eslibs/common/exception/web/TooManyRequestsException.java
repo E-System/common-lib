@@ -1,4 +1,4 @@
-package com.es.lib.common.exception.web;
+package com.eslibs.common.exception.web;
 
 import lombok.ToString;
 

@@ -1,4 +1,4 @@
-package com.es.lib.common
+package com.eslibs.common
 
 import spock.lang.Specification
 
