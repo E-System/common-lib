@@ -24,12 +24,12 @@ plugins {
     jacoco
     `java-library`
     `maven-publish`
-    id("com.github.ben-manes.versions") version "0.50.0"
-    id("org.sonarqube") version "4.4.1.3373"
+    id("com.github.ben-manes.versions") version "0.51.0"
+    id("org.sonarqube") version "5.0.0.4638"
 }
 
 tasks.wrapper {
-    gradleVersion = "8.7"
+    gradleVersion = "8.8"
 }
 
 fun resolve(name: String): String? {
@@ -97,11 +97,11 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.17.0"
+val jacksonVersion = "2.17.1"
 dependencies {
     api("org.apache.commons:commons-lang3:3.14.0")
-    api("commons-io:commons-io:2.16.0")
-    api("org.slf4j:slf4j-api:2.0.12")
+    api("commons-io:commons-io:2.16.1")
+    api("org.slf4j:slf4j-api:2.0.13")
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("org.eclipse.angus:angus-mail:2.0.3")
 
@@ -113,7 +113,7 @@ dependencies {
 
     testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
     testImplementation("org.apache.groovy:groovy:4.0.20")
-    testImplementation("ch.qos.logback:logback-classic:1.5.3")
+    testImplementation("ch.qos.logback:logback-classic:1.5.6")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 
