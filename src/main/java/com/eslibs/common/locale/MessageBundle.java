@@ -57,7 +57,7 @@ public class MessageBundle {
         }
         try {
             return ResourceBundle.getBundle(path, LocaleUtils.toLocale(locale), new UTF8Control()).getString(key);
-        } catch (Exception ignore) {
+        } catch (Exception _) {
             return defaultValue;
         }
     }

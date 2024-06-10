@@ -43,7 +43,7 @@ public record ClientInfo(
         Platform platform = Platform.undefined;
         try {
             platform = Platform.valueOf(headers.get(APP_PLATFORM_KEY).toLowerCase());
-        } catch (Exception ignored) {}
+        } catch (Exception _) {}
         return new ClientInfo(
             platform,
             StringUtils.defaultIfBlank(headers.get(APP_PLATFORM_VERSION_KEY), ""),

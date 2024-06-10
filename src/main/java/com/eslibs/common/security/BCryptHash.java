@@ -23,7 +23,7 @@ public class BCryptHash implements StrHash {
     public boolean valid(String value, String hash) {
         try {
             return value != null && BCrypt.checkpw(value, hash);
-        } catch (IllegalArgumentException ignore) {
+        } catch (IllegalArgumentException _) {
             return false;
         }
     }

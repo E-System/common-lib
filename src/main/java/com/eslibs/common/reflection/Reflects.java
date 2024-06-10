@@ -69,7 +69,7 @@ public final class Reflects {
             Object value = null;
             try {
                 value = field.get(instance);
-            } catch (Exception ignore) {}
+            } catch (Exception _) {}
             if (notAccessible) {
                 field.setAccessible(false);
             }
@@ -223,22 +223,22 @@ public final class Reflects {
     public static Object createDefaultInstance(Class<?> valueClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         try {
             return create(valueClass.getDeclaredConstructor());
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException _) {}
         try {
             return create(valueClass.getDeclaredConstructor(String.class), "0");
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException _) {}
         try {
             return create(valueClass.getDeclaredConstructor(Integer.class), 0);
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException _) {}
         try {
             return create(valueClass.getDeclaredConstructor(Short.class), (short) 0);
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException _) {}
         try {
             return create(valueClass.getDeclaredConstructor(Long.class), 0L);
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException _) {}
         try {
             return create(valueClass.getDeclaredConstructor(Double.class), 0.0d);
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException _) {}
         return valueClass;
     }
 
@@ -272,7 +272,7 @@ public final class Reflects {
             } catch (NoSuchMethodException e) {
                 try {
                     getter = aClass.getMethod("is" + capitalizedField);
-                } catch (NoSuchMethodException ignore) {}
+                } catch (NoSuchMethodException _) {}
             }
             if (getter == null) {
                 throw new RuntimeException("Getter not found for field: " + capitalizedField);

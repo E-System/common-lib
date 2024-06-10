@@ -109,7 +109,7 @@ public final class IO {
     public static void delete(Path file) {
         try {
             Files.deleteIfExists(file);
-        } catch (Exception ignore) {}
+        } catch (Exception _) {}
     }
 
     public static void deleteRecursively(Path path) throws IOException {

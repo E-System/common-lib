@@ -29,7 +29,7 @@ public class BasicHash implements StrHash {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
             digest.update(value);
             return HexFormat.of().formatHex(digest.digest());
-        } catch (Exception ignore) {
+        } catch (Exception _) {
             return null;
         }
     }

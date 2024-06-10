@@ -53,14 +53,14 @@ public final class RangeValidator {
                         if ((leftInclude && numValue >= lVal) || numValue > lVal) {
                             return true;
                         }
-                    } catch (Exception ignore) {}
+                    } catch (Exception _) {}
                 } else if (rItem.isEmpty()) {
                     try {
                         double rVal = Double.parseDouble(rItem);
                         if ((rightInclude && numValue <= rVal) || numValue < rVal) {
                             return true;
                         }
-                    } catch (Exception ignore) {}
+                    } catch (Exception _) {}
                 } else {
                     try {
                         double lVal = Double.parseDouble(lItem);
@@ -68,10 +68,10 @@ public final class RangeValidator {
                         if (((leftInclude && numValue >= lVal) || numValue > lVal) && ((rightInclude && numValue <= rVal) || (!rightInclude && numValue < rVal))) {
                             return true;
                         }
-                    } catch (Exception ignore) {}
+                    } catch (Exception _) {}
                 }
             }
-        } catch (Exception ignore) {}
+        } catch (Exception _) {}
         return false;
     }
 

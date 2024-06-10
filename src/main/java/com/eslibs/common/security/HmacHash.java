@@ -19,7 +19,7 @@ public class HmacHash implements StrHash {
     public String of(String value) {
         try {
             return of(Bytes.of(value));
-        } catch (Exception ignore) {
+        } catch (Exception _) {
             return null;
         }
     }
@@ -33,7 +33,7 @@ public class HmacHash implements StrHash {
             mac.init(secretKeySpec);
             ByteEncoder encoder = new ByteEncoder(mac.doFinal(value));
             return hexEncode ? encoder.hex() : encoder.base64();
-        } catch (Exception ignore) {
+        } catch (Exception _) {
             return null;
         }
     }
