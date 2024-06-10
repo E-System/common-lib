@@ -16,9 +16,12 @@
 package com.eslibs.common.model;
 
 import com.eslibs.common.collection.Items;
+import com.eslibs.common.locale.Locales;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.time.ZoneId;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -29,25 +32,42 @@ import java.util.Map;
 public record ClientInfo(
     Platform platform,
     String platformVersion,
-    String appVersion
+    String appVersion,
+    ZoneId appTimezone,
+    Locale appLocale
 ) implements Serializable {
 
     private static final String APP_PLATFORM_KEY = "es-app-platform";
     private static final String APP_PLATFORM_VERSION_KEY = "es-app-platform-version";
     private static final String APP_VERSION_KEY = "es-app-version";
+    private static final String APP_TIMEZONE_KEY = "es-app-timezone";
+    private static final String APP_LOCALE_KEY = "es-app-locale";
 
     public static ClientInfo from(Map<String, String> headers) {
         if (Items.isEmpty(headers)) {
-            return new ClientInfo(Platform.undefined, "", "");
+            return new ClientInfo(Platform.undefined, "", "", ZoneId.systemDefault(), Locale.getDefault());
         }
         Platform platform = Platform.undefined;
         try {
             platform = Platform.valueOf(headers.get(APP_PLATFORM_KEY).toLowerCase());
         } catch (Exception _) {}
+        ZoneId zoneId = ZoneId.systemDefault();
+        try {
+            zoneId = ZoneId.of(headers.get(APP_TIMEZONE_KEY));
+        } catch (Exception ignored) {}
+        Locale locale = Locale.getDefault();
+        try {
+            String localeValue = headers.get(APP_LOCALE_KEY);
+            if (StringUtils.isNotBlank(localeValue)) {
+                locale = Locales.of(localeValue);
+            }
+        } catch (Exception ignored) {}
         return new ClientInfo(
             platform,
             StringUtils.defaultIfBlank(headers.get(APP_PLATFORM_VERSION_KEY), ""),
-            StringUtils.defaultIfBlank(headers.get(APP_VERSION_KEY), "")
+            StringUtils.defaultIfBlank(headers.get(APP_VERSION_KEY), ""),
+            zoneId,
+            locale
         );
     }
 
