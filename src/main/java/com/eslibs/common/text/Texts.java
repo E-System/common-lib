@@ -1,5 +1,8 @@
 package com.eslibs.common.text;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -7,10 +10,8 @@ import java.util.function.Function;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 23.09.16
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Texts {
-
-    private Texts() {
-    }
 
     public static char nbsp() {
         return Character.toChars(160)[0];
@@ -113,6 +114,7 @@ public final class Texts {
     public static boolean contains(String value, String term) {
         return contains(value, term, true);
     }
+
     public static boolean contains(String value, String term, boolean ignoreCase) {
         if (value == null || term == null) {
             return false;

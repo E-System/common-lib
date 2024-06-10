@@ -16,7 +16,7 @@ final class KeyboardLayout {
      * @return результат транслитерации
      */
     static CharSequence convert(CharSequence term, boolean englishToRussian) {
-        if (term == null || term.length() == 0) {
+        if (term == null || term.isEmpty()) {
             return term;
         }
         String search = englishToRussian ? ENGLISH : RUSSIAN;

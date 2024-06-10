@@ -1,6 +1,10 @@
 package com.eslibs.common;
 
-public class UrlShortener {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class UrlShortener {
 
     private static final String MAPPING = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int LENGTH = MAPPING.length();

@@ -84,8 +84,16 @@ public final class Jsons {
         return fromJson(toJson(source), classOfT);
     }
 
+    public static <T> T clone(T source, Class<T> classOfT, ObjectMapper objectMapper) {
+        return fromJson(toJson(source, objectMapper), classOfT, objectMapper);
+    }
+
     public static <T> T clone(T source, TypeReference<T> typeReference) {
         return fromJson(toJson(source), typeReference);
+    }
+
+    public static <T> T clone(T source, TypeReference<T> typeReference, ObjectMapper objectMapper) {
+        return fromJson(toJson(source, objectMapper), typeReference, objectMapper);
     }
 
     public static class UnixTimeDeserializer extends JsonDeserializer<Date> {
