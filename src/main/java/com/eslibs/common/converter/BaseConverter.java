@@ -6,7 +6,6 @@ import com.eslibs.common.converter.option.LocaleConvertOption;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -34,7 +33,7 @@ public abstract class BaseConverter<R, T> {
         if (Items.isEmpty(items)) {
             return new ArrayList<>();
         }
-        return items.stream().filter(Objects::nonNull).map(v -> convert(v, enhancer, options)).collect(Collectors.toList());
+        return items.stream().filter(Objects::nonNull).map(v -> convert(v, enhancer, options)).toList();
     }
 
     public R convert(T item) {

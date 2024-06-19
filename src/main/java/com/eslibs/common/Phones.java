@@ -76,7 +76,7 @@ public final class Phones {
      */
     public static Collection<Map.Entry<String, Boolean>> split(String value, boolean clean) {
         final Collection<String> phones = Texts.splitBy("(,|;)").toList(value);
-        return phones.stream().map(clean ? cleanTypeMapper : typeMapper).collect(Collectors.toList());
+        return phones.stream().map(clean ? cleanTypeMapper : typeMapper).toList();
     }
 
     /**

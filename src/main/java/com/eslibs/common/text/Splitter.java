@@ -25,7 +25,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -53,7 +52,7 @@ public class Splitter {
         if (!trim) {
             return Arrays.asList(parts);
         }
-        return Stream.of(parts).map(String::trim).collect(Collectors.toList());
+        return Stream.of(parts).map(String::trim).toList();
     }
 
     public <T> T toObject(String text, Function<String[], T> convert) {

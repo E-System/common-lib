@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -65,7 +64,7 @@ public class BuildInfo implements Serializable {
 
     public static Collection<BuildInfo> list(Collection<String> prefix) {
         return Reflects.getResources(prefix, s -> s.endsWith("build.properties")).stream()
-            .map(v -> (v.startsWith("/") ? "" : "/") + v).map(BuildInfo::create).collect(Collectors.toList());
+            .map(v -> (v.startsWith("/") ? "" : "/") + v).map(BuildInfo::create).toList();
     }
 
     public static BuildInfo create() {

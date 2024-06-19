@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
@@ -35,7 +34,7 @@ public abstract class BaseBiConverter<R, T> extends BaseConverter<R, T> {
         if (Items.isEmpty(items)) {
             return new ArrayList<>();
         }
-        return items.stream().filter(Objects::nonNull).map(v -> reverseConvert(v, enhancer, options)).collect(Collectors.toList());
+        return items.stream().filter(Objects::nonNull).map(v -> reverseConvert(v, enhancer, options)).toList();
     }
 
     public T reverseConvert(R item) {

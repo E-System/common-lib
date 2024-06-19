@@ -43,13 +43,12 @@ class Translit {
         CHAR_MAP.put('Э', "E");
         CHAR_MAP.put('Ю', "YU");
         CHAR_MAP.put('Я', "YA");
-        Map<Character, String> lower = CHAR_MAP.entrySet().stream().collect(
+        CHAR_MAP.putAll(CHAR_MAP.entrySet().stream().collect(
             Collectors.toMap(
                 k -> k.getKey().toString().toLowerCase().toCharArray()[0],
                 v -> v.getValue().toLowerCase()
             )
-        );
-        CHAR_MAP.putAll(lower);
+        ));
     }
 
     static String convert(String value, Function<String, String> caseConverter, Function<String, String> whitespaceConverter) {

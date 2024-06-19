@@ -206,8 +206,8 @@ public class Net {
     private static InetAddress parseAddress(String address) {
         try {
             return InetAddress.getByName(address);
-        } catch (UnknownHostException var3) {
-            throw new IllegalArgumentException("Failed to parse address" + address, var3);
+        } catch (UnknownHostException e) {
+            throw new IllegalArgumentException("Failed to parse address" + address, e);
         }
     }
 }

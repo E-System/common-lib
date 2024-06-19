@@ -73,7 +73,7 @@ public final class Sys {
     public static void sleep(long timeout) {
         try {
             Thread.sleep(timeout);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException _) {
             Thread.currentThread().interrupt();
         }
     }

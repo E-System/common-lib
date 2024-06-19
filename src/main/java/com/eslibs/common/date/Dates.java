@@ -33,7 +33,6 @@ import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -83,7 +82,7 @@ public final class Dates {
             .filter(v -> v.matches(Dates.getEnvironment().zonePrefixes))
             .map(ZoneId::of)
             .sorted(Comparator.comparing(ZoneId::getId))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public static boolean contains(LocalDateTime startDate, LocalDateTime endDate, LocalDateTime date) {
@@ -133,13 +132,13 @@ public final class Dates {
     public static Collection<SItem> ranges(ZoneId zoneId, DateTimeFormatter dateTimeFormatter, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
             .map(v -> v.getItem(zoneId, dateTimeFormatter, lastNextDay))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public static Collection<SItem> ranges(ZoneId zoneId, boolean lastNextDay) {
         return Stream.of(DateRange.Interval.values())
             .map(v -> v.getItem(zoneId, lastNextDay))
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public static Collection<SItem> ranges(ZoneId zoneId) {
@@ -185,6 +184,6 @@ public final class Dates {
             .limit(numOfDaysBetween)
             .mapToObj(fromInclusive::plusDays)
             .filter(v -> filter == null || filter.test(v))
-            .collect(Collectors.toList());
+            .toList();
     }
 }

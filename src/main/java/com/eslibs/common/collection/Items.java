@@ -467,6 +467,6 @@ public final class Items {
         if (items.isEmpty()) {
             return returnNull ? null : new ArrayList<>();
         }
-        return items.stream().map(converter).collect(Collectors.toList());
+        return items.stream().map(converter).toList();
     }
 }

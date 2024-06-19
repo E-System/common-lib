@@ -311,7 +311,7 @@ public class Patcher<T, R> {
         Class<?> aClass = from.getClass();
         try {
             return aClass.getMethod("get" + capitalizedField);
-        } catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException _) {
             return aClass.getMethod("is" + capitalizedField);
         }
     }
