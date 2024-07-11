@@ -25,11 +25,11 @@ plugins {
     `java-library`
     `maven-publish`
     id("com.github.ben-manes.versions") version "0.51.0"
-    id("org.sonarqube") version "5.0.0.4638"
+    id("org.sonarqube") version "5.1.0.4882"
 }
 
 tasks.wrapper {
-    gradleVersion = "8.8"
+    gradleVersion = "8.9"
 }
 
 fun resolve(name: String): String? {
@@ -60,8 +60,8 @@ tasks {
     jar {
         manifest {
             attributes(
-                    "Implementation-Version" to project.version,
-                    "Implementation-Vendor" to "E-SYSTEM"
+                "Implementation-Version" to project.version,
+                "Implementation-Vendor" to "E-SYSTEM"
             )
         }
     }
@@ -97,7 +97,7 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.17.1"
+val jacksonVersion = "2.17.2"
 dependencies {
     api("org.apache.commons:commons-lang3:3.14.0")
     api("commons-io:commons-io:2.16.1")
@@ -108,26 +108,26 @@ dependencies {
     api("de.svenkubiak:jBCrypt:0.4.3")
     api("org.reflections:reflections:0.10.2")
 
-    compileOnly("org.projectlombok:lombok:1.18.32")
-    annotationProcessor("org.projectlombok:lombok:1.18.32")
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
 
     testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
-    testImplementation("org.apache.groovy:groovy:4.0.20")
+    testImplementation("org.apache.groovy:groovy:4.0.22")
     testImplementation("ch.qos.logback:logback-classic:1.5.6")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 
 val emailTestEnabled =
-        resolve("test_email_server") != null && resolve("test_email_login") != null && resolve("test_email_password") != null
+    resolve("test_email_server") != null && resolve("test_email_login") != null && resolve("test_email_password") != null
 if (emailTestEnabled) {
     tasks.test {
         if (emailTestEnabled) {
             systemProperties(
-                    mapOf(
-                            "test_email_server" to resolve("test_email_server"),
-                            "test_email_login" to resolve("test_email_login"),
-                            "test_email_password" to resolve("test_email_password")
-                    )
+                mapOf(
+                    "test_email_server" to resolve("test_email_server"),
+                    "test_email_login" to resolve("test_email_login"),
+                    "test_email_password" to resolve("test_email_password")
+                )
             )
         }
     }
@@ -139,7 +139,7 @@ tasks.named<Test>("test") {
 }
 
 val sonarAvailable =
-        resolve("sonar_url") != null && resolve("sonar_user") != null && resolve("sonar_password") != null
+    resolve("sonar_url") != null && resolve("sonar_user") != null && resolve("sonar_password") != null
 if (sonarAvailable) {
     val url = resolve("sonar_url")
     val user = resolve("sonar_user")
@@ -147,12 +147,12 @@ if (sonarAvailable) {
     sonar {
         properties {
             properties(
-                    mapOf(
-                            "sonar.host.url" to url,
-                            "sonar.login" to user,
-                            "sonar.password" to pass,
-                            "sonar.gradle.skipCompile" to true
-                    )
+                mapOf(
+                    "sonar.host.url" to url,
+                    "sonar.login" to user,
+                    "sonar.password" to pass,
+                    "sonar.gradle.skipCompile" to true
+                )
             )
         }
     }
