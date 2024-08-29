@@ -22,10 +22,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
 /**
@@ -36,8 +35,8 @@ import java.time.temporal.TemporalAdjusters;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class DateRange {
 
-    private final LocalDateTime dbegin;
-    private final LocalDateTime dend;
+    private final LocalDate start;
+    private final LocalDate end;
 
     public String getIntervalString() {
         return getIntervalString(null);
@@ -45,14 +44,14 @@ public class DateRange {
 
     public String getIntervalString(DateTimeFormatter dateTimeFormatter) {
         DateTimeFormatter formatter = dateTimeFormatter != null ? dateTimeFormatter : Dates.getEnvironment().getDateFormatter();
-        return formatter.format(getDbegin()) + "|" + formatter.format(getDend());
+        return formatter.format(getStart()) + "|" + formatter.format(getEnd());
     }
 
     public enum Interval {
         TODAY {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId);
                 return new DateRange(
                     begin,
                     begin.plusDays(lastNextDay ? 1 : 0)
@@ -62,7 +61,7 @@ public class DateRange {
         YESTERDAY {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).truncatedTo(ChronoUnit.DAYS).minusDays(1);
+                LocalDate begin = LocalDate.now(zoneId).minusDays(1);
                 return new DateRange(
                     begin,
                     begin.plusDays(lastNextDay ? 1 : 0)
@@ -72,7 +71,7 @@ public class DateRange {
         LAST_7_DAYS {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId);
                 return new DateRange(
                     begin.minusDays(7),
                     begin.plusDays(lastNextDay ? 1 : 0)
@@ -82,7 +81,7 @@ public class DateRange {
         CURRENT_WEEK {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId);
                 return new DateRange(
                     begin.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
                     begin.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).plusDays(lastNextDay ? 1 : 0)
@@ -92,7 +91,7 @@ public class DateRange {
         LAST_WEEK {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).truncatedTo(ChronoUnit.DAYS).minusWeeks(1);
+                LocalDate begin = LocalDate.now(zoneId).minusWeeks(1);
                 return new DateRange(
                     begin.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
                     begin.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).plusDays(lastNextDay ? 1 : 0)
@@ -102,7 +101,7 @@ public class DateRange {
         CURRENT_MONTH {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId).with(TemporalAdjusters.firstDayOfMonth());
                 return new DateRange(
                     begin,
                     begin.plusMonths(1).plusDays(lastNextDay ? 0 : -1)
@@ -112,7 +111,7 @@ public class DateRange {
         LAST_MONTH {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId).minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
                 return new DateRange(
                     begin,
                     begin.plusMonths(1).plusDays(lastNextDay ? 0 : -1)
@@ -122,7 +121,7 @@ public class DateRange {
         CURRENT_TRIAD {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId).with(TemporalAdjusters.firstDayOfMonth());
                 return new DateRange(
                     begin,
                     begin.plusMonths(3).plusDays(lastNextDay ? 0 : -1)
@@ -132,7 +131,7 @@ public class DateRange {
         LAST_TRIAD {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).minusMonths(3).with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId).minusMonths(3).with(TemporalAdjusters.firstDayOfMonth());
                 return new DateRange(
                     begin,
                     begin.plusMonths(3).plusDays(lastNextDay ? 0 : -1)
@@ -142,17 +141,17 @@ public class DateRange {
         CURRENT_YEAR {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).with(TemporalAdjusters.firstDayOfYear()).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId).with(TemporalAdjusters.firstDayOfYear());
                 return new DateRange(
                     begin,
-                    LocalDateTime.now(zoneId).truncatedTo(ChronoUnit.DAYS).plusDays(lastNextDay ? 1 : 0)
+                    LocalDate.now(zoneId).plusDays(lastNextDay ? 1 : 0)
                 );
             }
         },
         LAST_YEAR {
             @Override
             public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDateTime begin = LocalDateTime.now(zoneId).minusYears(1).with(TemporalAdjusters.firstDayOfYear()).truncatedTo(ChronoUnit.DAYS);
+                LocalDate begin = LocalDate.now(zoneId).minusYears(1).with(TemporalAdjusters.firstDayOfYear());
                 return new DateRange(
                     begin,
                     begin.plusYears(1).plusDays(lastNextDay ? 0 : -1)

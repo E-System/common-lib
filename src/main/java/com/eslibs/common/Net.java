@@ -19,14 +19,10 @@ package com.eslibs.common;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * Утилитарные методы по работе с сетью (ip адреса, ....)
@@ -36,10 +32,10 @@ import java.util.StringJoiner;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Net {
 
-    private static final Collection<Pair<Long, Long>> LOCAL_SUBNET = Arrays.asList(
-        Pair.of(ip4ToLong("10.0.0.0"), ip4ToLong("10.255.255.255")),
-        Pair.of(ip4ToLong("172.16.0.0"), ip4ToLong("172.31.255.255")),
-        Pair.of(ip4ToLong("192.168.0.0"), ip4ToLong("192.168.255.255"))
+    private static final Collection<Map.Entry<Long, Long>> LOCAL_SUBNET = Arrays.asList(
+        Map.entry(ip4ToLong("10.0.0.0"), ip4ToLong("10.255.255.255")),
+        Map.entry(ip4ToLong("172.16.0.0"), ip4ToLong("172.31.255.255")),
+        Map.entry(ip4ToLong("192.168.0.0"), ip4ToLong("192.168.255.255"))
     );
 
     /**
@@ -122,7 +118,7 @@ public class Net {
      */
     public static boolean isLocalNetwork(String ip) {
         long ipNumber = Net.ip4ToLong(ip);
-        return LOCAL_SUBNET.stream().anyMatch(v -> inRange(ipNumber, v.getLeft(), v.getRight()));
+        return LOCAL_SUBNET.stream().anyMatch(v -> inRange(ipNumber, v.getKey(), v.getValue()));
     }
 
     /**

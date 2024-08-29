@@ -21,7 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.Function;
@@ -123,7 +122,7 @@ public class Splitter {
                     key = trim(parts[0]);
                 }
                 if (key != null) {
-                    result.add(Pair.of(key, value));
+                    result.add(Map.entry(key, value));
                 }
             }
             return result;

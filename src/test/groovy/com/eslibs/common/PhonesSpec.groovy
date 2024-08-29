@@ -16,7 +16,7 @@
 
 package com.eslibs.common
 
-import com.eslibs.common.Phones
+
 import org.apache.commons.lang3.tuple.Pair
 import spock.lang.Specification
 
@@ -60,8 +60,8 @@ class PhonesSpec extends Specification {
         where:
         value                                | clean || result
         ""                                   | false || []
-        "+7(3852)11-12-12, +7 905 981 79 16" | false || [Pair.of("+7(3852)11-12-12", false), Pair.of("+7 905 981 79 16", true)]
-        "+7(3852)11-12-12, +7 905 981 79 16" | true  || [Pair.of("73852111212", false), Pair.of("79059817916", true)]
+        "+7(3852)11-12-12, +7 905 981 79 16" | false || [Map.entry("+7(3852)11-12-12", false), Map.entry("+7 905 981 79 16", true)]
+        "+7(3852)11-12-12, +7 905 981 79 16" | true  || [Map.entry("73852111212", false), Map.entry("79059817916", true)]
 
     }
 
@@ -69,10 +69,10 @@ class PhonesSpec extends Specification {
         expect:
         Phones.joinByType(values, ", ") == result
         where:
-        values                                                                                  || result
-        []                                                                                      || null
-        [Pair.of("11-12-13", false), Pair.of("9059817916", true)]                               || Pair.of("11-12-13", "9059817916")
-        [Pair.of("11-12-13", false), Pair.of("9059817916", true), Pair.of("79131111234", true)] || Pair.of("11-12-13", "9059817916, 79131111234")
+        values                                                                                        || result
+        []                                                                                            || null
+        [Map.entry("11-12-13", false), Map.entry("9059817916", true)]                                 || Map.entry("11-12-13", "9059817916")
+        [Map.entry("11-12-13", false), Map.entry("9059817916", true), Map.entry("79131111234", true)] || Map.entry("11-12-13", "9059817916, 79131111234")
     }
 
     def "Split numbers by types"() {
@@ -81,9 +81,9 @@ class PhonesSpec extends Specification {
         where:
         values                                            || result
         ""                                                || null
-        "+7(3852)11-12-12, +7 905 981 79 16"              || Pair.of("+7(3852)11-12-12", "+7 905 981 79 16")
-        "+7(3852)11-12-12"                                || Pair.of("+7(3852)11-12-12", "")
-        "+7(3852)11-12-12, +7 905 981 79 16; 79131111234" || Pair.of("+7(3852)11-12-12", "+7 905 981 79 16, 79131111234")
+        "+7(3852)11-12-12, +7 905 981 79 16"              || Map.entry("+7(3852)11-12-12", "+7 905 981 79 16")
+        "+7(3852)11-12-12"                                || Map.entry("+7(3852)11-12-12", "")
+        "+7(3852)11-12-12, +7 905 981 79 16; 79131111234" || Map.entry("+7(3852)11-12-12", "+7 905 981 79 16, 79131111234")
     }
 
     def "Format number"() {

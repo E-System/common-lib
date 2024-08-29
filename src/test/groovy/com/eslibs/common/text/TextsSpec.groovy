@@ -1,6 +1,6 @@
 package com.eslibs.common.text
 
-import org.apache.commons.lang3.tuple.Pair
+
 import spock.lang.Specification
 
 import java.util.function.Function
@@ -171,8 +171,8 @@ class TextsSpec extends Specification {
         where:
         value        | splitter                        || result
         ""           | Texts.splitBy(",").splitBy(":") || []
-        "1:2,2:3"    | Texts.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
-        "1:2, 2 : 3" | Texts.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
+        "1:2,2:3"    | Texts.splitBy(",").splitBy(":") || [Map.entry("1", "2"), Map.entry("2", "3")]
+        "1:2, 2 : 3" | Texts.splitBy(",").splitBy(":") || [Map.entry("1", "2"), Map.entry("2", "3")]
     }
 
     def "Split on 2 rows"() {

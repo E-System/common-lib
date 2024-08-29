@@ -21,7 +21,6 @@ import com.eslibs.common.text.Texts;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
 import java.util.Map;
@@ -37,8 +36,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Phones {
 
-    private static final Function<String, Map.Entry<String, Boolean>> typeMapper = v -> Pair.of(v, isMobile(v));
-    private static final Function<String, Map.Entry<String, Boolean>> cleanTypeMapper = v -> Pair.of(clean(v), isMobile(v));
+    private static final Function<String, Map.Entry<String, Boolean>> typeMapper = v -> Map.entry(v, isMobile(v));
+    private static final Function<String, Map.Entry<String, Boolean>> cleanTypeMapper = v -> Map.entry(clean(v), isMobile(v));
 
     /**
      * Clean phone number (remove spaces, braces, dashes...)
@@ -90,7 +89,7 @@ public final class Phones {
         if (Items.isEmpty(values)) {
             return null;
         }
-        return Pair.of(
+        return Map.entry(
             values.stream().filter(v -> !v.getValue()).map(Map.Entry::getKey).collect(Collectors.joining(delimiter)),
             values.stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.joining(delimiter))
         );

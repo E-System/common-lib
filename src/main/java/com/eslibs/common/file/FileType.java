@@ -2,7 +2,6 @@ package com.eslibs.common.file;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Collection;
 import java.util.List;
@@ -53,8 +52,8 @@ public enum FileType {
 
     private static final Map<String, FileType> EXTENSION_TYPES = Stream.of(FileType.values())
         .filter(v -> v.getExtensions() != null)
-        .flatMap(v -> v.getExtensions().stream().map(k -> Pair.of(k, v)))
-        .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+        .flatMap(v -> v.getExtensions().stream().map(k -> Map.entry(k, v)))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     public String getIcon() {
         return "file-" + toString().toLowerCase() + "-o";

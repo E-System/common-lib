@@ -1,7 +1,5 @@
 package com.eslibs.common.date;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -54,12 +52,12 @@ public final class PrettyInterval {
             days -= 1;
         }
         return Arrays.asList(
-            Pair.of(ChronoUnit.YEARS, (long) period.getYears()),
-            Pair.of(ChronoUnit.MONTHS, (long) period.getMonths()),
-            Pair.of(ChronoUnit.DAYS, (long) days),
-            Pair.of(ChronoUnit.HOURS, (long) duration.toHoursPart()),
-            Pair.of(ChronoUnit.MINUTES, (long) duration.toMinutesPart()),
-            Pair.of(ChronoUnit.SECONDS, (long) duration.toSecondsPart())
+            Map.entry(ChronoUnit.YEARS, (long) period.getYears()),
+            Map.entry(ChronoUnit.MONTHS, (long) period.getMonths()),
+            Map.entry(ChronoUnit.DAYS, (long) days),
+            Map.entry(ChronoUnit.HOURS, (long) duration.toHoursPart()),
+            Map.entry(ChronoUnit.MINUTES, (long) duration.toMinutesPart()),
+            Map.entry(ChronoUnit.SECONDS, (long) duration.toSecondsPart())
         );
     }
 }

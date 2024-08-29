@@ -24,7 +24,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,7 +69,7 @@ public final class IO {
 
     public static Map.Entry<String, Long> readCrc32(InputStream inputStream) throws IOException {
         try (CheckedInputStream cis = new CheckedInputStream(inputStream, new CRC32())) {
-            return Pair.of(
+            return Map.entry(
                 toString(cis),
                 cis.getChecksum().getValue()
             );
@@ -137,11 +136,11 @@ public final class IO {
         return humanReadableSize(size, true, 3);
     }
 
-    public static Pair<Path, FileName> download(String url) {
+    public static Map.Entry<Path, FileName> download(String url) {
         return download(url, null);
     }
 
-    public static Pair<Path, FileName> download(String url, Function<String, FileName> fileNameCreator) {
+    public static Map.Entry<Path, FileName> download(String url, Function<String, FileName> fileNameCreator) {
         try {
             if (fileNameCreator == null) {
                 fileNameCreator = FileName::of;
@@ -149,7 +148,7 @@ public final class IO {
             URL source = new URI(url).toURL();
             Path result = Files.createTempFile("download", "");
             FileUtils.copyURLToFile(source, result.toFile(), (int) IConnection.DEFAULT_CONNECT_TIMEOUT, (int) IConnection.DEFAULT_RW_TIMEOUT);
-            return Pair.of(result, fileNameCreator.apply(source.getPath()));
+            return Map.entry(result, fileNameCreator.apply(source.getPath()));
         } catch (IOException | URISyntaxException e) {
             return null;
         }

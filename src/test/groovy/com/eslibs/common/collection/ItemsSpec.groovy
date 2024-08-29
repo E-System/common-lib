@@ -97,7 +97,7 @@ class ItemsSpec extends Specification {
 
     def "Remove empty values"() {
         expect:
-        Items.removeEmptyValues(map as Map) == result
+        Items.removeEmptyValues(map as Map) == result as Map
         where:
         map                                 || result
         null                                || null
@@ -316,9 +316,9 @@ class ItemsSpec extends Specification {
         input     || result
         null      || null
         []        || null
-        [1, 2, 3] || Pair.of(1, 0)
-        [2, 1, 3] || Pair.of(1, 1)
-        [3, 2, 1] || Pair.of(1, 2)
+        [1, 2, 3] || Map.entry(1, 0)
+        [2, 1, 3] || Map.entry(1, 1)
+        [3, 2, 1] || Map.entry(1, 2)
         [3, 2, 4] || null
     }
 
@@ -339,7 +339,7 @@ class ItemsSpec extends Specification {
                 attributes = o
             }
         }
-        def newAttributes = Items.updateValues(supplier, consumer, [Pair.of('K1', 'V1'), Pair.of('K2', 'V2'), Pair.of('K3', null), Pair.of('K4', '')])
+        def newAttributes = Items.updateValues(supplier, consumer, [Map.entry('K1', 'V1'), Map.entry('K2', 'V2'), Pair.of('K3', null), Map.entry('K4', '')])
         then:
         attributes == newAttributes
         newAttributes.containsKey('K1')
@@ -503,7 +503,7 @@ class ItemsSpec extends Specification {
 
     def "toMap with entry"() {
         when:
-        def res = Items.toMap([Pair.of("1", "2"), Pair.of("2", "3")])
+        def res = Items.toMap([Map.entry("1", "2"), Map.entry("2", "3")])
         then:
         res.size() == 2
         res["1"] == "2"

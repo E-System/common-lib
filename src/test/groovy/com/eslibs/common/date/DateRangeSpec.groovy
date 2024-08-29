@@ -18,7 +18,10 @@ package com.eslibs.common.date
 
 import spock.lang.Specification
 
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.ZoneId
+import java.time.temporal.TemporalAdjusters
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -26,45 +29,45 @@ import java.time.ZoneId
  */
 class DateRangeSpec extends Specification {
 
-    /*def "Interval generate with next day"() {
+    def "Interval generate with next day"() {
         expect:
         def range = interval.getRange(zoneId)
-        range.dbegin == Dates.converter().get(dbegin)
-        range.dend == Dates.converter().get(dend)
+        range.start == start
+        range.end == end
         where:
-        interval                         | zoneId                 | dbegin                                                                               | dend
-        DateRange.Interval.TODAY         | ZoneId.systemDefault() | Dates.builder().clearTime().build()                                                  | Dates.builder().clearTime().addDayOfMonth(1).build()
-        DateRange.Interval.YESTERDAY     | ZoneId.systemDefault() | Dates.builder().clearTime().addDayOfMonth(-1).build()                                | Dates.builder().clearTime().build()
-        DateRange.Interval.LAST_7_DAYS   | ZoneId.systemDefault() | Dates.builder().clearTime().addDayOfMonth(-7).build()                                | Dates.builder().clearTime().addDayOfMonth(1).build()
-        DateRange.Interval.CURRENT_WEEK  | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfWeek(Calendar.MONDAY).build()                    | Dates.builder().clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
-        DateRange.Interval.LAST_WEEK     | ZoneId.systemDefault() | Dates.builder().clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build() | Dates.builder().clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).build()
-        DateRange.Interval.CURRENT_MONTH | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).build()                                 | Dates.builder().clearTime().setDayOfMonth(1).addMonth(1).build()
-        DateRange.Interval.LAST_MONTH    | ZoneId.systemDefault() | Dates.builder().clearTime().addMonth(-1).setDayOfMonth(1).build()                    | Dates.builder().clearTime().setDayOfMonth(1).build()
-        DateRange.Interval.CURRENT_TRIAD | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).build()                                 | Dates.builder().clearTime().setDayOfMonth(1).addMonth(3).build()
-        DateRange.Interval.LAST_TRIAD    | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).addMonth(-3).build()                    | Dates.builder().clearTime().setDayOfMonth(1).build()
-        DateRange.Interval.CURRENT_YEAR  | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).build()                     | Dates.builder().clearTime().addDayOfMonth(1).build()
-        DateRange.Interval.LAST_YEAR     | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).build()
+        interval                         | zoneId                 | start                                                                                  | end
+        DateRange.Interval.TODAY         | ZoneId.systemDefault() | LocalDate.now()                                                                        | LocalDate.now().plusDays(1)
+        DateRange.Interval.YESTERDAY     | ZoneId.systemDefault() | LocalDate.now().minusDays(1)                                                           | LocalDate.now()
+        DateRange.Interval.LAST_7_DAYS   | ZoneId.systemDefault() | LocalDate.now().minusDays(7)                                                           | LocalDate.now().plusDays(1)
+        DateRange.Interval.CURRENT_WEEK  | ZoneId.systemDefault() | LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))               | LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).plusDays(1)
+        DateRange.Interval.LAST_WEEK     | ZoneId.systemDefault() | LocalDate.now().minusWeeks(1).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) | LocalDate.now().minusWeeks(1).with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).plusDays(1)
+        DateRange.Interval.CURRENT_MONTH | ZoneId.systemDefault() | LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())                              | LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusMonths(1)
+        DateRange.Interval.LAST_MONTH    | ZoneId.systemDefault() | LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth())               | LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()).plusMonths(1)
+        DateRange.Interval.CURRENT_TRIAD | ZoneId.systemDefault() | LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())                              | LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusMonths(3)
+        DateRange.Interval.LAST_TRIAD    | ZoneId.systemDefault() | LocalDate.now().minusMonths(3).with(TemporalAdjusters.firstDayOfMonth())               | LocalDate.now().minusMonths(3).with(TemporalAdjusters.firstDayOfMonth()).plusMonths(3)
+        DateRange.Interval.CURRENT_YEAR  | ZoneId.systemDefault() | LocalDate.now().with(TemporalAdjusters.firstDayOfYear())                               | LocalDate.now().plusDays(1)
+        DateRange.Interval.LAST_YEAR     | ZoneId.systemDefault() | LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear())                 | LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear()).plusYears(1)
     }
 
     def "Interval generate with current day"() {
         expect:
         def range = interval.getRange(zoneId, false)
-        range.dbegin == Dates.converter().get(dbegin)
-        range.dend == Dates.converter().get(dend)
+        range.start == start
+        range.end == end
         where:
-        interval                         | zoneId                 | dbegin                                                                               | dend
-        DateRange.Interval.TODAY         | ZoneId.systemDefault() | Dates.builder().clearTime().build()                                                  | Dates.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.YESTERDAY     | ZoneId.systemDefault() | Dates.builder().clearTime().addDayOfMonth(-1).build()                                | Dates.builder().clearTime().addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_7_DAYS   | ZoneId.systemDefault() | Dates.builder().clearTime().addDayOfMonth(-7).build()                                | Dates.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.CURRENT_WEEK  | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfWeek(Calendar.MONDAY).build()                    | Dates.builder().clearTime().setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_WEEK     | ZoneId.systemDefault() | Dates.builder().clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.MONDAY).build() | Dates.builder().clearTime().addWeekOfMonth(-1).setDayOfWeek(Calendar.SUNDAY).addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.CURRENT_MONTH | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).build()                                 | Dates.builder().clearTime().setDayOfMonth(1).addMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_MONTH    | ZoneId.systemDefault() | Dates.builder().clearTime().addMonth(-1).setDayOfMonth(1).build()                    | Dates.builder().clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.CURRENT_TRIAD | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).build()                                 | Dates.builder().clearTime().setDayOfMonth(1).addMonth(3).addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_TRIAD    | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).addMonth(-3).build()                    | Dates.builder().clearTime().setDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.CURRENT_YEAR  | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).build()                     | Dates.builder().clearTime().addDayOfMonth(1).addDayOfMonth(-1).build()
-        DateRange.Interval.LAST_YEAR     | ZoneId.systemDefault() | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).addYear(-1).build()         | Dates.builder().clearTime().setDayOfMonth(1).setMonth(0).addDayOfMonth(-1).build()
-    }*/
+        interval                         | zoneId                 | start                                                                                  | end
+        DateRange.Interval.TODAY         | ZoneId.systemDefault() | LocalDate.now()                                                                        | LocalDate.now()
+        DateRange.Interval.YESTERDAY     | ZoneId.systemDefault() | LocalDate.now().minusDays(1)                                                           | LocalDate.now().minusDays(1)
+        DateRange.Interval.LAST_7_DAYS   | ZoneId.systemDefault() | LocalDate.now().minusDays(7)                                                           | LocalDate.now()
+        DateRange.Interval.CURRENT_WEEK  | ZoneId.systemDefault() | LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))               | LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+        DateRange.Interval.LAST_WEEK     | ZoneId.systemDefault() | LocalDate.now().minusWeeks(1).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) | LocalDate.now().minusWeeks(1).with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+        DateRange.Interval.CURRENT_MONTH | ZoneId.systemDefault() | LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())                              | LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusMonths(1).minusDays(1)
+        DateRange.Interval.LAST_MONTH    | ZoneId.systemDefault() | LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth())               | LocalDate.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()).plusMonths(1).minusDays(1)
+        DateRange.Interval.CURRENT_TRIAD | ZoneId.systemDefault() | LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())                              | LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).plusMonths(3).minusDays(1)
+        DateRange.Interval.LAST_TRIAD    | ZoneId.systemDefault() | LocalDate.now().minusMonths(3).with(TemporalAdjusters.firstDayOfMonth())               | LocalDate.now().minusMonths(3).with(TemporalAdjusters.firstDayOfMonth()).plusMonths(3).minusDays(1)
+        DateRange.Interval.CURRENT_YEAR  | ZoneId.systemDefault() | LocalDate.now().with(TemporalAdjusters.firstDayOfYear())                               | LocalDate.now()
+        DateRange.Interval.LAST_YEAR     | ZoneId.systemDefault() | LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear())                 | LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear()).plusYears(1).minusDays(1)
+    }
 
     def "Generate list of all intervals"() {
         when:

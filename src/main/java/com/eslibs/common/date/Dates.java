@@ -18,10 +18,7 @@ package com.eslibs.common.date;
 
 import com.eslibs.common.model.SItem;
 import com.eslibs.common.text.Texts;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,17 +40,26 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Dates {
 
+    @Builder
     @Getter
     @RequiredArgsConstructor
     public static class Environment {
 
+        @Builder.Default
         private final ZoneId zoneId = ZoneId.systemDefault();
+        @Builder.Default
         private final Locale locale = Locale.getDefault();
+        @Builder.Default
         private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        @Builder.Default
         private final DateTimeFormatter sortableDateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        @Builder.Default
         private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        @Builder.Default
         private final DateTimeFormatter sortableDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        @Builder.Default
         private final String zonePrefixes = "^(Africa|America|Asia|Atlantic|Australia|Europe|Indian|Pacific)/.*";
+        @Builder.Default
         private final BiFunction<ChronoUnit, Long, String> intervalLocalization = (type, value) -> switch (type) {
             case YEARS -> value + " " + Texts.pluralize(value, "год", "года", "лет");
             case MONTHS -> value + " мес.";
@@ -65,9 +71,9 @@ public final class Dates {
         };
     }
 
-    public static Environment getEnvironment() {
-        return new Environment();
-    }
+    @Getter
+    @Setter
+    private static Environment environment = Environment.builder().build();
 
     public static boolean isZoneValid(String id) {
         try {

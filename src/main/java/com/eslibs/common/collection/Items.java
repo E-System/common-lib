@@ -19,7 +19,6 @@ package com.eslibs.common.collection;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.*;
@@ -360,7 +359,7 @@ public final class Items {
         for (int i = 0; i < input.size(); ++i) {
             U elem = input.get(i);
             if (predicate.test(elem)) {
-                return Pair.of(elem, i);
+                return Map.entry(elem, i);
             }
         }
         return null;
