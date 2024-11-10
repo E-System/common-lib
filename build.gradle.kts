@@ -97,11 +97,11 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.17.2"
+val jacksonVersion = "2.18.1"
 dependencies {
-    api("org.apache.commons:commons-lang3:3.16.0")
-    api("commons-io:commons-io:2.16.1")
-    api("org.slf4j:slf4j-api:2.0.15")
+    api("org.apache.commons:commons-lang3:3.17.0")
+    api("commons-io:commons-io:2.17.0")
+    api("org.slf4j:slf4j-api:2.0.16")
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("org.eclipse.angus:angus-mail:2.0.3")
 
@@ -112,8 +112,8 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
     testImplementation("org.spockframework:spock-core:2.4-M4-groovy-4.0")
-    testImplementation("org.apache.groovy:groovy:4.0.22")
-    testImplementation("ch.qos.logback:logback-classic:1.5.6")
+    testImplementation("org.apache.groovy:groovy:4.0.24")
+    testImplementation("ch.qos.logback:logback-classic:1.5.12")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 
