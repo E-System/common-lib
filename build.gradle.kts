@@ -29,7 +29,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "8.10.2"
+    gradleVersion = "8.11.1"
 }
 
 fun resolve(name: String): String? {
@@ -97,10 +97,10 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.18.1"
+val jacksonVersion = "2.18.2"
 dependencies {
     api("org.apache.commons:commons-lang3:3.17.0")
-    api("commons-io:commons-io:2.17.0")
+    api("commons-io:commons-io:2.18.0")
     api("org.slf4j:slf4j-api:2.0.16")
     api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
     api("org.eclipse.angus:angus-mail:2.0.3")
@@ -108,8 +108,8 @@ dependencies {
     api("de.svenkubiak:jBCrypt:0.4.3")
     api("org.reflections:reflections:0.10.2")
 
-    compileOnly("org.projectlombok:lombok:1.18.34")
-    annotationProcessor("org.projectlombok:lombok:1.18.34")
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
 
     testImplementation("org.spockframework:spock-core:2.4-M4-groovy-4.0")
     testImplementation("org.apache.groovy:groovy:4.0.24")
