@@ -29,7 +29,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "8.11.1"
+    gradleVersion = "8.12"
 }
 
 fun resolve(name: String): String? {
