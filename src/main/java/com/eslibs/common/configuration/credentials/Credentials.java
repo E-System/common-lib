@@ -31,8 +31,8 @@ import java.util.Map;
  */
 @Getter
 @ToString
-@SuperBuilder
 @Jacksonized
+@SuperBuilder
 public class Credentials implements ICredentials {
 
     public static final String ATTR_URI = "URI";

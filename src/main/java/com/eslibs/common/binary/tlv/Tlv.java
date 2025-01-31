@@ -1,5 +1,6 @@
 package com.eslibs.common.binary.tlv;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -42,15 +43,15 @@ public class Tlv {
     }
 
     public static ITlv from(int tag, String value) {
-        return from(tag, value, StringTlv.DEFAULT_ENCODING);
+        return from(tag, value, StringTlv.DEFAULT_CHARSET);
     }
 
-    public static ITlv from(int tag, String value, String charsetName) {
-        return from(tag, value, charsetName, null);
+    public static ITlv from(int tag, String value, Charset charset) {
+        return from(tag, value, charset, null);
     }
 
-    public static ITlv from(int tag, String value, String charsetName, Predicate<String> validator) {
-        return new StringTlv(tag, value, charsetName, validator);
+    public static ITlv from(int tag, String value, Charset charset, Predicate<String> validator) {
+        return new StringTlv(tag, value, charset, validator);
     }
 
     public static ITlv from(int tag, ITlv... items) {

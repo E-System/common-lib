@@ -30,8 +30,8 @@ import java.util.Objects;
  */
 @Getter
 @ToString
-@SuperBuilder
 @Jacksonized
+@SuperBuilder
 public class Proxy extends SimpleConfiguration {
 
     @Builder.Default

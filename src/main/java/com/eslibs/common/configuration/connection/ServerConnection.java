@@ -34,8 +34,8 @@ import java.util.Map;
  */
 @Getter
 @ToString
-@SuperBuilder
 @Jacksonized
+@SuperBuilder
 public class ServerConnection extends SimpleConnection {
 
     @Builder.Default

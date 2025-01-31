@@ -9,8 +9,8 @@ import lombok.extern.jackson.Jacksonized;
 
 @Getter
 @ToString
-@SuperBuilder
 @Jacksonized
+@SuperBuilder
 public class SimpleConfiguration implements IConfiguration {
 
     protected final IConnection connection;

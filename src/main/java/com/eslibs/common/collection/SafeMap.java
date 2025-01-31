@@ -1,7 +1,10 @@
 package com.eslibs.common.collection;
 
-import java.time.LocalDate;
+import com.eslibs.common.date.Dates;
+
+import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -29,12 +32,19 @@ public class SafeMap extends HashMap<String, String> {
         return parse(key, Double::parseDouble);
     }
 
-    public Optional<LocalDate> getDate(String key) {
+    public Optional<TemporalAccessor> getDate(String key) {
         return getDate(key, null);
     }
 
-    public Optional<LocalDate> getDate(String key, DateTimeFormatter dateTimeFormatter) {
-        return Optional.ofNullable(LocalDate.parse(get(key), dateTimeFormatter));
+    public Optional<TemporalAccessor> getDate(String key, DateTimeFormatter dateTimeFormatter) {
+        if (dateTimeFormatter == null) {
+            dateTimeFormatter = Dates.getEnvironment().getDateFormatter();
+        }
+        try {
+            return Optional.of(dateTimeFormatter.parse(get(key)));
+        } catch (DateTimeException e) {
+            return Optional.empty();
+        }
     }
 
     private <T> Optional<T> parse(String key, Function<String, T> parser) {

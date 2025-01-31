@@ -30,8 +30,8 @@ import java.net.InetSocketAddress;
  */
 @Getter
 @ToString
-@SuperBuilder
 @Jacksonized
+@SuperBuilder
 public class SimpleConnection implements IConnection {
 
     protected final String host;

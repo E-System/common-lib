@@ -1,19 +1,20 @@
 package com.eslibs.common.binary.tlv;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.function.Predicate;
 
 public class StringTlv extends AbstractTlv<String> {
 
-    public static final String DEFAULT_ENCODING = "cp866";
+    public static final Charset DEFAULT_CHARSET = Charset.forName("cp866");
 
-    private final String charsetName;
+    private final Charset charset;
 
-    StringTlv(int tag, String value, String charsetName, Predicate<String> validator) {
+    StringTlv(int tag, String value, Charset charset, Predicate<String> validator) {
         super(tag, value, validator);
-        this.charsetName = charsetName;
+        this.charset = charset;
     }
 
     @Override
-    public byte[] encodeValue() throws IOException {return value.getBytes(charsetName);}
+    public byte[] encodeValue() throws IOException {return value.getBytes(charset);}
 }

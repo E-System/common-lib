@@ -24,12 +24,12 @@ plugins {
     jacoco
     `java-library`
     `maven-publish`
-    id("com.github.ben-manes.versions") version "0.51.0"
+    id("com.github.ben-manes.versions") version "0.52.0"
     id("org.sonarqube") version "5.1.0.4882"
 }
 
 tasks.wrapper {
-    gradleVersion = "8.12"
+    gradleVersion = "8.12.1"
 }
 
 fun resolve(name: String): String? {
@@ -72,7 +72,7 @@ tasks {
 }
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(22)
+        languageVersion = JavaLanguageVersion.of(23)
         vendor = JvmVendorSpec.ADOPTIUM
     }
     withSourcesJar()
@@ -111,9 +111,9 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
 
-    testImplementation("org.spockframework:spock-core:2.4-M4-groovy-4.0")
-    testImplementation("org.apache.groovy:groovy:4.0.24")
-    testImplementation("ch.qos.logback:logback-classic:1.5.12")
+    testImplementation("org.spockframework:spock-core:2.4-M5-groovy-4.0")
+    testImplementation("org.apache.groovy:groovy:4.0.25")
+    testImplementation("ch.qos.logback:logback-classic:1.5.16")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
 }
 

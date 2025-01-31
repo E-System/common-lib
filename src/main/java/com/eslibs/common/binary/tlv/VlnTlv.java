@@ -14,12 +14,16 @@ public class VlnTlv extends LongTlv {
     public byte[] encodeValue() throws IOException {
         byte[] full = super.encodeValue();
         int index = full.length - 1;
-        while (index >= 0) {
+        do {
             if (full[index] != 0x0) {
-                return Arrays.copyOf(full, index + 1);
+                break;
             }
             --index;
+        } while (index >= 0);
+        index += 1;
+        if (index == 0) {
+            return new byte[]{0x0};
         }
-        return new byte[]{0x0};
+        return Arrays.copyOf(full, index);
     }
 }

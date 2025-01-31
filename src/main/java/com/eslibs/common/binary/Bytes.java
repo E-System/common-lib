@@ -50,7 +50,7 @@ public class Bytes {
     /**
      * Форматирует байты в hex значении объединяя пробелом
      *
-     * @param b - мастив байтов
+     * @param b - массив байт
      * @return строку hex значений байтов объединенных пробелом
      */
     public static String hex(byte... b) {

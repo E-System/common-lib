@@ -139,6 +139,10 @@ public final class Items {
         return collection == null ? new ArrayList<>() : (immutable ? new ArrayList<>(collection) : collection);
     }
 
+    public static SafeMap safeMap(Map<String, String> map) {
+        return new SafeMap(map != null ? map : new HashMap<>());
+    }
+
     public static <K, V> Map<K, V> map(Map<K, V> map) {
         return map(map, false);
     }
