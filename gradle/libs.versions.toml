@@ -1,0 +1,23 @@
+[versions]
+jackson = "2.18.2"
+
+[libraries]
+commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
+commons-io = { group = "commons-io", name = "commons-io", version = "2.18.0" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.16" }
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
+angus-mail = { group = "org.eclipse.angus", name = "angus-mail", version = "2.0.3" }
+bcrypt = { group = "de.svenkubiak", name = "jBCrypt", version = "0.4.3" }
+reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
+spock = { group = "org.spockframework", name = "spock-core", version = "2.4-M5-groovy-4.0" }
+groovy = { group = "org.apache.groovy", name = "groovy", version = "4.0.25" }
+logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.16" }
+jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson" }
+
+[bundles]
+spock = ["spock", "groovy"]
+
+[plugins]
+versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
+sonarqube = { id = "org.sonarqube", version = "5.1.0.4882" }

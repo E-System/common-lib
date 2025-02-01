@@ -24,8 +24,8 @@ plugins {
     jacoco
     `java-library`
     `maven-publish`
-    id("com.github.ben-manes.versions") version "0.52.0"
-    id("org.sonarqube") version "5.1.0.4882"
+    alias(libs.plugins.versions)
+    alias(libs.plugins.sonarqube)
 }
 
 tasks.wrapper {
@@ -99,22 +99,21 @@ publishing {
 }
 val jacksonVersion = "2.18.2"
 dependencies {
-    api("org.apache.commons:commons-lang3:3.17.0")
-    api("commons-io:commons-io:2.18.0")
-    api("org.slf4j:slf4j-api:2.0.16")
-    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    api("org.eclipse.angus:angus-mail:2.0.3")
+    api(libs.commons.lang3)
+    api(libs.commons.io)
+    api(libs.slf4j.api)
+    api(libs.jackson.databind)
+    api(libs.angus.mail)
 
-    api("de.svenkubiak:jBCrypt:0.4.3")
-    api("org.reflections:reflections:0.10.2")
+    api(libs.bcrypt)
+    api(libs.reflections)
 
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
 
-    testImplementation("org.spockframework:spock-core:2.4-M5-groovy-4.0")
-    testImplementation("org.apache.groovy:groovy:4.0.25")
-    testImplementation("ch.qos.logback:logback-classic:1.5.16")
-    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+    testImplementation(libs.bundles.spock)
+    testImplementation(libs.logback)
+    testImplementation(libs.jackson.datatype.jsr310)
 }
 
 val emailTestEnabled =
