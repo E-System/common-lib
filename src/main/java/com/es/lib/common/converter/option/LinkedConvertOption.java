@@ -8,6 +8,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 public class LinkedConvertOption<T, R> implements ConvertOption {
+
     private final Map<T, R> items;
 
     public LinkedConvertOption() {

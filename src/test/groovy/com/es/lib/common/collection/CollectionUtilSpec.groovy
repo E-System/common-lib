@@ -61,7 +61,7 @@ class CollectionUtilSpec extends Specification {
 
     def "Получение первого элемента или null"() {
         expect:
-        CollectionUtil.getFirstOrNull(list) == result
+        CollectionUtil.getFirst(list) == result
         where:
         list   | result
         null   | null

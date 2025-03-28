@@ -23,6 +23,6 @@ public class LinkedCollectionConvertOption<T, R> extends LinkedConvertOption<T, 
     }
 
     public R getFirst(T id) {
-        return CollectionUtil.getFirstOrNull(get(id));
+        return CollectionUtil.getFirst(get(id));
     }
 }

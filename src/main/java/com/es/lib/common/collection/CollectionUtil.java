@@ -229,7 +229,12 @@ public final class CollectionUtil {
         return parts;
     }
 
+    @Deprecated
     public static <T> T getFirstOrNull(Collection<T> list) {
+        return getFirst(list);
+    }
+
+    public static <T> T getFirst(Collection<T> list) {
         return isEmpty(list) ? null : list.iterator().next();
     }
 
