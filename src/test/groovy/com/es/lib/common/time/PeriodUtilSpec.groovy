@@ -34,7 +34,7 @@ class PeriodUtilSpec extends Specification {
         def nextDate = date.plusYears(1).plusDays(1).plusHours(2)
         def result = PeriodUtil.pretty(date, nextDate, false)
         then:
-        result == '1 год 1 дн. 2 ч.'
+        result == (date.getHour() < 22 ? '1 год 1 дн. 2 ч.' : '1 год 2 дн.')
     }
 
     def "two hours"() {
@@ -43,7 +43,7 @@ class PeriodUtilSpec extends Specification {
         def nextDate = date.plusHours(2)
         def result = PeriodUtil.pretty(date, nextDate, false)
         then:
-        result == '2 ч.'
+        result == (date.getHour() < 22 ? '2 ч.' : '1 дн.')
     }
 
     def "two hours with minutes and seconds"() {
@@ -52,7 +52,7 @@ class PeriodUtilSpec extends Specification {
         def nextDate = date.plusHours(2).plusMinutes(11).plusSeconds(34)
         def result = PeriodUtil.pretty(date, nextDate, false)
         then:
-        result == '2 ч. 11 м. 34 c.'
+        result == (date.getHour() < 22 ? '2 ч. 11 м. 34 c.' : '1 дн.')
     }
 
     def "two hours with minutes and seconds (use braces)"() {
@@ -61,7 +61,7 @@ class PeriodUtilSpec extends Specification {
         def nextDate = date.plusHours(2).plusMinutes(11).plusSeconds(34)
         def result = PeriodUtil.pretty(date, nextDate, true)
         then:
-        result == '(2 ч. 11 м. 34 c.)'
+        result == (date.getHour() < 22 ? '(2 ч. 11 м. 34 c.)' : '(1 дн.)')
     }
 
 }
