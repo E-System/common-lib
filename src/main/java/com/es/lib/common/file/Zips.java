@@ -1,9 +1,16 @@
 package com.es.lib.common.file;
 
+import com.es.lib.common.file.output.ByteData;
+import com.es.lib.common.file.output.FileData;
+import com.es.lib.common.file.output.OutputData;
+import com.es.lib.common.file.output.StreamData;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.util.Collection;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -11,12 +18,30 @@ import java.util.zip.ZipOutputStream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Zips {
 
-    public static void compress(OutputStream outputStream, File file) throws IOException {
-        ZipOutputStream zipOut = new ZipOutputStream(outputStream);
+    public static byte[] compress(Collection<OutputData> items) throws IOException {
+        try (final ByteArrayOutputStream result = new ByteArrayOutputStream(); ZipOutputStream zipOut = new ZipOutputStream(result)) {
+            for (OutputData item : items) {
+                ZipEntry zipEntry = new ZipEntry(item.getFileName());
+                zipOut.putNextEntry(zipEntry);
+                if (item.isFile()) {
+                    FileData fileData = (FileData) item;
+                    FileUtils.copyFile(fileData.getContent().toFile(), zipOut);
+                } else if (item.isBytes()) {
+                    ByteData byteData = (ByteData) item;
+                    zipOut.write(byteData.getContent());
+                } else if (item.isStream()) {
+                    StreamData streamData = (StreamData) item;
+                    IOUtils.copy(streamData.getContent(), zipOut);
+                }
+            }
+            return result.toByteArray();
+        }
+    }
 
-        zipFile(file, file.getName(), zipOut);
-        zipOut.close();
-        outputStream.close();
+    public static void compress(OutputStream outputStream, File file) throws IOException {
+        try (ZipOutputStream zipOut = new ZipOutputStream(outputStream)) {
+            zipFile(file, file.getName(), zipOut);
+        }
     }
 
     public static void decompress(InputStream inputStream, File destDir) throws IOException {
