@@ -33,6 +33,7 @@ public final class Zips {
                     StreamData streamData = (StreamData) item;
                     IOUtils.copy(streamData.getContent(), zipOut);
                 }
+                zipOut.closeEntry();
             }
             return result.toByteArray();
         }
