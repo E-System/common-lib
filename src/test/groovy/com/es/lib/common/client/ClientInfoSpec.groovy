@@ -69,6 +69,30 @@ class ClientInfoSpec extends Specification {
         result.appLocale == Locales.from("en_US")
     }
 
+    def "Create with new headers all"() {
+        when:
+        def platform = 'iOS'
+        def platformVersion = 'iOS 13.0'
+        def appVersion = '1.0.0'
+        def guid = UUID.randomUUID().toString()
+        def headers = [
+                'es-app-platform'        : platform,
+                'es-app-platform-version': platformVersion,
+                'es-app-version'         : appVersion,
+                'es-app-timezone'        : 'GMT+03',
+                'es-app-locale'          : 'ru_RU',
+                'es-app-key'             : guid
+        ]
+        def result = ClientInfo.create(headers)
+        then:
+        result.platform == ClientInfo.Platform.ios
+        result.platformVersion == platformVersion
+        result.appVersion == appVersion
+        result.appLocale == Locale.default
+        result.appTimezone == ZoneId.of('GMT+03')
+        result.appKey == guid
+    }
+
     def "Create with empty headers"() {
         when:
         def headers = [:] as Map

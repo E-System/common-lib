@@ -40,16 +40,18 @@ public class ClientInfo {
     private static final String APP_VERSION_KEY = "es-app-version";
     private static final String APP_TIMEZONE_KEY = "es-app-timezone";
     private static final String APP_LOCALE_KEY = "es-app-locale";
+    private static final String APP_KEY = "es-app-key";
 
     private final Platform platform;
     private final String platformVersion;
     private final String appVersion;
     private final ZoneId appTimezone;
     private final Locale appLocale;
+    private final String appKey;
 
     public static ClientInfo create(Map<String, String> headers) {
         if (Items.isEmpty(headers)) {
-            return new ClientInfo(Platform.undefined, "", "", ZoneId.systemDefault(), Locale.getDefault());
+            return new ClientInfo(Platform.undefined, "", "", ZoneId.systemDefault(), Locale.getDefault(), "");
         }
         Platform platform = Platform.undefined;
         try {
@@ -71,7 +73,8 @@ public class ClientInfo {
             StringUtils.defaultIfBlank(headers.get(APP_PLATFORM_VERSION_KEY), ""),
             StringUtils.defaultIfBlank(headers.get(APP_VERSION_KEY), ""),
             zoneId,
-            locale
+            locale,
+            StringUtils.defaultIfBlank(headers.get(APP_KEY), "")
         );
     }
 
@@ -79,6 +82,7 @@ public class ClientInfo {
         undefined,
         android,
         ios,
-        web
+        web,
+        arm
     }
 }
