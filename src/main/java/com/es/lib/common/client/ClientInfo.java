@@ -82,6 +82,7 @@ public class ClientInfo {
         android,
         ios,
         web,
-        arm
+        arm,
+        telegram
     }
 }
