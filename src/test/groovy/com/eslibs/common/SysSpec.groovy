@@ -25,6 +25,30 @@ import spock.lang.Specification
  */
 class SysSpec extends Specification {
 
+    def "Get os name"() {
+        when:
+        def name = Sys.osName
+        println(name)
+        then:
+        name != null
+    }
+
+    def "Get os version"() {
+        when:
+        def name = Sys.osVersion
+        println(name)
+        then:
+        name != null
+    }
+
+    def "Get full os name with version"() {
+        when:
+        def name = Sys.fullOsName
+        println(name)
+        then:
+        name == Sys.osName + ' ' + Sys.osVersion
+    }
+
     def "Correct os types recognized"() {
         expect:
         Sys.getOS('win') == Sys.OS.WINDOWS

@@ -75,6 +75,8 @@ public record ClientInfo(
         undefined,
         android,
         ios,
-        web
+        web,
+        arm,
+        telegram
     }
 }

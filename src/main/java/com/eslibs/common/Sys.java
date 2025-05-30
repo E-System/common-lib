@@ -36,6 +36,7 @@ import java.util.function.Supplier;
 public final class Sys {
 
     private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
+    private static final String OS_VERSION = System.getProperty("os.version");
 
     public enum OS {
         WINDOWS,
@@ -145,5 +146,17 @@ public final class Sys {
             return OS.SOLARIS;
         }
         return null;
+    }
+
+    public static String getOsName() {
+        return OS_NAME;
+    }
+
+    public static String getOsVersion() {
+        return OS_VERSION;
+    }
+
+    public static String getFullOsName() {
+        return getOsName() + " " + getOsVersion();
     }
 }
