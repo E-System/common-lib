@@ -17,6 +17,8 @@
 package com.es.lib.common.os;
 
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Paths;
@@ -25,6 +27,7 @@ import java.nio.file.Paths;
  * @author Vitaliy Savchenko - savchenko.v@ext-system.com
  * @since 24.05.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OSUtil {
 
     private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
@@ -36,8 +39,6 @@ public final class OSUtil {
         MACOS,
         SOLARIS
     }
-
-    private OSUtil() {}
 
     /**
      * Get path to configuration file
