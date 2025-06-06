@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,6 +32,29 @@ public class ClientInfo {
     private final ZoneId appTimezone;
     private final Locale appLocale;
     private final String appKey;
+
+    public Map<String, String> toMap() {
+        Map<String, String> result = new HashMap<>();
+        if (platform != null) {
+            result.put(APP_PLATFORM_KEY, platform.name());
+        }
+        if (StringUtils.isNotBlank(platformVersion)) {
+            result.put(APP_PLATFORM_VERSION_KEY, platformVersion);
+        }
+        if (StringUtils.isNotBlank(appVersion)) {
+            result.put(APP_VERSION_KEY, appVersion);
+        }
+        if (appTimezone != null) {
+            result.put(APP_TIMEZONE_KEY, appTimezone.getId());
+        }
+        if (appLocale != null) {
+            result.put(APP_LOCALE_KEY, appLocale.getDisplayName());
+        }
+        if (StringUtils.isNotBlank(appKey)) {
+            result.put(APP_KEY, appKey);
+        }
+        return result;
+    }
 
     public static ClientInfo create(Map<String, String> headers) {
         if (CollectionUtil.isEmpty(headers)) {
