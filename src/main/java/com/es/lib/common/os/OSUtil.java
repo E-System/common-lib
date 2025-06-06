@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 public final class OSUtil {
 
     private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
+    private static final String OS_VERSION = System.getProperty("os.version");
 
     public enum OS {
         WINDOWS,
@@ -36,7 +37,7 @@ public final class OSUtil {
         SOLARIS
     }
 
-    private OSUtil() { }
+    private OSUtil() {}
 
     /**
      * Get path to configuration file
@@ -60,7 +61,7 @@ public final class OSUtil {
     public static String getAppConfigPath(String vendorName, String appName) {
         switch (OSUtil.getOS()) {
             case WINDOWS:
-                if(StringUtils.isBlank(System.getenv("LOCALAPPDATA"))) {
+                if (StringUtils.isBlank(System.getenv("LOCALAPPDATA"))) {
                     return Paths.get(System.getenv("APPDATA"), vendorName, appName).toString();
                 }
                 return Paths.get(System.getenv("LOCALAPPDATA"), vendorName, appName).toString();
@@ -80,6 +81,18 @@ public final class OSUtil {
 
     public static OS getOS() {
         return getOS(OS_NAME);
+    }
+
+    public static String getOsName() {
+        return OS_NAME;
+    }
+
+    public static String getOsVersion() {
+        return OS_VERSION;
+    }
+
+    public static String getFullOsName() {
+        return getOsName() + " " + getOsVersion();
     }
 
     private static OS getOS(String property) {

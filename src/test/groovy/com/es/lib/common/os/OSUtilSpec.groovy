@@ -24,13 +24,37 @@ import spock.lang.Specification
  */
 class OSUtilSpec extends Specification {
 
-    def "Должны быть корректно получены типы операционки"() {
+    def "Success get OS type"() {
         expect:
         OSUtil.getOS('win') == OSUtil.OS.WINDOWS
         OSUtil.getOS('Linux') == OSUtil.OS.LINUX
         OSUtil.getOS('Unix') == OSUtil.OS.LINUX
         OSUtil.getOS('mac') == OSUtil.OS.MACOS
         OSUtil.getOS('sunos') == OSUtil.OS.SOLARIS
+    }
+
+    def "Get os name"() {
+        when:
+        def name = OSUtil.osName
+        println(name)
+        then:
+        name != null
+    }
+
+    def "Get os version"() {
+        when:
+        def name = OSUtil.osVersion
+        println(name)
+        then:
+        name != null
+    }
+
+    def "Get full os name with version"() {
+        when:
+        def name = OSUtil.fullOsName
+        println(name)
+        then:
+        name == OSUtil.osName + ' ' + OSUtil.osVersion
     }
 
     def "Get os"() {
@@ -54,7 +78,7 @@ class OSUtilSpec extends Specification {
 
     def "getAppPath"() {
         expect:
-        def path = OSUtil.getAppPath()
+        def path = OSUtil.appPath
         println(path)
         path != null
     }
