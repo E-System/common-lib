@@ -48,7 +48,7 @@ public class ClientInfo {
             result.put(APP_TIMEZONE_KEY, appTimezone.getId());
         }
         if (appLocale != null) {
-            result.put(APP_LOCALE_KEY, appLocale.getDisplayName());
+            result.put(APP_LOCALE_KEY, appLocale.toString());
         }
         if (StringUtils.isNotBlank(appKey)) {
             result.put(APP_KEY, appKey);
