@@ -16,15 +16,16 @@
 
 package com.eslibs.common.exception;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Base runtime exception
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 05.06.15
  */
+@NoArgsConstructor
 public class ESRuntimeException extends RuntimeException {
-
-    public ESRuntimeException() { }
 
     public ESRuntimeException(String message) {
         super(message);

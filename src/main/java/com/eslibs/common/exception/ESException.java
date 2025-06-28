@@ -16,15 +16,16 @@
 
 package com.eslibs.common.exception;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Base checked exception
  *
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 05.06.15
  */
+@NoArgsConstructor
 public class ESException extends Exception {
-
-    public ESException() {}
 
     public ESException(String message) {
         super(message);

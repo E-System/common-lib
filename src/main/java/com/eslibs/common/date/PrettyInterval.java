@@ -1,5 +1,8 @@
 package com.eslibs.common.date;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -14,15 +17,11 @@ import java.util.stream.Collectors;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.05.2018
  */
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class PrettyInterval {
 
     private final boolean useBraces;
     private final BiFunction<ChronoUnit, Long, String> localization;
-
-    PrettyInterval(boolean useBraces, BiFunction<ChronoUnit, Long, String> localization) {
-        this.useBraces = useBraces;
-        this.localization = localization;
-    }
 
     public String get(LocalDateTime from) {
         return get(from, LocalDateTime.now());

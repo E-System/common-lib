@@ -23,6 +23,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -55,8 +56,7 @@ public record Message(
     }
 
     public String id() {
-        Attachment ra = rootAttachment();
-        return ra != null ? ra.id() : null;
+        return Optional.ofNullable(rootAttachment()).map(Attachment::id).orElse(null);
     }
 
     @Builder

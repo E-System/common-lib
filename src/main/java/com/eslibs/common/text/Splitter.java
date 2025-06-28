@@ -102,14 +102,14 @@ public class Splitter {
             this.firstSplitter = firstSplitter;
         }
 
-        public Collection<Map.Entry<String, String>> toPairs(String text) {
+        public Map<String, String> toMap(String text) {
             if (StringUtils.isEmpty(text)) {
-                return Collections.emptyList();
+                return Collections.emptyMap();
             }
-            return toPairs(text, new LinkedList<>());
+            return toMap(text, new LinkedHashMap<>());
         }
 
-        public Collection<Map.Entry<String, String>> toPairs(String text, Collection<Map.Entry<String, String>> result) {
+        public Map<String, String> toMap(String text, Map<String, String> result) {
             for (String row : firstSplitter.internalSplit(text)) {
                 String[] parts = internalSplit(firstSplitter.trim(row));
                 String key = null;
@@ -122,7 +122,7 @@ public class Splitter {
                     key = trim(parts[0]);
                 }
                 if (key != null) {
-                    result.add(Map.entry(key, value));
+                    result.put(key, value);
                 }
             }
             return result;

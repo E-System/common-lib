@@ -85,7 +85,7 @@ public final class Dates {
 
     public static Collection<ZoneId> availableZones() {
         return ZoneId.getAvailableZoneIds().stream()
-            .filter(v -> v.matches(Dates.getEnvironment().zonePrefixes))
+            .filter(v -> v.matches(getEnvironment().zonePrefixes))
             .map(ZoneId::of)
             .sorted(Comparator.comparing(ZoneId::getId))
             .toList();
@@ -132,7 +132,7 @@ public final class Dates {
     }
 
     public static PrettyInterval pretty(boolean useBraces, BiFunction<ChronoUnit, Long, String> localization) {
-        return new PrettyInterval(useBraces, localization != null ? localization : Dates.getEnvironment().intervalLocalization);
+        return new PrettyInterval(useBraces, localization != null ? localization : getEnvironment().intervalLocalization);
     }
 
     public static Collection<SItem> ranges(ZoneId zoneId, DateTimeFormatter dateTimeFormatter, boolean lastNextDay) {
