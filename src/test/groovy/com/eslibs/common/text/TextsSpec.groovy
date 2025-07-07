@@ -167,12 +167,12 @@ class TextsSpec extends Specification {
 
     def "Split1"() {
         expect:
-        splitter.toPairs(value) == result
+        splitter.toMap(value) == result
         where:
         value        | splitter                        || result
-        ""           | Texts.splitBy(",").splitBy(":") || []
-        "1:2,2:3"    | Texts.splitBy(",").splitBy(":") || [Map.entry("1", "2"), Map.entry("2", "3")]
-        "1:2, 2 : 3" | Texts.splitBy(",").splitBy(":") || [Map.entry("1", "2"), Map.entry("2", "3")]
+        ""           | Texts.splitBy(",").splitBy(":") || [:]
+        "1:2,2:3"    | Texts.splitBy(",").splitBy(":") || ["1": "2", "2": "3"]
+        "1:2, 2 : 3" | Texts.splitBy(",").splitBy(":") || ["1": "2", "2": "3"]
     }
 
     def "Split on 2 rows"() {
