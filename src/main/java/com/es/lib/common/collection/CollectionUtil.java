@@ -351,4 +351,36 @@ public final class CollectionUtil {
         }
         return null;
     }
+
+    public static <T> Collection<T> collection(Collection<T> collection) {
+        return collection(collection, false);
+    }
+
+    public static <T> Collection<T> collection(Collection<T> collection, boolean immutable) {
+        return collection == null ? new ArrayList<>() : (immutable ? new ArrayList<>(collection) : collection);
+    }
+
+    public static <K, V> Map<K, V> map(Map<K, V> map) {
+        return map(map, false);
+    }
+
+    public static <K, V> Map<K, V> map(Map<K, V> map, boolean immutable) {
+        return map == null ? new HashMap<>() : (immutable ? new HashMap<>(map) : map);
+    }
+
+    public static <K, V> Map<K, V> immutableMap(Map<K, V> collection) {
+        return immutableMap(collection, false);
+    }
+
+    public static <K, V> Map<K, V> immutableMap(Map<K, V> collection, boolean linked) {
+        return collection == null ? null : (linked ? new LinkedHashMap<>(collection) : new HashMap<>(collection));
+    }
+
+    public static <T> Set<T> immutableSet(Set<T> collection) {
+        return immutableSet(collection, false);
+    }
+
+    public static <T> Set<T> immutableSet(Set<T> collection, boolean linked) {
+        return collection == null ? null : (linked ? new LinkedHashSet<>(collection) : new HashSet<>(collection));
+    }
 }

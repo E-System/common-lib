@@ -351,4 +351,69 @@ class CollectionUtilSpec extends Specification {
         CollectionUtil.remove(['a': 'a', 'b': 'b'], ['a']) == ['b': 'b']
         CollectionUtil.remove(['a': 'a', 'b': 'b'], 'a') == ['b': 'b']
     }
+
+    def "not null map mutable"() {
+        when:
+        def map = [key: 'value']
+        def map2 = CollectionUtil.map(map)
+        map['key2'] = 'value2'
+        map2['key3'] = 'value3'
+        then:
+        CollectionUtil.map(null) != null
+        CollectionUtil.map([:]) != null
+        !CollectionUtil.map([key: 'value']).isEmpty()
+        map2.containsKey('key2')
+        map2.containsKey('key3')
+        map.containsKey('key2')
+        map.containsKey('key3')
+    }
+
+    def "not null map immutable param"() {
+        when:
+        def map = [key: 'value']
+        def map2 = CollectionUtil.map(map, true)
+        map['key2'] = 'value2'
+        map2['key3'] = 'value3'
+        then:
+        CollectionUtil.map(null, true) != null
+        CollectionUtil.map([:], true) != null
+        !CollectionUtil.map([key: 'value'], true).isEmpty()
+        !map2.containsKey('key2')
+        map2.containsKey('key3')
+        map.containsKey('key2')
+        !map.containsKey('key3')
+    }
+
+    def "immutableMap"() {
+        when:
+        def map = [key: 'value']
+        def map2 = CollectionUtil.immutableMap(map)
+        map['key2'] = 'value2'
+        map2['key3'] = 'value3'
+        then:
+        CollectionUtil.immutableMap(null) == null
+        CollectionUtil.immutableMap([:]) != null
+        !CollectionUtil.immutableMap([key: 'value']).isEmpty()
+        !map2.containsKey('key2')
+        map2.containsKey('key3')
+        map.containsKey('key2')
+        !map.containsKey('key3')
+    }
+
+    def "immutableSet"() {
+        when:
+        def set = new HashSet<String>(Arrays.asList('value'))
+        def set2 = CollectionUtil.immutableSet(set)
+        set.add('value2')
+        set2.add('value3')
+        then:
+        CollectionUtil.immutableSet(null) == null
+        CollectionUtil.immutableSet(new HashSet()) != null
+        !CollectionUtil.immutableSet(new HashSet(Arrays.asList('value'))).isEmpty()
+        !set2.contains('value2')
+        set2.contains('value3')
+        set.contains('value2')
+        !set.contains('value3')
+    }
+
 }
