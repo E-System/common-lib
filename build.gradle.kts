@@ -46,15 +46,18 @@ repositories {
     mavenLocal()
 }
 
-var filePath = Paths.get(project.projectDir.toString(), "src/main/resources/com/eslibs/common/")
-Files.createDirectories(filePath)
-filePath = filePath.resolve("build.properties")
-println("Create file for property: $filePath")
-val props = Properties()
-props["name"] = rootProject.name
-props["version"] = project.version
-props["date"] = LocalDateTime.now().toString()
-props.store(Files.newOutputStream(filePath), null)
+Paths.get(project.projectDir.toString(), "src/main/resources/com/eslibs/common/").let {
+    Files.createDirectories(it)
+    val path = it.resolve("build.properties")
+    println("Create file for property: $path")
+    Properties().let {
+        it["name"] = rootProject.name
+        it["version"] = project.version
+        it["date"] = LocalDateTime.now().toString()
+        it.store(Files.newOutputStream(path), null)
+    }
+}
+
 
 tasks {
     jar {
@@ -70,13 +73,14 @@ tasks {
         options.encoding = "utf-8"
     }
 }
+val jVersion = JavaLanguageVersion.of(24)
 tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
-    languageVersion = JavaLanguageVersion.of(24)
+    languageVersion = jVersion
     vendor = JvmVendorSpec.ADOPTIUM
 }
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = jVersion
         vendor = JvmVendorSpec.ADOPTIUM
     }
     withSourcesJar()
