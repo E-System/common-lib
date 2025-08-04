@@ -29,7 +29,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "8.14.3"
+    gradleVersion = "9.0.0"
 }
 
 fun resolve(name: String): String? {
@@ -101,7 +101,6 @@ publishing {
         }
     }
 }
-val jacksonVersion = "2.18.2"
 dependencies {
     api(libs.commons.lang3)
     api(libs.commons.io)
@@ -118,6 +117,7 @@ dependencies {
     testImplementation(libs.bundles.spock)
     testImplementation(libs.logback)
     testImplementation(libs.jackson.datatype.jsr310)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 val emailTestEnabled =
