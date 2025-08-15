@@ -8,9 +8,7 @@ import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @ToString
@@ -25,6 +23,15 @@ public class ClientInfo {
     private static final String APP_TIMEZONE_KEY = "es-app-timezone";
     private static final String APP_LOCALE_KEY = "es-app-locale";
     private static final String APP_KEY = "es-app-key";
+
+    public static final Collection<String> ALL_HEADERS = Arrays.asList(
+        APP_PLATFORM_KEY,
+        APP_PLATFORM_VERSION_KEY,
+        APP_VERSION_KEY,
+        APP_TIMEZONE_KEY,
+        APP_LOCALE_KEY,
+        APP_KEY
+    );
 
     private final Platform platform;
     private final String platformVersion;
@@ -107,6 +114,7 @@ public class ClientInfo {
         ios,
         web,
         arm,
-        telegram
+        telegram,
+        mobileArm
     }
 }
