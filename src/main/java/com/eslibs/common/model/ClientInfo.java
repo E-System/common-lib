@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -34,7 +35,8 @@ public record ClientInfo(
     String platformVersion,
     String appVersion,
     ZoneId appTimezone,
-    Locale appLocale
+    Locale appLocale,
+    String appKey
 ) implements Serializable {
 
     private static final String APP_PLATFORM_KEY = "es-app-platform";
@@ -42,33 +44,74 @@ public record ClientInfo(
     private static final String APP_VERSION_KEY = "es-app-version";
     private static final String APP_TIMEZONE_KEY = "es-app-timezone";
     private static final String APP_LOCALE_KEY = "es-app-locale";
+    private static final String APP_KEY = "es-app-key";
 
     public static ClientInfo from(Map<String, String> headers) {
         if (Items.isEmpty(headers)) {
-            return new ClientInfo(Platform.undefined, "", "", ZoneId.systemDefault(), Locale.getDefault());
+            return new ClientInfo(
+                Platform.undefined,
+                "",
+                "",
+                ZoneId.systemDefault(),
+                Locale.getDefault(),
+                null
+            );
         }
-        Platform platform = Platform.undefined;
+        return new ClientInfo(
+            getPlatform(headers),
+            StringUtils.defaultIfBlank(headers.get(APP_PLATFORM_VERSION_KEY), ""),
+            StringUtils.defaultIfBlank(headers.get(APP_VERSION_KEY), ""),
+            getZoneId(headers),
+            getLocale(headers),
+            StringUtils.defaultIfBlank(headers.get(APP_KEY), "")
+        );
+    }
+
+    public Map<String, String> toMap() {
+        Map<String, String> result = new HashMap<>();
+        if (platform != null) {
+            result.put(APP_PLATFORM_KEY, platform.name());
+        }
+        if (StringUtils.isNotBlank(platformVersion)) {
+            result.put(APP_PLATFORM_VERSION_KEY, platformVersion);
+        }
+        if (StringUtils.isNotBlank(appVersion)) {
+            result.put(APP_VERSION_KEY, appVersion);
+        }
+        if (appTimezone != null) {
+            result.put(APP_TIMEZONE_KEY, appTimezone.getId());
+        }
+        if (appLocale != null) {
+            result.put(APP_LOCALE_KEY, appLocale.toString());
+        }
+        if (StringUtils.isNotBlank(appKey)) {
+            result.put(APP_KEY, appKey);
+        }
+        return result;
+    }
+
+    private static Platform getPlatform(Map<String, String> headers) {
         try {
-            platform = Platform.valueOf(headers.get(APP_PLATFORM_KEY).toLowerCase());
+            return Platform.valueOf(headers.get(APP_PLATFORM_KEY).toLowerCase());
         } catch (Exception _) {}
-        ZoneId zoneId = ZoneId.systemDefault();
+        return Platform.undefined;
+    }
+
+    private static ZoneId getZoneId(Map<String, String> headers) {
         try {
-            zoneId = ZoneId.of(headers.get(APP_TIMEZONE_KEY));
-        } catch (Exception ignored) {}
-        Locale locale = Locale.getDefault();
+            return ZoneId.of(headers.get(APP_TIMEZONE_KEY));
+        } catch (Exception _) {}
+        return ZoneId.systemDefault();
+    }
+
+    private static Locale getLocale(Map<String, String> headers) {
         try {
             String localeValue = headers.get(APP_LOCALE_KEY);
             if (StringUtils.isNotBlank(localeValue)) {
-                locale = Locales.of(localeValue);
+                return Locales.of(localeValue);
             }
-        } catch (Exception ignored) {}
-        return new ClientInfo(
-            platform,
-            StringUtils.defaultIfBlank(headers.get(APP_PLATFORM_VERSION_KEY), ""),
-            StringUtils.defaultIfBlank(headers.get(APP_VERSION_KEY), ""),
-            zoneId,
-            locale
-        );
+        } catch (Exception _) {}
+        return Locale.getDefault();
     }
 
     public enum Platform {
