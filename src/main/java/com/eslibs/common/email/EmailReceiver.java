@@ -19,7 +19,7 @@ package com.eslibs.common.email;
 import com.eslibs.common.configuration.IConfiguration;
 import com.eslibs.common.exception.ESRuntimeException;
 import com.eslibs.common.model.data.OutputData;
-import com.eslibs.common.security.Hash;
+import com.eslibs.common.security.hash.Hash;
 import jakarta.mail.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

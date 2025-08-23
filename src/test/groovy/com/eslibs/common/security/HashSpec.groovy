@@ -16,6 +16,7 @@
 
 package com.eslibs.common.security
 
+import com.eslibs.common.security.hash.Hash
 import spock.lang.Specification
 
 /**

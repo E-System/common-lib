@@ -136,7 +136,7 @@ public class Bytes {
     }
 
     /**
-     * Read short value from array
+     * Read short value from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -147,7 +147,7 @@ public class Bytes {
     }
 
     /**
-     * Read short value in LE format from array
+     * Read short value in LE format from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -159,7 +159,7 @@ public class Bytes {
     }
 
     /**
-     * Read unsigned short (int) value from array
+     * Read an unsigned short (int) value from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -172,7 +172,7 @@ public class Bytes {
 
 
     /**
-     * Read short value in LE format from array
+     * Read short value in LE format from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -184,7 +184,7 @@ public class Bytes {
 
 
     /**
-     * Read 3byte int value from array
+     * Read 3 byte int value from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -195,7 +195,7 @@ public class Bytes {
     }
 
     /**
-     * Read 3byte int value in LE format from array
+     * Read 3 byte int value in LE format from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -206,7 +206,7 @@ public class Bytes {
     }
 
     /**
-     * Read int value from array
+     * Read int value from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -217,7 +217,7 @@ public class Bytes {
     }
 
     /**
-     * Read int value in LE format from array
+     * Read int value in LE format from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -228,7 +228,7 @@ public class Bytes {
     }
 
     /**
-     * Read long value from array
+     * Read long value from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -239,7 +239,7 @@ public class Bytes {
     }
 
     /**
-     * Read long value in LE format from array
+     * Read long value in LE format from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -250,7 +250,7 @@ public class Bytes {
     }
 
     /**
-     * Read custom len long value from array
+     * Read custom len long value from an array
      *
      * @param b     - source byte array
      * @param index - start position index
@@ -264,7 +264,7 @@ public class Bytes {
     }
 
     /**
-     * Read custom len long value in LE format from array
+     * Read custom len long value in LE format from an array
      *
      * @param b     - source byte array
      * @param index - start position index

@@ -1,4 +1,4 @@
-package com.eslibs.common.security;
+package com.eslibs.common.security.hash;
 
 import com.eslibs.common.binary.ByteEncoder;
 import com.eslibs.common.binary.Bytes;

@@ -16,7 +16,7 @@
 package com.eslibs.common.model;
 
 import com.eslibs.common.reflection.Reflects;
-import com.eslibs.common.security.Hash;
+import com.eslibs.common.security.hash.Hash;
 import lombok.Getter;
 import lombok.ToString;
 

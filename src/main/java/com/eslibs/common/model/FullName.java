@@ -17,9 +17,7 @@ package com.eslibs.common.model;
 
 import com.eslibs.common.collection.Items;
 import com.eslibs.common.text.Texts;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
@@ -138,10 +136,7 @@ public class FullName {
                && StringUtils.isEmpty(patronymic);
     }
 
-    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-    public static class Initiator {
-
-        private final boolean left;
+    public record Initiator(boolean left) {
 
         public String get(FullName fullName) {
             if (fullName == null || fullName.isAllBlank()) {

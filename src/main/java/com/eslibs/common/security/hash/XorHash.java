@@ -1,4 +1,4 @@
-package com.eslibs.common.security;
+package com.eslibs.common.security.hash;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
