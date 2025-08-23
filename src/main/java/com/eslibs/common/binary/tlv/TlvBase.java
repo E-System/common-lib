@@ -6,10 +6,11 @@ import lombok.RequiredArgsConstructor;
 import java.util.function.Predicate;
 
 @RequiredArgsConstructor
-abstract class AbstractTlv<T> implements ITlv {
+abstract class TlvBase<T> implements ITlv {
 
     @Getter
     protected final int tag;
+    @Getter
     protected final T value;
     protected final Predicate<T> validator;
 

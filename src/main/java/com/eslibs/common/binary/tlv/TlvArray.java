@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-class Stlv extends AbstractTlv<Collection<? extends ITlv>> {
+class TlvArray extends TlvBase<Collection<? extends ITlv>> {
 
-    Stlv(int tag, Collection<? extends ITlv> value, Predicate<Collection<? extends ITlv>> validator) {super(tag, value, validator);}
+    TlvArray(int tag, Collection<? extends ITlv> value, Predicate<Collection<? extends ITlv>> validator) {super(tag, value, validator);}
 
     @Override
     public byte[] encodeValue() throws IOException {

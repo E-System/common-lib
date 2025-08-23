@@ -56,7 +56,7 @@ public final class Phones {
     }
 
     /**
-     * Check phone number for mobile(7, 8 or blank in begin, next 9 and 7 digits)
+     * Check phone number for mobile (7, 8 or blank in beginning, next 9 and 7 digits)
      *
      * @param value Phone number
      * @return true - is mobile number
@@ -67,7 +67,7 @@ public final class Phones {
     }
 
     /**
-     * Split input on phone pairs(number and mobile phone flag)
+     * Split input on phone pairs (number and mobile phone flag)
      *
      * @param value Input string
      * @param clean Clean numbers
@@ -83,7 +83,7 @@ public final class Phones {
      *
      * @param values    Numbers array
      * @param delimiter Delimiter for phones
-     * @return 1 element - simple numbers, 2 element - mobile numbers
+     * @return 1 element - simple numbers, 2 elements - mobile numbers
      */
     public static Map.Entry<String, String> joinByType(Collection<Map.Entry<String, Boolean>> values, String delimiter) {
         if (Items.isEmpty(values)) {
@@ -96,12 +96,12 @@ public final class Phones {
     }
 
     /**
-     * Convert input string to 2 string with typed numbers
+     * Convert input string to 2 strings with typed numbers
      *
      * @param value     Input string
-     * @param clean     Clean numbers in output string
-     * @param delimiter Delimiter for numbers in output string
-     * @return 1 element - simple numbers, 2 element - mobile numbers
+     * @param clean     Clean numbers in the output string
+     * @param delimiter Delimiter for numbers in the output string
+     * @return 1 element - simple numbers, 2 elements - mobile numbers
      */
     public static Map.Entry<String, String> groupByType(String value, boolean clean, String delimiter) {
         return joinByType(
@@ -114,7 +114,7 @@ public final class Phones {
      * Format phone number by mask
      *
      * @param value Input number
-     * @param mask  Mask (for example +7 (***) ***-****)
+     * @param mask  Mask (for example, +7 (***) ***-****)
      * @param full  Fill not available symbols in phone from mask
      * @return Formatted phone
      */

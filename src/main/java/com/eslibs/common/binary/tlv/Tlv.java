@@ -12,7 +12,7 @@ public class Tlv {
     }
 
     public static ITlv from(int tag, byte value, Predicate<Byte> validator) {
-        return new ByteTlv(tag, value, validator);
+        return new TlvByte(tag, value, validator);
     }
 
     public static ITlv from(int tag, short value) {
@@ -20,7 +20,7 @@ public class Tlv {
     }
 
     public static ITlv from(int tag, short value, Predicate<Short> validator) {
-        return new ShortTlv(tag, value, validator);
+        return new TlvShort(tag, value, validator);
     }
 
     public static ITlv from(int tag, int value) {
@@ -28,7 +28,7 @@ public class Tlv {
     }
 
     public static ITlv from(int tag, int value, Predicate<Integer> validator) {
-        return new IntTlv(tag, value, validator);
+        return new TlvInt(tag, value, validator);
     }
 
     public static ITlv from(int tag, long value, boolean vln) {
@@ -37,13 +37,13 @@ public class Tlv {
 
     public static ITlv from(int tag, long value, boolean vln, Predicate<Long> validator) {
         if (vln) {
-            return new VlnTlv(tag, value, validator);
+            return new TlvVln(tag, value, validator);
         }
-        return new LongTlv(tag, value, validator);
+        return new TlvLong(tag, value, validator);
     }
 
     public static ITlv from(int tag, String value) {
-        return from(tag, value, StringTlv.DEFAULT_CHARSET);
+        return from(tag, value, TlvString.DEFAULT_CHARSET);
     }
 
     public static ITlv from(int tag, String value, Charset charset) {
@@ -51,7 +51,7 @@ public class Tlv {
     }
 
     public static ITlv from(int tag, String value, Charset charset, Predicate<String> validator) {
-        return new StringTlv(tag, value, charset, validator);
+        return new TlvString(tag, value, charset, validator);
     }
 
     public static ITlv from(int tag, ITlv... items) {
@@ -59,6 +59,6 @@ public class Tlv {
     }
 
     public static ITlv from(int tag, Predicate<Collection<? extends ITlv>> validator, ITlv... items) {
-        return new Stlv(tag, Arrays.asList(items), validator);
+        return new TlvArray(tag, Arrays.asList(items), validator);
     }
 }

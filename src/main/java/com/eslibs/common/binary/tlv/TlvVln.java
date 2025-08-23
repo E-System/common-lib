@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
-public class VlnTlv extends LongTlv {
+public class TlvVln extends TlvLong {
 
-    VlnTlv(int tag, long value, Predicate<Long> validator) {
+    TlvVln(int tag, long value, Predicate<Long> validator) {
         super(tag, value, validator);
     }
 

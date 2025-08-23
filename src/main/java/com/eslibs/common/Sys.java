@@ -93,12 +93,12 @@ public final class Sys {
     }
 
     /**
-     * Get path to configuration file
+     * Get path to a configuration file
      *
      * @param vendorName     Vendor name
      * @param appName        Application name
      * @param configFileName Configuration file name
-     * @return path to configuration file
+     * @return path to a configuration file
      */
     public static Path getConfigFilePath(String vendorName, String appName, String configFileName) {
         return getAppConfigPath(vendorName, appName).resolve(configFileName);
@@ -124,7 +124,7 @@ public final class Sys {
     /**
      * Get path to application folder
      *
-     * @return path to application folder
+     * @return path to the application folder
      */
     public static Path getAppPath() {
         return Paths.get(".").toAbsolutePath().normalize();

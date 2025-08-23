@@ -3,11 +3,11 @@ package com.eslibs.common.binary.tlv;
 import java.io.IOException;
 import java.util.function.Predicate;
 
-public class FvlnTlv extends VlnTlv {
+public class TlvFvln extends TlvVln {
 
     private final int decimalCount;
 
-    FvlnTlv(int tag, long value, int decimalCount, Predicate<Long> validator) {
+    TlvFvln(int tag, long value, int decimalCount, Predicate<Long> validator) {
         super(tag, value, validator);
         this.decimalCount = decimalCount;
     }

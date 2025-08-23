@@ -10,13 +10,13 @@ import java.util.function.Supplier;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Lambda {
 
-    public static void run(Runnable executor) {
-        run(executor, null);
+    public static void run(ExceptionalRunnable runnable) {
+        run(runnable, null);
     }
 
-    public static void run(Runnable executor, Consumer<Throwable> exceptionConsumer) {
+    public static void run(ExceptionalRunnable runnable, Consumer<Throwable> exceptionConsumer) {
         try {
-            executor.run();
+            runnable.run();
         } catch (Throwable t) {
             if (exceptionConsumer != null) {
                 exceptionConsumer.accept(t);
@@ -24,11 +24,14 @@ public final class Lambda {
         }
     }
 
-    public static <T> T run(ExceptionalSupplier<T> executor, Function<Throwable, T> exceptionConsumer) {
+    public static <T> T get(ExceptionalSupplier<T> supplier, Function<Throwable, T> defaultSupplier) {
         try {
-            return executor.run();
+            return supplier.get();
         } catch (Throwable t) {
-            return exceptionConsumer.apply(t);
+            if (defaultSupplier != null) {
+                return defaultSupplier.apply(t);
+            }
+            throw new RuntimeException(t);
         }
     }
 
@@ -49,7 +52,7 @@ public final class Lambda {
     }
 
     @FunctionalInterface
-    public interface Runnable {
+    public interface ExceptionalRunnable {
 
         void run() throws Exception;
     }
@@ -57,6 +60,6 @@ public final class Lambda {
     @FunctionalInterface
     public interface ExceptionalSupplier<R> {
 
-        R run() throws Exception;
+        R get() throws Exception;
     }
 }

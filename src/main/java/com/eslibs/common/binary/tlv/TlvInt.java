@@ -5,12 +5,12 @@ import com.eslibs.common.binary.Bytes;
 import java.io.IOException;
 import java.util.function.Predicate;
 
-class LongTlv extends AbstractTlv<Long> {
+public class TlvInt extends TlvBase<Integer> {
 
-    LongTlv(int tag, long value, Predicate<Long> validator) {
+    TlvInt(int tag, int value, Predicate<Integer> validator) {
         super(tag, value, validator);
     }
 
     @Override
-    public byte[] encodeValue() throws IOException {return Bytes.getLongBytesLE(value);}
+    public byte[] encodeValue() throws IOException {return Bytes.getInt32BytesLE(value);}
 }

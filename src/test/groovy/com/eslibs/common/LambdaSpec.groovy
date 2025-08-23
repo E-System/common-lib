@@ -10,7 +10,7 @@ class LambdaSpec extends Specification {
 
     def "Execute with Exception ignore Exception"() {
         expect:
-        Lambda.run(new Lambda.Runnable() {
+        Lambda.run(new Lambda.ExceptionalRunnable() {
 
             @Override
             void run() throws Throwable {
@@ -23,7 +23,7 @@ class LambdaSpec extends Specification {
         when:
         def value = 1
         then:
-        Lambda.run(new Lambda.Runnable() {
+        Lambda.run(new Lambda.ExceptionalRunnable() {
 
             @Override
             void run() throws Throwable {
@@ -39,7 +39,7 @@ class LambdaSpec extends Specification {
         def value = 1
         def value2 = 1
         then:
-        Lambda.run(new Lambda.Runnable() {
+        Lambda.run(new Lambda.ExceptionalRunnable() {
 
             @Override
             void run() throws Throwable {
@@ -62,7 +62,7 @@ class LambdaSpec extends Specification {
         def value = 1
         def value2 = 1
         then:
-        Lambda.run(new Lambda.Runnable() {
+        Lambda.run(new Lambda.ExceptionalRunnable() {
 
             @Override
             void run() throws Throwable {
@@ -86,7 +86,7 @@ class LambdaSpec extends Specification {
         def value = 1
         def value2 = 1
         then:
-        Lambda.run(new Lambda.Runnable() {
+        Lambda.run(new Lambda.ExceptionalRunnable() {
 
             @Override
             void run() throws Throwable {
