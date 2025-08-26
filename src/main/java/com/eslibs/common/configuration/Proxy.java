@@ -38,9 +38,10 @@ public class Proxy extends SimpleConfiguration {
     protected final java.net.Proxy.Type type = java.net.Proxy.Type.HTTP;
 
     public java.net.Proxy proxy() {
-        if (Objects.requireNonNull(connection) instanceof SimpleConnection c) {
-            return new java.net.Proxy(type, c.inetSocketAddress());
-        }
-        throw new IllegalArgumentException("Unprocessable server connection type: " + connection.getClass());
+        return switch (Objects.requireNonNull(connection)) {
+            case SimpleConnection c -> new java.net.Proxy(type, c.inetSocketAddress());
+            default ->
+                throw new IllegalArgumentException("Unprocessable server connection type: " + connection.getClass());
+        };
     }
 }
