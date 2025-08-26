@@ -15,8 +15,9 @@
  */
 package com.es.lib.common.security.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -27,11 +28,19 @@ import java.io.Serializable;
  */
 @Getter
 @ToString
-@RequiredArgsConstructor
 public class Credentials implements Serializable, Cloneable {
 
     private final String login;
     private final String password;
+
+    @JsonCreator
+    public Credentials(
+        @JsonProperty("login") String login,
+        @JsonProperty("password") String password
+    ) {
+        this.login = login;
+        this.password = password;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
