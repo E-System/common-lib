@@ -16,6 +16,7 @@
 package com.eslibs.common.configuration.credentials;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -33,6 +34,7 @@ import java.util.Map;
 @ToString
 @Jacksonized
 @SuperBuilder
+@EqualsAndHashCode
 public class Credentials implements ICredentials {
 
     public static final String ATTR_URI = "URI";

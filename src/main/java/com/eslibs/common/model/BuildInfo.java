@@ -23,7 +23,10 @@ import lombok.ToString;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 import java.util.function.Supplier;
 
 /**
@@ -50,12 +53,12 @@ public class BuildInfo implements Serializable {
     }
 
     public Map<String, String> asMap() {
-        return new LinkedHashMap<>() {{
-            put("name", name);
-            put("version", version);
-            put("date", date);
-            put("hash", hash);
-        }};
+        return Map.of(
+            "name", name,
+            "version", version,
+            "date", date,
+            "hash", hash
+        );
     }
 
     public static Collection<BuildInfo> list(String prefix) {

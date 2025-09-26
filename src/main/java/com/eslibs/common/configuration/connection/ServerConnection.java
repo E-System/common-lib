@@ -19,6 +19,7 @@ package com.eslibs.common.configuration.connection;
 import com.eslibs.common.configuration.Proxy;
 import com.eslibs.common.security.Ssl;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -36,6 +37,7 @@ import java.util.Map;
 @ToString
 @Jacksonized
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class ServerConnection extends SimpleConnection {
 
     @Builder.Default

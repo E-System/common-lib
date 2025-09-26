@@ -29,7 +29,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "9.0.0"
+    gradleVersion = "9.1.0"
 }
 
 fun resolve(name: String): String? {
@@ -73,7 +73,7 @@ tasks {
         options.encoding = "utf-8"
     }
 }
-val jVersion = JavaLanguageVersion.of(24)
+val jVersion = JavaLanguageVersion.of(25)
 tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
     languageVersion = jVersion
     vendor = JvmVendorSpec.ADOPTIUM

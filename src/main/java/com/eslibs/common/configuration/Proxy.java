@@ -17,6 +17,7 @@ package com.eslibs.common.configuration;
 
 import com.eslibs.common.configuration.connection.SimpleConnection;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -32,6 +33,7 @@ import java.util.Objects;
 @ToString
 @Jacksonized
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class Proxy extends SimpleConfiguration {
 
     @Builder.Default

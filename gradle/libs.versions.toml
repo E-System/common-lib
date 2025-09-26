@@ -1,5 +1,5 @@
 [versions]
-jackson = "2.19.2"
+jackson = "2.20.0"
 
 [libraries]
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.18.0" }
@@ -9,7 +9,7 @@ jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-datab
 angus-mail = { group = "org.eclipse.angus", name = "angus-mail", version = "2.0.3" }
 bcrypt = { group = "de.svenkubiak", name = "jBCrypt", version = "0.4.3" }
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 spock = { group = "org.spockframework", name = "spock-core", version = "2.4-M6-groovy-4.0" }
 groovy = { group = "org.apache.groovy", name = "groovy", version = "4.0.28" }
 logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.18" }
