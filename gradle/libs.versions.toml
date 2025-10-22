@@ -2,7 +2,7 @@
 jackson = "2.20.0"
 
 [libraries]
-commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.18.0" }
+commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.19.0" }
 commons-io = { group = "commons-io", name = "commons-io", version = "2.20.0" }
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.17" }
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
@@ -12,12 +12,12 @@ reflections = { group = "org.reflections", name = "reflections", version = "0.10
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 spock = { group = "org.spockframework", name = "spock-core", version = "2.4-M6-groovy-4.0" }
 groovy = { group = "org.apache.groovy", name = "groovy", version = "4.0.28" }
-logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.18" }
+logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.20" }
 jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson" }
 
 [bundles]
 spock = ["spock", "groovy"]
 
 [plugins]
-versions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
-sonarqube = { id = "org.sonarqube", version = "6.3.1.5724" }
+versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }
+sonarqube = { id = "org.sonarqube", version = "7.0.0.6105" }
