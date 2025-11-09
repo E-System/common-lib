@@ -16,6 +16,7 @@
 package com.eslibs.common.configuration;
 
 import com.eslibs.common.configuration.connection.SimpleConnection;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -37,13 +38,28 @@ import java.util.Objects;
 public class Proxy extends SimpleConfiguration {
 
     @Builder.Default
-    protected final java.net.Proxy.Type type = java.net.Proxy.Type.HTTP;
+    protected final Type type = Type.HTTP;
 
     public java.net.Proxy proxy() {
         return switch (Objects.requireNonNull(connection)) {
-            case SimpleConnection c -> new java.net.Proxy(type, c.inetSocketAddress());
+            case SimpleConnection c -> new java.net.Proxy(type.type(), c.inetSocketAddress());
             default ->
                 throw new IllegalArgumentException("Unprocessable server connection type: " + connection.getClass());
         };
+    }
+
+    public enum Type {
+        DIRECT,
+        HTTP,
+        SOCKS;
+
+        @JsonIgnore
+        public java.net.Proxy.Type type() {
+            return switch (this) {
+                case DIRECT -> java.net.Proxy.Type.DIRECT;
+                case HTTP -> java.net.Proxy.Type.HTTP;
+                case SOCKS -> java.net.Proxy.Type.SOCKS;
+            };
+        }
     }
 }

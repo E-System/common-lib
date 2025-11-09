@@ -159,7 +159,6 @@ public class EmailReceiver extends EmailProcessor {
                     if (text == null) {
                         text = fetchText(bp);
                     }
-                    continue;
                 } else if (bp.isMimeType("text/html")) {
                     String s = fetchText(bp);
                     if (s != null) {
