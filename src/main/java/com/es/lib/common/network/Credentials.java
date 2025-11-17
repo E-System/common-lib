@@ -26,6 +26,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
+@Deprecated
 public class Credentials {
 
     private final String login;
