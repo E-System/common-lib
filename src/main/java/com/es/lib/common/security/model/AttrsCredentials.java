@@ -2,6 +2,7 @@ package com.es.lib.common.security.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class AttrsCredentials extends Credentials {
 
     public static final String ATTR_URI = "URI";

@@ -36,5 +36,6 @@ class AttrsCredentialsSpec extends Specification {
         item.login == item2.login
         item.password == item2.password
         item.attrs == item2.attrs
+        item == item2
     }
 }
