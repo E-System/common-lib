@@ -32,7 +32,7 @@ public final class JsonUtil {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    private JsonUtil() { }
+    private JsonUtil() {}
 
     public static <T> T fromJson(String json, Class<T> classOfT) {
         try {
@@ -53,6 +53,14 @@ public final class JsonUtil {
     public static <T> T fromJson(String json, TypeReference<T> typeReference) {
         try {
             return OBJECT_MAPPER.readValue(json, typeReference);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T fromJson(Reader reader, TypeReference<T> typeReference) {
+        try {
+            return OBJECT_MAPPER.readValue(reader, typeReference);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
