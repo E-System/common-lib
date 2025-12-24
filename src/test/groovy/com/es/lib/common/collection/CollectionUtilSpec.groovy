@@ -224,6 +224,7 @@ class CollectionUtilSpec extends Specification {
     def "FindWithIndex"() {
         expect:
         CollectionUtil.findWithIndex(input, new Predicate<Object>() {
+
             @Override
             boolean test(Object o) {
                 return o == 1
@@ -243,12 +244,14 @@ class CollectionUtilSpec extends Specification {
         when:
         def attributes = null
         def supplier = new Supplier<Map<String, String>>() {
+
             @Override
             Map<String, String> get() {
                 return attributes
             }
         }
         def consumer = new Consumer<Map<String, String>>() {
+
             @Override
             void accept(Map<String, String> o) {
                 attributes = o
@@ -269,12 +272,14 @@ class CollectionUtilSpec extends Specification {
         when:
         def attributes = null
         def supplier = new Supplier<Map<String, String>>() {
+
             @Override
             Map<String, String> get() {
                 return attributes
             }
         }
         def consumer = new Consumer<Map<String, String>>() {
+
             @Override
             void accept(Map<String, String> o) {
                 attributes = o
@@ -295,12 +300,14 @@ class CollectionUtilSpec extends Specification {
         when:
         def attributes = null
         def supplier = new Supplier<Map<String, String>>() {
+
             @Override
             Map<String, String> get() {
                 return attributes
             }
         }
         def consumer = new Consumer<Map<String, String>>() {
+
             @Override
             void accept(Map<String, String> o) {
                 attributes = o
@@ -327,6 +334,7 @@ class CollectionUtilSpec extends Specification {
     def "first not empty"() {
         setup:
         def predicate = new Predicate<String>() {
+
             @Override
             boolean test(String t) {
                 return StringUtils.isNotBlank(t)
@@ -416,4 +424,12 @@ class CollectionUtilSpec extends Specification {
         !set.contains('value3')
     }
 
+    def "Convert"() {
+        expect:
+        CollectionUtil.convert(null, { String.valueOf(it) }) == null
+        CollectionUtil.convert([], { String.valueOf(it) }) == null
+        CollectionUtil.convert(null, false, { String.valueOf(it) }) == []
+        CollectionUtil.convert([], false, { String.valueOf(it) }) == []
+        CollectionUtil.convert([1, 2], { String.valueOf(it) }) == ["1", "2"]
+    }
 }

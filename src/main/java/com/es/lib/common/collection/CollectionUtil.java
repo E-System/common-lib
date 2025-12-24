@@ -20,10 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
 /**
@@ -382,5 +379,16 @@ public final class CollectionUtil {
 
     public static <T> Set<T> immutableSet(Set<T> collection, boolean linked) {
         return collection == null ? null : (linked ? new LinkedHashSet<>(collection) : new HashSet<>(collection));
+    }
+
+    public static <T, R> Collection<R> convert(Collection<T> items, Function<T, R> converter) {
+        return convert(items, true, converter);
+    }
+
+    public static <T, R> Collection<R> convert(Collection<T> items, boolean returnNull, Function<T, R> converter) {
+        if (isEmpty(items)) {
+            return returnNull ? null : new ArrayList<>();
+        }
+        return items.stream().map(converter).collect(Collectors.toList());
     }
 }
