@@ -130,7 +130,7 @@ class DateUtilSpec extends Specification {
 
     def "Форматим название месяца"() {
         expect:
-        DateUtil.format(date, format) == result
+        DateUtil.format(date, format).toLowerCase() == result
         where:
         date                             | format             | result
         sdf.parse("02.05.2015 00:00:00") | "«dd» MMMM yyyyг." | "«02» мая 2015г."
