@@ -22,4 +22,18 @@ public class TextUtil {
     public static String[] splitAsArray(String value) {
         return value.trim().split("\\s+");
     }
+
+    public static boolean contains(String value, String term) {
+        return contains(value, term, true);
+    }
+    public static boolean contains(String value, String term, boolean ignoreCase) {
+        if (value == null || term == null) {
+            return false;
+        }
+        if (ignoreCase) {
+            value = value.toLowerCase();
+            term = term.toLowerCase();
+        }
+        return value.contains(term);
+    }
 }
