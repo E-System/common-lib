@@ -32,15 +32,6 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v5
 
-    - uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-
     - name: Build and publish to Reposilite
       run: ./gradlew build publish
       env:
