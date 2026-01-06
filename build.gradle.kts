@@ -29,7 +29,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "9.2.0"
+    gradleVersion = "9.2.1"
 }
 
 fun resolve(name: String): String? {
@@ -118,7 +118,7 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
-    testImplementation(libs.bundles.spock)
+    testImplementation(libs.spock)
     testImplementation(libs.logback)
     testImplementation(libs.jackson.datatype.jsr310)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

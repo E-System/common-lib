@@ -164,8 +164,8 @@ class ReflectsSpec extends Specification {
         def result = Reflects.createDefaultInstance(Integer)
         then:
         result != null
-        result instanceof Integer
         result == 0
+        result instanceof Integer
     }
 
     def "createDefaultInstance Short"() {
@@ -173,8 +173,8 @@ class ReflectsSpec extends Specification {
         def result = Reflects.createDefaultInstance(Short)
         then:
         result != null
-        result instanceof Short
         result == 0
+        result instanceof Short
     }
 
     def "createDefaultInstance Long"() {
@@ -182,8 +182,8 @@ class ReflectsSpec extends Specification {
         def result = Reflects.createDefaultInstance(Long)
         then:
         result != null
-        result instanceof Long
         result == 0
+        result instanceof Long
     }
 
     def "createDefaultInstance Double"() {
@@ -191,8 +191,8 @@ class ReflectsSpec extends Specification {
         def result = Reflects.createDefaultInstance(Double)
         then:
         result != null
-        result instanceof Double
         result == 0
+        result instanceof Double
     }
 
     def "createDefaultInstance String"() {
@@ -200,8 +200,8 @@ class ReflectsSpec extends Specification {
         def result = Reflects.createDefaultInstance(String)
         then:
         result != null
-        result instanceof String
         result == ''
+        result instanceof String
     }
 
     def "createDefaultInstance SomeClass without default constructor return input class"() {
@@ -209,7 +209,7 @@ class ReflectsSpec extends Specification {
         def result = Reflects.createDefaultInstance(SomeClass)
         then:
         result != null
-        result instanceof Class<SomeClass>
+        result instanceof Class<?>
     }
 
     def "createDefaultInstance SomeClass with default constructor"() {
@@ -227,10 +227,9 @@ class ReflectsSpec extends Specification {
         def res2 = Reflects.getTypesAnnotatedWith("com.eslibs", TestAnnotation.class)
         then:
         res.size() == 1
-        res[0] instanceof Class
         res2.size() == 1
-        res2[0] instanceof Class
         res == res2
+        res[0] instanceof Class && res2[0] instanceof Class
     }
 
     def "getResources"() {
