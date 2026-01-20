@@ -1,8 +1,8 @@
 package com.es.lib.common.model;
 
-import com.es.lib.common.collection.Items;
-import com.es.lib.common.date.Dates;
-import com.es.lib.common.text.Texts;
+import com.es.lib.common.DateUtil;
+import com.es.lib.common.collection.CollectionUtil;
+import com.es.lib.common.text.TextUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -143,8 +143,8 @@ public class VCalendar {
         for (Event event : calendar.events) {
             result.add(new Token(Token.BEGIN, Token.VEVENT));
             result.add(new Token(Token.UID, event.getId()));
-            result.add(new Token(Token.DTSTART, Dates.formatter().format(event.getStartDate(), Token.DATE_PATTERN_SHORT), Token.DATE_SPECS));
-            result.add(new Token(Token.DTEND, Dates.formatter().format(event.getEndDate(), Token.DATE_PATTERN_SHORT), Token.DATE_SPECS));
+            result.add(new Token(Token.DTSTART, DateUtil.format(event.getStartDate(), Token.DATE_PATTERN_SHORT), Token.DATE_SPECS));
+            result.add(new Token(Token.DTEND, DateUtil.format(event.getEndDate(), Token.DATE_PATTERN_SHORT), Token.DATE_SPECS));
             result.add(new Token(Token.SUMMARY, event.getSummary()));
             result.add(new Token(Token.END, Token.VEVENT));
         }
@@ -212,7 +212,7 @@ public class VCalendar {
 
         public String serialize() {
             String specs = "";
-            if (Items.isNotEmpty(this.specs)) {
+            if (CollectionUtil.isNotEmpty(this.specs)) {
                 specs = this.specs.entrySet().stream().map(v -> v.getKey() + "=" + v.getValue()).collect(Collectors.joining(";", ";", ""));
             }
             return name + specs + ":" + value;
@@ -224,24 +224,24 @@ public class VCalendar {
                 format = DATE_PATTERN_SHORT;
             }
             try {
-                return Dates.parser(zoneId).parse(value, format);
+                return DateUtil.parse(value, format, zoneId);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
         }
 
         public static Token of(String line) {
-            return Texts.splitBy(":", 2, true).toObject(line, v -> {
+            return TextUtil.splitBy(":", 2, true).toObject(line, v -> {
                 String key = v[0];
                 Map<String, String> specs = new HashMap<>();
                 if (key.contains(";")) {
-                    List<String> specsPart = Texts.splitBy(";", true).toList(key);
+                    List<String> specsPart = TextUtil.splitBy(";", true).toList(key);
                     for (int i = 0; i < specsPart.size(); ++i) {
                         String part = specsPart.get(i);
                         if (i == 0) {
                             key = part;
                         } else {
-                            String[] spec = Texts.splitBy("=", true).toArray(part);
+                            String[] spec = TextUtil.splitBy("=", true).toArray(part);
                             specs.put(spec[0], spec[1]);
                         }
                     }

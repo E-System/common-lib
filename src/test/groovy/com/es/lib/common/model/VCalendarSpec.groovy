@@ -1,6 +1,6 @@
 package com.es.lib.common.model
 
-import com.es.lib.common.date.Dates
+import com.es.lib.common.DateUtil
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -103,14 +103,14 @@ class VCalendarSpec extends Specification {
                 [
                         new VCalendar.Event(
                                 UUID.randomUUID().toString(),
-                                Dates.converter().get(LocalDate.of(2024, 7, 11).atStartOfDay()),
-                                Dates.converter().get(LocalDate.of(2024, 7, 12).atStartOfDay()),
+                                DateUtil.convert(LocalDate.of(2024, 7, 11).atStartOfDay()),
+                                DateUtil.convert(LocalDate.of(2024, 7, 12).atStartOfDay()),
                                 "GeshGo (Booked)"
                         ),
                         new VCalendar.Event(
                                 UUID.randomUUID().toString(),
-                                Dates.converter().get(LocalDate.of(2024, 8, 11).atStartOfDay()),
-                                Dates.converter().get(LocalDate.of(2024, 8, 20).atStartOfDay()),
+                                DateUtil.convert(LocalDate.of(2024, 8, 11).atStartOfDay()),
+                                DateUtil.convert(LocalDate.of(2024, 8, 20).atStartOfDay()),
                                 "GeshGo (Booked)"
                         )
                 ]

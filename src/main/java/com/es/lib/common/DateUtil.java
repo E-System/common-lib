@@ -16,6 +16,9 @@
 
 package com.es.lib.common;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -31,12 +34,11 @@ import java.util.TimeZone;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
 
     public static final String CALENDAR_DATE_PATTERN = "dd.MM.yyyy";
     public static final String CALENDAR_DATE_PATTERN_WITH_TIME = "dd.MM.yyyy HH:mm:ss";
-
-    private DateUtil() {}
 
     public static Date nextDay(Date date, TimeZone timeZone) {
         return Date.from(
@@ -240,10 +242,14 @@ public final class DateUtil {
     }
 
     public static Date parse(String date, String format) throws ParseException {
+        return parse(date, format, null);
+    }
+
+    public static Date parse(String date, String format, ZoneId zoneId) throws ParseException {
         if (date == null) {
             return null;
         }
-        return createDateFormat(format).parse(date);
+        return createDateFormat(format, zoneId).parse(date);
     }
 
 
@@ -251,9 +257,15 @@ public final class DateUtil {
         return new SimpleDateFormat(format);
     }
 
+    private static SimpleDateFormat createDateFormat(String format, ZoneId zoneId) {
+        return createDateFormat(format, zoneId != null ? TimeZone.getTimeZone(zoneId) : null);
+    }
+
     private static SimpleDateFormat createDateFormat(String format, TimeZone timeZone) {
         SimpleDateFormat result = createDateFormat(format);
-        result.setTimeZone(timeZone);
+        if (timeZone != null) {
+            result.setTimeZone(timeZone);
+        }
         return result;
     }
 

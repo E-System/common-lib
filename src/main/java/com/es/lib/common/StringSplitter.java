@@ -16,6 +16,8 @@
 
 package com.es.lib.common;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -27,10 +29,9 @@ import java.util.stream.Stream;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@Deprecated
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StringSplitter {
-
-    private StringSplitter() {
-    }
 
     public static Collection<String> process(String text, Splitter splitter) {
         if (StringUtils.isEmpty(text)) {

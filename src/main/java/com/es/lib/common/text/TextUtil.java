@@ -12,6 +12,22 @@ import java.util.List;
  */
 public class TextUtil {
 
+    public static Splitter splitBy(String regexp) {
+        return splitBy(regexp, null, true);
+    }
+
+    public static Splitter splitBy(String regexp, boolean trim) {
+        return splitBy(regexp, null, trim);
+    }
+
+    public static Splitter splitBy(String regexp, Integer limit) {
+        return splitBy(regexp, limit, true);
+    }
+
+    public static Splitter splitBy(String regexp, Integer limit, boolean trim) {
+        return new Splitter(regexp, limit, trim);
+    }
+
     public static List<String> splitAsList(String value) {
         if (StringUtils.isBlank(value)) {
             return Collections.emptyList();
@@ -26,6 +42,7 @@ public class TextUtil {
     public static boolean contains(String value, String term) {
         return contains(value, term, true);
     }
+
     public static boolean contains(String value, String term, boolean ignoreCase) {
         if (value == null || term == null) {
             return false;
