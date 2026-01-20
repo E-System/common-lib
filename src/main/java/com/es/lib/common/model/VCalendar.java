@@ -3,6 +3,7 @@ package com.es.lib.common.model;
 import com.es.lib.common.collection.Items;
 import com.es.lib.common.date.Dates;
 import com.es.lib.common.text.Texts;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @ToString
+@EqualsAndHashCode
 @RequiredArgsConstructor
 public class VCalendar {
 
@@ -105,6 +107,7 @@ public class VCalendar {
 
     @Getter
     @ToString
+    @EqualsAndHashCode
     @RequiredArgsConstructor
     public static class Event {
 
