@@ -97,7 +97,10 @@ public class VCalendar {
         StringJoiner sj = new StringJoiner("\n");
         tokens(calendar).forEach(v -> sj.add(v.serialize()));
         return sj.toString().getBytes(StandardCharsets.UTF_8);
+    }
 
+    public byte[] serialize() {
+        return serialize(this);
     }
 
     @Getter
