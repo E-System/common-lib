@@ -115,10 +115,13 @@ class VCalendarSpec extends Specification {
                         )
                 ]
         )
-        def item = new String(VCalendar.serialize(calendar))
+        def item = new String(calendar.serialize())
+        def item2 = new String(VCalendar.serialize(calendar))
         println(item)
+        item == item2
         then:
         !item.isEmpty()
+        !item2.isEmpty()
     }
 
 }
