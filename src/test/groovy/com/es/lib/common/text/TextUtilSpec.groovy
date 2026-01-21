@@ -80,6 +80,60 @@ class TextUtilSpec extends Specification {
         "1:2, 2 : 3" | TextUtil.splitBy(",").splitBy(":") || [Pair.of("1", "2"), Pair.of("2", "3")]
     }
 
+    def "Transliterate without transform"() {
+        expect:
+        TextUtil.transliterate(value) == result
+        where:
+        value                                                                                  || result
+        null                                                                                   || null
+        ''                                                                                     || ''
+        'Привет'                                                                               || 'Privet'
+        'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'Sesh zhe eschyo etih myagkih francuzskih bulok da vypey chayu'
+        'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'SHirokaya elektrifikaciya yuzhnyh guberniy dast moschnyy tolchok podyomu selskogo hozyaystva'
+        'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'Aerofotosyomka landshafta uzhe vyyavila zemli bogachey i procvetayuschih krestyan'
+    }
+
+    def "Transliterate to lowercase"() {
+        expect:
+        TextUtil.transliterateToLower(value) == result
+        where:
+        value                                                                                  || result
+        null                                                                                   || null
+        ''                                                                                     || ''
+        'Привет'                                                                               || 'privet'
+        'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'sesh zhe eschyo etih myagkih francuzskih bulok da vypey chayu'
+        'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'shirokaya elektrifikaciya yuzhnyh guberniy dast moschnyy tolchok podyomu selskogo hozyaystva'
+        'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'aerofotosyomka landshafta uzhe vyyavila zemli bogachey i procvetayuschih krestyan'
+    }
+
+    def "Transliterate to uppercase"() {
+        expect:
+        TextUtil.transliterateToUpper(value) == result
+        where:
+        value                                                                                  || result
+        null                                                                                   || null
+        ''                                                                                     || ''
+        'Привет'                                                                               || 'PRIVET'
+        'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'SESH ZHE ESCHYO ETIH MYAGKIH FRANCUZSKIH BULOK DA VYPEY CHAYU'
+        'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'SHIROKAYA ELEKTRIFIKACIYA YUZHNYH GUBERNIY DAST MOSCHNYY TOLCHOK PODYOMU SELSKOGO HOZYAYSTVA'
+        'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'AEROFOTOSYOMKA LANDSHAFTA UZHE VYYAVILA ZEMLI BOGACHEY I PROCVETAYUSCHIH KRESTYAN'
+    }
+
+    def "Transliterate to uppercase with underscore"() {
+        expect:
+        TextUtil.transliterateToUpper(value, "_") == result
+        where:
+        value                                                                                  || result
+        null                                                                                   || null
+        ''                                                                                     || ''
+        'Привет'                                                                               || 'PRIVET'
+        'Привет  привет'                                                                       || 'PRIVET__PRIVET'
+        'Съешь же ещё этих мягких французских булок да выпей чаю'                              || 'SESH_ZHE_ESCHYO_ETIH_MYAGKIH_FRANCUZSKIH_BULOK_DA_VYPEY_CHAYU'
+        'Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства' || 'SHIROKAYA_ELEKTRIFIKACIYA_YUZHNYH_GUBERNIY_DAST_MOSCHNYY_TOLCHOK_PODYOMU_SELSKOGO_HOZYAYSTVA'
+        'Аэрофотосъёмка ландшафта уже выявила земли богачей и процветающих крестьян'           || 'AEROFOTOSYOMKA_LANDSHAFTA_UZHE_VYYAVILA_ZEMLI_BOGACHEY_I_PROCVETAYUSCHIH_KRESTYAN'
+    }
+
+
 
     def "Contains"() {
         expect:

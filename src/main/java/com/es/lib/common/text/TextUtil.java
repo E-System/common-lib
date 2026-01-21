@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -33,6 +34,30 @@ public class TextUtil {
             return Collections.emptyList();
         }
         return Arrays.asList(splitAsArray(value));
+    }
+
+    public static String transliterate(String value) {
+        return transliterate(value, null, null);
+    }
+
+    public static String transliterateToLower(String value) {
+        return transliterateToLower(value, null);
+    }
+
+    public static String transliterateToLower(String value, String whitespaceReplace) {
+        return transliterate(value, String::toLowerCase, whitespaceReplace != null ? s -> s.replaceAll("\\s", whitespaceReplace) : null);
+    }
+
+    public static String transliterateToUpper(String value) {
+        return transliterateToUpper(value, null);
+    }
+
+    public static String transliterateToUpper(String value, String whitespaceReplace) {
+        return transliterate(value, String::toUpperCase, whitespaceReplace != null ? s -> s.replaceAll("\\s", whitespaceReplace) : null);
+    }
+
+    public static String transliterate(String value, Function<String, String> caseConverter, Function<String, String> whitespaceConverter) {
+        return Translit.convert(value, caseConverter, whitespaceConverter);
     }
 
     public static String[] splitAsArray(String value) {
