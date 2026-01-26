@@ -29,11 +29,11 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "9.2.1"
+    gradleVersion = "9.3.0"
 }
 
 fun resolve(name: String): String? {
-    return (System.getenv()[name] ?: properties[name]) as String?
+    return (findProperty(name) ?: System.getenv(name)) as String?
 }
 
 apply("build-${resolve("profile")}.gradle.kts")
