@@ -11,9 +11,9 @@ bcrypt = { group = "de.svenkubiak", name = "jBCrypt", version = "0.4.3" }
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 spock = { group = "org.spockframework", name = "spock-core", version = "2.4-groovy-5.0" }
-logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.23" }
+logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.5.27" }
 jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson" }
 
 [plugins]
 versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }
-sonarqube = { id = "org.sonarqube", version = "7.0.1.6134" }
+sonarqube = { id = "org.sonarqube", version = "7.2.2.6593" }

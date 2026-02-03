@@ -29,11 +29,21 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "9.3.0"
+    gradleVersion = "9.3.1"
 }
 
 fun resolve(name: String): String? {
     return (findProperty(name) ?: System.getenv(name)) as String?
+}
+
+fun resolveServer(urlName: String, userName: String, passwordName: String): Triple<String, String, String>? {
+    val url = resolve(urlName)
+    val user = resolve(userName)
+    val password = resolve(passwordName)
+    if (url != null && user != null && password != null) {
+        return Triple(url, user, password)
+    }
+    return null
 }
 
 apply("build-${resolve("profile")}.gradle.kts")
@@ -124,43 +134,41 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-val emailTestEnabled =
-    resolve("test_email_server") != null && resolve("test_email_login") != null && resolve("test_email_password") != null
-if (emailTestEnabled) {
-    tasks.test {
-        if (emailTestEnabled) {
-            systemProperties(
-                mapOf(
-                    "test_email_server" to resolve("test_email_server"),
-                    "test_email_login" to resolve("test_email_login"),
-                    "test_email_password" to resolve("test_email_password")
-                )
-            )
-        }
-    }
-}
-
 tasks.named<Test>("test") {
     useJUnitPlatform()
     finalizedBy("jacocoTestReport")
+    resolveServer(
+        "test_email_server",
+        "test_email_login",
+        "test_email_password"
+    )?.let {
+        systemProperties(
+            mapOf(
+                "test_email_server" to it.first,
+                "test_email_login" to it.second,
+                "test_email_password" to it.third
+            )
+        )
+    }
 }
 
-val sonarAvailable =
-    resolve("sonar_url") != null && resolve("sonar_user") != null && resolve("sonar_password") != null
-if (sonarAvailable) {
-    val url = resolve("sonar_url")
-    val user = resolve("sonar_user")
-    val pass = resolve("sonar_password")
+resolveServer(
+    "sonar_url",
+    "sonar_user",
+    "sonar_password"
+
+)?.let {
     sonar {
         properties {
             properties(
                 mapOf(
-                    "sonar.host.url" to url,
-                    "sonar.login" to user,
-                    "sonar.password" to pass,
+                    "sonar.host.url" to it.first,
+                    "sonar.login" to it.second,
+                    "sonar.password" to it.third,
                     "sonar.gradle.skipCompile" to true
                 )
             )
         }
     }
 }
+
