@@ -15,38 +15,28 @@
  */
 package com.eslibs.common.model;
 
-import lombok.Getter;
-import lombok.ToString;
-
 import java.io.Serializable;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 08.09.18
  */
-@Getter
-@ToString
-public class PageRequest implements Serializable {
-
-    private final int limit;
-    private int offset;
-    private int page;
+public record PageRequest(int limit, int offset, int page) implements Serializable {
 
     public PageRequest(int limit) {
         if (limit <= 0) {
             throw new IllegalArgumentException("limit must be greater than zero");
         }
-        this.limit = limit;
-        this.page = 1;
-        this.offset = 0;
+        this(limit, 0, 1);
     }
 
     public PageRequest(int countOnPage, int page) {
-        this(countOnPage);
+        if (countOnPage <= 0) {
+            throw new IllegalArgumentException("limit must be greater than zero");
+        }
         if (page <= 0) {
             page = 1;
         }
-        this.page = page;
-        this.offset = (page - 1) * countOnPage;
+        this(countOnPage, (page - 1) * countOnPage, page);
     }
 }

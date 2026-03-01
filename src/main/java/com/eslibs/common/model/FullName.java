@@ -17,55 +17,45 @@ package com.eslibs.common.model;
 
 import com.eslibs.common.collection.Items;
 import com.eslibs.common.text.Texts;
-import lombok.Getter;
-import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 23.09.16
  */
-@Getter
-@ToString
-public class FullName {
-
-    private String surname;
-    private String name;
-    private String patronymic;
-    private List<String> others;
+public record FullName(String surname, String name, String patronymic, List<String> others) {
 
     public FullName(String fullName) {
-        if (StringUtils.isBlank(fullName)) {
-            return;
+        String surname = null;
+        String name = null;
+        String patronymic = null;
+        List<String> others = null;
+        if (StringUtils.isNotBlank(fullName)) {
+            final String[] parts = Texts.splitBy("\\s+").toArray(fullName);
+            if (parts.length >= 1) {
+                surname = parts[0];
+            }
+            if (parts.length >= 2) {
+                name = parts[1];
+            }
+            if (parts.length >= 3) {
+                patronymic = parts[2];
+            }
+            if (parts.length >= 4) {
+                others = Arrays.asList(Arrays.copyOfRange(parts, 3, parts.length));
+            }
         }
-        final String[] parts = Texts.splitBy("\\s+").toArray(fullName);
-        if (parts.length >= 1) {
-            surname = parts[0];
-        }
-        if (parts.length >= 2) {
-            name = parts[1];
-        }
-        if (parts.length >= 3) {
-            patronymic = parts[2];
-        }
-        if (parts.length >= 4) {
-            others = Arrays.asList(Arrays.copyOfRange(parts, 3, parts.length));
-        }
+        this(surname, name, patronymic, others);
     }
 
     public FullName(String surname, String name, String patronymic) {
-        this.surname = surname;
-        this.name = name;
-        this.patronymic = patronymic;
+        this(surname, name, patronymic, null);
     }
 
     public String getPatronymicFull() {
-        String result = Objects.toString(getPatronymic(), "");
+        String result = Objects.toString(patronymic, "");
         if (Items.isNotEmpty(others)) {
             result += (" " + String.join(" ", others));
         }
@@ -82,20 +72,24 @@ public class FullName {
     }
 
     public List<String> toList() {
-        return Arrays.asList(toArray());
+        List<String> result = new ArrayList<>();
+        if (surname != null) {
+            result.add(surname);
+        }
+        if (name != null) {
+            result.add(name);
+        }
+        if (patronymic != null) {
+            result.add(patronymic);
+        }
+        if (others != null) {
+            result.addAll(others);
+        }
+        return result;
     }
 
     public String[] toArray() {
-        if (surname != null) {
-            if (name != null) {
-                if (patronymic != null) {
-                    return new String[]{surname, name, patronymic};
-                }
-                return new String[]{surname, name};
-            }
-            return new String[]{surname};
-        }
-        return new String[0];
+        return toList().toArray(new String[0]);
     }
 
     public String getFull() {

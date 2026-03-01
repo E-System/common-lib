@@ -17,8 +17,6 @@ package com.eslibs.common.model;
 
 import com.eslibs.common.reflection.Reflects;
 import com.eslibs.common.security.hash.Hash;
-import lombok.Getter;
-import lombok.ToString;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,24 +31,19 @@ import java.util.function.Supplier;
  * @author Dmitriy Zuzoev - zuzoev.d@ext-system.com
  * @since 29.06.17
  */
-@Getter
-@ToString
-public class BuildInfo implements Serializable {
+public record BuildInfo(
+    String name,
+    String version,
+    String date,
+    String hash
+) implements Serializable {
+
+    public BuildInfo(String name, String version, String date) {
+        this(name, version, date, computeHash(name, version, date));
+    }
 
     public static final String UNDEFINED = "UNDEFINED";
     public static final String UNDEFINED_VERSION = "UNDEFINED_VERSION";
-
-    private final String name;
-    private final String version;
-    private final String date;
-    private final String hash;
-
-    public BuildInfo(String name, String version, String date) {
-        this.name = name;
-        this.version = version;
-        this.date = date;
-        hash = Hash.md5().of(name + version + date);
-    }
 
     public Map<String, String> asMap() {
         return Map.of(
@@ -65,8 +58,8 @@ public class BuildInfo implements Serializable {
         return list(Collections.singletonList(prefix));
     }
 
-    public static Collection<BuildInfo> list(Collection<String> prefix) {
-        return Reflects.getResources(prefix, s -> s.endsWith("build.properties")).stream()
+    public static Collection<BuildInfo> list(Collection<String> prefixes) {
+        return Reflects.getResources(prefixes, s -> s.endsWith("build.properties")).stream()
             .map(v -> (v.startsWith("/") ? "" : "/") + v).map(BuildInfo::create).toList();
     }
 
@@ -89,6 +82,10 @@ public class BuildInfo implements Serializable {
         } catch (Exception e) {
             return new BuildInfo(UNDEFINED, UNDEFINED_VERSION, UNDEFINED);
         }
+    }
+
+    private static String computeHash(String name, String version, String date) {
+        return Hash.md5().of(name + version + date);
     }
 
     private static Properties loadProps(InputStream stream) throws IOException {

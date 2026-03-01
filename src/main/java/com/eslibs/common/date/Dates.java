@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Dates {
 
-    @Builder
+    @Builder(toBuilder = true)
     @Getter
     @RequiredArgsConstructor
     public static class Environment {
@@ -49,6 +49,8 @@ public final class Dates {
         private final ZoneId zoneId = ZoneId.systemDefault();
         @Builder.Default
         private final Locale locale = Locale.getDefault();
+        @Builder.Default
+        private final boolean lastNextDay = true;
         @Builder.Default
         private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         @Builder.Default
@@ -85,7 +87,7 @@ public final class Dates {
 
     public static Collection<ZoneId> availableZones() {
         return ZoneId.getAvailableZoneIds().stream()
-            .filter(v -> v.matches(getEnvironment().zonePrefixes))
+            .filter(v -> v.matches(getEnvironment().getZonePrefixes()))
             .map(ZoneId::of)
             .sorted(Comparator.comparing(ZoneId::getId))
             .toList();
@@ -135,28 +137,22 @@ public final class Dates {
         return new PrettyInterval(useBraces, localization != null ? localization : getEnvironment().intervalLocalization);
     }
 
-    public static Collection<SItem> ranges(ZoneId zoneId, DateTimeFormatter dateTimeFormatter, boolean lastNextDay) {
+    public static Collection<SItem> ranges() {
+        return ranges(getEnvironment());
+    }
+
+    public static Collection<SItem> ranges(Environment environment) {
         return Stream.of(DateRange.Interval.values())
-            .map(v -> v.getItem(zoneId, dateTimeFormatter, lastNextDay))
+            .map(v -> v.toItem(environment))
             .toList();
     }
 
-    public static Collection<SItem> ranges(ZoneId zoneId, boolean lastNextDay) {
-        return Stream.of(DateRange.Interval.values())
-            .map(v -> v.getItem(zoneId, lastNextDay))
-            .toList();
+    public static DateRange defaultRange() {
+        return defaultRange(getEnvironment());
     }
 
-    public static Collection<SItem> ranges(ZoneId zoneId) {
-        return ranges(zoneId, true);
-    }
-
-    public static DateRange defaultRange(ZoneId zoneId) {
-        return defaultRange(zoneId, true);
-    }
-
-    public static DateRange defaultRange(ZoneId zoneId, boolean lastNextDay) {
-        return DateRange.Interval.TODAY.getRange(zoneId, lastNextDay);
+    public static DateRange defaultRange(Environment environment) {
+        return DateRange.Interval.TODAY.getRange(environment);
     }
 
     public static TimeConverter timeConverter() {

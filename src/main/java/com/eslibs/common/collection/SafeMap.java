@@ -37,9 +37,7 @@ public class SafeMap extends HashMap<String, String> {
     }
 
     public Optional<TemporalAccessor> getDate(String key, DateTimeFormatter dateTimeFormatter) {
-        if (dateTimeFormatter == null) {
-            dateTimeFormatter = Dates.getEnvironment().getDateFormatter();
-        }
+        dateTimeFormatter = dateTimeFormatter != null ? dateTimeFormatter : Dates.getEnvironment().getDateTimeFormatter();
         try {
             return Optional.of(dateTimeFormatter.parse(get(key)));
         } catch (DateTimeException e) {

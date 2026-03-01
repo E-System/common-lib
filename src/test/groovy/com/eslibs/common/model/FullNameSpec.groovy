@@ -99,7 +99,7 @@ class FullNameSpec extends Specification {
         "aaa  \n bbb   ccc"          | "aaa b. c."
         "aaa   bbb   ccc "           | "aaa b. c."
         "aaa   bbb   ccc           " | "aaa b. c."
-        "Рахметов Иприс Алюб Углы"   | "Рахметов И. А."
+        "Рахметов Иприс Алюб Углы"   | "Рахметов И. А. У."
     }
 
     def "Initials from left"() {

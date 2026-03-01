@@ -35,6 +35,7 @@ import java.time.temporal.TemporalAdjusters;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class DateRange {
 
+    private final Dates.Environment environment;
     private final LocalDate start;
     private final LocalDate end;
 
@@ -43,142 +44,141 @@ public class DateRange {
     }
 
     public String getIntervalString(DateTimeFormatter dateTimeFormatter) {
-        DateTimeFormatter formatter = dateTimeFormatter != null ? dateTimeFormatter : Dates.getEnvironment().getDateFormatter();
-        return formatter.format(getStart()) + "|" + formatter.format(getEnd());
+        dateTimeFormatter = dateTimeFormatter != null ? dateTimeFormatter : Dates.getEnvironment().getDateFormatter();
+        return dateTimeFormatter.format(getStart()) + "|" + dateTimeFormatter.format(getEnd());
     }
 
     public enum Interval {
         TODAY {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId);
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId());
                 return new DateRange(
+                    environment,
                     begin,
-                    begin.plusDays(lastNextDay ? 1 : 0)
+                    begin.plusDays(environment.isLastNextDay() ? 1 : 0)
                 );
             }
         },
         YESTERDAY {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId).minusDays(1);
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId()).minusDays(1);
                 return new DateRange(
+                    environment,
                     begin,
-                    begin.plusDays(lastNextDay ? 1 : 0)
+                    begin.plusDays(environment.isLastNextDay() ? 1 : 0)
                 );
             }
         },
         LAST_7_DAYS {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId);
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId());
                 return new DateRange(
+                    environment,
                     begin.minusDays(7),
-                    begin.plusDays(lastNextDay ? 1 : 0)
+                    begin.plusDays(environment.isLastNextDay() ? 1 : 0)
                 );
             }
         },
         CURRENT_WEEK {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId);
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId());
                 return new DateRange(
+                    environment,
                     begin.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
-                    begin.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).plusDays(lastNextDay ? 1 : 0)
+                    begin.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).plusDays(environment.isLastNextDay() ? 1 : 0)
                 );
             }
         },
         LAST_WEEK {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId).minusWeeks(1);
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId()).minusWeeks(1);
                 return new DateRange(
+                    environment,
                     begin.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)),
-                    begin.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).plusDays(lastNextDay ? 1 : 0)
+                    begin.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).plusDays(environment.isLastNextDay() ? 1 : 0)
                 );
             }
         },
         CURRENT_MONTH {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId).with(TemporalAdjusters.firstDayOfMonth());
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId()).with(TemporalAdjusters.firstDayOfMonth());
                 return new DateRange(
+                    environment,
                     begin,
-                    begin.plusMonths(1).plusDays(lastNextDay ? 0 : -1)
+                    begin.plusMonths(1).plusDays(environment.isLastNextDay() ? 0 : -1)
                 );
             }
         },
         LAST_MONTH {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId).minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId()).minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
                 return new DateRange(
+                    environment,
                     begin,
-                    begin.plusMonths(1).plusDays(lastNextDay ? 0 : -1)
+                    begin.plusMonths(1).plusDays(environment.isLastNextDay() ? 0 : -1)
                 );
             }
         },
         CURRENT_TRIAD {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId).with(TemporalAdjusters.firstDayOfMonth());
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId()).with(TemporalAdjusters.firstDayOfMonth());
                 return new DateRange(
+                    environment,
                     begin,
-                    begin.plusMonths(3).plusDays(lastNextDay ? 0 : -1)
+                    begin.plusMonths(3).plusDays(environment.isLastNextDay() ? 0 : -1)
                 );
             }
         },
         LAST_TRIAD {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId).minusMonths(3).with(TemporalAdjusters.firstDayOfMonth());
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId()).minusMonths(3).with(TemporalAdjusters.firstDayOfMonth());
                 return new DateRange(
+                    environment,
                     begin,
-                    begin.plusMonths(3).plusDays(lastNextDay ? 0 : -1)
+                    begin.plusMonths(3).plusDays(environment.isLastNextDay() ? 0 : -1)
                 );
             }
         },
         CURRENT_YEAR {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId).with(TemporalAdjusters.firstDayOfYear());
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId()).with(TemporalAdjusters.firstDayOfYear());
                 return new DateRange(
+                    environment,
                     begin,
-                    LocalDate.now(zoneId).plusDays(lastNextDay ? 1 : 0)
+                    LocalDate.now(environment.getZoneId()).plusDays(environment.isLastNextDay() ? 1 : 0)
                 );
             }
         },
         LAST_YEAR {
             @Override
-            public DateRange getRange(ZoneId zoneId, boolean lastNextDay) {
-                LocalDate begin = LocalDate.now(zoneId).minusYears(1).with(TemporalAdjusters.firstDayOfYear());
+            public DateRange getRange(Dates.Environment environment) {
+                LocalDate begin = LocalDate.now(environment.getZoneId()).minusYears(1).with(TemporalAdjusters.firstDayOfYear());
                 return new DateRange(
+                    environment,
                     begin,
-                    begin.plusYears(1).plusDays(lastNextDay ? 0 : -1)
+                    begin.plusYears(1).plusDays(environment.isLastNextDay() ? 0 : -1)
                 );
             }
         };
 
-        public DateRange getRange(ZoneId zoneId) {
-            return getRange(zoneId, true);
+        public DateRange getRange() {
+            return getRange(Dates.getEnvironment());
         }
 
-        public abstract DateRange getRange(ZoneId zoneId, boolean lastNextDay);
+        public abstract DateRange getRange(Dates.Environment environment);
 
-        public SItem getItem(ZoneId zoneId) {
-            return getItem(zoneId, true);
-        }
-
-        public SItem getItem(ZoneId zoneId, DateTimeFormatter dateTimeFormatter) {
-            return getItem(zoneId, dateTimeFormatter, true);
-        }
-
-        public SItem getItem(ZoneId zoneId, boolean lastNextDay) {
-            return getItem(zoneId, null, lastNextDay);
-        }
-
-        public SItem getItem(ZoneId zoneId, DateTimeFormatter dateTimeFormatter, boolean lastNextDay) {
-            return new SItem(this.getRange(zoneId, lastNextDay).getIntervalString(dateTimeFormatter), this.toString());
+        public SItem toItem(Dates.Environment environment) {
+            return new SItem(getRange(environment).getIntervalString(), this.toString());
         }
     }
 }
