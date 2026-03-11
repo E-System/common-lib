@@ -26,8 +26,9 @@ public abstract class BackgroundWorker implements Runnable {
         } catch (Throwable t) {
             getLogger().error("Worker error [{}]", info, t);
             doOnError(t);
+        } finally {
+            getLogger().trace("End worker [{}]", info);
         }
-        getLogger().trace("End worker [{}]", info);
     }
 
     protected abstract void doWork();

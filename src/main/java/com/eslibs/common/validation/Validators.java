@@ -22,19 +22,12 @@ import lombok.NoArgsConstructor;
 public final class Validators {
 
     public static final BikValidator BIK = BikValidator.getInstance();
-
     public static final InnValidator INN = InnValidator.getInstance();
-
     public static final KppValidator KPP = KppValidator.getInstance();
-
     public static final OgrnValidator OGRN = OgrnValidator.getInstance();
-
     public static final PassportDateValidator PASSPORT_DATE = PassportDateValidator.getInstance();
-
     public static final RangeValidator RANGE = RangeValidator.getInstance();
-
     public static final RegexpValidator REGEXP = RegexpValidator.getInstance();
-
     public static final SnilsValidator SNILS = SnilsValidator.getInstance();
 
 

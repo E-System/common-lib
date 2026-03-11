@@ -54,6 +54,8 @@ public final class Dates {
         @Builder.Default
         private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         @Builder.Default
+        private final DateTimeFormatter dateRangeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        @Builder.Default
         private final DateTimeFormatter sortableDateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         @Builder.Default
         private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");

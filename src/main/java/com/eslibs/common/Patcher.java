@@ -99,15 +99,15 @@ public class Patcher<T, R> {
     @EqualsAndHashCode
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonTypeInfo(
-            use = JsonTypeInfo.Id.NAME,
-            include = JsonTypeInfo.As.EXISTING_PROPERTY,
-            defaultImpl = UpdatedField.class,
-            visible = true,
-            property = "type")
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        defaultImpl = UpdatedField.class,
+        visible = true,
+        property = "type")
     @JsonSubTypes({
-            @JsonSubTypes.Type(value = UpdatedField.class, name = "F"),
-            @JsonSubTypes.Type(value = UpdatedRow.class, name = "R"),
-            @JsonSubTypes.Type(value = UpdatedGroup.class, name = "G"),
+        @JsonSubTypes.Type(value = UpdatedField.class, name = "F"),
+        @JsonSubTypes.Type(value = UpdatedRow.class, name = "R"),
+        @JsonSubTypes.Type(value = UpdatedGroup.class, name = "G"),
     })
     public static class Updated {
 
@@ -204,22 +204,18 @@ public class Patcher<T, R> {
         }
     }
 
-    @RequiredArgsConstructor
-    private static class Rule<T, R, R1, R2> {
-
-        private final Patcher<T, R> owner;
-        private final String field;
-        private final Runnable runnable;
-
-        private final BiConsumer<T, R> consumer;
-
-        private final Function<T, R1> fromGetter;
-        private final BiConsumer<R, R2> toSetter;
-        private final Function<R1, R2> converter;
-
-        private final Function<R, R2> callbackGetter;
-        private final Function<R2, String> callbackConverter;
-        private final Consumer<Updated> updatedFieldCallback;
+    private record Rule<T, R, R1, R2>(
+        Patcher<T, R> owner,
+        String field,
+        Runnable runnable,
+        BiConsumer<T, R> consumer,
+        Function<T, R1> fromGetter,
+        BiConsumer<R, R2> toSetter,
+        Function<R1, R2> converter,
+        Function<R, R2> callbackGetter,
+        Function<R2, String> callbackConverter,
+        Consumer<Updated> updatedFieldCallback
+    ) {
 
         public Rule(Patcher<T, R> owner, String field, Runnable runnable) {
             this(owner, field, runnable, null, null, null, null, null, null, null);

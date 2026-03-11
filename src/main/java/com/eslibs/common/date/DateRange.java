@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 
@@ -39,13 +38,13 @@ public class DateRange {
     private final LocalDate start;
     private final LocalDate end;
 
-    public String getIntervalString() {
-        return getIntervalString(null);
+    public String toKey() {
+        return toKey(environment);
     }
 
-    public String getIntervalString(DateTimeFormatter dateTimeFormatter) {
-        dateTimeFormatter = dateTimeFormatter != null ? dateTimeFormatter : Dates.getEnvironment().getDateFormatter();
-        return dateTimeFormatter.format(getStart()) + "|" + dateTimeFormatter.format(getEnd());
+    public String toKey(Dates.Environment environment) {
+        DateTimeFormatter dateFormatter = environment.getDateRangeFormatter();
+        return dateFormatter.format(getStart()) + "|" + dateFormatter.format(getEnd());
     }
 
     public enum Interval {
@@ -178,7 +177,7 @@ public class DateRange {
         public abstract DateRange getRange(Dates.Environment environment);
 
         public SItem toItem(Dates.Environment environment) {
-            return new SItem(getRange(environment).getIntervalString(), this.toString());
+            return new SItem(getRange(environment).toKey(), this.toString());
         }
     }
 }

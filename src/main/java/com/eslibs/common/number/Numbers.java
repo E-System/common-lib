@@ -16,7 +16,8 @@
 
 package com.eslibs.common.number;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -216,18 +217,10 @@ public final class Numbers {
         }
     }
 
-    @Getter
-    @ToString
-    @EqualsAndHashCode
-    @RequiredArgsConstructor
-    public static class AAM {
-
-        private final long addition;
-        private final long total;
+    public record AAM(long addition, long total) {
 
         public AAM(Double addition, Double total) {
-            this.addition = converter(addition).asScaledLong();
-            this.total = converter(total).asScaledLong();
+            this(converter(addition).asScaledLong(), converter(total).asScaledLong());
         }
 
         public BigDecimal getRealAddition() {
