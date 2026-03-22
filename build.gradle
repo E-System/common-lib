@@ -45,8 +45,10 @@ apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.sourceCompatibility = JavaVersion.VERSION_1_8
+[compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.targetCompatibility = JavaVersion.VERSION_1_8
+[compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.options*.release = 8
+[compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.options*.encoding = 'UTF-8'
 
 group = ext.mainGroup
 version = ext.mainVersion + (ext.snapshot ? '-SNAPSHOT' : '')
@@ -54,20 +56,6 @@ version = ext.mainVersion + (ext.snapshot ? '-SNAPSHOT' : '')
 repositories {
     mavenCentral()
     mavenLocal()
-}
-
-idea {
-    project {
-        jdkName = '1.8'
-        languageLevel = JavaVersion.VERSION_1_8
-    }
-    module {
-        downloadJavadoc = false
-        downloadSources = false
-        inheritOutputDirs = true
-        excludeDirs += file('gradle')
-        excludeDirs += file('out')
-    }
 }
 
 def propName = rootProject.name
