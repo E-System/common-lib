@@ -30,7 +30,7 @@ buildscript {
 }
 
 wrapper {
-    gradleVersion = '8.0.2'
+    gradleVersion = '9.4.1'
 }
 
 def resolve(String name) {
@@ -124,12 +124,12 @@ dependencies {
     testImplementation "org.spockframework:spock-core:2.3-groovy-4.0"
 }
 
-def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null
+def emailTestEnabled = resolve('test_email_server') != null && resolve('test_email_login') != null && resolve('test_email_password') != null
 if (emailTestEnabled) {
     test {
-        systemProperty 'test_email_server', "${test_email_server}"
-        systemProperty 'test_email_login', "${test_email_login}"
-        systemProperty 'test_email_password', "${test_email_password}"
+        systemProperty 'test_email_server', resolve('test_email_server')
+        systemProperty 'test_email_login', resolve('test_email_login')
+        systemProperty 'test_email_password', resolve('test_email_password')
     }
 }
 test {
@@ -137,14 +137,14 @@ test {
     finalizedBy jacocoTestReport
 }
 
-def sonarAvailable = properties['sonar_url'] != null && properties['sonar_user'] != null && properties['sonar_password'] != null
+def sonarAvailable = resolve('sonar_url') != null && resolve('sonar_user') != null && resolve('sonar_password') != null
 if (sonarAvailable) {
     apply plugin: 'org.sonarqube'
     sonarqube {
         properties {
-            property "sonar.host.url", "${sonar_url}"
-            property "sonar.login", "${sonar_user}"
-            property "sonar.password", "${sonar_password}"
+            property "sonar.host.url", resolve('sonar_url')
+            property "sonar.login", resolve('sonar_user')
+            property "sonar.password", resolve('sonar_password')
         }
     }
 }
