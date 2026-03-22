@@ -157,7 +157,7 @@ class DatesSpec extends Specification {
         where:
         date                             | format             | result
         sdf.parse("02.05.2015 00:00:00") | "«dd» MMMM yyyyг." | "«02» мая 2015г."
-        sdf.parse("02.05.2015 00:00:00") | "MMMM"             | "Май"
+        sdf.parse("02.05.2015 00:00:00") | "MMMM"             | "май"
     }
 
     def "Format with time zone"() {
