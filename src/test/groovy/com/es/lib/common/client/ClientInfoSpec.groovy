@@ -51,7 +51,7 @@ class ClientInfoSpec extends Specification {
                 'es-app-platform-version': platformVersion,
                 'es-app-version'         : appVersion,
                 'es-app-timezone'        : 'GMT+03',
-                'es-app-locale'          : 'en_US',
+                'es-app-locale'          : 'ru_RU',
                 'es-app-key'             : guid
         ]
         def result = ClientInfo.create(headers)
@@ -59,7 +59,7 @@ class ClientInfoSpec extends Specification {
         result.platform == ClientInfo.Platform.ios
         result.platformVersion == platformVersion
         result.appVersion == appVersion
-        result.appLocale == Locale.default
+        result.appLocale == new Locale('ru_RU')
         result.appTimezone == ZoneId.of('GMT+03')
         result.appKey == guid
     }
