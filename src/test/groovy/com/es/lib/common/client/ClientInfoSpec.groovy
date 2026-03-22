@@ -51,7 +51,7 @@ class ClientInfoSpec extends Specification {
                 'es-app-platform-version': platformVersion,
                 'es-app-version'         : appVersion,
                 'es-app-timezone'        : 'GMT+03',
-                'es-app-locale'          : 'ru_RU',
+                'es-app-locale'          : 'en_US',
                 'es-app-key'             : guid
         ]
         def result = ClientInfo.create(headers)
