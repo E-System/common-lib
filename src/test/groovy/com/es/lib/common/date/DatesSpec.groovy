@@ -16,6 +16,7 @@
 
 package com.es.lib.common.date
 
+import com.es.lib.common.locale.Locales
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -43,6 +44,7 @@ class DatesSpec extends Specification {
     DateTimeFormatter dtf
 
     def setupSpec() {
+        Locale.setDefault(Locales.from('ru_RU'))
         TimeZone.setDefault(TimeZone.getTimeZone('Asia/Krasnoyarsk'))
         sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
         dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
