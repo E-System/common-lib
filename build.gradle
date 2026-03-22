@@ -118,9 +118,10 @@ dependencies {
     api "de.svenkubiak:jBCrypt:0.4.1"
     api "commons-io:commons-io:2.6"
 
-    compileOnly "org.projectlombok:lombok:1.18.12"
-    annotationProcessor "org.projectlombok:lombok:1.18.12"
+    compileOnly "org.projectlombok:lombok:1.18.44"
+    annotationProcessor "org.projectlombok:lombok:1.18.44"
 
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
     testImplementation "org.spockframework:spock-core:2.3-groovy-4.0"
 }
 
