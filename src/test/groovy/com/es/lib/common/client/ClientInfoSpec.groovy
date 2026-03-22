@@ -88,7 +88,7 @@ class ClientInfoSpec extends Specification {
         result.platform == ClientInfo.Platform.ios
         result.platformVersion == platformVersion
         result.appVersion == appVersion
-        result.appLocale == Locale.default
+        result.appLocale == Locales.from('ru_RU')
         result.appTimezone == ZoneId.of('GMT+03')
         result.appKey == guid
     }
