@@ -25,8 +25,12 @@ buildscript {
         }
     }
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929"
     }
+}
+
+plugins {
+    id "com.github.ben-manes.versions" version "0.44.0"
 }
 
 wrapper {
@@ -44,6 +48,7 @@ apply plugin: 'java-library'
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
+
 if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
     [compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.sourceCompatibility = JavaVersion.VERSION_1_8
     [compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.targetCompatibility = JavaVersion.VERSION_1_8
@@ -110,29 +115,42 @@ publishing {
         }
     }
 }
+ext {
+    jacksonVersion = "2.14.1"
+}
 dependencies {
-    api "org.apache.commons:commons-lang3:3.9"
-    api "org.slf4j:slf4j-api:1.7.29"
-    api "com.fasterxml.jackson.core:jackson-databind:2.10.2"
-    api "com.sun.mail:javax.mail:1.6.2"
-    api "de.svenkubiak:jBCrypt:0.4.1"
-    api "commons-io:commons-io:2.6"
+    api "org.apache.commons:commons-lang3:3.12.0"
+    api "commons-io:commons-io:2.11.0"
+    api 'org.slf4j:slf4j-api:1.7.36'
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api "com.sun.mail:jakarta.mail:2.0.1"
+    api "de.svenkubiak:jBCrypt:0.4.3"
+    api "org.reflections:reflections:0.10.2"
 
-    compileOnly "org.projectlombok:lombok:1.18.44"
-    annotationProcessor "org.projectlombok:lombok:1.18.44"
+    compileOnly "org.projectlombok:lombok:1.18.22"
+    annotationProcessor "org.projectlombok:lombok:1.18.22"
 
-    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
     testImplementation "org.spockframework:spock-core:2.3-groovy-4.0"
+    testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 }
 
 def emailTestEnabled = resolve('test_email_server') != null && resolve('test_email_login') != null && resolve('test_email_password') != null
-if (emailTestEnabled) {
+def emailTestEnabledEs = resolve('test_email_server_es') != null && resolve('test_email_login_es') != null && resolve('test_email_password_es') != null
+if (emailTestEnabled || emailTestEnabledEs) {
     test {
-        systemProperty 'test_email_server', resolve('test_email_server')
-        systemProperty 'test_email_login', resolve('test_email_login')
-        systemProperty 'test_email_password', resolve('test_email_password')
+        if (emailTestEnabled) {
+            systemProperty 'test_email_server', resolve('test_email_server')
+            systemProperty 'test_email_login', resolve('test_email_login')
+            systemProperty 'test_email_password', resolve('test_email_password')
+        }
+        if (emailTestEnabledEs) {
+            systemProperty 'test_email_server_es', resolve('test_email_server_es')
+            systemProperty 'test_email_login_es', resolve('test_email_login_es')
+            systemProperty 'test_email_password_es', resolve('test_email_password_es')
+        }
     }
 }
+
 test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
@@ -141,7 +159,7 @@ test {
 def sonarAvailable = resolve('sonar_url') != null && resolve('sonar_user') != null && resolve('sonar_password') != null
 if (sonarAvailable) {
     apply plugin: 'org.sonarqube'
-    sonarqube {
+    sonar {
         properties {
             property "sonar.host.url", resolve('sonar_url')
             property "sonar.login", resolve('sonar_user')
