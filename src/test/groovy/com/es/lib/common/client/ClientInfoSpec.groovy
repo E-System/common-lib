@@ -1,5 +1,6 @@
 package com.es.lib.common.client
 
+import com.es.lib.common.locale.LocaleUtil
 import spock.lang.Specification
 
 import java.time.ZoneId
@@ -59,7 +60,7 @@ class ClientInfoSpec extends Specification {
         result.platform == ClientInfo.Platform.ios
         result.platformVersion == platformVersion
         result.appVersion == appVersion
-        result.appLocale == new Locale('ru_RU')
+        result.appLocale == LocaleUtil.toLocale('ru_RU')
         result.appTimezone == ZoneId.of('GMT+03')
         result.appKey == guid
     }
