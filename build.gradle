@@ -30,14 +30,14 @@ buildscript {
 }
 
 wrapper {
-    gradleVersion = '6.8.1'
+    gradleVersion = '8.0.2'
 }
 
 apply from: "build-${profile}.gradle"
 apply plugin: 'idea'
 apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'groovy'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
@@ -48,7 +48,7 @@ group = ext.mainGroup
 version = ext.mainVersion + (ext.snapshot ? '-SNAPSHOT' : '')
 
 repositories {
-    jcenter()
+    mavenCentral()
     mavenLocal()
 }
 
@@ -97,44 +97,29 @@ javadoc {
     failOnError = false
     options.encoding = 'utf-8'
 }
-tasks.create(name: 'javadocJar', type: Jar, dependsOn: 'javadoc') {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+java{
+    withSourcesJar()
+    withJavadocJar()
 }
-tasks.create(name: 'sourceJar', type: Jar) {
-    from sourceSets.main.allJava
-}
-
-artifacts {
-    archives javadocJar
-    archives sourceJar
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-
-            artifact javadocJar {
-                classifier 'javadoc'
-            }
-            artifact sourceJar {
-                classifier 'sources'
-            }
         }
     }
 }
 dependencies {
-    compile "org.apache.commons:commons-lang3:3.9"
-    compile "org.slf4j:slf4j-api:1.7.29"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.10.2"
-    compile "com.sun.mail:javax.mail:1.6.2"
-    compile "de.svenkubiak:jBCrypt:0.4.1"
-    compile "commons-io:commons-io:2.6"
+    api "org.apache.commons:commons-lang3:3.9"
+    api "org.slf4j:slf4j-api:1.7.29"
+    api "com.fasterxml.jackson.core:jackson-databind:2.10.2"
+    api "com.sun.mail:javax.mail:1.6.2"
+    api "de.svenkubiak:jBCrypt:0.4.1"
+    api "commons-io:commons-io:2.6"
+
     compileOnly "org.projectlombok:lombok:1.18.12"
     annotationProcessor "org.projectlombok:lombok:1.18.12"
 
-    testCompile "org.spockframework:spock-core:2.3-groovy-4.0"
+    testImplementation "org.spockframework:spock-core:2.3-groovy-4.0"
 }
 
 def emailTestEnabled = properties['test_email_server'] != null && properties['test_email_login'] != null && properties['test_email_password'] != null
