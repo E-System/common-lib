@@ -36,8 +36,10 @@ plugins {
 wrapper {
     gradleVersion = '8.0.2'
 }
-
-apply from: "build-${profile}.gradle"
+def resolve(String name) {
+    return (findProperty(name) ?: System.getenv(name))
+}
+apply from: "build-${resolve('profile')}.gradle"
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'java-library'
@@ -45,8 +47,12 @@ apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
+    [compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.sourceCompatibility = JavaVersion.VERSION_1_8
+    [compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.targetCompatibility = JavaVersion.VERSION_1_8
+    [compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.options*.release = 8
+}
+[compileJava, compileTestJava, compileTestGroovy, compileGroovy]*.options*.encoding = 'UTF-8'
 
 group = ext.mainGroup
 version = ext.mainVersion + (ext.snapshot ? '-SNAPSHOT' : '')
@@ -54,20 +60,6 @@ version = ext.mainVersion + (ext.snapshot ? '-SNAPSHOT' : '')
 repositories {
     mavenCentral()
     mavenLocal()
-}
-
-idea {
-    project {
-        jdkName = '1.8'
-        languageLevel = JavaVersion.VERSION_1_8
-    }
-    module {
-        downloadJavadoc = false
-        downloadSources = false
-        inheritOutputDirs = true
-        excludeDirs += file('gradle')
-        excludeDirs += file('out')
-    }
 }
 
 def propName = rootProject.name
@@ -106,6 +98,15 @@ java{
     withJavadocJar()
 }
 publishing {
+    repositories {
+        maven {
+            url = uri("${resolve("repos_url")}/${((rootProject.ext.snapshot) ? "snapshots" : "releases")}")
+            credentials {
+                username = resolve("repos_user")
+                password = resolve("repos_password")
+            }
+        }
+    }
     publications {
         mavenJava(MavenPublication) {
             from components.java
