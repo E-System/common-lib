@@ -35,7 +35,7 @@ public class BaseEmailProcessor implements Serializable {
 
     public BaseEmailProcessor(EmailServerConfiguration config) throws IOException {
         this.config = config;
-        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+        //Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
         session = createSession();
         session.setDebug(config.isDebug());
     }
