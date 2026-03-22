@@ -33,7 +33,11 @@ wrapper {
     gradleVersion = '8.0.2'
 }
 
-apply from: "build-${profile}.gradle"
+def resolve(String name) {
+    return (findProperty(name) ?: System.getenv(name))
+}
+
+apply from: "build-${resolve('profile')}.gradle"
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'java-library'
@@ -88,8 +92,8 @@ project.ant.propertyfile(file: "${filePath}build.properties") {
 jar {
     manifest {
         attributes(
-            'Implementation-Version': project.version,
-            'Implementation-Vendor': 'E-SYSTEM'
+                'Implementation-Version': project.version,
+                'Implementation-Vendor': 'E-SYSTEM'
         )
     }
 }
@@ -97,11 +101,20 @@ javadoc {
     failOnError = false
     options.encoding = 'utf-8'
 }
-java{
+java {
     withSourcesJar()
     withJavadocJar()
 }
 publishing {
+    repositories {
+        maven {
+            url = uri("${resolve("repos_url")}/${((rootProject.ext.snapshot) ? "snapshots" : "releases")}")
+            credentials {
+                username = resolve("repos_user")
+                password = resolve("repos_password")
+            }
+        }
+    }
     publications {
         mavenJava(MavenPublication) {
             from components.java
