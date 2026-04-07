@@ -38,7 +38,7 @@ public final class RangeValidator {
                 String range = m.group();
                 boolean leftInclude = range.startsWith("[");
                 boolean rightInclude = range.endsWith("]");
-                String[] items = range.replaceAll("[\\[]|[(]|[]]|[)]", "").split(";", 2);
+                String[] items = range.replaceAll("\\[|[(]|]|[)]", "").split(";", 2);
                 if (items.length < 2) {
                     continue;
                 }

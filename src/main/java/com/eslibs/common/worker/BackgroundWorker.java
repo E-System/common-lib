@@ -19,15 +19,16 @@ import org.slf4j.Logger;
 public abstract class BackgroundWorker implements Runnable {
 
     protected void process() {
+        Logger log = getLogger();
         Info info = getInfo();
-        getLogger().trace("Start worker [{}]", info);
+        log.trace("Start worker [{}]", info);
         try {
             doWork();
         } catch (Throwable t) {
-            getLogger().error("Worker error [{}]", info, t);
+            log.error("Worker error [{}]", info, t);
             doOnError(t);
         } finally {
-            getLogger().trace("End worker [{}]", info);
+            log.trace("End worker [{}]", info);
         }
     }
 

@@ -161,7 +161,6 @@ public final class Dates {
         return TimeConverter.getInstance();
     }
 
-
     public static DateConverter converter() {
         return converter(ZoneId.systemDefault());
     }

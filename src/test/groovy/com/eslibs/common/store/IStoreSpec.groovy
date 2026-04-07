@@ -5,6 +5,7 @@ import spock.lang.Specification
 class IStoreSpec extends Specification {
 
     class Store implements IStore {
+
         String fileName
         String fileExt
         long crc32
@@ -20,21 +21,6 @@ class IStoreSpec extends Specification {
 
         Store(String url) {
             this.url = url
-        }
-
-        @Override
-        String getFullName() {
-            return IStore.fullName(this)
-        }
-
-        @Override
-        String getAbbreviatedFileName(int maxWidth) {
-            return IStore.abbreviatedFileName(this, maxWidth)
-        }
-
-        @Override
-        boolean isImage() {
-            return IStore.isImage(this)
         }
     }
 

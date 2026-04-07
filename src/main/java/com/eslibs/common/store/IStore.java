@@ -30,7 +30,9 @@ public interface IStore extends Serializable {
 
     String getFileExt();
 
-    String getFullName();
+    default String getFullName() {
+        return fullName(this);
+    }
 
     long getCrc32();
 
@@ -38,9 +40,13 @@ public interface IStore extends Serializable {
 
     String getMime();
 
-    String getAbbreviatedFileName(int maxWidth);
+    default String getAbbreviatedFileName(int maxWidth) {
+        return abbreviatedFileName(this, maxWidth);
+    }
 
-    boolean isImage();
+    default boolean isImage() {
+        return isImage(this);
+    }
 
     default String getUrl() {
         return null;
