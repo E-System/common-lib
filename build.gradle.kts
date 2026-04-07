@@ -99,7 +99,7 @@ java {
 publishing {
     repositories {
         maven {
-            url = uri("${resolve("repos_url")}${(if (extra["snapshot"] as Boolean) "snapshots" else "releases")}")
+            url = uri("${resolve("repos_url")}/${(if (extra["snapshot"] as Boolean) "snapshots" else "releases")}")
             credentials(PasswordCredentials::class) {
                 username = resolve("repos_user")
                 password = resolve("repos_password")
@@ -130,7 +130,6 @@ dependencies {
 
     testImplementation(libs.spock)
     testImplementation(libs.logback)
-   // testImplementation(libs.jackson.datatype.jsr310)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
