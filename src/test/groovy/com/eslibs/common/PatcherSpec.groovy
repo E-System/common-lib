@@ -1,10 +1,11 @@
 package com.eslibs.common
 
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
+
 import spock.lang.Shared
 import spock.lang.Specification
+import tools.jackson.core.type.TypeReference
+import tools.jackson.databind.json.JsonMapper
 
 import java.util.function.BiConsumer
 import java.util.function.Consumer
@@ -12,7 +13,7 @@ import java.util.function.Consumer
 class PatcherSpec extends Specification {
 
     @Shared
-    def mapper = new ObjectMapper()
+    def mapper = new JsonMapper()
 
     def "Rules all"() {
         when:

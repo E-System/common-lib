@@ -16,14 +16,17 @@
 
 package com.eslibs.common;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.*;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -33,21 +36,21 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Jsons {
 
-    private static final ObjectMapper OBJECT_MAPPER = mapper();
+    private static final JsonMapper OBJECT_MAPPER = mapper();
 
-    public static ObjectMapper mapper() {
-        return new ObjectMapper()
-            .findAndRegisterModules()
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
+    public static JsonMapper mapper() {
+        return JsonMapper.builder()
+            .findAndAddModules()
+            .disable(DateTimeFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID);
+            .enable(DateTimeFeature.WRITE_DATES_WITH_ZONE_ID)
+            .build();
     }
 
-    public static <T> T fromJson(String json, Class<T> classOfT, ObjectMapper objectMapper) {
+    public static <T> T fromJson(String json, Class<T> classOfT, JsonMapper objectMapper) {
         try {
             return objectMapper.readValue(json, classOfT);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }
@@ -60,10 +63,10 @@ public final class Jsons {
         return fromJson(json, typeReference, OBJECT_MAPPER);
     }
 
-    public static <T> T fromJson(String json, TypeReference<T> typeReference, ObjectMapper objectMapper) {
+    public static <T> T fromJson(String json, TypeReference<T> typeReference, JsonMapper objectMapper) {
         try {
             return objectMapper.readValue(json, typeReference);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }
@@ -72,10 +75,10 @@ public final class Jsons {
         return toJson(object, OBJECT_MAPPER);
     }
 
-    public static String toJson(Object object, ObjectMapper objectMapper) {
+    public static String toJson(Object object, JsonMapper objectMapper) {
         try {
             return objectMapper.writeValueAsString(object);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }
@@ -84,7 +87,7 @@ public final class Jsons {
         return fromJson(toJson(source), classOfT);
     }
 
-    public static <T> T clone(T source, Class<T> classOfT, ObjectMapper objectMapper) {
+    public static <T> T clone(T source, Class<T> classOfT, JsonMapper objectMapper) {
         return fromJson(toJson(source, objectMapper), classOfT, objectMapper);
     }
 
@@ -92,22 +95,22 @@ public final class Jsons {
         return fromJson(toJson(source), typeReference);
     }
 
-    public static <T> T clone(T source, TypeReference<T> typeReference, ObjectMapper objectMapper) {
+    public static <T> T clone(T source, TypeReference<T> typeReference, JsonMapper objectMapper) {
         return fromJson(toJson(source, objectMapper), typeReference, objectMapper);
     }
 
-    public static class UnixTimeDeserializer extends JsonDeserializer<Date> {
+    public static class UnixTimeDeserializer extends ValueDeserializer<Date> {
 
         @Override
-        public Date deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+        public Date deserialize(JsonParser parser, DeserializationContext context) throws JacksonException {
             return new Date(Long.parseLong(parser.getValueAsString()) * 1000);
         }
     }
 
-    public static class UnixTimeSerializer extends JsonSerializer<Date> {
+    public static class UnixTimeSerializer extends ValueSerializer<Date> {
 
         @Override
-        public void serialize(Date value, JsonGenerator generator, SerializerProvider serializers) throws IOException {
+        public void serialize(Date value, JsonGenerator generator, SerializationContext serializers) throws JacksonException {
             generator.writeString(String.valueOf(value.getTime() / 1000));
         }
 

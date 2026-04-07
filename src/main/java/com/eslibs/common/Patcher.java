@@ -164,7 +164,7 @@ public class Patcher<T, R> {
         }
 
         @JsonCreator
-        public UpdatedGroup(@JsonProperty("type") Type type, @JsonProperty("field") String field, @JsonProperty("rows") Collection<Updated> items) {
+        public UpdatedGroup(@JsonProperty("type") Type type, @JsonProperty("field") String field, @JsonAlias("items") @JsonProperty("rows") Collection<Updated> items) {
             super(type, field);
             this.items = items;
         }

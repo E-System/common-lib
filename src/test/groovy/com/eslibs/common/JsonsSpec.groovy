@@ -1,8 +1,8 @@
 package com.eslibs.common
 
 
-import com.fasterxml.jackson.core.type.TypeReference
 import spock.lang.Specification
+import tools.jackson.core.type.TypeReference
 
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime

@@ -130,7 +130,7 @@ dependencies {
 
     testImplementation(libs.spock)
     testImplementation(libs.logback)
-    testImplementation(libs.jackson.datatype.jsr310)
+   // testImplementation(libs.jackson.datatype.jsr310)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
