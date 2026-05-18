@@ -35,6 +35,7 @@ public final class Zips {
                 }
                 zipOut.closeEntry();
             }
+            zipOut.close();
             return result.toByteArray();
         }
     }
