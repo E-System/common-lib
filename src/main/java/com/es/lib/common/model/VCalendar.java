@@ -3,10 +3,7 @@ package com.es.lib.common.model;
 import com.es.lib.common.DateUtil;
 import com.es.lib.common.collection.CollectionUtil;
 import com.es.lib.common.text.TextUtil;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -70,20 +67,20 @@ public class VCalendar {
                 }
             }
         }
-        System.out.println(calendarTokens);
-        eventsTokens.forEach(System.out::println);
         Collection<Event> events = new ArrayList<>();
         ZoneId zoneId = calendarTokens.getOrDefault(Token.X_WR_TIMEZONE, Token.NULL).zoneId();
         for (Map<String, Token> eTokens : eventsTokens) {
-            events.add(new Event(
-                eTokens.getOrDefault(Token.UID, Token.NULL).value,
-                eTokens.getOrDefault(Token.DTSTART, Token.NULL).date(zoneId),
-                eTokens.getOrDefault(Token.DTEND, Token.NULL).date(zoneId),
-                eTokens.getOrDefault(Token.SUMMARY, Token.NULL).value,
-                eTokens.getOrDefault(Token.DESCRIPTION, Token.NULL).value,
-                eTokens.getOrDefault(Token.STATUS, Token.NULL).value,
-                eTokens.getOrDefault(Token.TRANSP, Token.NULL).value
-            ));
+            events.add(
+                Event.builder()
+                    .id(eTokens.getOrDefault(Token.UID, Token.NULL).value)
+                    .startDate(eTokens.getOrDefault(Token.DTSTART, Token.NULL).date(zoneId))
+                    .endDate(eTokens.getOrDefault(Token.DTEND, Token.NULL).date(zoneId))
+                    .summary(eTokens.getOrDefault(Token.SUMMARY, Token.NULL).value)
+                    .description(eTokens.getOrDefault(Token.DESCRIPTION, Token.NULL).value)
+                    .status(eTokens.getOrDefault(Token.STATUS, Token.NULL).value)
+                    .transp(eTokens.getOrDefault(Token.TRANSP, Token.NULL).value)
+                    .build()
+            );
         }
         return new VCalendar(
             calendarTokens.getOrDefault(Token.PRODID, Token.NULL).value,
@@ -105,22 +102,35 @@ public class VCalendar {
         return serialize(this);
     }
 
+
     @Getter
+    @Builder
     @ToString
     @EqualsAndHashCode
     @RequiredArgsConstructor
     public static class Event {
 
         private final String id;
-        private final Date startDate;
-        private final Date endDate;
+        private final EventDate startDate;
+        private final EventDate endDate;
         private final String summary;
         private final String description;
         private final String status;
         private final String transp;
+    }
 
-        public Event(String id, Date startDate, Date endDate, String summary) {
-            this(id, startDate, endDate, summary, null, null, null);
+    @Getter
+    @Builder
+    @ToString
+    @EqualsAndHashCode
+    @RequiredArgsConstructor
+    public static class EventDate {
+
+        private final Date value;
+        private final boolean full;
+
+        public EventDate(Date value) {
+            this(value, false);
         }
     }
 
@@ -143,13 +153,22 @@ public class VCalendar {
         for (Event event : calendar.events) {
             result.add(new Token(Token.BEGIN, Token.VEVENT));
             result.add(new Token(Token.UID, event.getId()));
-            result.add(new Token(Token.DTSTART, DateUtil.format(event.getStartDate(), Token.DATE_PATTERN_SHORT), Token.DATE_SPECS));
-            result.add(new Token(Token.DTEND, DateUtil.format(event.getEndDate(), Token.DATE_PATTERN_SHORT), Token.DATE_SPECS));
+            result.add(token(Token.DTSTART, event.getStartDate()));
+            result.add(token(Token.DTEND, event.getEndDate()));
             result.add(new Token(Token.SUMMARY, event.getSummary()));
+            result.add(new Token(Token.DESCRIPTION, event.getDescription()));
             result.add(new Token(Token.END, Token.VEVENT));
         }
         result.add(new Token(Token.END, Token.VCALENDAR));
         return result;
+    }
+
+    private static Token token(String name, EventDate date) {
+        return new Token(
+            name,
+            DateUtil.format(date.value, date.full ? Token.DATE_PATTERN_FULL : Token.DATE_PATTERN_SHORT),
+            date.full ? null : Token.DATE_SPECS
+        );
     }
 
     private static Collection<Token> tokens(String source) {
@@ -218,13 +237,14 @@ public class VCalendar {
             return name + specs + ":" + value;
         }
 
-        public Date date(ZoneId zoneId) {
+        public EventDate date(ZoneId zoneId) {
+            boolean full = !DATE.equals(specs.get(VALUE));
             String format = DATE_PATTERN_FULL;
-            if (DATE.equals(specs.get(VALUE))) {
+            if (!full) {
                 format = DATE_PATTERN_SHORT;
             }
             try {
-                return DateUtil.parse(value, format, zoneId);
+                return new EventDate(DateUtil.parse(value, format, zoneId), full);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
