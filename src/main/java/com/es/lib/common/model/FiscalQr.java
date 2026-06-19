@@ -1,6 +1,7 @@
 package com.es.lib.common.model;
 
 import com.es.lib.common.DateUtil;
+import com.es.lib.common.NumberFormatUtil;
 import com.es.lib.common.text.TextUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ public class FiscalQr {
     private static final String DOC = "i";
     private static final String FP = "fp";
     private static final String TYPE = "n";
+    private static final String DATE_FORMAT = "yyyyMMdd'T'HHmm";
 
     private final String fn;
     private final String fp;
@@ -33,6 +36,22 @@ public class FiscalQr {
     private final int sum;
     private final Date date;
     private final Type type;
+
+    public String asString() {
+        return asString(null);
+    }
+
+    public String asString(String url) {
+        LinkedHashMap<String, String> params = new LinkedHashMap<>();
+        params.put(TIME, DateUtil.format(date, DATE_FORMAT));
+        params.put(SUM, NumberFormatUtil.f22(sum, '.'));
+        params.put(FN, fn);
+        params.put(DOC, doc);
+        params.put(FP, fp);
+        params.put(TYPE, String.valueOf(type.value));
+        return (StringUtils.isNotBlank(url) ? (url + "?") : "")
+               + params.entrySet().stream().map(v -> v.getKey() + "=" + v.getValue()).collect(Collectors.joining("&"));
+    }
 
     public static FiscalQr of(String value) {
         if (StringUtils.isBlank(value)) {
@@ -57,7 +76,7 @@ public class FiscalQr {
 
     private static Date parse(String value) {
         try {
-            return DateUtil.parse(value, "yyyyMMdd'T'HHmm");
+            return DateUtil.parse(value, DATE_FORMAT);
         } catch (Exception e) {
             log.error("ERROR PARSE QR DATE [{}]:{}", value, e.getMessage(), e);
         }
