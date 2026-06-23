@@ -2,17 +2,17 @@ package com.es.lib.common.model;
 
 import com.es.lib.common.DateUtil;
 import com.es.lib.common.NumberFormatUtil;
-import com.es.lib.common.text.TextUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,6 +28,7 @@ public class FiscalQr {
     private static final String DOC = "i";
     private static final String FP = "fp";
     private static final String TYPE = "n";
+    private static final Collection<String> AllToParse = Arrays.asList(TIME, SUM, FN, DOC, FP, TYPE);
     private static final String DATE_FORMAT = "yyyyMMdd'T'HHmm";
 
     private final String fn;
@@ -60,10 +61,8 @@ public class FiscalQr {
         if (value.contains("?")) {
             value = value.substring(value.indexOf("?") + 1);
         }
-        Map<String, String> params = TextUtil.splitBy("&", true).splitBy("=", true).toPairs(value).stream().collect(Collectors.toMap(
-            Map.Entry::getKey,
-            Map.Entry::getValue
-        ));
+        System.out.println(value);
+        Map<String, String> params = extract(value);
         return new FiscalQr(
             params.get(FN),
             params.get(FP),
@@ -72,6 +71,20 @@ public class FiscalQr {
             parse(params.get(TIME)),
             Type.of(Integer.parseInt(params.get(TYPE)))
         );
+    }
+
+    private static Map<String, String> extract(String value) {
+        return AllToParse.stream().map(v -> Pair.of(v, find(v, value))).collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+    }
+
+    private static String find(String name, String value) {
+        Matcher matcher = Pattern.compile("&" +name + "=([\\d.T]*)").matcher("&" + value);
+        if (matcher.find()) {
+            String result = matcher.group(1);
+            System.out.println(name + "->" + result);
+            return result;
+        }
+        return null;
     }
 
     private static Date parse(String value) {
