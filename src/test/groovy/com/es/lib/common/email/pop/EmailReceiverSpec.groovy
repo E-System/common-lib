@@ -21,13 +21,19 @@ import com.es.lib.common.email.config.POP3ServerConfiguration
 import com.es.lib.common.security.model.Credentials
 import spock.lang.IgnoreIf
 import spock.lang.Specification
+import spock.lang.TempDir
 import spock.lang.Timeout
+
+import java.nio.file.Path
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 15.05.16
  */
 class EmailReceiverSpec extends Specification {
+
+    @TempDir
+    Path saveDir
 
     @IgnoreIf({
         System.getProperty("test_email_server") == null || System.getProperty("test_email_login") == null || System.getProperty("test_email_password") == null
@@ -36,16 +42,16 @@ class EmailReceiverSpec extends Specification {
     def "GetAll"() {
         when:
         def receiver = new EmailReceiver(
-            new POP3ServerConfiguration(
-                POP3ServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
-                new Credentials(
-                    System.getProperty("test_email_login"),
-                    System.getProperty("test_email_password")
+                new POP3ServerConfiguration(
+                        POP3ServerConfiguration.PRESETS.get(System.getProperty("test_email_server")),
+                        new Credentials(
+                                System.getProperty("test_email_login"),
+                                System.getProperty("test_email_password")
+                        )
                 )
-            )
         )
         then:
-        def messages = receiver.getAll("/tmp", false)
+        def messages = receiver.getAll(saveDir.toString(), false)
         expect:
         messages.size() >= 0
     }
