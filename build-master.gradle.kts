@@ -14,4 +14,4 @@
  *    limitations under the License.
  */
 
-val snapshot by extra(false)
+extra.set("snapshot", false)
