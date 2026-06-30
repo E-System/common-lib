@@ -8,8 +8,8 @@ class OutputDataSpec extends Specification {
 
     static FILE_NAME = "filename.txt"
     static RELATIVE_PATH = "/2020/01"
-    static CONTENT_TYPE = "text"
-    static BYTE_DATA = new byte[1]
+    static CONTENT_TYPE = "text/plain"
+    static BYTE_DATA = new byte[] { 0x01 }
     static STREAM_DATA = new ByteArrayInputStream(BYTE_DATA)
 
     def "Create with file"() {
@@ -21,6 +21,10 @@ class OutputDataSpec extends Specification {
         data.relativePath == RELATIVE_PATH
         data.fileName == FILE_NAME
         data.content == Paths.get(RELATIVE_PATH)
+        with(data.info()){
+            it.fileName == FILE_NAME
+            it.contentType == 'text/plain'
+        }
     }
 
     def "Create with byte array"() {
@@ -32,6 +36,10 @@ class OutputDataSpec extends Specification {
         data.contentType == CONTENT_TYPE
         data.fileName == FILE_NAME
         data.content == BYTE_DATA
+        with(data.info()){
+            it.fileName == FILE_NAME
+            it.contentType == 'text/plain'
+        }
     }
 
     def "Create with input stream"() {
@@ -43,5 +51,9 @@ class OutputDataSpec extends Specification {
         data.contentType == CONTENT_TYPE
         data.fileName == FILE_NAME
         data.content == STREAM_DATA
+        with(data.info()){
+            it.fileName == FILE_NAME
+            it.contentType == 'text/plain'
+        }
     }
 }

@@ -26,14 +26,12 @@ import java.io.InputStream;
  */
 @Getter
 @ToString(callSuper = true)
-public class StreamData extends OutputData {
+public class StreamData extends TypedData {
 
-    private String contentType;
-    private InputStream content;
+    private final InputStream content;
 
     StreamData(String fileName, String contentType, InputStream content) {
-        super(fileName);
-        this.contentType = contentType;
+        super(fileName, contentType);
         this.content = content;
     }
 

@@ -10,5 +10,5 @@ import lombok.ToString;
 public class DataInfo {
 
     private final String fileName;
-    private final String mime;
+    private final String contentType;
 }

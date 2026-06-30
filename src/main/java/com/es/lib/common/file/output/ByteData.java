@@ -24,14 +24,12 @@ import lombok.ToString;
  */
 @Getter
 @ToString(callSuper = true)
-public class ByteData extends OutputData {
+public class ByteData extends TypedData {
 
-    private final String contentType;
     private final byte[] content;
 
     ByteData(String fileName, String contentType, byte[] content) {
-        super(fileName);
-        this.contentType = contentType;
+        super(fileName, contentType);
         this.content = content;
     }
 
