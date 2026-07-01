@@ -2,6 +2,7 @@ package com.es.lib.common.model;
 
 import com.es.lib.common.DateUtil;
 import com.es.lib.common.NumberFormatUtil;
+import com.es.lib.common.collection.CollectionUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -61,8 +62,10 @@ public class FiscalQr {
         if (value.contains("?")) {
             value = value.substring(value.indexOf("?") + 1);
         }
-        System.out.println(value);
         Map<String, String> params = extract(value);
+        if (CollectionUtil.isEmpty(params)) {
+            return null;
+        }
         return new FiscalQr(
             params.get(FN),
             params.get(FP),
@@ -74,17 +77,14 @@ public class FiscalQr {
     }
 
     private static Map<String, String> extract(String value) {
-        return AllToParse.stream().map(v -> Pair.of(v, find(v, value))).collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+        return AllToParse.stream().map(v -> Pair.of(v, find(v, value)))
+            .filter(v -> v.getValue() != null)
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
     }
 
     private static String find(String name, String value) {
-        Matcher matcher = Pattern.compile("&" +name + "=([\\d.T]*)").matcher("&" + value);
-        if (matcher.find()) {
-            String result = matcher.group(1);
-            System.out.println(name + "->" + result);
-            return result;
-        }
-        return null;
+        Matcher matcher = Pattern.compile("&" + name + "=([\\d.T]*)").matcher("&" + value);
+        return matcher.find() ? matcher.group(1) : null;
     }
 
     private static Date parse(String value) {

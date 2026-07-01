@@ -12,6 +12,7 @@ class FiscalQrSpec extends Specification {
         expect:
         FiscalQr.of(null) == null
         FiscalQr.of('') == null
+        FiscalQr.of('asdasdasdasd') == null
         with(FiscalQr.of(VALUE)) {
             println(it)
             it.date != null
