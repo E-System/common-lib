@@ -66,14 +66,19 @@ public class FiscalQr {
         if (CollectionUtil.isEmpty(params)) {
             return null;
         }
-        return new FiscalQr(
-            params.get(FN),
-            params.get(FP),
-            params.get(DOC),
-            (int) Math.round(Double.parseDouble(params.get(SUM)) * 100.0),
-            parse(params.get(TIME)),
-            Type.of(Integer.parseInt(params.get(TYPE)))
-        );
+        try {
+            return new FiscalQr(
+                params.get(FN),
+                params.get(FP),
+                params.get(DOC),
+                (int) Math.round(Double.parseDouble(params.get(SUM)) * 100.0),
+                parse(params.get(TIME)),
+                Type.of(Integer.parseInt(params.get(TYPE)))
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
     }
 
     private static Map<String, String> extract(String value) {
