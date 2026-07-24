@@ -11,8 +11,8 @@ import java.util.function.BiFunction;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class DateParser {
 
-    private final String value;
     private final Dates.Environment environment;
+    private final String value;
 
     public Optional<Instant> asInstant() {
         return asInstant(null);
