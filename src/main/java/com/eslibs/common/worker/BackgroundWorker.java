@@ -34,7 +34,15 @@ public abstract class BackgroundWorker implements Runnable {
 
     protected abstract void doWork();
 
-    protected void doOnError(Throwable throwable) {}
+    protected void doOnError(Throwable throwable) {
+        if (isThrowOnError()) {
+            throw new RuntimeException(throwable);
+        }
+    }
+
+    protected boolean isThrowOnError() {
+        return true;
+    }
 
     protected abstract Info getInfo();
 
