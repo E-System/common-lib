@@ -44,7 +44,7 @@ class ClientInfoSpec extends Specification {
         result.platformVersion() == platformVersion
         result.appVersion() == appVersion
         result.appTimezone() == ZoneId.of("GMT+03")
-        result.appLocale() == Locales.of("en_US")
+        result.appLocale() == Locales.of("en_US").orElse(null)
     }
 
     def "Create with full headers (2)"() {
@@ -65,7 +65,7 @@ class ClientInfoSpec extends Specification {
         result.platformVersion() == platformVersion
         result.appVersion() == appVersion
         result.appTimezone() == ZoneId.of("Europe/Moscow")
-        result.appLocale() == Locales.of("en_US")
+        result.appLocale() == Locales.of("en_US").orElse(null)
     }
 
     def "Create with empty headers"() {

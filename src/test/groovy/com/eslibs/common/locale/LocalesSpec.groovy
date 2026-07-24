@@ -10,37 +10,37 @@ class LocalesSpec extends Specification {
 
     def "To locale with null return null"() {
         expect:
-        Locales.of(null) == null
+        Locales.of(null).isEmpty()
     }
 
     def "To locale with empty string return null"() {
         expect:
-        Locales.of("") == null
+        Locales.of("").isEmpty()
     }
 
     def "To locale with invalid code return null"() {
         expect:
-        Locales.of("a") == null
+        Locales.of("a").isEmpty()
     }
 
     def "To locale with ru_RU code return Locale(ru, RU)"() {
         expect:
-        Locales.of("ru_RU") == Locale.of("ru", "RU")
+        Locales.of("ru_RU").orElse(null) == Locale.of("ru", "RU")
     }
 
     def "To locale with en_US code return Locale(en, US)"() {
         expect:
-        Locales.of("en_US") == Locale.of("en", "US")
+        Locales.of("en_US").orElse(null) == Locale.of("en", "US")
     }
 
     def "To locale with en code return Locale(en, US)"() {
         expect:
-        Locales.of("en_US") == Locale.of("en", "US")
-        Locales.of("en_US").getUnicodeLocaleType("ca") == null
+        Locales.of("en_US").orElse(null) == Locale.of("en", "US")
+        Locales.of("en_US").orElse(null).getUnicodeLocaleType("ca") == null
     }
 
     def "ToLocale with en code return Locale(th, TH)"() {
         expect:
-        Locales.of("th_TH").getUnicodeLocaleType("ca") == "gregory"
+        Locales.of("th_TH").orElse(null).getUnicodeLocaleType("ca") == "gregory"
     }
 }

@@ -99,7 +99,6 @@ public final class Dates {
         return date.isAfter(startDate) && !(endDate != null && !date.isBefore(endDate));
     }
 
-
     /**
      * Проверить что дата не принадлежит сегодня (меньше начала сегодняшнего дня)
      *
@@ -155,6 +154,14 @@ public final class Dates {
 
     public static DateRange defaultRange(Environment environment) {
         return DateRange.Interval.TODAY.getRange(environment);
+    }
+
+    public static DateParser parser(String value) {
+        return parser(value, getEnvironment());
+    }
+
+    public static DateParser parser(String value, Environment environment) {
+        return new DateParser(value, environment);
     }
 
     public static TimeConverter timeConverter() {

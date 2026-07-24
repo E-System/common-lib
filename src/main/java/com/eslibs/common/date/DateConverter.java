@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class DateConverter {
@@ -18,12 +19,12 @@ public class DateConverter {
      * @param date Date
      * @return Local date
      */
-    public LocalDateTime get(Date date) {
+    public Optional<LocalDateTime> asLocalDateTime(Date date) {
         if (date == null) {
-            return null;
+            return Optional.empty();
         }
         Instant instant = Instant.ofEpochMilli(date.getTime());
-        return LocalDateTime.ofInstant(instant, zoneId);
+        return Optional.of(LocalDateTime.ofInstant(instant, zoneId));
     }
 
     /**
@@ -32,11 +33,11 @@ public class DateConverter {
      * @param date Local date
      * @return Date
      */
-    public Date get(LocalDateTime date) {
+    public Optional<Date> asDate(LocalDateTime date) {
         if (date == null) {
-            return null;
+            return Optional.empty();
         }
         Instant instant = date.atZone(zoneId).toInstant();
-        return Date.from(instant);
+        return Optional.of(Date.from(instant));
     }
 }

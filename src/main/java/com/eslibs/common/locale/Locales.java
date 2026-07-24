@@ -7,6 +7,7 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
@@ -16,19 +17,19 @@ import java.util.Locale;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Locales {
 
-    public static Locale of(String code) {
+    public static Optional<Locale> of(String code) {
         if (StringUtils.isBlank(code)) {
-            return null;
+            return Optional.empty();
         }
         try {
             Locale result = LocaleUtils.toLocale(code);
             if ("th".equals(result.getLanguage()) && "TH".equals(result.getCountry())) {
                 result = new Locale.Builder().setLocale(result).setUnicodeLocaleKeyword("ca", "gregory").build();
             }
-            return result;
+            return Optional.of(result);
         } catch (Exception e) {
             log.error("Invalid locale: {}", code);
         }
-        return null;
+        return Optional.empty();
     }
 }

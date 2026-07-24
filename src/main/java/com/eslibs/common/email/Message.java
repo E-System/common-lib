@@ -20,7 +20,7 @@ import com.eslibs.common.collection.Items;
 import com.eslibs.common.model.data.OutputData;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -43,8 +43,8 @@ public record Message(
     Map<String, String> headers,
     Collection<Attachment> attachments,
     Map<String, String> extensions,
-    LocalDateTime sentDate,
-    LocalDateTime receivedDate
+    Instant sentDate,
+    Instant receivedDate
 ) {
 
     public boolean attachmentsAvailable() {

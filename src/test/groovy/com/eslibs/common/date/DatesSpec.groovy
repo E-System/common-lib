@@ -66,13 +66,13 @@ class DatesSpec extends Specification {
         !zones.contains(ZoneId.of('UTC'))
     }
 
-   /* def "NextDay"() {
-        expect:
-        Dates.generator(zone).nextDay(date) == result
-        where:
-        date                             | zone                       | result
-        sdf.parse("06.02.2015 23:30:00") | ZoneId.of("Europe/Moscow") | sdf.parse("07.02.2015 23:30:00")
-    }*/
+    /* def "NextDay"() {
+         expect:
+         Dates.generator(zone).nextDay(date) == result
+         where:
+         date                             | zone                       | result
+         sdf.parse("06.02.2015 23:30:00") | ZoneId.of("Europe/Moscow") | sdf.parse("07.02.2015 23:30:00")
+     }*/
 
     def "Contains"() {
         expect:
@@ -92,45 +92,45 @@ class DatesSpec extends Specification {
         LocalDateTime.now()                                                  | false
     }
 
-   /* def "Get start month date"() {
-        expect:
-        Dates.generator().monthStart() == result
-        where:
-        result << Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
-    }*/
+    /* def "Get start month date"() {
+         expect:
+         Dates.generator().monthStart() == result
+         where:
+         result << Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
+     }*/
 
-   /* def "Get start month date (in Moscow time zone)"() {
-        expect:
-        Dates.generator(zone).monthStart() == result
-        where:
-        zone                       | result
-        ZoneId.of("Europe/Moscow") | Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant())
-    }*/
+    /* def "Get start month date (in Moscow time zone)"() {
+         expect:
+         Dates.generator(zone).monthStart() == result
+         where:
+         zone                       | result
+         ZoneId.of("Europe/Moscow") | Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.of("Europe/Moscow")).toInstant())
+     }*/
 
-   /* def "Today begin"() {
-        expect:
-        Dates.generator().today() == result
-        where:
-        result << Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant())
-    }*/
+    /* def "Today begin"() {
+         expect:
+         Dates.generator().today() == result
+         where:
+         result << Date.from(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant())
+     }*/
 
-   /* def "Format months"() {
-        expect:
-        Dates.formatter().format(date, format) == result
-        where:
-        date                             | format             | result
-        sdf.parse("02.05.2015 00:00:00") | "«dd» MMMM yyyyг." | "«02» мая 2015г."
-        sdf.parse("02.05.2015 00:00:00") | "MMMM"             | "май"
-    }*/
+    /* def "Format months"() {
+         expect:
+         Dates.formatter().format(date, format) == result
+         where:
+         date                             | format             | result
+         sdf.parse("02.05.2015 00:00:00") | "«dd» MMMM yyyyг." | "«02» мая 2015г."
+         sdf.parse("02.05.2015 00:00:00") | "MMMM"             | "май"
+     }*/
 
-   /* def "Format with time zone"() {
-        expect:
-        Dates.formatter(zoneId).format(date, format) == result
-        where:
-        zoneId                     | date                             | format                || result
-        ZoneId.systemDefault()     | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
-        ZoneId.of('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
-    }*/
+    /* def "Format with time zone"() {
+         expect:
+         Dates.formatter(zoneId).format(date, format) == result
+         where:
+         zoneId                     | date                             | format                || result
+         ZoneId.systemDefault()     | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "02.05.2015 00:00:00"
+         ZoneId.of('Europe/Moscow') | sdf.parse("02.05.2015 00:00:00") | "dd.MM.yyyy HH:mm:ss" || "01.05.2015 20:00:00"
+     }*/
 
     /*def "Get week number in year"() {
         expect:
@@ -145,7 +145,7 @@ class DatesSpec extends Specification {
         given:
         def date = new Date()
         when:
-        def result = Dates.converter().get(date)
+        def result = Dates.converter().asLocalDateTime(date).orElse(null)
         println(date)
         println(result)
         then:
@@ -157,7 +157,7 @@ class DatesSpec extends Specification {
         given:
         def date = LocalDateTime.now()
         when:
-        def result = Dates.converter().get(date)
+        def result = Dates.converter().asDate(date).orElse(null)
         println(date)
         println(result)
         then:

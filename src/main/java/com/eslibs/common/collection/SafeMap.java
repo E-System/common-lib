@@ -1,14 +1,12 @@
 package com.eslibs.common.collection;
 
+import com.eslibs.common.date.DateParser;
 import com.eslibs.common.date.Dates;
+import com.eslibs.common.number.NumberParser;
+import com.eslibs.common.number.Numbers;
 
-import java.time.DateTimeException;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 public class SafeMap extends HashMap<String, String> {
 
@@ -16,40 +14,12 @@ public class SafeMap extends HashMap<String, String> {
         super(m);
     }
 
-    public Optional<Short> getShort(String key) {
-        return parse(key, Short::parseShort);
+    public NumberParser number(String key) {
+        return Numbers.parser(get(key));
     }
 
-    public Optional<Integer> getInt(String key) {
-        return parse(key, Integer::parseInt);
+    public DateParser date(String key) {
+        return Dates.parser(get(key));
     }
 
-    public Optional<Long> getLong(String key) {
-        return parse(key, Long::parseLong);
-    }
-
-    public Optional<Double> getDouble(String key) {
-        return parse(key, Double::parseDouble);
-    }
-
-    public Optional<TemporalAccessor> getDate(String key) {
-        return getDate(key, null);
-    }
-
-    public Optional<TemporalAccessor> getDate(String key, DateTimeFormatter dateTimeFormatter) {
-        dateTimeFormatter = dateTimeFormatter != null ? dateTimeFormatter : Dates.getEnvironment().getDateTimeFormatter();
-        try {
-            return Optional.of(dateTimeFormatter.parse(get(key)));
-        } catch (DateTimeException e) {
-            return Optional.empty();
-        }
-    }
-
-    private <T> Optional<T> parse(String key, Function<String, T> parser) {
-        try {
-            return Optional.of(parser.apply(get(key)));
-        } catch (NumberFormatException e) {
-            return Optional.empty();
-        }
-    }
 }

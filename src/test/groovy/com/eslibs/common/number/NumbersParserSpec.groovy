@@ -26,7 +26,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Double value with default"() {
         expect:
-        Numbers.parser(value1).asDouble(value2 as double) == result as double
+        Numbers.parser(value1).asDouble().orElse(value2 as double) == result as double
         where:
         value1 | value2 || result
         null   | 10.0d  || 10.0d
@@ -37,7 +37,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Double value without default (use null)"() {
         expect:
-        Numbers.parser(value1).asDouble() == result as Double
+        Numbers.parser(value1).asDouble().orElse(null) == result as Double
         where:
         value1 || result
         null   || null
@@ -48,7 +48,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Float value with default"() {
         expect:
-        Numbers.parser(value1).asFloat(value2 as float) == result as float
+        Numbers.parser(value1).asFloat().orElse(value2 as float) == result as float
         where:
         value1 | value2 || result
         null   | 10.0f  || 10.0f
@@ -59,7 +59,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Float value without default (use null)"() {
         expect:
-        Numbers.parser(value1).asFloat() == result as Float
+        Numbers.parser(value1).asFloat().orElse(null) == result as Float
         where:
         value1 || result
         null   || null
@@ -70,7 +70,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Long value with default"() {
         expect:
-        Numbers.parser(value1).asLong(value2 as long) == result as long
+        Numbers.parser(value1).asLong().orElse(value2 as long) == result as long
         where:
         value1 | value2 || result
         null   | 10L    || 10L
@@ -81,7 +81,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Long value without default (use null)"() {
         expect:
-        Numbers.parser(value1).asLong() == result as Long
+        Numbers.parser(value1).asLong().orElse(null) == result as Long
         where:
         value1 || result
         null   || null
@@ -92,7 +92,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Short value with default"() {
         expect:
-        Numbers.parser(value1).asShort(value2 as short) == result as short
+        Numbers.parser(value1).asShort().orElse(value2 as short) == result as short
         where:
         value1 | value2 || result
         null   | 10     || 10
@@ -103,7 +103,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Short value without default (use null)"() {
         expect:
-        Numbers.parser(value1).asShort() == result as Short
+        Numbers.parser(value1).asShort().orElse(null) == result as Short
         where:
         value1 || result
         null   || null
@@ -114,7 +114,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Integer value with default"() {
         expect:
-        Numbers.parser(value1).asInt(value2 as int) == result as int
+        Numbers.parser(value1).asInt().orElse(value2 as int) == result as int
         where:
         value1 | value2 || result
         null   | 10     || 10
@@ -125,7 +125,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get Integer value without default (use null)"() {
         expect:
-        Numbers.parser(value1).asInt() == result as Integer
+        Numbers.parser(value1).asInt().orElse(null) == result as Integer
         where:
         value1 || result
         null   || null
@@ -136,7 +136,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get sum value with default"() {
         expect:
-        Numbers.parser(value1).asSum(value2 as long) == result as long
+        Numbers.parser(value1).asSum().orElse(value2 as long) == result as long
         where:
         value1  | value2 || result
         null    | 100    || 100
@@ -149,7 +149,7 @@ class NumbersParserSpec extends Specification {
 
     def "Get sum value without default (use null)"() {
         expect:
-        Numbers.parser(value1).asSum() == result as Long
+        Numbers.parser(value1).asSum().orElse(null) == result as Long
         where:
         value1  || result
         null    || null

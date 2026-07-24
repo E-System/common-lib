@@ -108,7 +108,7 @@ public record ClientInfo(
         try {
             String localeValue = headers.get(APP_LOCALE_KEY);
             if (StringUtils.isNotBlank(localeValue)) {
-                return Locales.of(localeValue);
+                return Locales.of(localeValue).orElse(Locale.getDefault());
             }
         } catch (Exception _) {}
         return Locale.getDefault();
