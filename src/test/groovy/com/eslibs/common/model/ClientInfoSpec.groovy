@@ -99,7 +99,6 @@ class ClientInfoSpec extends Specification {
         result.appLocale() == Locale.default
     }
 
-
     def "Create with new headers all"() {
         when:
         def platform = 'iOS'
@@ -119,7 +118,7 @@ class ClientInfoSpec extends Specification {
         result.platform() == ClientInfo.Platform.ios
         result.platformVersion() == platformVersion
         result.appVersion() == appVersion
-        result.appLocale() == Locale.default
+        result.appLocale() == Locales.of("ru_RU").orElse(null)
         result.appTimezone() == ZoneId.of('GMT+03')
         result.appKey() == guid
     }
