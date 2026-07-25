@@ -9,5 +9,6 @@ build.properties
 *.iml
 *.ipr
 *.iws
+/file/
 
 
