@@ -220,20 +220,27 @@ public record VCalendar(
 
         public EventDate date(ZoneId zoneId) {
             boolean full = !DATE.equals(specs.get(VALUE));
-            String format = DATE_PATTERN_FULL;
+            String pattern = DATE_PATTERN_FULL;
             if (!full) {
-                format = DATE_PATTERN_SHORT;
+                pattern = DATE_PATTERN_SHORT;
             }
             try {
-                return new EventDate(new DateTimeFormatterBuilder()
-                                         .appendPattern(format)
-                                         .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-                                         .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
-                                         .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0).toFormatter().withZone(zoneId).parse(value, LocalDateTime::from), full);
+                return new EventDate(parse(zoneId, pattern), full);
             } catch (DateTimeParseException e) {
                 throw new RuntimeException(e);
             }
         }
+
+        private LocalDateTime parse(ZoneId zoneId, String pattern) {
+            return new DateTimeFormatterBuilder()
+                .appendPattern(pattern)
+                .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
+                .toFormatter().withZone(zoneId)
+                .parse(value, LocalDateTime::from);
+        }
+
 
         public static Token of(String line) {
             return Texts.splitBy(":", 2, true).toObject(line, v -> {
