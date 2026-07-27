@@ -16,6 +16,8 @@
 
 package com.es.lib.common;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -31,6 +33,7 @@ import java.util.StringJoiner;
  *
  * @author uchonyy
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NetUtil {
 
     private static final Collection<Pair<Long, Long>> LOCAL_SUBNET = Arrays.asList(
@@ -38,9 +41,18 @@ public class NetUtil {
         Pair.of(ip4ToLong("172.16.0.0"), ip4ToLong("172.31.255.255")),
         Pair.of(ip4ToLong("192.168.0.0"), ip4ToLong("192.168.255.255"))
     );
+    private static final Collection<String> LOCAL_ADDRESS = Arrays.asList(
+        "localhost",
+        "127.0.0.1"
+    );
 
-
-    private NetUtil() {
+    public static boolean isLocal(String host) {
+        if (StringUtils.isBlank(host)) {
+            return false;
+        }
+        host = host.trim();
+        String checkValue = !host.contains(":") ? host : host.split(":")[0];
+        return LOCAL_ADDRESS.contains(checkValue);
     }
 
     /**

@@ -185,7 +185,22 @@ class NetUtilSpec extends Specification {
         NetUtil.matches("fe80:0:0:0:0:0:c0a8:11", "fe80:0:0:0:0:0:c0a8:1/120")
         !NetUtil.matches("fe80:0:0:0:0:0:c0a8:11", "fe80:0:0:0:0:0:c0a8:1/128")
         !NetUtil.matches("fe80:0:0:0:0:0:c0a8:11", "192.168.2.0/32")
+    }
 
+    def "Is local"(){
+        expect:
+        NetUtil.isLocal('127.0.0.1')
+        NetUtil.isLocal('127.0.0.1:80')
+        NetUtil.isLocal('localhost')
+        NetUtil.isLocal('localhost:80')
+
+        !NetUtil.isLocal('')
+        !NetUtil.isLocal(null)
+
+        !NetUtil.isLocal('192.168.0.1')
+        !NetUtil.isLocal('192.168.0.1:80')
+        !NetUtil.isLocal('asd')
+        !NetUtil.isLocal('asd:80')
     }
 }
 
