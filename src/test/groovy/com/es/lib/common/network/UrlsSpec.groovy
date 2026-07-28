@@ -37,10 +37,11 @@ class UrlsSpec extends Specification {
 
     def "Is valid list"() {
         expect:
+        Urls.isValidList("")
+        Urls.isValidList(null)
         Urls.isValidList("http://127.0.0.1:80\nhttps://127.0.0.1:80\nhttps://127.0.0.1\nhttps://domain.com:1234\nhttps://domain.com")
         !Urls.isValidList("http://127.0.0.1:80\nhttps://127.0.0.1:80\nhttps://127.0.0.1\nhttps://domain.com:1234\nhttps://domain.com\n127.0.0.1:80")
         !Urls.isValidList("127.0.0.1:80")
-        !Urls.isValidList("")
         !Urls.isValidList("null")
     }
 }

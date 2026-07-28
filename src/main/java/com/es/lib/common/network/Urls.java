@@ -18,8 +18,7 @@ public class Urls {
         if (StringUtils.isBlank(url)) {
             return null;
         }
-        List<String> result = Stream.of(url.trim().split("\n"))
-            .map(String::trim)
+        List<String> result = toStream(url)
             .map(v -> v.endsWith("/") ? v : (v + "/"))
             .collect(Collectors.toList());
         if (CollectionUtil.isEmpty(result)) {
@@ -29,7 +28,7 @@ public class Urls {
     }
 
     public static boolean isValidList(String value) {
-        return Stream.of(value.trim().split("\n")).allMatch(Urls::isValid);
+        return toStream(value).allMatch(Urls::isValid);
     }
 
     public static boolean isValid(String value) {
@@ -46,5 +45,12 @@ public class Urls {
         } catch (MalformedURLException e) {
             return false;
         }
+    }
+
+    private static Stream<String> toStream(String value) {
+        if (StringUtils.isBlank(value)) {
+            return Stream.empty();
+        }
+        return Stream.of(value.trim().split("\n")).map(String::trim);
     }
 }
