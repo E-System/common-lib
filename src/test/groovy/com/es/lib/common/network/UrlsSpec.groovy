@@ -4,6 +4,23 @@ import spock.lang.Specification
 
 class UrlsSpec extends Specification {
 
+    def "Split"() {
+        expect:
+        Urls.split(null) == null
+        Urls.split("") == null
+        with(Urls.split("https://127.0.0.1:80")) {
+            it.size() == 1
+        }
+        with(Urls.split("http://127.0.0.1:80\nhttps://127.0.0.1:80    \nhttps://127.0.0.1\n    https://domain.com:1234\nhttps://domain.com")) {
+            it.size() == 5
+            it[0] == 'http://127.0.0.1:80/'
+            it[1] == 'https://127.0.0.1:80/'
+            it[2] == 'https://127.0.0.1/'
+            it[3] == 'https://domain.com:1234/'
+            it[4] == 'https://domain.com/'
+        }
+    }
+
     def "Is valid"() {
         expect:
         Urls.isValid("http://127.0.0.1:80")
