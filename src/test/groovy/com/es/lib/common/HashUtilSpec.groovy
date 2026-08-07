@@ -24,6 +24,16 @@ import spock.lang.Specification
  */
 class HashUtilSpec extends Specification {
 
+    def "fnv-1"() {
+        expect:
+        HashUtil.fnv1a32(src) == result
+        where:
+        src                                   || result
+        "Название"                            || 1794781853
+        "Название Название Название Название" || 876932951
+        "hello"                               || 1335831723
+    }
+
     def "crc16ccitt required not null array"() {
         when:
         HashUtil.crc16ccitt(null)

@@ -16,10 +16,13 @@
 
 package com.es.lib.common;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
 
@@ -28,13 +31,29 @@ import java.util.Base64;
  * @since 10.04.15
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class HashUtil {
 
     private static final String ALGORITHM_MD5 = "MD5";
     private static final String ALGORITHM_SHA256 = "SHA256";
     private static final String HEXES = "0123456789abcdef";
 
-    private HashUtil() {
+    private static final int FNV_OFFSET_BASIS_32 = 0x811c9dc5;
+    private static final int FNV_PRIME_32 = 0x01000193;
+
+    public static int fnv1a32(final byte[] value) {
+        int h = FNV_OFFSET_BASIS_32;
+
+        for (byte b : value) {
+            h ^= (b & 0xFF);
+            h *= FNV_PRIME_32;
+        }
+
+        return h;
+    }
+
+    public static int fnv1a32(String value) {
+        return fnv1a32(value.getBytes(StandardCharsets.UTF_8));
     }
 
     public static String hash(byte[] value, String algorithm) {
@@ -143,7 +162,7 @@ public final class HashUtil {
         return crc;
     }
 
-    public static int crc16ccitt(byte[] data) { return crc16ccitt(data, 0, 0); }
+    public static int crc16ccitt(byte[] data) {return crc16ccitt(data, 0, 0);}
 
     public static int crc16ccitt(byte[] data, int skipIndex, int skipLen) {
         int crc = 0xFFFF;          // init
@@ -163,7 +182,7 @@ public final class HashUtil {
         return crc;
     }
 
-    public static int xor(byte[] data) { return xor(data, 0, 0); }
+    public static int xor(byte[] data) {return xor(data, 0, 0);}
 
     public static int xor(byte[] data, int skipIndex, int skipLen) {
         return xor(data, skipIndex, skipLen, data.length);
