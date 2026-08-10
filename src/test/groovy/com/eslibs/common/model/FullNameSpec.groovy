@@ -48,7 +48,7 @@ class FullNameSpec extends Specification {
         def entity = new FullName('1', '2', '3')
         def result = entity.toArray()
         then:
-        result.size() == 3
+        result.length == 3
         result[0] == '1'
         result[1] == '2'
         result[2] == '3'
