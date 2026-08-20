@@ -16,14 +16,15 @@
 
 package com.es.lib.common.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 02.05.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValidationUtil {
-
-    private ValidationUtil() {
-    }
 
     /**
      * Получить дробное число из объекта(toString)
