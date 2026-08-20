@@ -6,8 +6,8 @@ class UrlsSpec extends Specification {
 
     def "Split"() {
         expect:
-        Urls.split(null) == null
-        Urls.split("") == null
+        Urls.split(null) == []
+        Urls.split("") == []
         with(Urls.split("https://127.0.0.1:80")) {
             it.size() == 1
         }

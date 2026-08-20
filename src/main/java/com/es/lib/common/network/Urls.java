@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -14,12 +15,19 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Urls {
 
-    public static List<String> split(String url) {
+    public static String withSlash(String url) {
         if (StringUtils.isBlank(url)) {
             return null;
         }
+        return url.endsWith("/") ? url : url + "/";
+    }
+
+    public static List<String> split(String url) {
+        if (StringUtils.isBlank(url)) {
+            return new ArrayList<>();
+        }
         List<String> result = toStream(url)
-            .map(v -> v.endsWith("/") ? v : (v + "/"))
+            .map(Urls::withSlash)
             .collect(Collectors.toList());
         if (CollectionUtil.isEmpty(result)) {
             return null;
