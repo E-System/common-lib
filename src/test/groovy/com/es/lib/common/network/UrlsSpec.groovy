@@ -19,6 +19,14 @@ class UrlsSpec extends Specification {
             it[3] == 'https://domain.com:1234/'
             it[4] == 'https://domain.com/'
         }
+        with(Urls.split("http://127.0.0.1:80\nhttps://127.0.0.1:80    \nhttps://127.0.0.1\n    https://domain.com:1234\nhttps://domain.com", "core-api")) {
+            it.size() == 5
+            it[0] == 'http://127.0.0.1:80/core-api/'
+            it[1] == 'https://127.0.0.1:80/core-api/'
+            it[2] == 'https://127.0.0.1/core-api/'
+            it[3] == 'https://domain.com:1234/core-api/'
+            it[4] == 'https://domain.com/core-api/'
+        }
     }
 
     def "Is valid"() {

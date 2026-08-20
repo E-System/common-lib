@@ -23,11 +23,16 @@ public class Urls {
     }
 
     public static List<String> split(String url) {
+        return split(url, null);
+    }
+
+    public static List<String> split(String url, String path) {
         if (StringUtils.isBlank(url)) {
             return new ArrayList<>();
         }
         List<String> result = toStream(url)
             .map(Urls::withSlash)
+            .map(v -> path != null ? withSlash(v + path) : v)
             .collect(Collectors.toList());
         if (CollectionUtil.isEmpty(result)) {
             return null;
