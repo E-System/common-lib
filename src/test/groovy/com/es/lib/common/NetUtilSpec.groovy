@@ -194,6 +194,17 @@ class NetUtilSpec extends Specification {
         NetUtil.isLocal('localhost')
         NetUtil.isLocal('localhost:80')
 
+        NetUtil.isLocal('http://127.0.0.1')
+        NetUtil.isLocal('http://127.0.0.1:80')
+        NetUtil.isLocal('http://localhost')
+        NetUtil.isLocal('http://localhost:80')
+
+
+        NetUtil.isLocal('http://127.0.0.1/asd')
+        NetUtil.isLocal('http://127.0.0.1:80/core')
+        NetUtil.isLocal('http://localhost/1111')
+        NetUtil.isLocal('http://localhost:80/1234')
+
         !NetUtil.isLocal('')
         !NetUtil.isLocal(null)
 

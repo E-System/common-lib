@@ -50,9 +50,7 @@ public class NetUtil {
         if (StringUtils.isBlank(host)) {
             return false;
         }
-        host = host.trim();
-        String checkValue = !host.contains(":") ? host : host.split(":")[0];
-        return LOCAL_ADDRESS.contains(checkValue);
+        return LOCAL_ADDRESS.stream().anyMatch(host::contains);
     }
 
     /**
