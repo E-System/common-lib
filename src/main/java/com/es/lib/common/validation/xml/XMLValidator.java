@@ -24,6 +24,18 @@ public class XMLValidator {
         validator = schema.newValidator();
     }
 
+    public boolean validate(String xml) {
+        return validate(xml.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public boolean validate(byte[] xml) {
+        try (InputStream is = new ByteArrayInputStream(xml)) {
+            return validate(is);
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     public boolean validate(InputStream xml) {
         try {
             validator.validate(new StreamSource(xml));
