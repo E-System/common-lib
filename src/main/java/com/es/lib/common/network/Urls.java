@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +16,48 @@ import java.util.stream.Stream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Urls {
+
+
+    public static String replaceHost(String url, String host) {
+        if (StringUtils.isEmpty(url)) {
+            return null;
+        }
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            try {
+                URI source = new URI(url);
+                return new URI(
+                    source.getScheme(),
+                    source.getUserInfo(),
+                    host,
+                    source.getPort(),
+                    source.getPath(),
+                    source.getQuery(),
+                    source.getFragment()
+                ).toString();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        String[] parts = url.split(":");
+        if (parts.length == 1) {
+            return host;
+        }
+        return host + ":" + parts[1];
+    }
+
+    public static String host(String url) {
+        if (StringUtils.isEmpty(url)) {
+            return null;
+        }
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            try {
+                return new URI(url).getHost();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return url.split(":")[0];
+    }
 
     public static String merge(List<String> items, String url) {
         List<String> result = new ArrayList<>(items != null ? items : Collections.emptyList());

@@ -4,6 +4,27 @@ import spock.lang.Specification
 
 class UrlsSpec extends Specification {
 
+    def "Replace host"(){
+        expect:
+        Urls.replaceHost(null, 'local.host') == null
+        Urls.replaceHost('','local.host') == null
+        Urls.replaceHost('https://127.0.0.1:80','local.host') == 'https://local.host:80'
+        Urls.replaceHost('127.0.0.1','192.168.0.1') == '192.168.0.1'
+        Urls.replaceHost('127.0.0.1:80','192.168.0.1') == '192.168.0.1:80'
+        Urls.replaceHost('https://domain.com','local.host') == 'https://local.host'
+        Urls.replaceHost('https://domain.com:443','local.host') == 'https://local.host:443'
+    }
+
+    def "Host"(){
+        expect:
+        Urls.host(null) == null
+        Urls.host('') == null
+        Urls.host('127.0.0.1') == '127.0.0.1'
+        Urls.host('127.0.0.1:80') == '127.0.0.1'
+        Urls.host('https://127.0.0.1:80') == '127.0.0.1'
+        Urls.host('https://domain.com') == 'domain.com'
+        Urls.host('https://domain.com:443') == 'domain.com'
+    }
     def "AsString"() {
         expect:
         Urls.asString(Urls.split(null)) == null
