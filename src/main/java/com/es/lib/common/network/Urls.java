@@ -8,12 +8,30 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Urls {
+
+    public static String merge(List<String> items, String url) {
+        List<String> result = new ArrayList<>(items != null ? items : Collections.emptyList());
+        List<String> newUrls = split(url);
+        if (newUrls != null) {
+            result.addAll(0, newUrls);
+        }
+        return asString(result);
+    }
+
+    public static String asString(List<String> items) {
+        if (CollectionUtil.isEmpty(items)) {
+            return null;
+        }
+        return String.join("\n", items);
+    }
+
 
     public static String withSlash(String url) {
         if (StringUtils.isBlank(url)) {
@@ -31,8 +49,7 @@ public class Urls {
             return new ArrayList<>();
         }
         List<String> result = toStream(url)
-            .map(Urls::withSlash)
-            .map(v -> path != null ? withSlash(v + path) : v)
+            .map(v -> v + StringUtils.defaultString(path, ""))
             .collect(Collectors.toList());
         if (CollectionUtil.isEmpty(result)) {
             return null;
