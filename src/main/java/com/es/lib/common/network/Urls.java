@@ -22,7 +22,7 @@ public class Urls {
         if (StringUtils.isEmpty(url)) {
             return null;
         }
-        if (url.startsWith("http://") || url.startsWith("https://")) {
+        if (isSchemaAvailable(url)) {
             try {
                 URI source = new URI(url);
                 return new URI(
@@ -49,7 +49,7 @@ public class Urls {
         if (StringUtils.isEmpty(url)) {
             return null;
         }
-        if (url.startsWith("http://") || url.startsWith("https://")) {
+        if (isSchemaAvailable(url)) {
             try {
                 return new URI(url).getHost();
             } catch (Exception e) {
@@ -57,6 +57,10 @@ public class Urls {
             }
         }
         return url.split(":")[0];
+    }
+
+    private static boolean isSchemaAvailable(String url) {
+        return url.startsWith("http://") || url.startsWith("https://");
     }
 
     public static String merge(List<String> items, String url) {
