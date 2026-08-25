@@ -41,6 +41,27 @@ public final class HashUtil {
     private static final int FNV_OFFSET_BASIS_32 = 0x811c9dc5;
     private static final int FNV_PRIME_32 = 0x01000193;
 
+    private static final long FNV_OFFSET_BASIS_64 = 0xCBF29CE484222325L; // 14695981039346656037
+    private static final long FNV_PRIME_64        = 0x100000001B3L;       // 1099511628211
+
+    public static long fnv1a64(byte[] data) {
+        long hash = FNV_OFFSET_BASIS_64;
+        for (byte b : data) {
+            hash ^= (b & 0xFF);
+            hash *= FNV_PRIME_64;
+        }
+        return hash;
+    }
+
+    /**
+     * Хеширование строки в кодировке UTF-8.
+     * Примечание: создает новый массив byte[].
+     * Для hot-путей лучше использовать версию с ByteBuffer или CharSequence.
+     */
+    public static long fnv1a64(String str) {
+        return fnv1a64(str.getBytes(StandardCharsets.UTF_8));
+    }
+
     public static int fnv1a32(final byte[] value) {
         int h = FNV_OFFSET_BASIS_32;
 
