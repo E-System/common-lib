@@ -44,7 +44,7 @@ public final class HashUtil {
     private static final long FNV_OFFSET_BASIS_64 = 0xCBF29CE484222325L; // 14695981039346656037
     private static final long FNV_PRIME_64        = 0x100000001B3L;       // 1099511628211
 
-    public static long fnv1a64(byte[] data) {
+    public static long fnv1a64(final byte[] data) {
         long hash = FNV_OFFSET_BASIS_64;
         for (byte b : data) {
             hash ^= (b & 0xFF);
