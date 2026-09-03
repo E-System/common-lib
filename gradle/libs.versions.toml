@@ -1,5 +1,5 @@
 [versions]
-jackson = "3.2.1"
+jackson = "3.2.2"
 
 [libraries]
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.20.0" }
@@ -9,10 +9,10 @@ jackson-databind = { group = "tools.jackson.core", name = "jackson-databind", ve
 angus-mail = { group = "org.eclipse.angus", name = "angus-mail", version = "2.1.0-M1" }
 bcrypt = { group = "de.svenkubiak", name = "jBCrypt", version = "0.4.3" }
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.46" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.48" }
 spock = { group = "org.spockframework", name = "spock-core", version = "2.4-groovy-5.0" }
-logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.6.1" }
+logback = { group = "ch.qos.logback", name = "logback-classic", version = "1.6.3" }
 
 [plugins]
-versions = { id = "com.github.ben-manes.versions", version = "0.54.0" }
-sonarqube = { id = "org.sonarqube", version = "7.3.1.8318" }
+versions = { id = "com.github.ben-manes.versions", version = "0.61.0" }
+sonarqube = { id = "org.sonarqube", version = "7.5.0.8588" }
