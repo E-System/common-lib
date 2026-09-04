@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.text.NumberFormat;
 
 @Slf4j
 @Getter
@@ -31,5 +33,20 @@ public class DiscInfo {
             log.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public static DiscInfo create(String total, String free) {
+        if (StringUtils.isNotBlank(total) && StringUtils.isNotBlank(free)) {
+            return new DiscInfo(Long.parseLong(total), Long.parseLong(free));
+        }
+        return null;
+    }
+
+    public String asString() {
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setMaximumFractionDigits(2);
+        double totalGb = ((double) total / (1024 * 1024 * 1024));
+        double freeGb = ((double) free / (1024 * 1024 * 1024));
+        return numberFormat.format(freeGb) + "/" + numberFormat.format(totalGb);
     }
 }
