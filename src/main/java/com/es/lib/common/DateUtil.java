@@ -18,6 +18,7 @@ package com.es.lib.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,7 +39,8 @@ import java.util.TimeZone;
 public final class DateUtil {
 
     public static final String CALENDAR_DATE_PATTERN = "dd.MM.yyyy";
-    public static final String CALENDAR_DATE_PATTERN_WITH_TIME = "dd.MM.yyyy HH:mm:ss";
+    public static final String TIME_PATTERN = "HH:mm:ss";
+    public static final String CALENDAR_DATE_PATTERN_WITH_TIME = CALENDAR_DATE_PATTERN + " " + TIME_PATTERN;
 
     public static Date nextDay(Date date, TimeZone timeZone) {
         return Date.from(
@@ -252,6 +254,21 @@ public final class DateUtil {
         return createDateFormat(format, zoneId).parse(date);
     }
 
+    public static String reformat(String value, String sourceFormat, String targetFormat) throws ParseException {
+        return format(parse(value, sourceFormat), targetFormat);
+    }
+
+    public static String formatDateSameDay(Date date, Date now) {
+        return formatDateSameDay(date, now, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME, TIME_PATTERN);
+    }
+
+    public static String formatDateSameDay(Date date, Date now, String withDatePattern, String withoutDatePattern) {
+        if (date == null) {
+            return "";
+        }
+        boolean sameDay = DateUtils.isSameDay(now, date);
+        return DateUtil.format(date, sameDay ? withoutDatePattern : withDatePattern);
+    }
 
     private static SimpleDateFormat createDateFormat(String format) {
         return new SimpleDateFormat(format);
