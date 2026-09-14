@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CacheProvider {
@@ -24,6 +25,14 @@ public class CacheProvider {
             key,
             v -> createData(supplier.get(), ttl)
         ).getData();
+    }
+
+    public <T, R> R computeIfAbsent(String key, Supplier<T> supplier, Function<T, R> wrapper) {
+        return computeIfAbsent(key, null, supplier, wrapper);
+    }
+
+    public <T, R> R computeIfAbsent(String key, Long ttl, Supplier<T> supplier, Function<T, R> wrapper) {
+        return wrapper.apply(computeIfAbsent(key, ttl, supplier));
     }
 
     public <T> T put(String key, T data) {
