@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CacheProvider {
@@ -21,18 +20,11 @@ public class CacheProvider {
     }
 
     public <T> T computeIfAbsent(String key, Long ttl, Supplier<T> supplier) {
-        return (T) items.computeIfAbsent(
+        Item<?> wrapper = items.get(key);
+        return (T) (wrapper != null ? wrapper : items.computeIfAbsent(
             key,
-            v -> createData(supplier.get(), ttl)
-        ).getData();
-    }
-
-    public <T, R> R computeIfAbsent(String key, Supplier<T> supplier, Function<T, R> wrapper) {
-        return computeIfAbsent(key, null, supplier, wrapper);
-    }
-
-    public <T, R> R computeIfAbsent(String key, Long ttl, Supplier<T> supplier, Function<T, R> wrapper) {
-        return wrapper.apply(computeIfAbsent(key, ttl, supplier));
+            v -> Item.create(supplier.get(), ttl)
+        )).getData();
     }
 
     public <T> T put(String key, T data) {
@@ -40,18 +32,14 @@ public class CacheProvider {
     }
 
     public <T> T put(String key, T data, Long ttl) {
-        Item<T> cacheData = createData(data, ttl);
-        items.putIfAbsent(key, cacheData);
+        Item<T> wrapper = Item.create(data, ttl);
+        items.putIfAbsent(key, wrapper);
         return data;
     }
 
     public <T> T get(String key) {
         Item<?> data = items.get(key);
         return data != null ? (T) data.getData() : null;
-    }
-
-    private <T> Item<T> createData(T data, Long ttl) {
-        return new Item<>(new Date().getTime() + (ttl != null ? ttl : DEFAULT_TTL), data);
     }
 
     public void clean() {
@@ -70,8 +58,12 @@ public class CacheProvider {
     @RequiredArgsConstructor
     public static class Item<T> {
 
-        private final Long ttl;
         private final T data;
+        private final Long ttl;
+
+        public static <T> Item<T> create(T data, Long ttl) {
+            return new Item<>(data, new Date().getTime() + (ttl != null ? ttl : DEFAULT_TTL));
+        }
     }
 }
 
