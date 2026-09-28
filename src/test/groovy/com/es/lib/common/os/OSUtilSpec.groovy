@@ -24,6 +24,20 @@ import spock.lang.Specification
  */
 class OSUtilSpec extends Specification {
 
+    def "Java exec"(){
+        when:
+        def path = OSUtil.javaExec
+        then:
+        println(path)
+        with(OSUtil.getOS()){
+            if (WINDOWS == it){
+                path.endsWith('bin/java.exe')
+            }else{
+                path.endsWith('bin/java')
+            }
+        }
+    }
+
     def "Success get OS type"() {
         expect:
         OSUtil.getOS('win') == OSUtil.OS.WINDOWS

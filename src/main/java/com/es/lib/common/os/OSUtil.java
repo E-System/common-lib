@@ -21,6 +21,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -30,6 +31,7 @@ import java.nio.file.Paths;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OSUtil {
 
+    private static final String JAVA_HOME = System.getProperty("java.home");
     private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
     private static final String OS_VERSION = System.getProperty("os.version");
 
@@ -38,6 +40,19 @@ public final class OSUtil {
         LINUX,
         MACOS,
         SOLARIS
+    }
+
+    public static Path getJavaExec(){
+        OS os = getOS();
+        switch (os) {
+            case WINDOWS:
+                return Paths.get(JAVA_HOME, "bin", "java.exe");
+            case LINUX:
+            case MACOS:
+            case SOLARIS:
+                return Paths.get(JAVA_HOME, "bin", "java");
+        }
+        return null;
     }
 
     /**
