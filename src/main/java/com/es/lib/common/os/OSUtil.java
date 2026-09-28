@@ -42,15 +42,19 @@ public final class OSUtil {
         SOLARIS
     }
 
-    public static Path getJavaExec(){
+    public static Path getJavaHome() {
+        return Paths.get(JAVA_HOME);
+    }
+
+    public static Path getJavaExec() {
         OS os = getOS();
         switch (os) {
             case WINDOWS:
-                return Paths.get(JAVA_HOME, "bin", "java.exe");
+                return getJavaHome().resolve(Paths.get("bin", "java.exe"));
             case LINUX:
             case MACOS:
             case SOLARIS:
-                return Paths.get(JAVA_HOME, "bin", "java");
+                return getJavaHome().resolve(Paths.get("bin", "java"));
         }
         return null;
     }
