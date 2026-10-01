@@ -47,10 +47,14 @@ public final class OSUtil {
     }
 
     public static Path getJavaExec() {
+        return getJavaExec(true);
+    }
+
+    public static Path getJavaExec(boolean console) {
         OS os = getOS();
         switch (os) {
             case WINDOWS:
-                return getJavaHome().resolve(Paths.get("bin", "java.exe"));
+                return getJavaHome().resolve(Paths.get("bin", console ? "java.exe" : "javaw.exe"));
             case LINUX:
             case MACOS:
             case SOLARIS:

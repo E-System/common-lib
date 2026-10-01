@@ -38,6 +38,20 @@ class OSUtilSpec extends Specification {
         }
     }
 
+    def "Java exec (not console)"(){
+        when:
+        def path = OSUtil.getJavaExec(false)
+        then:
+        println(path)
+        with(OSUtil.getOS()){
+            if (WINDOWS == it){
+                path.endsWith('bin/javaw.exe')
+            }else{
+                path.endsWith('bin/java')
+            }
+        }
+    }
+
     def "Success get OS type"() {
         expect:
         OSUtil.getOS('win') == OSUtil.OS.WINDOWS
