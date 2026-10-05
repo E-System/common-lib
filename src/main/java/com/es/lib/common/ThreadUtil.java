@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadUtil {
 
+    public static final int DEFAULT_MAX_POOL_SIZE = 200;
+
     public static void sleep(long timeout) {
         try {
             Thread.sleep(timeout);
@@ -36,10 +38,11 @@ public class ThreadUtil {
     }
 
     public static ExecutorService bgService() {
-        return bgService(
-            200,
-            Runtime.getRuntime().availableProcessors() * 2
-        );
+        return bgService(DEFAULT_MAX_POOL_SIZE);
+    }
+
+    public static ExecutorService bgService(int maxPoolSize) {
+        return bgService(maxPoolSize, Runtime.getRuntime().availableProcessors() * 2);
     }
 
     public static ExecutorService bgService(int maxPoolSize, int corePoolSize) {
