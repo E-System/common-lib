@@ -16,6 +16,11 @@
 
 package com.es.lib.common;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Vitaliy Savchenko - savchenko.v@ext-system.com
  * @since 12.06.15
@@ -30,4 +35,20 @@ public class ThreadUtil {
         }
     }
 
+    public static ExecutorService bgService() {
+        return bgService(
+            200,
+            Runtime.getRuntime().availableProcessors() * 2
+        );
+    }
+
+    public static ExecutorService bgService(int maxPoolSize, int corePoolSize) {
+        return new ThreadPoolExecutor(
+            corePoolSize,
+            maxPoolSize,
+            60L, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>(1000),
+            new ThreadPoolExecutor.CallerRunsPolicy()
+        );
+    }
 }
