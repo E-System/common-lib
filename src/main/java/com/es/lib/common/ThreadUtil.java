@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 public class ThreadUtil {
 
     public static final int DEFAULT_MAX_POOL_SIZE = 200;
+    public static final int DEFAULT_TERMINATE_TIMEOUT_1 = 15;
+    public static final int DEFAULT_TERMINATE_TIMEOUT_2 = 5;
 
     public static void sleep(long timeout) {
         try {
@@ -58,7 +60,7 @@ public class ThreadUtil {
     }
 
     public static void shutdownAndAwaitTermination(Logger log, ExecutorService executorService) {
-        shutdownAndAwaitTermination(log, executorService, 15, 5);
+        shutdownAndAwaitTermination(log, executorService, DEFAULT_TERMINATE_TIMEOUT_1, DEFAULT_TERMINATE_TIMEOUT_2);
     }
 
     public static void shutdownAndAwaitTermination(Logger log, ExecutorService executorService, long firstTimeout, long secondTimeout) {
