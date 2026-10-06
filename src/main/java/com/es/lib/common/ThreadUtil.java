@@ -16,6 +16,8 @@
 
 package com.es.lib.common;
 
+import org.slf4j.Logger;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -53,5 +55,24 @@ public class ThreadUtil {
             new LinkedBlockingQueue<>(1000),
             new ThreadPoolExecutor.CallerRunsPolicy()
         );
+    }
+
+    public static void shutdownAndAwaitTermination(Logger log, ExecutorService executorService) {
+        shutdownAndAwaitTermination(log, executorService, 15, 5);
+    }
+
+    public static void shutdownAndAwaitTermination(Logger log, ExecutorService executorService, long firstTimeout, long secondTimeout) {
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(firstTimeout, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+                if (!executorService.awaitTermination(secondTimeout, TimeUnit.SECONDS)) {
+                    log.error("ExecutorService не завершился принудительно!");
+                }
+            }
+        } catch (InterruptedException ie) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 }
