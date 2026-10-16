@@ -57,11 +57,11 @@ public class Executor {
         }
     }
 
-    private void shutdownAndAwaitTermination(ExecutorService executorService) {
+    public void shutdownAndAwaitTermination(ExecutorService executorService) {
         shutdownAndAwaitTermination(executorService, terminateTimeout, terminateTimeoutAfterShutdown);
     }
 
-    private void shutdownAndAwaitTermination(ExecutorService executorService, long firstTimeout, long secondTimeout) {
+    public void shutdownAndAwaitTermination(ExecutorService executorService, long firstTimeout, long secondTimeout) {
         executorService.shutdown();
         try {
             if (!executorService.awaitTermination(firstTimeout, TimeUnit.SECONDS)) {
