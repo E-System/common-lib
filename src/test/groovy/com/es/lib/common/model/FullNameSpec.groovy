@@ -1,5 +1,6 @@
 package com.es.lib.common.model
 
+import com.es.lib.common.JsonUtil
 import spock.lang.Specification
 
 /**
@@ -135,5 +136,27 @@ class FullNameSpec extends Specification {
         value                      | result
         null                       | ""
         "Рахметов Иприс Алюб Углы" | "Иприс Алюб Углы"
+    }
+
+    def "Serialize and deserialize only main"(){
+        when:
+        def item = FullName.of('SURNAME', 'NAME', 'PATRON')
+        def json = JsonUtil.toJson(item)
+        def item2 = JsonUtil.fromJson(json, FullName.class)
+        println(json)
+        then:
+        item == item2
+        item.others == item2.others
+    }
+
+    def "Serialize and deserialize full"(){
+        when:
+        def item = FullName.of('SURNAME NAME PATRON ASD QWE')
+        def json = JsonUtil.toJson(item)
+        def item2 = JsonUtil.fromJson(json, FullName.class)
+        println(json)
+        then:
+        item == item2
+        item.others == item2.others
     }
 }
