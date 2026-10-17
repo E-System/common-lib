@@ -19,6 +19,8 @@ package com.es.lib.common;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -27,12 +29,27 @@ import java.io.Reader;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JsonUtil {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    private JsonUtil() {}
+    public static <T> T convert(Object json, Class<T> classOfT) {
+        try {
+            return OBJECT_MAPPER.convertValue(json, classOfT);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T convert(Object json, TypeReference<T> typeReference) {
+        try {
+            return OBJECT_MAPPER.convertValue(json, typeReference);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static <T> T fromJson(String json, Class<T> classOfT) {
         try {
@@ -42,17 +59,17 @@ public final class JsonUtil {
         }
     }
 
-    public static <T> T fromJson(Reader reader, Class<T> classOfT) {
+    public static <T> T fromJson(String json, TypeReference<T> typeReference) {
         try {
-            return OBJECT_MAPPER.readValue(reader, classOfT);
+            return OBJECT_MAPPER.readValue(json, typeReference);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static <T> T fromJson(String json, TypeReference<T> typeReference) {
+    public static <T> T fromJson(Reader reader, Class<T> classOfT) {
         try {
-            return OBJECT_MAPPER.readValue(json, typeReference);
+            return OBJECT_MAPPER.readValue(reader, classOfT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
