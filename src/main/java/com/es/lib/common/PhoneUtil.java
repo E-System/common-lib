@@ -17,6 +17,9 @@
 package com.es.lib.common;
 
 import com.es.lib.common.collection.CollectionUtil;
+import com.es.lib.common.text.TextUtil;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -31,12 +34,29 @@ import java.util.stream.Collectors;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 11.08.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PhoneUtil {
 
     private static final Function<String, Map.Entry<String, Boolean>> typeMapper = v -> Pair.of(v, isMobile(v));
     private static final Function<String, Map.Entry<String, Boolean>> cleanTypeMapper = v -> Pair.of(clean(v), isMobile(v));
 
-    private PhoneUtil() {
+    public static String cleanToRus(String value) {
+        if (value == null) {
+            return null;
+        }
+        value = clean(value);
+        if (value.length() == 10) {
+            return "+7" + value;
+        }
+        if (value.length() == 11) {
+            if (value.startsWith("7")) {
+                return "+" + value;
+            }
+            if (value.startsWith("8")) {
+                return "+7" + value.substring(1);
+            }
+        }
+        return value;
     }
 
     /**
@@ -63,7 +83,7 @@ public final class PhoneUtil {
      */
     public static boolean isMobile(String value) {
         value = clean(value);
-        return value != null && value.matches("^(7|8)?9\\d{7,}$");
+        return value != null && value.matches("^([78])?9\\d{7,}$");
     }
 
     /**
@@ -74,7 +94,7 @@ public final class PhoneUtil {
      * @return Phone pairs
      */
     public static Collection<Map.Entry<String, Boolean>> split(String value, boolean clean) {
-        final Collection<String> phones = StringSplitter.process(value, new StringSplitter.Splitter("(,|;)"));
+        final Collection<String> phones = TextUtil.splitBy("(,|;)", true).toList(value);
         return phones.stream().map(clean ? cleanTypeMapper : typeMapper).collect(Collectors.toList());
     }
 

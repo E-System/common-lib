@@ -25,6 +25,21 @@ import spock.lang.Specification
  */
 class PhoneUtilSpec extends Specification {
 
+    def "Clean to rus"() {
+        expect:
+        PhoneUtil.cleanToRus(value) == result
+        where:
+        value                     || result
+        null                      || null
+        ""                        || ""
+        "      "                  || ""
+        "9059817916"              || "+79059817916"
+        "79059817916"             || "+79059817916"
+        "79   059   81  79  1  6" || "+79059817916"
+        "89059817916"             || "+79059817916"
+        "+7 (905) 981 - 79 - 16"  || "+79059817916"
+    }
+
     def "Clean number"() {
         expect:
         PhoneUtil.clean(value) == result
@@ -37,7 +52,7 @@ class PhoneUtilSpec extends Specification {
         "+7 905 981 79 16" || "79059817916"
     }
 
-    def "Checnk on mobile phone"() {
+    def "Check on mobile phone"() {
         expect:
         PhoneUtil.isMobile(value) == result
         where:
