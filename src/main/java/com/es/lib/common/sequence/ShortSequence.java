@@ -24,11 +24,11 @@ public class ShortSequence extends NumberSequence<Short> {
 
 	@Override
 	public Short next() {
-		return --value;
+		return value = (short) (value - 1);
 	}
 
 	@Override
 	public void clear() {
-		value = 0;
+		value = (short) 0;
 	}
 }

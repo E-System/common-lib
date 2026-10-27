@@ -73,5 +73,41 @@ class HashUtilSpec extends Specification {
         expect:
         HashUtil.hmacSha256("Test message", "secret_key", true) == "001a5eb3b757f79d63cee98fb66b4d15ea38312f7270bfac3753b552729425e6"
     }
+
+    def "fnv1a64"() {
+        expect:
+        HashUtil.fnv1a64("hello") != 0L
+        HashUtil.fnv1a64("hello".bytes) == HashUtil.fnv1a64("hello")
+    }
+
+    def "md5 and isCorrect"() {
+        given:
+        String str = "Hello MD5"
+        String md5Hash = HashUtil.md5(str)
+
+        expect:
+        md5Hash != null
+        md5Hash == HashUtil.md5(str.bytes)
+        HashUtil.isCorrect(str, md5Hash)
+        !HashUtil.isCorrect("Different text", md5Hash)
+    }
+
+    def "crc16 and xor"() {
+        given:
+        byte[] data = "Test XOR and CRC".bytes
+
+        expect:
+        HashUtil.crc16(data) != 0
+        HashUtil.xor(data) != 0
+        HashUtil.xor(data, 0, 2) != 0
+        HashUtil.xor(data, 0, 2, data.length) != 0
+    }
+
+    def "Null handling in HashUtil"() {
+        expect:
+        HashUtil.hash((byte[]) null, "MD5") == null
+        HashUtil.hash((String) null, "MD5") == null
+        HashUtil.getHex(null) == null
+    }
 }
 

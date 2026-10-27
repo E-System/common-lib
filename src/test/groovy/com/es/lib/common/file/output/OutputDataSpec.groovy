@@ -13,18 +13,42 @@ class OutputDataSpec extends Specification {
     static STREAM_DATA = new ByteArrayInputStream(BYTE_DATA)
 
     def "Create with file"() {
+        given:
+        def tempFile = java.nio.file.Files.createTempFile("outdata", ".txt")
+        java.nio.file.Files.write(tempFile, BYTE_DATA)
+
         when:
-        def data = (FileData) OutputData.create(FILE_NAME, RELATIVE_PATH, Paths.get(RELATIVE_PATH))
+        def data = (FileData) OutputData.create(FILE_NAME, tempFile.parent.toString(), tempFile.fileName)
         then:
         !data.stream
         !data.bytes
-        data.relativePath == RELATIVE_PATH
+        data.isFile()
+        data.relativePath == tempFile.parent.toString()
         data.fileName == FILE_NAME
-        data.content == Paths.get(RELATIVE_PATH)
+        data.content == tempFile.fileName
         with(data.info()){
             it.fileName == FILE_NAME
             it.contentType == 'text/plain'
         }
+        data.asBytes() == BYTE_DATA
+
+        cleanup:
+        java.nio.file.Files.deleteIfExists(tempFile)
+    }
+
+    def "Create with file without relative path"() {
+        given:
+        def tempFile = java.nio.file.Files.createTempFile("outdata2", ".txt")
+        java.nio.file.Files.write(tempFile, BYTE_DATA)
+
+        when:
+        def data = (FileData) OutputData.create(FILE_NAME, null, tempFile)
+        then:
+        data.isFile()
+        data.asBytes() == BYTE_DATA
+
+        cleanup:
+        java.nio.file.Files.deleteIfExists(tempFile)
     }
 
     def "Create with byte array"() {
@@ -33,6 +57,7 @@ class OutputDataSpec extends Specification {
         then:
         !data.stream
         data.bytes
+        !data.isFile()
         data.contentType == CONTENT_TYPE
         data.fileName == FILE_NAME
         data.content == BYTE_DATA
@@ -40,20 +65,38 @@ class OutputDataSpec extends Specification {
             it.fileName == FILE_NAME
             it.contentType == 'text/plain'
         }
+        data.asBytes() == BYTE_DATA
     }
 
     def "Create with input stream"() {
         when:
-        def data = (StreamData) OutputData.create(FILE_NAME, CONTENT_TYPE, STREAM_DATA)
+        def data = (StreamData) OutputData.create(FILE_NAME, CONTENT_TYPE, new ByteArrayInputStream(BYTE_DATA))
         then:
         data.stream
         !data.bytes
+        !data.isFile()
         data.contentType == CONTENT_TYPE
         data.fileName == FILE_NAME
-        data.content == STREAM_DATA
+        data.content != null
         with(data.info()){
             it.fileName == FILE_NAME
             it.contentType == 'text/plain'
         }
+        data.asBytes() == BYTE_DATA
+    }
+
+    def "Custom OutputData throws on info and asBytes"() {
+        given:
+        def custom = new OutputData("custom.txt") {}
+
+        when:
+        custom.info()
+        then:
+        thrown(IllegalArgumentException)
+
+        when:
+        custom.asBytes()
+        then:
+        thrown(IllegalArgumentException)
     }
 }

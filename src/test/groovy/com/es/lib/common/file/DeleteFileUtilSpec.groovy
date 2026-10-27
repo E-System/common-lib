@@ -63,4 +63,36 @@ class DeleteFileUtilSpec extends Specification {
         expect:
         DeleteFileUtil.exceptional(file)
     }
+
+    def "Recursively delete directory tree"() {
+        given:
+        def tempDir = java.nio.file.Files.createTempDirectory("del_rec_test")
+        def subDir = tempDir.resolve("sub")
+        java.nio.file.Files.createDirectories(subDir)
+        def file1 = tempDir.resolve("f1.txt")
+        def file2 = subDir.resolve("f2.txt")
+        java.nio.file.Files.write(file1, "1".bytes)
+        java.nio.file.Files.write(file2, "2".bytes)
+
+        when:
+        DeleteFileUtil.recursively(tempDir)
+
+        then:
+        !java.nio.file.Files.exists(tempDir)
+    }
+
+    def "DeleteFileVisitor deletes files and directories"() {
+        given:
+        def tempDir = java.nio.file.Files.createTempDirectory("visitor_test")
+        def subDir = tempDir.resolve("sub")
+        java.nio.file.Files.createDirectories(subDir)
+        def file = subDir.resolve("f.txt")
+        java.nio.file.Files.write(file, "content".bytes)
+
+        when:
+        java.nio.file.Files.walkFileTree(tempDir, new DeleteFileVisitor())
+
+        then:
+        !java.nio.file.Files.exists(tempDir)
+    }
 }

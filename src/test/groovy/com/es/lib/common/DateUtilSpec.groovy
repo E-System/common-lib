@@ -220,4 +220,37 @@ class DateUtilSpec extends Specification {
         then:
         DateUtil.format(date, DateUtil.CALENDAR_DATE_PATTERN_WITH_TIME) == "27.09.1985 00:00:00"
     }
+
+    def "Additional date utilities"() {
+        given:
+        TimeZone tz = TimeZone.getTimeZone("UTC")
+        Date testDate = sdf.parse("27.09.1985 12:00:00")
+
+        expect:
+        DateUtil.between(ChronoUnit.DAYS, sdf.parse("01.01.2020 00:00:00")) > 0
+        DateUtil.yesterday(tz) != null
+        DateUtil.today(tz) != null
+        DateUtil.tommorow(tz) != null
+        DateUtil.todayWithHour(tz, 10) != null
+        DateUtil.todayWithHour(tz, null) != null
+        DateUtil.now(tz) != null
+        DateUtil.nowOffset(tz, Calendar.DAY_OF_MONTH, 2) != null
+        DateUtil.getYearIndex(testDate) == "85"
+        DateUtil.format(testDate) == "27.09.1985"
+        DateUtil.formatWithTime(testDate) == "27.09.1985 12:00:00"
+        DateUtil.format(tz, testDate) != null
+        DateUtil.formatWithTime(tz, testDate) != null
+        DateUtil.format(Locale.ENGLISH, testDate, "yyyy-MM-dd") == "1985-09-27"
+        DateUtil.format(Locale.ENGLISH, testDate) == "27.09.1985"
+        DateUtil.formatWithTime(Locale.ENGLISH, testDate) == "27.09.1985 12:00:00"
+        DateUtil.reformat("27.09.1985", "dd.MM.yyyy", "yyyy-MM-dd") == "1985-09-27"
+        DateUtil.formatDateSameDay(testDate, testDate) == "12:00:00"
+        DateUtil.formatDateSameDay(testDate, new Date()) == "27.09.1985 12:00:00"
+        DateUtil.formatDateSameDay(null, new Date()) == ""
+        DateUtil.getCalendar(testDate, tz) != null
+        DateUtil.getCalendar(tz) != null
+        DateUtil.getWeekNumber(2026, 10, 27) > 0
+        DateUtil.convert((Date) null) == null
+        DateUtil.convert((LocalDateTime) null) == null
+    }
 }

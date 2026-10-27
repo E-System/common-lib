@@ -16,6 +16,34 @@ class JsonUtilSpec extends Specification {
         then:
         noExceptionThrown()
         res != null
+        res.key1 == 'value'
+        res.key2 == 3
+        res2.size() == 2
+    }
+
+    def "ToJson and FromJson methods"() {
+        given:
+        ForJsonTest obj = new ForJsonTest("test", 42)
+
+        when:
+        String json = JsonUtil.toJson(obj)
+
+        then:
+        json != null
+        json.contains('"key1":"test"')
+
+        when:
+        ForJsonTest fromStr = JsonUtil.fromJson(json, ForJsonTest)
+        ForJsonTest fromTypeRef = JsonUtil.fromJson(json, new TypeReference<ForJsonTest>() {})
+        ForJsonTest fromReader = JsonUtil.fromJson(new StringReader(json), ForJsonTest)
+        ForJsonTest fromReaderTypeRef = JsonUtil.fromJson(new StringReader(json), new TypeReference<ForJsonTest>() {})
+
+        then:
+        fromStr.key1 == "test"
+        fromStr.key2 == 42
+        fromTypeRef.key1 == "test"
+        fromReader.key1 == "test"
+        fromReaderTypeRef.key1 == "test"
     }
 
     static class ForJsonTest {
