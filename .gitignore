@@ -1,27 +1,13 @@
-.DS_Store
-*.iml
-
-## Directory-based project format:
 .idea/
 .gradle/
 build/
 classes/
+out/
+file/archive.zip
+.DS_Store
+*.iml
 build.properties
 *.ipr
 *.iws
-
-# IntelliJ
-out/
-
-# mpeltonen/sbt-idea plugin
-.idea_modules/
-
-# JIRA plugin
-atlassian-ide-plugin.xml
-
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
 
 
