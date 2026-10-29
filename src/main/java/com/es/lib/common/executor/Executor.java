@@ -34,7 +34,7 @@ public class Executor {
     public ExecutorService executorService() {
         return new ThreadPoolExecutor(
             corePoolSize,
-            maxPoolSize,
+            Math.max(corePoolSize, maxPoolSize),
             60L, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(1000),
             new ThreadPoolExecutor.CallerRunsPolicy()
