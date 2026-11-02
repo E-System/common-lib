@@ -24,4 +24,20 @@ class VersionLoaderSpec extends Specification {
         info.version == "1.3.0-SNAPSHOT"
         info.date == "2018-01-31T16:00:45.167"
     }
+
+    def "ReadBuildInfo default"() {
+        when:
+        def info = VersionLoader.readBuildInfo(new Supplier<InputStream>() {
+            @Override
+            InputStream get() {
+                return VersionLoader.class.getResourceAsStream("/com/es/lib/common/build.properties")
+            }
+        })
+        then:
+        println(info)
+        info != null
+        info.name == "common-lib"
+        info.version == "1.3.0-SNAPSHOT"
+        info.date != null
+    }
 }

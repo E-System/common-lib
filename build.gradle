@@ -1,6 +1,3 @@
-import java.nio.file.Files
-import java.nio.file.NoSuchFileException
-import java.nio.file.Paths
 import java.time.LocalDateTime
 
 /*
@@ -21,7 +18,7 @@ import java.time.LocalDateTime
 buildscript {
     repositories {
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url = "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
@@ -59,23 +56,18 @@ repositories {
     mavenLocal()
 }
 
-def propName = rootProject.name
-def fullPath = '/com/es/lib/common'
-if (!fullPath.startsWith('/src/main/resources')) {
-    fullPath = '/src/main/resources' + fullPath
+def generatedResourcesDir = layout.buildDirectory.dir('generated/resources')
+
+def generateBuildProperties = tasks.register('generateBuildProperties', WriteProperties) {
+    destinationFile = generatedResourcesDir.map { it.file('com/es/lib/common/build.properties') }
+    property('name', rootProject.name)
+    property('version', project.version.toString())
+    property('date', providers.provider { LocalDateTime.now().toString() })
 }
-def versionString = "${project.version}"
-def filePath = "${project.projectDir}${fullPath}/"
-new File(filePath).mkdirs()
-try {
-    Files.delete(Paths.get(filePath, 'build.properties'))
-} catch (NoSuchFileException ignore) {
-}
-println("Create file for property: ${filePath}")
-project.ant.propertyfile(file: "${filePath}build.properties") {
-    ant.entry(key: 'name', value: propName)
-    ant.entry(key: 'version', value: versionString)
-    ant.entry(key: 'date', value: "${LocalDateTime.now().toString()}")
+
+processResources {
+    dependsOn(generateBuildProperties)
+    from(generatedResourcesDir)
 }
 
 jar {
