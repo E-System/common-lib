@@ -27,7 +27,7 @@ buildscript {
 }
 
 wrapper {
-    gradleVersion = '9.6.0'
+    gradleVersion = '9.9.2'
 }
 
 def resolve(String name) {

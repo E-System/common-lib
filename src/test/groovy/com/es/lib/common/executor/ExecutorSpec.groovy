@@ -20,7 +20,6 @@ class ExecutorSpec extends Specification {
         counter.get() == 1
 
         when:
-        println(Runtime.getRuntime().get)
         def result = executor.get({ es ->
             return es.submit({ counter.addAndGet(10) } as java.util.concurrent.Callable<Integer>).get()
         } as java.util.function.Function)
