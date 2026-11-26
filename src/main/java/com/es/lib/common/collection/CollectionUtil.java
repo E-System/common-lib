@@ -16,10 +16,13 @@
 
 package com.es.lib.common.collection;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.*;
 import java.util.stream.Collectors;
 
@@ -27,9 +30,13 @@ import java.util.stream.Collectors;
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 10.04.15
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CollectionUtil {
 
-    private CollectionUtil() {}
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
 
     /**
      * Создать новый ассоциативный массив без пустых значений
