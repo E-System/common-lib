@@ -23,12 +23,46 @@ import spock.lang.Specification
 import java.util.function.Consumer
 import java.util.function.Predicate
 import java.util.function.Supplier
+import java.util.stream.Collectors
 
 /**
  * @author Zuzoev Dmitry - zuzoev.d@ext-system.com
  * @since 05.03.15
  */
 class CollectionUtilSpec extends Specification {
+
+    def "Distinct"(){
+        when:
+        def result =  [
+                new Value("v1", "v4"),
+                new Value("v1", "v5"),
+                new Value("v2", "v6")
+        ].stream().filter(CollectionUtil.distinctByKey {
+            return it.f1
+        }).collect(Collectors.toList())
+        then:
+        result.size() == 2
+        result[0].f2 == "v4"
+        result[1].f2 == "v6"
+    }
+
+    static class Value{
+        String f1
+        String f2
+
+        Value(String f1, String f2) {
+            this.f1 = f1
+            this.f2 = f2
+        }
+
+        String getF1() {
+            return f1
+        }
+
+        String getF2() {
+            return f2
+        }
+    }
 
     def "Удалить пустые значения"() {
         expect:
